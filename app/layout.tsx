@@ -1,0 +1,37 @@
+import type { Metadata } from "next";
+import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
+import "./globals.css";
+import SiteShell from "@/components/SiteShell";
+
+const sans = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-sans"
+});
+
+const serif = Noto_Serif_JP({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-serif"
+});
+
+export const metadata: Metadata = {
+  title: "株式会社クラウドネイチャー | AI時代を、共に歩むITパートナー",
+  description:
+    "地方企業の人手不足を解消するAIエージェントと誠実なシステム開発で、組織を「強く、しなやか」に変革するITパートナー。",
+  icons: [{ rel: "icon", url: "/favicon.ico" }]
+};
+
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ja">
+      <body className={`${sans.variable} ${serif.variable}`}>
+        <SiteShell>{children}</SiteShell>
+      </body>
+    </html>
+  );
+}

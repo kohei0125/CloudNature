@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI } from "@google/genai";
-import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
-import { COLORS } from '../constants';
+'use client';
+
+import React, { useState, useRef, useEffect } from "react";
+import { X, Send, Loader2, Sparkles } from "lucide-react";
+import { COLORS, AI_COPY } from "@/content/strings";
 
 interface Message {
   role: 'user' | 'model';
@@ -12,7 +13,7 @@ const AIConcierge: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'model', text: 'こんにちは。株式会社クラウドネイチャーのAIコンシェルジュです。業務自動化やDXについて、お困りのことはありませんか？' }
+    { role: 'model', text: AI_COPY.initial }
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -31,58 +32,10 @@ const AIConcierge: React.FC = () => {
     setInput('');
     setIsLoading(true);
 
-    try {
-      if (!process.env.API_KEY) {
-        throw new Error("API Key not found");
-      }
-
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
-      const systemInstruction = `
-        あなたは株式会社クラウドネイチャー（CloudNature）のWebサイトに設置されたAIコンシェルジュです。
-        
-        以下の企業情報を基に、訪問者の質問に丁寧かつ簡潔に答えてください。
-        
-        【企業コンセプト】
-        「AI時代を、共に歩むITパートナー」。先進的な「Cloud」と地域に根ざした「Nature」の融合。
-        
-        【主なサービス】
-        1. 受託システム開発 (Python/PHP): 複雑な業務ロジックや大規模Webアプリ向け。実用本位。
-        2. AIエージェント開発 (Dify/n8n): 即効性のある業務改善、チャットボット、自動化ワークフロー。
-        3. DXサポート (伴走型): デジタイゼーションからトランスフォーメーションまでの支援。
-        
-        【特徴】
-        - 地方中小企業の「人手不足」解消に注力。
-        - 「仕組み」を提供し、属人化を解消。
-        - 誠実、実用本位、伴走支援。
-        
-        回答のトーンは、プロフェッショナルでありながら、親しみやすく、温かみのあるもの（丁寧語）にしてください。
-        営業的な押し売りはせず、ユーザーの課題に寄り添う姿勢を見せてください。
-      `;
-
-      const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: [
-            ...messages.map(m => ({
-                role: m.role,
-                parts: [{ text: m.text }]
-            })),
-            { role: 'user', parts: [{ text: userMessage }] }
-        ],
-        config: {
-          systemInstruction: systemInstruction,
-        },
-      });
-
-      const text = response.text || "申し訳ありません。現在応答できません。";
-      setMessages(prev => [...prev, { role: 'model', text }]);
-
-    } catch (error) {
-      console.error("AI Error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: '申し訳ありません。エラーが発生しました。時間をおいて再度お試しください。' }]);
-    } finally {
+    setTimeout(() => {
+      setMessages(prev => [...prev, { role: 'model', text: AI_COPY.placeholderReply }]);
       setIsLoading(false);
-    }
+    }, 350);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -157,7 +110,7 @@ const AIConcierge: React.FC = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="例：自動化の事例を知りたい"
+                placeholder={AI_COPY.inputPlaceholder}
                 className="w-full bg-[#EDE8E5] text-[#19231B] rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#8A9668] placeholder-gray-500"
               />
               <button
@@ -170,7 +123,7 @@ const AIConcierge: React.FC = () => {
               </button>
             </div>
             <p className="text-[10px] text-center text-gray-400 mt-2">
-              AIは誤った情報を生成する可能性があります。
+              {AI_COPY.typingNote}
             </p>
           </div>
         </div>
