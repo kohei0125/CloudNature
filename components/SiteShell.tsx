@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Menu, X, Leaf, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { NAV_ITEMS, HEADER_COPY, FOOTER_COPY } from "@/content/strings";
@@ -34,7 +35,9 @@ const SiteShell = ({ children }: Props) => {
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
+
+            {/* 旧ロゴ */}
+            {/* <div className="relative">
               <Leaf className={`w-8 h-8 transition-colors ${isScrolled ? "text-[#8A9668]" : "text-[#19231B]"}`} />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#DD9348] rounded-full animate-ping opacity-75"></div>
             </div>
@@ -42,7 +45,16 @@ const SiteShell = ({ children }: Props) => {
               <span className="text-xl font-serif font-bold tracking-wider text-[#19231B]">
                 {HEADER_COPY.brand}
               </span>
-            </div>
+            </div> */}
+
+            <Image
+              src="/images/header_logo.png"
+              alt={HEADER_COPY.brand}
+              width={180}
+              height={50}
+              className="object-contain h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -118,9 +130,12 @@ const SiteShell = ({ children }: Props) => {
         <div className="container mx-auto px-6 relative z-10">
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <Leaf className="w-10 h-10 text-[#8A9668]" />
-                <span className="text-3xl font-serif font-bold tracking-wide">{HEADER_COPY.brand}</span>
+              <div className="mb-6">
+                <img
+                  src="/images/footer_logo.png"
+                  alt={HEADER_COPY.brand}
+                  className="object-contain h-12 w-auto"
+                />
               </div>
               <p className="text-gray-400 leading-loose max-w-md mb-8 pl-1">
                 {FOOTER_COPY.taglineLines[0]}

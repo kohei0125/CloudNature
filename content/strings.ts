@@ -30,8 +30,8 @@ export const HEADER_COPY = {
 export const HERO_COPY = {
   imageSrc: "/images/hero-office.svg",
   badge: "2026 STRATEGIC PARTNER",
-  headingLine1: "AI時代を、",
-  headingLine2: "共に歩む。",
+  headingLine1: "事業に効く",
+  headingLine2: "システム開発を",
   description:
     "人手不足という「不自由」からの解放。最新のAIエージェントと、地に足のついたシステム開発で、地方企業の組織を「強く、しなやか」に変革します。",
   primaryCta: "無料診断・相談",
