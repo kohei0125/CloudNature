@@ -14,14 +14,31 @@ interface Props {
 
 const SiteShell = ({ children }: Props) => {
   const pathname = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Determine if scrolling up or down
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down & past threshold -> Hide
+        setIsVisible(false);
+      } else {
+        // Scrolling up -> Show
+        setIsVisible(true);
+      }
+
+      setIsScrolled(currentScrollY > 50);
+      setLastScrollY(currentScrollY);
+    };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [lastScrollY]);
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -30,7 +47,8 @@ const SiteShell = ({ children }: Props) => {
     <div className="flex flex-col min-h-screen font-sans text-[#19231B] selection:bg-[#DD9348] selection:text-white">
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-5"
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 transform ${isVisible ? "translate-y-0" : "-translate-y-full"
+          } ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3" : "bg-transparent py-3 md:py-5"
           }`}
       >
         <div className="container mx-auto px-6 flex justify-between items-center">
@@ -52,7 +70,7 @@ const SiteShell = ({ children }: Props) => {
               alt={HEADER_COPY.brand}
               width={180}
               height={50}
-              className="object-contain h-12 w-auto"
+              className="object-contain h-10 md:h-12 w-auto"
               priority
             />
           </Link>
@@ -134,7 +152,7 @@ const SiteShell = ({ children }: Props) => {
                 <img
                   src="/images/footer_logo.png"
                   alt={HEADER_COPY.brand}
-                  className="object-contain h-12 w-auto"
+                  className="object-contain h-10 md:h-12 w-auto"
                 />
               </div>
               <p className="text-gray-400 leading-loose max-w-md mb-8 pl-1">
