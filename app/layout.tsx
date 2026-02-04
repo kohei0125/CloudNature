@@ -16,7 +16,7 @@ const serif = Noto_Serif_JP({
 });
 
 export const metadata: Metadata = (() => {
-  const isProd = process.env.NODE_ENV === "production";
+  const isProd = process.env.NEXT_PUBLIC_ENV === "production";
   return {
     title: "株式会社クラウドネイチャー | AI時代を、共に歩むITパートナー",
     description:
