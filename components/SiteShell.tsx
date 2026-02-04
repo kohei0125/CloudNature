@@ -112,7 +112,7 @@ const SiteShell = ({ children }: Props) => {
                 key={item.path}
                 href={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-2xl font-serif font-bold ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"
+                className={`text-2xl font-bold ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"
                   }`}
               >
                 {item.label}

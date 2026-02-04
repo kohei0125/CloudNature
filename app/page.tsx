@@ -119,7 +119,7 @@ const Home = () => {
                     <Users className="w-3 h-3 text-[#DD9348]" />
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0F2F5]">{HERO_BENTO.caseBadge}</span>
                   </div>
-                  <p className="font-serif text-2xl leading-tight mb-2">{HERO_BENTO.caseTitle}</p>
+                  <p className="text-2xl leading-tight mb-2 font-bold">{HERO_BENTO.caseTitle}</p>
                   <p className="text-sm text-gray-300">{HERO_BENTO.caseDesc}</p>
                 </div>
               </div>
@@ -173,7 +173,7 @@ const Home = () => {
                 <div className="relative z-10">
                   <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-1">{HERO_BENTO.metricLabel}</p>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-serif font-bold text-white highlight-cloud">{HERO_BENTO.metricValue}</span>
+                    <span className="text-5xl font-bold text-white highlight-cloud">{HERO_BENTO.metricValue}</span>
                     <span className="text-xl text-[#8A9668] font-bold">{HERO_BENTO.metricUnit}</span>
                   </div>
                   <p className="text-gray-400 text-xs mt-2 leading-tight whitespace-pre-line">{HERO_BENTO.metricDesc}</p>
@@ -221,7 +221,7 @@ const Home = () => {
                   <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full text-[#8A9668]/20 fill-current">
                     <path d="M42.7,-73.4C55.9,-67.2,67.3,-57.8,76.4,-46.6C85.5,-35.3,92.3,-22.2,90.8,-9.6C89.3,3,79.5,15.1,70.6,26.4C61.7,37.7,53.7,48.2,43.6,56.8C33.5,65.4,21.3,72.1,8.3,73.5C-4.7,74.9,-18.5,71,-30.7,64.2C-42.9,57.4,-53.5,47.7,-61.7,36.7C-69.9,25.7,-75.7,13.4,-74.6,1.9C-73.5,-9.6,-65.5,-20.3,-56.9,-30.2C-48.3,-40.1,-39.1,-49.2,-28.5,-56.6C-17.9,-64,-5.9,-69.7,7,-71.9L19.9,-74.1" transform="translate(50 50) scale(0.9)" />
                   </svg>
-                  <span className="font-serif font-bold text-[#19231B] text-xl relative z-10">{index + 1}</span>
+                  <span className="font-bold text-[#19231B] text-xl relative z-10">{index + 1}</span>
                 </div>
 
                 <h4 className="text-lg font-bold text-[#19231B] mb-2 relative z-10">{value.title.split(": ")[1]}</h4>
@@ -258,7 +258,7 @@ const Home = () => {
                   <div className="w-14 h-14 bg-[#EDE8E5] rounded-full flex items-center justify-center mb-6 text-[#19231B] group-hover:bg-[#19231B] group-hover:text-white transition-colors duration-300">
                     <service.icon className="w-7 h-7" />
                   </div>
-                  <h4 className="text-2xl font-serif font-bold text-[#19231B] mb-4">{service.title}</h4>
+                  <h4 className="text-2xl font-bold text-[#19231B] mb-4">{service.title}</h4>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">{service.description}</p>
                   <ul className="space-y-3">
                     {service.features.map((feature, idx) => (
@@ -318,7 +318,7 @@ const Home = () => {
                 </div>
                 <div className="p-6 space-y-3">
                   <p className="text-xs uppercase tracking-widest text-[#C8E8FF] font-bold">{study.category}</p>
-                  <h4 className="text-xl font-serif font-bold text-white">{study.title}</h4>
+                  <h4 className="text-xl font-bold text-white">{study.title}</h4>
                   <div className="text-sm text-gray-300 space-y-2">
                     <p>
                       <span className="text-[#8A9668] font-semibold">{CASES_SECTION.labels.before}</span> {study.before}
@@ -382,7 +382,7 @@ const Home = () => {
                   <Network className="w-4 h-4 text-[#C8E8FF]" />
                   <span>{CTA_BANNER.sideBadge}</span>
                 </div>
-                <p className="text-lg md:text-xl font-serif font-semibold text-white leading-relaxed whitespace-pre-line">
+                <p className="text-lg md:text-xl font-semibold text-white leading-relaxed whitespace-pre-line">
                   {CTA_BANNER.sideTitle}
                 </p>
                 <p className="text-sm text-gray-200">{CTA_BANNER.sideDescription}</p>
