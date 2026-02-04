@@ -21,20 +21,20 @@ export const metadata: Metadata = (() => {
     title: "株式会社クラウドネイチャー | AI時代を、共に歩むITパートナー",
     description:
       "地方企業の人手不足を解消するAIエージェントと誠実なシステム開発で、組織を「強く、しなやか」に変革するITパートナー。",
-    icons: [{ rel: "icon", url: "/favicon.ico" }],
+
     robots: isProd
       ? undefined
       : {
+        index: false,
+        follow: false,
+        nocache: true,
+        googleBot: {
           index: false,
           follow: false,
-          nocache: true,
-          googleBot: {
-            index: false,
-            follow: false,
-            noarchive: true,
-            nosnippet: true
-          }
+          noarchive: true,
+          nosnippet: true
         }
+      }
   };
 })();
 
