@@ -40,7 +40,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden">
         {/* Dynamic Organic Background (Living Breath) */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden z-0 bg-gradient-to-b from-[#F0EEE9] via-[#f5f2ec] to-[#eef1ea] bg-[url('/images/hero-mobile-blob.svg')] bg-cover bg-center md:bg-none">
+        <div className="absolute inset-0 w-full h-full overflow-hidden z-0 bg-[url('/images/hero-mobile-blob.svg'),linear-gradient(180deg,_#F0EEE9_0%,_#f5f2ec_50%,_#eef1ea_100%)] bg-cover bg-center md:bg-none">
           {/* Aurora Blobs (desktop onlyで動きを維持) */}
           <div className="hidden md:block absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-[#C8E8FF] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
           <div className="hidden md:block absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#8A9668] rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob animation-delay-2000"></div>
