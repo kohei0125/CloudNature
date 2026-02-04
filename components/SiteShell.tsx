@@ -149,10 +149,13 @@ const SiteShell = ({ children }: Props) => {
           <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
               <div className="mb-6">
-                <img
+                <Image
                   src="/images/footer_logo.png"
                   alt={HEADER_COPY.brand}
+                  width={200}
+                  height={60}
                   className="object-contain h-10 md:h-12 w-auto"
+                  priority={false}
                 />
               </div>
               <p className="text-gray-400 leading-loose max-w-md mb-8 pl-1">
