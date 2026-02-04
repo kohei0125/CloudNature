@@ -192,7 +192,7 @@ const Home = () => {
       />
 
       {/* Mission / Values Section */}
-      < section className="py-24 bg-white relative texture-grain" >
+      <section className="py-24 bg-white relative texture-grain overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3">{MISSION_COPY.eyebrow}</p>
@@ -236,7 +236,7 @@ const Home = () => {
       <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
 
       {/* Services Section */}
-      <section className="py-24 bg-[#F8F9FA] texture-grain">
+      <section className="py-24 bg-[#F8F9FA] texture-grain overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
