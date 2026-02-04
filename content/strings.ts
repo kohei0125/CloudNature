@@ -113,7 +113,7 @@ export const SERVICES: ServiceItem[] = [
 
 export const CASES_SECTION = {
   eyebrow: "CASE STUDIES",
-  title: "成果で語る、共創の記録",
+  title: "「仕組み」が変われば、未来が変わる。",
   cta: "事例をもっと見る",
   labels: {
     before: "Before:",
@@ -150,15 +150,13 @@ export const CASE_STUDIES: CaseStudy[] = [
 
 export const CTA_BANNER = {
   eyebrow: "CONSULTATION",
-  titleLines: ["人手不足からの解放へ。", "まずは30分の無料相談で、", "課題を整理しませんか？"],
+  titleLines: ["失敗しないAI導入の", "はじめの一歩。"],
   description:
-    "現場の業務フロー、既存システム、社内リソースを踏まえ、最短の打ち手をご提案します。技術的な質問だけでも歓迎です。",
-  primaryCta: "無料で相談する",
-  secondaryCta: "サービス資料をダウンロード",
-  bullets: ["最短2週間で導入", "データ連携対応", "現場目線のUX"],
-  sideBadge: "Regional DX Support",
-  sideTitle: "「仕組み」で、地域の企業を強くする。\n伴走型で、成果までやり切ります。",
-  sideDescription: "導入後の運用・内製化までサポートし、属人化を解消。"
+    "中小企業がAIエージェントを導入する際に陥りがちな罠と、成功への5つのステップをまとめた資料を無料で公開しています。",
+  downloadTitle: "2025年版 中小企業のためのAIエージェント導入実践ガイド",
+  downloadMeta: "PDF / 全24ページ / 最終更新 2025.04",
+  primaryCta: "資料をダウンロード",
+  secondaryCta: "無料診断を受ける",
 };
 
 export const FOOTER_COPY = {

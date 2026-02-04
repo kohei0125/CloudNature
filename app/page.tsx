@@ -291,103 +291,131 @@ const Home = () => {
       <section className="py-24 bg-[#19231B] text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_30%,#C8E8FF,transparent_20%),radial-gradient(circle_at_50%_80%,#DD9348,transparent_25%)]"></div>
         <div className="container mx-auto px-6 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div>
-              <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3">{CASES_SECTION.eyebrow}</p>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">{CASES_SECTION.title}</h2>
-            </div>
-            <button className="text-[#DD9348] font-bold flex items-center gap-2 hover:gap-3 transition-all">
-              {CASES_SECTION.cta} <ArrowRight className="w-4 h-4" />
-            </button>
+          <div className="text-center mb-16">
+            <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3 uppercase">{CASES_SECTION.eyebrow}</p>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">{CASES_SECTION.title}</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {CASE_STUDIES.map((study) => (
-              <div
-                key={study.id}
-                className="bg-white/5 border border-white/10 rounded-[28px] overflow-hidden backdrop-blur-sm shadow-lg hover:-translate-y-1 hover:shadow-2xl transition-all duration-300"
-              >
-                <div className="h-52 overflow-hidden relative">
+              <div key={study.id} className="group">
+                {/* Image Area */}
+                <div className="relative h-60 rounded-[20px] overflow-hidden mb-6">
                   <Image
                     src={study.image}
                     alt={study.title}
                     fill
                     sizes="(min-width: 1024px) 33vw, 100vw"
-                    className="object-cover transition-transform duration-700 hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
+                  {/* Badge on Image */}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-[#DD9348] text-white text-[10px] font-bold rounded-full shadow-md">
+                      {study.category}
+                    </span>
+                  </div>
                 </div>
-                <div className="p-6 space-y-3">
-                  <p className="text-xs uppercase tracking-widest text-[#C8E8FF] font-bold">{study.category}</p>
-                  <h4 className="text-xl font-bold text-white">{study.title}</h4>
-                  <div className="text-sm text-gray-300 space-y-2">
-                    <p>
-                      <span className="text-[#8A9668] font-semibold">{CASES_SECTION.labels.before}</span> {study.before}
-                    </p>
-                    <p>
-                      <span className="text-[#DD9348] font-semibold">{CASES_SECTION.labels.after}</span> {study.after}
-                    </p>
+
+                {/* Content Area */}
+                <div className="space-y-4">
+                  <h4 className="text-lg font-bold text-white leading-tight">{study.title}</h4>
+
+                  <div className="space-y-3">
+                    {/* Before Block */}
+                    <div className="pl-3 border-l-2 border-white/20">
+                      <p className="text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-wider">BEFORE</p>
+                      <p className="text-xs text-gray-400 leading-relaxed">
+                        {study.before}
+                      </p>
+                    </div>
+
+                    {/* After Block */}
+                    <div className="pl-3 border-l-2 border-[#DD9348]">
+                      <p className="text-[10px] text-[#DD9348] font-bold uppercase mb-1 tracking-wider">AFTER</p>
+                      <p className="text-xs text-white font-bold leading-relaxed">
+                        {study.after}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+
+          <div className="mt-12 text-center">
+            <button className="text-[#DD9348] font-bold inline-flex items-center gap-2 hover:gap-3 transition-all">
+              {CASES_SECTION.cta} <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-white relative">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-[#C8E8FF] rounded-full blur-3xl opacity-40"></div>
-          <div className="absolute bottom-0 right-10 w-48 h-48 bg-[#DD9348] rounded-full blur-3xl opacity-30"></div>
-        </div>
+      <section className="py-24 bg-[#EDE8E5] relative">
         <div className="container mx-auto px-6 relative z-10">
-          <div className="bg-[#19231B] text-white rounded-[36px] overflow-hidden shadow-2xl grid md:grid-cols-2">
-            <div className="p-10 md:p-14 space-y-6">
-              <p className="text-sm font-bold tracking-widest text-[#8A9668]">{CTA_BANNER.eyebrow}</p>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold leading-tight">
-                {CTA_BANNER.titleLines[0]}
-                <br />
-                {CTA_BANNER.titleLines[1]}
-                <br />
-                {CTA_BANNER.titleLines[2]}
-              </h2>
-              <p className="text-gray-300 leading-relaxed">{CTA_BANNER.description}</p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 group">
-                  {CTA_BANNER.primaryCta}
-                  <div className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
-                    <ArrowRight className="w-4 h-4" />
+          <div className="bg-white rounded-[32px] overflow-hidden shadow-xl grid md:grid-cols-2">
+
+            {/* Left Column: Content */}
+            <div className="p-10 md:p-16 space-y-8 flex flex-col justify-center">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#19231B] leading-tight mb-4">
+                  {CTA_BANNER.titleLines[0]}
+                  <br />
+                  {CTA_BANNER.titleLines[1]}
+                </h2>
+
+                {/* Mobile Image Placeholder (Visible only on mobile) */}
+                <div className="block md:hidden mb-6">
+                  <div className="bg-gray-50 p-8 flex items-center justify-center border border-gray-100 rounded-2xl relative overflow-hidden">
+                    {/* Decorative background blur */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+                    {/* Placeholder Box */}
+                    <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
+                      <p className="font-bold tracking-widest text-[10px] uppercase">Book Cover Image</p>
+                    </div>
                   </div>
-                </button>
-                <button className="px-8 py-4 bg-white/10 text-white border border-white/20 rounded-full font-bold hover:bg-white/20 transition-colors shadow-sm flex items-center justify-center gap-2">
-                  {CTA_BANNER.secondaryCta}
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-              <div className="grid grid-cols-3 gap-4 text-xs text-gray-400">
-                {CTA_BANNER.bullets.map((text, idx) => (
-                  <div key={text} className="flex items-center gap-2">
-                    {idx === 0 && <Zap className="w-4 h-4 text-[#DD9348]" />}
-                    {idx === 1 && <Database className="w-4 h-4 text-[#8A9668]" />}
-                    {idx === 2 && <Sparkles className="w-4 h-4 text-[#C8E8FF]" />}
-                    <span>{text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="relative bg-[radial-gradient(circle_at_20%_20%,rgba(138,150,104,0.25),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(200,232,255,0.25),transparent_25%),radial-gradient(circle_at_50%_80%,rgba(221,147,72,0.3),transparent_30%)] flex items-center justify-center">
-              <div className="absolute inset-0 texture-grain opacity-30"></div>
-              <div className="relative z-10 text-center space-y-4 px-8 py-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-xs">
-                  <Network className="w-4 h-4 text-[#C8E8FF]" />
-                  <span>{CTA_BANNER.sideBadge}</span>
                 </div>
-                <p className="text-lg md:text-xl font-semibold text-white leading-relaxed whitespace-pre-line">
-                  {CTA_BANNER.sideTitle}
+
+                <p className="text-gray-600 leading-relaxed">
+                  {CTA_BANNER.description}
                 </p>
-                <p className="text-sm text-gray-200">{CTA_BANNER.sideDescription}</p>
+              </div>
+
+              {/* Resource Box */}
+              <div className="hidden md:flex bg-gray-50 rounded-xl p-5 border border-gray-100 items-start gap-4">
+                <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm text-[#8A9668]">
+                  <Database className="w-6 h-6" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-[#19231B] text-sm mb-1">{CTA_BANNER.downloadTitle}</h4>
+                  <p className="text-xs text-gray-500 font-medium">{CTA_BANNER.downloadMeta}</p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                <button className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-[#DD9348]/20 hover:shadow-[#DD9348]/40 transition-all">
+                  <Download className="w-5 h-5" />
+                  {CTA_BANNER.primaryCta}
+                </button>
+                <button className="px-8 py-4 bg-[#19231B] text-white rounded-full font-bold hover:bg-[#261D14] transition-colors shadow-lg flex items-center justify-center gap-2">
+                  <Zap className="w-4 h-4 text-[#DD9348]" />
+                  {CTA_BANNER.secondaryCta}
+                </button>
               </div>
             </div>
+
+            {/* Right Column: Image Placeholder */}
+            <div className="hidden md:flex bg-gray-50 p-10 md:p-16 items-center justify-center border-t md:border-t-0 md:border-l border-gray-100 relative overflow-hidden">
+              {/* Decorative background blur */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+
+              {/* Placeholder Box */}
+              <div className="w-full h-full min-h-[300px] border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
+                <p className="font-bold tracking-widest text-xs uppercase">Book Cover Image</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
