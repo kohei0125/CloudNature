@@ -182,8 +182,11 @@ const SiteShell = ({ children }: Props) => {
               <ul className="space-y-4 text-gray-400 text-sm">
                 {FOOTER_COPY.serviceLinks.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.path} className="group hover:text-white transition-colors flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" /> {link.label}
+                    <Link href={link.path} className="group hover:text-white transition-colors relative block">
+                      <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-[#DD9348] opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                      {link.label}
                     </Link>
                   </li>
                 ))}
@@ -195,8 +198,11 @@ const SiteShell = ({ children }: Props) => {
               <ul className="space-y-4 text-gray-400 text-sm">
                 {FOOTER_COPY.companyLinks.map((link) => (
                   <li key={link.label}>
-                    <Link href={link.path} className="group hover:text-white transition-colors flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" /> {link.label}
+                    <Link href={link.path} className="group hover:text-white transition-colors relative block">
+                      <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-[#DD9348] opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                      {link.label}
                     </Link>
                   </li>
                 ))}
