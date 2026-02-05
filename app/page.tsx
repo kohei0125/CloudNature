@@ -286,7 +286,6 @@ const Home = () => {
         </div>
       </section>
 
-      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#19231B" />
 
       {/* Case Studies Section */}
       <section className="py-16 md:py-24 bg-[#19231B] text-white relative overflow-hidden">
@@ -350,6 +349,8 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <WaveSeparator position="top" color="#EDE8E5" bgColor="#19231B" />
 
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-[#EDE8E5] relative">
