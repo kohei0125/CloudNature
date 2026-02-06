@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, Download, Zap, Database, PlayCircle, Bot, TrendingUp, Sparkles, Users, Network } from "lucide-react";
+import { ArrowRight, CheckCircle2, Download, Zap, Database, PlayCircle } from "lucide-react";
 import {
   HERO_COPY,
   HERO_BENTO,
@@ -13,6 +13,10 @@ import {
 } from "@/content/strings";
 import Image from "next/image";
 import type { Metadata } from "next";
+import MobileCarousel from "@/components/MobileCarousel";
+import HeroCardMain from "@/components/hero/HeroCardMain";
+import HeroCardAi from "@/components/hero/HeroCardAi";
+import HeroCardMetrics from "@/components/hero/HeroCardMetrics";
 
 export const metadata: Metadata = {
   title: PAGE_META.home.title,
@@ -38,6 +42,7 @@ const Home = () => {
   return (
     <div className="w-full bg-[#F0EEE9]">
       {/* Hero Section */}
+      {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-16 pb-16 md:pt-32 md:pb-24 overflow-hidden">
         {/* Dynamic Organic Background (Living Breath) */}
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0 bg-[url('/images/hero-mobile-blob.svg'),linear-gradient(180deg,_#F0EEE9_0%,_#f5f2ec_50%,_#eef1ea_100%)] bg-cover bg-center md:bg-none">
@@ -53,7 +58,7 @@ const Home = () => {
           <div className="absolute inset-0 texture-grain opacity-20 md:opacity-40 mix-blend-overlay"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="container mx-auto px-6 relative z-10 flex flex-col lg:grid lg:grid-cols-12 gap-10 lg:gap-16 lg:items-center">
           {/* LEFT COLUMN: Text Content */}
           <div className="lg:col-span-5 space-y-6 md:space-y-10 animate-in slide-in-from-bottom-10 duration-700">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full text-xs font-bold tracking-wider text-[#19231B] border border-white/50 shadow-sm hover:shadow-md transition-shadow cursor-default">
@@ -94,90 +99,30 @@ const Home = () => {
 
           {/* RIGHT COLUMN: Bento Grid Visuals */}
           <div className="lg:col-span-7 h-auto lg:h-[650px] relative animate-in fade-in duration-1000 delay-300">
-            {/* The Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-6 lg:grid-rows-6 gap-4 md:gap-5 h-full min-h-0 lg:min-h-[500px]">
+            {/* Mobile Carousel (Visible only on mobile) */}
+            <div className="md:hidden block w-[calc(100%+3rem)] -ml-6 relative z-30">
+              <MobileCarousel>
+                <HeroCardMain />
+                <HeroCardAi />
+                <HeroCardMetrics />
+              </MobileCarousel>
+            </div>
+
+            {/* Desktop Grid (Hidden on mobile) */}
+            <div className="hidden md:grid grid-cols-2 lg:grid-cols-6 lg:grid-rows-6 gap-4 md:gap-5 h-full min-h-0 lg:min-h-[500px]">
               {/* 1. Main Visual: Human & Tech Symbiosis (Largest) */}
-              <div className="col-span-2 lg:col-span-4 lg:row-span-6 h-[260px] md:h-[300px] lg:h-full rounded-[24px] md:rounded-[40px] overflow-hidden relative shadow-2xl glass-card group">
-                {/* Background Image */}
-                <Image
-                  src={HERO_COPY.imageSrc}
-                  alt={HERO_COPY.heroImageAlt}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-[2000ms] group-hover:scale-110 saturate-[0.8] group-hover:saturate-100"
-                />
-                {/* Texture Overlay on Image */}
-                <div className="absolute inset-0 texture-grain opacity-20"></div>
-
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#19231B]/90 via-[#19231B]/10 to-transparent"></div>
-
-                {/* Content Overlay */}
-                <div className="absolute bottom-8 left-8 right-8 text-white">
-                  <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-                    <Users className="w-3 h-3 text-[#DD9348]" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0F2F5]">{HERO_BENTO.caseBadge}</span>
-                  </div>
-                  <p className="text-2xl leading-tight mb-2 font-bold">{HERO_BENTO.caseTitle}</p>
-                  <p className="text-sm text-gray-300">{HERO_BENTO.caseDesc}</p>
-                </div>
+              <div className="col-span-2 lg:col-span-4 lg:row-span-6">
+                <HeroCardMain />
               </div>
 
               {/* 2. AI Agent Visualization (Top Right - Floating/Bleeding) */}
-              <div className="col-span-1 lg:col-span-2 lg:row-span-3 h-[180px] md:h-[240px] lg:h-full rounded-[24px] md:rounded-[40px] glass-card p-4 md:p-5 flex flex-col justify-between relative overflow-visible transform transition-all hover:-translate-y-2 duration-500 z-20">
-                {/* Bleeding Element: Bot Icon popping out */}
-                <div className="absolute top-3 right-3 md:-top-4 md:-right-4 w-10 h-10 md:w-14 md:h-14 bg-[#DD9348] rounded-xl md:rounded-2xl rotate-0 md:rotate-12 flex items-center justify-center shadow-lg md:animate-blob animation-delay-2000 border-2 md:border-4 border-[#EDE8E5]">
-                  <Bot className="text-white w-5 h-5 md:w-7 md:h-7 rotate-0 md:-rotate-12" />
-                </div>
-
-                <div className="mt-2 h-full flex flex-col justify-between">
-                  <h4 className="font-bold text-[#19231B] leading-tight text-sm">
-                    {HERO_BENTO.aiCardTitleLines[0]}
-                    <br />
-                    {HERO_BENTO.aiCardTitleLines[1]}
-                  </h4>
-
-                  {/* Animated Abstract Workflow */}
-                  <div className="relative h-20 w-full mt-2">
-                    {/* Nodes */}
-                    <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-[#8A9668] animate-pulse"></div>
-                    <div className="absolute top-8 right-4 w-2 h-2 rounded-full bg-[#8A9668] animate-pulse delay-700"></div>
-                    <div className="absolute bottom-2 left-6 w-2 h-2 rounded-full bg-[#DD9348] animate-pulse delay-300"></div>
-
-                    {/* Lines (SVG) */}
-                    <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-                      <path d="M 12 12 L 30 60" stroke="#8A9668" strokeWidth="1" strokeDasharray="2 2" className="opacity-50" />
-                      <path d="M 30 60 L 80 40" stroke="#DD9348" strokeWidth="1" strokeDasharray="2 2" className="opacity-50" />
-                      <path d="M 80 40 L 12 12" stroke="#8A9668" strokeWidth="1" strokeDasharray="2 2" className="opacity-50" />
-                    </svg>
-
-                    {/* Processing Chip */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm px-2 py-1 rounded border border-gray-100 shadow-sm">
-                      <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-[#19231B] rounded-full animate-bounce"></div>
-                        <div className="w-1 h-1 bg-[#19231B] rounded-full animate-bounce delay-100"></div>
-                        <div className="w-1 h-1 bg-[#19231B] rounded-full animate-bounce delay-200"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-span-1 lg:col-span-2 lg:row-span-3">
+                <HeroCardAi />
               </div>
 
               {/* 3. Productivity Metrics (Bottom Right - Dark Accent) */}
-              <div className="col-span-1 lg:col-span-2 lg:row-span-3 h-[180px] md:h-[220px] lg:h-full rounded-[24px] md:rounded-[40px] glass-card-dark p-4 md:p-6 flex flex-col justify-center relative overflow-hidden group shadow-2xl texture-grain border border-white/5">
-                {/* Dynamic abstract background line */}
-                <div className="absolute top-1/2 left-0 w-full h-32 bg-gradient-to-t from-[#8A9668]/20 to-transparent transform -skew-y-12 translate-y-4"></div>
-
-                <TrendingUp className="w-8 h-8 text-[#DD9348] mb-4 relative z-10" />
-                <div className="relative z-10">
-                  <p className="text-gray-400 text-[9px] md:text-[10px] font-bold uppercase tracking-widest mb-1">{HERO_BENTO.metricLabel}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl md:text-5xl font-bold text-white highlight-cloud">{HERO_BENTO.metricValue}</span>
-                    <span className="text-base md:text-xl text-[#8A9668] font-bold">{HERO_BENTO.metricUnit}</span>
-                  </div>
-                  <p className="text-gray-400 text-[10px] md:text-xs mt-1 md:mt-2 leading-tight whitespace-pre-line">{HERO_BENTO.metricDesc}</p>
-                </div>
+              <div className="col-span-1 lg:col-span-2 lg:row-span-3">
+                <HeroCardMetrics />
               </div>
             </div>
           </div>

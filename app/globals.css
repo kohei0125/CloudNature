@@ -12,6 +12,8 @@ body {
   color: #19231B;
   font-feature-settings: "palt";
   font-kerning: normal;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll from w-screen elements */
 }
 
 h1,
@@ -23,13 +25,16 @@ h2 {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #EDE8E5;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #8A9668;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #19231B;
 }
@@ -38,6 +43,7 @@ h2 {
 .texture-grain {
   position: relative;
 }
+
 .texture-grain::before {
   content: "";
   position: absolute;
@@ -58,6 +64,7 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
 }
+
 .glass-card-dark {
   background: rgba(25, 35, 27, 0.85);
   backdrop-filter: blur(12px);
@@ -78,6 +85,7 @@ h2 {
   position: relative;
   overflow: hidden;
 }
+
 .btn-puffy:hover {
   transform: translateY(-2px) scale(1.02);
   box-shadow:
@@ -85,10 +93,12 @@ h2 {
     0px 4px 6px -2px rgba(0, 0, 0, 0.1),
     inset 0px 1px 0px rgba(255, 255, 255, 0.15);
 }
+
 .btn-puffy:active {
   transform: translateY(1px);
   box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
+
 .btn-puffy-accent {
   background-color: #DD9348;
 }
@@ -98,22 +108,28 @@ h2 {
   0% {
     transform: translate(0px, 0px) scale(1);
   }
+
   33% {
     transform: translate(80px, -120px) scale(1.2);
   }
+
   66% {
     transform: translate(-60px, 60px) scale(0.8);
   }
+
   100% {
     transform: translate(0px, 0px) scale(1);
   }
 }
+
 .animate-blob {
   animation: blob 12s infinite ease-in-out;
 }
+
 .animation-delay-2000 {
   animation-delay: 2s;
 }
+
 .animation-delay-4000 {
   animation-delay: 4s;
 }
@@ -126,6 +142,7 @@ h2 {
 
 /* --- Mobile performance simplifications --- */
 @media (max-width: 767px) {
+
   /* 重いノイズオーバーレイはモバイルで無効化 */
   .texture-grain::before {
     display: none;
@@ -138,4 +155,15 @@ h2 {
     -webkit-backdrop-filter: none;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
