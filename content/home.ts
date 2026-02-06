@@ -1,4 +1,3 @@
-import { Code2, Bot, TrendingUp } from "lucide-react";
 import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
