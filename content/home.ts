@@ -3,11 +3,11 @@ import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
   imageSrc: "/images/hero-office.svg",
-  badge: "2026 STRATEGIC PARTNER",
+  badge: "AI時代における企業の開発パートナー",
   headingLine1: "新潟の中小企業に、",
   headingLine2: "人手に代わる仕組みを。",
   description:
-    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、Difyとn8nを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
+    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
   primaryCta: "無料診断・相談",
   secondaryCta: "3分でわかるサービス",
   heroImageAlt: "Modern office collaboration"
@@ -63,7 +63,6 @@ export const SERVICES: ServiceItem[] = [
     id: "dev",
     title: "システム開発",
     description: "既存の業務システムはそのまま活かし、必要な機能だけを追加・連携。「全部作り直し」ではない、コストを抑えた段階的な開発を行います。",
-    icon: Code2,
     features: ["既存システムとのAPI連携", "業務管理Webアプリ開発", "データ分析基盤の構築"],
     techStack: ["Python（AI・分析）", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
   },
@@ -71,7 +70,6 @@ export const SERVICES: ServiceItem[] = [
     id: "ai",
     title: "AIエージェント開発",
     description: "導入最短2週間。Difyで作る「社内の物知りAI」。問い合わせ対応、マニュアル検索、見積もり作成など、今まで人がやっていた単純作業を24時間365日、AIが代行します。",
-    icon: Bot,
     features: ["社内ナレッジAIチャット", "予約・問い合わせ自動応答", "SaaS間のデータ自動連携"],
     techStack: ["Dify（AIチャット構築）", "n8n（業務自動化）", "OpenAI", "Gemini"]
   },
@@ -79,7 +77,6 @@ export const SERVICES: ServiceItem[] = [
     id: "dx",
     title: "DXサポート（伴走型）",
     description: "「何から始めればいいかわからない」を解決。現場ヒアリングから課題を可視化し、最もコスパの高い施策から段階的に導入。社員研修と定着支援まで一貫サポートします。",
-    icon: TrendingUp,
     features: ["現場ヒアリング・課題の可視化", "社員向け導入研修・マニュアル整備", "データに基づく経営判断支援"],
     techStack: ["現状分析", "導入研修", "運用定着支援"]
   }

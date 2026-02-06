@@ -25,10 +25,10 @@ const HeroSection = () => {
       <div className="container mx-auto px-6 relative z-10 flex flex-col lg:grid lg:grid-cols-12 gap-10 lg:gap-16 lg:items-center">
         {/* LEFT COLUMN: Text Content */}
         <div className="lg:col-span-5 space-y-6 md:space-y-10 animate-in slide-in-from-bottom-10 duration-700">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full text-xs font-bold tracking-wider text-[#19231B] border border-white/50 shadow-sm hover:shadow-md transition-shadow cursor-default">
+          {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full text-xs font-bold tracking-wider text-[#19231B] border border-white/50 shadow-sm hover:shadow-md transition-shadow cursor-default">
             <span className="w-2 h-2 bg-[#DD9348] rounded-full animate-pulse"></span>
             {HERO_COPY.badge}
-          </div>
+          </div> */}
 
           <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-serif font-bold leading-[1.1] text-[#19231B] tracking-tight">
             {HERO_COPY.headingLine1}
