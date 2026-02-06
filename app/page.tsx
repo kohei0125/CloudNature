@@ -39,9 +39,9 @@ export const metadata: Metadata = {
 import WaveSeparator from "@/components/WaveSeparator";
 
 const Home = () => {
+
   return (
     <div className="w-full bg-[#F0EEE9]">
-      {/* Hero Section */}
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-16 pb-16 md:pt-32 md:pb-24 overflow-hidden">
         {/* Dynamic Organic Background (Living Breath) */}
@@ -137,47 +137,86 @@ const Home = () => {
       />
 
       {/* Mission / Values Section */}
-      {/* Mission / Values Section */}
       <section className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3">{MISSION_COPY.eyebrow}</p>
-            <h2 className="text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold text-[#19231B] mb-6 text-balance">
-              {MISSION_COPY.title}
-            </h2>
-            <p className="text-sm text-gray-600 leading-loose text-balance">
-              {MISSION_COPY.paragraphs[0]}
-              <br className="hidden md:block" />
-              {MISSION_COPY.paragraphs[1]}
-              <br className="hidden md:block" />
-              {MISSION_COPY.paragraphs[2]}
-            </p>
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left Column: Text */}
+            <div className="text-center md:text-left z-10 relative">
+              <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-4">{MISSION_COPY.eyebrow}</p>
+              <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-serif font-bold text-[#19231B] mb-8 text-balance md:text-wrap">
+                {MISSION_COPY.title}
+              </h2>
+              <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">
+                {MISSION_COPY.paragraphs[0]}
+                <br className="hidden md:block" />
+                {MISSION_COPY.paragraphs[1]}
+                <br className="hidden md:block" />
+                {MISSION_COPY.paragraphs[2]}
+              </p>
+            </div>
+
+            {/* Right Column: Glassmorphism Cards */}
+            <div className="relative">
+              {/* Abstract Background Blob for Glass Effect */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#C8E8FF]/30 via-[#8A9668]/20 to-[#DD9348]/20 rounded-full blur-3xl opacity-60"></div>
+
+              <div className="relative space-y-4 md:space-y-6">
+                {VALUES.map((value, index) => {
+                  const colors = ["#8A9668", "#DD9348", "#79C0BC"];
+                  const icons = ["/images/logo_green.png", "/images/logo_orange.png", "/images/logo_blue.png"];
+                  const color = colors[index];
+                  const iconSrc = icons[index];
+
+                  return (
+                    <div
+                      key={index}
+                      className="group flex items-start gap-5 p-5 md:p-6 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-sm hover:shadow-lg hover:bg-white/60 transition-all duration-300 relative overflow-hidden"
+                    >
+                      {/* Number */}
+                      <div
+                        className="text-4xl md:text-5xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20"
+                        style={{ color: color }}
+                      >
+                        0{index + 1}
+                      </div>
+
+                      <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm transition-colors relative z-10">
+                        <Image
+                          src={iconSrc}
+                          alt=""
+                          width={28}
+                          height={28}
+                          className="object-contain"
+                        />
+                      </div>
+
+                      <div className="relative z-10">
+                        <h4 className="text-lg font-bold text-[#19231B] mb-1">{value.title.split(": ")[1]}</h4>
+                        <p className="text-xs font-bold mb-2 tracking-wider" style={{ color: color }}>{value.subtitle}</p>
+                        <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
+                          {value.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {VALUES.map((value, index) => (
-              <div
-                key={index}
-                className="bg-[#EDE8E5] p-5 md:p-8 rounded-[24px] md:rounded-[32px] hover:shadow-lg transition-all duration-300 border border-transparent hover:border-[#8A9668]/30 group relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-white/50 rounded-full blur-2xl transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                {/* Organic Number Background */}
-                <div className="relative w-12 h-12 md:w-14 md:h-14 mb-4 md:mb-6 group-hover:scale-110 transition-transform z-10 flex items-center justify-center">
-                  <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full text-[#8A9668]/20 fill-current">
-                    <path d="M42.7,-73.4C55.9,-67.2,67.3,-57.8,76.4,-46.6C85.5,-35.3,92.3,-22.2,90.8,-9.6C89.3,3,79.5,15.1,70.6,26.4C61.7,37.7,53.7,48.2,43.6,56.8C33.5,65.4,21.3,72.1,8.3,73.5C-4.7,74.9,-18.5,71,-30.7,64.2C-42.9,57.4,-53.5,47.7,-61.7,36.7C-69.9,25.7,-75.7,13.4,-74.6,1.9C-73.5,-9.6,-65.5,-20.3,-56.9,-30.2C-48.3,-40.1,-39.1,-49.2,-28.5,-56.6C-17.9,-64,-5.9,-69.7,7,-71.9L19.9,-74.1" transform="translate(50 50) scale(0.9)" />
-                  </svg>
-                  <span className="font-bold text-[#19231B] text-lg md:text-xl relative z-10">{index + 1}</span>
-                </div>
-
-                <h4 className="text-base md:text-lg font-bold text-[#19231B] mb-1 md:mb-2 relative z-10">{value.title.split(": ")[1]}</h4>
-                <p className="text-[10px] md:text-xs font-bold text-[#8A9668] mb-3 md:mb-4 tracking-wider relative z-10">{value.subtitle}</p>
-                <p className="text-xs md:text-sm text-gray-600 leading-relaxed relative z-10">{value.description}</p>
-              </div>
-            ))}
+          {/* SEO Content (Screen Reader Only) - Values List */}
+          <div className="sr-only">
+            <ul>
+              {VALUES.map((value, index) => (
+                <li key={index}>
+                  <h3>{value.title}</h3>
+                  <p>{value.description}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </section >
+      </section>
 
       <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
 
