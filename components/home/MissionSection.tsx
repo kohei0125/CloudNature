@@ -5,7 +5,7 @@ const MissionSection = () => {
   return (
     <section className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-20 items-center">
           {/* Left Column: Text */}
           <div className="text-center md:text-left z-10 relative">
             <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-4">{MISSION_COPY.eyebrow}</p>

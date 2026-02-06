@@ -54,7 +54,7 @@ export const VALUES: ValueProp[] = [
 
 export const SERVICES_SECTION = {
   eyebrow: "SOLUTIONS",
-  title: "現場に最適なソリューション",
+  title: "現場に最適なテクノロジー",
   cta: "全サービスを見る"
 };
 
