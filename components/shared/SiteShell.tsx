@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Header from "./Header";
 import MobileMenu from "./MobileMenu";
 import Footer from "./Footer";
@@ -39,16 +39,25 @@ const SiteShell = ({ children }: Props) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleOpenMobileMenu = useCallback(() => {
+    setMobileMenuOpen(true);
+  }, []);
+
+  const handleCloseMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen font-sans text-[#19231B] selection:bg-[#DD9348] selection:text-white">
       <Header
         isScrolled={isScrolled}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
-        onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)}
+        onOpenMobileMenu={handleOpenMobileMenu}
+        onCloseMobileMenu={handleCloseMobileMenu}
       />
-      <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       <main className="flex-grow">{children}</main>
+      <MobileMenu isOpen={mobileMenuOpen} onClose={handleCloseMobileMenu} />
       <Footer />
       <AIConcierge />
     </div>

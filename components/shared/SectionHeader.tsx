@@ -23,8 +23,8 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
   }
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-      <div>
+    <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-6">
+      <div className="mx-auto md:mx-0">
         <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3">{eyebrow}</p>
         <h2 className={`text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold ${darkMode ? "text-white" : "text-[#19231B]"}`}>
           {title}

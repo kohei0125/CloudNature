@@ -23,25 +23,30 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed top-0 left-0 w-full h-[100dvh] z-[9999] bg-[#F0EEE9] text-[#19231B] flex flex-col overflow-hidden animate-in slide-in-from-right duration-500 ease-in-out texture-grain">
-
+    <div
+      id="mobile-navigation"
+      className={`!fixed inset-0 w-full h-screen min-h-[100dvh] z-[99999] bg-[#F0EEE9] text-[#19231B] flex flex-col overflow-y-auto overflow-x-hidden overscroll-none texture-grain transition-opacity duration-200 ${isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
+        }`}
+      aria-hidden={!isOpen}
+    >
       {/* Ambient Background Blobs (Light Theme) */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#C8E8FF] rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none animate-blob"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#DD9348] rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none animate-blob animation-delay-2000"></div>
+      <div className="absolute top-0 left-0 w-[80vw] h-[80vw] bg-[#C8E8FF] rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[80vw] h-[80vw] bg-[#DD9348] rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none"></div>
 
       {/* Background Watermark Logo */}
-      <div className="absolute -bottom-10 -right-10 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
+      <div className="absolute bottom-10 right-0 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
         <Image
           src="/images/logo.png"
           alt=""
@@ -51,21 +56,20 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       </div>
 
       <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 space-y-6 z-10" aria-label="モバイルナビゲーション">
-        {NAV_ITEMS.map((item, index) => (
+        {NAV_ITEMS.map((item) => (
           <Link
             key={item.path}
             href={item.path}
             onClick={onClose}
-            className={`text-2xl font-sans font-bold tracking-wider transition-all duration-300 transform hover:translate-x-2 hover:text-[#DD9348] animate-in slide-in-from-bottom-2 fade-in ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"}`}
-            style={{ animationDelay: `${index * 60}ms` }}
+            className={`text-2xl font-sans font-bold tracking-wider transition-all duration-300 transform hover:text-[#DD9348] ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"}`}
+            style={{}}
           >
             {item.label}
           </Link>
         ))}
 
         <div
-          className="pt-8 border-t border-[#19231B]/10 animate-in slide-in-from-bottom-2 fade-in"
-          style={{ animationDelay: `${NAV_ITEMS.length * 60}ms` }}
+          className="pt-8 border-t border-[#19231B]/10"
         >
           <p className="text-[10px] text-gray-500 mb-4 font-bold tracking-widest uppercase">{HEADER_COPY.mobilePrompt}</p>
           <Link

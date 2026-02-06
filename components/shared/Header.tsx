@@ -11,10 +11,11 @@ interface HeaderProps {
   isScrolled: boolean;
   isVisible: boolean;
   isMobileMenuOpen: boolean;
-  onToggleMobileMenu: () => void;
+  onOpenMobileMenu: () => void;
+  onCloseMobileMenu: () => void;
 }
 
-const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onToggleMobileMenu }: HeaderProps) => {
+const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
 
   const isActive = (path: string) =>
@@ -22,8 +23,8 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onToggleMobileMenu }:
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[10000] transition-all duration-300 transform ${isVisible ? "translate-y-0" : "-translate-y-full"
-        } ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3" : "bg-transparent py-3 md:py-5"
+      className={`fixed top-0 left-0 right-0 z-[999999] transition-all duration-300 transform ${isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
+        } ${isMobileMenuOpen ? "bg-transparent" : (isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3" : "bg-transparent py-3 md:py-5")
         }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
@@ -60,7 +61,14 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onToggleMobileMenu }:
         </nav>
 
         {/* Mobile Menu Toggle */}
-        <button className="md:hidden p-2" onClick={onToggleMobileMenu}>
+        <button
+          type="button"
+          className="md:hidden p-2"
+          onClick={isMobileMenuOpen ? onCloseMobileMenu : onOpenMobileMenu}
+          aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-navigation"
+        >
           {isMobileMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
