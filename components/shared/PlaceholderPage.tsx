@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PLACEHOLDER_COPY } from "@/content/strings";
+import { PLACEHOLDER_COPY } from "@/content/placeholder";
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="pt-32 pb-20 container mx-auto px-6 text-center min-h-[60vh] flex flex-col items-center justify-center">

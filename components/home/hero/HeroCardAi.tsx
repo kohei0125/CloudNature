@@ -1,5 +1,5 @@
 import { Bot } from "lucide-react";
-import { HERO_BENTO } from "@/content/strings";
+import { HERO_BENTO } from "@/content/home";
 
 const HeroCardAi = () => {
   return (

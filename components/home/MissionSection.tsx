@@ -1,0 +1,89 @@
+import Image from "next/image";
+import { MISSION_COPY, VALUES } from "@/content/home";
+
+const MissionSection = () => {
+  return (
+    <section className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
+      <div className="container mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left Column: Text */}
+          <div className="text-center md:text-left z-10 relative">
+            <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-4">{MISSION_COPY.eyebrow}</p>
+            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-serif font-bold text-[#19231B] mb-8 text-balance md:text-wrap">
+              {MISSION_COPY.title}
+            </h2>
+            <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">
+              {MISSION_COPY.paragraphs[0]}
+              <br className="hidden md:block" />
+              {MISSION_COPY.paragraphs[1]}
+              <br className="hidden md:block" />
+              {MISSION_COPY.paragraphs[2]}
+            </p>
+          </div>
+
+          {/* Right Column: Glassmorphism Cards */}
+          <div className="relative">
+            {/* Abstract Background Blob for Glass Effect */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#C8E8FF]/30 via-[#8A9668]/20 to-[#DD9348]/20 rounded-full blur-3xl opacity-60"></div>
+
+            <div className="relative space-y-4 md:space-y-6">
+              {VALUES.map((value, index) => {
+                const colors = ["#8A9668", "#DD9348", "#79C0BC"];
+                const icons = ["/images/logo_green.png", "/images/logo_orange.png", "/images/logo_blue.png"];
+                const color = colors[index];
+                const iconSrc = icons[index];
+
+                return (
+                  <div
+                    key={index}
+                    className="group flex items-start gap-5 p-5 md:p-6 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-sm hover:shadow-lg hover:bg-white/60 transition-all duration-300 relative overflow-hidden"
+                  >
+                    {/* Number */}
+                    <div
+                      className="text-4xl md:text-5xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20"
+                      style={{ color: color }}
+                    >
+                      0{index + 1}
+                    </div>
+
+                    <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm transition-colors relative z-10">
+                      <Image
+                        src={iconSrc}
+                        alt=""
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </div>
+
+                    <div className="relative z-10">
+                      <h4 className="text-lg font-bold text-[#19231B] mb-1">{value.title.split(": ")[1]}</h4>
+                      <p className="text-xs font-bold mb-2 tracking-wider" style={{ color: color }}>{value.subtitle}</p>
+                      <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
+                        {value.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* SEO Content (Screen Reader Only) - Values List */}
+        <div className="sr-only">
+          <ul>
+            {VALUES.map((value, index) => (
+              <li key={index}>
+                <h3>{value.title}</h3>
+                <p>{value.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default MissionSection;

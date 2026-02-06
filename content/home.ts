@@ -1,31 +1,5 @@
-import { Code2, Bot, TrendingUp, ShieldCheck, Check } from "lucide-react";
-import { NavItem, ServiceItem, CaseStudy, ValueProp } from "@/types";
-
-export const COLORS = {
-  sageGreen: "#8A9668",
-  deepForest: "#19231B",
-  pebbleBeige: "#EDE8E5",
-  warmSunset: "#DD9348",
-  cloudBlue: "#C8E8FF",
-  earth: "#261D14",
-  sea: "#79C0BC",
-  stone: "#CADCEB"
-};
-
-export const NAV_ITEMS: NavItem[] = [
-  { label: "ホーム", path: "/" },
-  { label: "想い", path: "/philosophy" },
-  { label: "サービス", path: "/services" },
-  { label: "事例", path: "/cases" },
-  { label: "お問い合わせ", path: "/contact" }
-];
-
-export const HEADER_COPY = {
-  brand: "CloudNature",
-  consultation: "無料相談",
-  mobilePrompt: "お急ぎの方はこちら",
-  mobileButton: "無料相談を予約する"
-};
+import { Code2, Bot, TrendingUp } from "lucide-react";
+import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
   imageSrc: "/images/hero-office.svg",
@@ -157,75 +131,4 @@ export const CTA_BANNER = {
   downloadMeta: "PDF / 全24ページ / 最終更新 2025.04",
   primaryCta: "資料をダウンロード",
   secondaryCta: "無料診断を受ける",
-};
-
-export const FOOTER_COPY = {
-  taglineLines: [
-    "「仕組み」で、現場を変える。",
-    "AI時代を共に歩む、あなたのITパートナー。",
-    "システム開発からDX伴走支援まで、誠実にサポートします。"
-  ],
-  serviceHeading: "Service",
-  companyHeading: "Company",
-  serviceLinks: [
-    { label: "システム開発", path: "/services" },
-    { label: "AIエージェント開発", path: "/services" },
-    { label: "DX伴走支援", path: "/services" }
-  ],
-  companyLinks: [
-    { label: "想い (Philosophy)", path: "/philosophy" },
-    { label: "導入事例", path: "/cases" },
-    { label: "プライバシーポリシー", path: "/privacy" },
-    { label: "情報セキュリティ方針", path: "/security" }
-  ],
-  copyright: "© 2026 CloudNature Co., Ltd. All Rights Reserved.",
-  badges: [
-    { icon: ShieldCheck, label: "AI Guidelines" },
-    { icon: Check, label: "GDPR Compliant" }
-  ],
-  socials: ["FB", "X"]
-};
-
-export const PLACEHOLDER_COPY = {
-  description: "現在、このページは準備中です。ホームに戻ってサービスの詳細をご覧ください。",
-  back: "ホームへ戻る"
-};
-
-export const AI_COPY = {
-  initial: "こんにちは。株式会社クラウドネイチャーのAIコンシェルジュです。業務自動化やDXについて、お困りのことはありませんか？",
-  placeholderReply: "AI応答は現在準備中です。お問い合わせは無料相談ボタンまたはフォームからお願いいたします。",
-  inputPlaceholder: "例：自動化の事例を知りたい",
-  typingNote: "AIは誤った情報を生成する可能性があります。"
-};
-
-export const PAGE_META = {
-  home: {
-    title: "株式会社クラウドネイチャー | AI時代を、共に歩むITパートナー",
-    description:
-      "地方企業の人手不足をAIエージェントと堅牢なシステム開発で解決。システム開発、AIエージェント開発、DX伴走支援をワンストップ提供。"
-  },
-  philosophy: {
-    title: "想い | 株式会社クラウドネイチャー",
-    description: "CloudNatureの使命と価値観。誠実な実装と伴走で地域企業の課題解決に取り組みます。"
-  },
-  services: {
-    title: "サービス | 株式会社クラウドネイチャー",
-    description: "システム開発・AIエージェント開発・DX伴走支援。現場最適なテクノロジーで成果を出すサービス群。"
-  },
-  cases: {
-    title: "導入事例 | 株式会社クラウドネイチャー",
-    description: "製造業・サービス業・自治体でのDX/自動化事例を紹介。成果と効果を具体的に掲載。"
-  },
-  contact: {
-    title: "お問い合わせ | 株式会社クラウドネイチャー",
-    description: "無料相談・資料請求はこちらから。人手不足や業務自動化の課題をお気軽にご相談ください。"
-  },
-  privacy: {
-    title: "プライバシーポリシー | 株式会社クラウドネイチャー",
-    description: "個人情報の取り扱い方針についてご案内します。"
-  },
-  security: {
-    title: "情報セキュリティ方針 | 株式会社クラウドネイチャー",
-    description: "情報資産の保護と安全管理に関する取り組みを記載しています。"
-  }
 };

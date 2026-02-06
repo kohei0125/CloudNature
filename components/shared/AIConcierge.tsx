@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { X, Send, Loader2, Sparkles } from "lucide-react";
-import { COLORS, AI_COPY } from "@/content/strings";
+import { COLORS } from "@/content/common";
+import { AI_COPY } from "@/content/ai";
 
 interface Message {
   role: 'user' | 'model';

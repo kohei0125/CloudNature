@@ -1,6 +1,6 @@
 import { Users } from "lucide-react";
 import Image from "next/image";
-import { HERO_COPY, HERO_BENTO } from "@/content/strings";
+import { HERO_COPY, HERO_BENTO } from "@/content/home";
 
 const HeroCardMain = () => {
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
-import SiteShell from "@/components/SiteShell";
+import SiteShell from "@/components/shared/SiteShell";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
