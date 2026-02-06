@@ -35,12 +35,21 @@ const ServicesSection = () => {
               </div>
               {/* Refined Tech Tags: Better Visibility */}
               <div className="px-8 py-6 bg-[#19231B] text-white/80 text-xs border-t border-white/10 group-hover:bg-[#DD9348] transition-colors duration-300">
-                <div className="flex flex-wrap gap-2">
-                  {service.techStack.map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-white/15 border border-white/20 rounded-md backdrop-blur-sm">
-                      {tech}
-                    </span>
-                  ))}
+                <div className="flex overflow-hidden group/tags">
+                  <div className="flex gap-2 animate-infinite-scroll w-max group-hover/tags:paused">
+                    {/* First set of tags */}
+                    {service.techStack.map((tech) => (
+                      <span key={`org-${tech}`} className="shrink-0 px-2 py-1 bg-white/15 border border-white/20 rounded-md backdrop-blur-sm whitespace-nowrap">
+                        {tech}
+                      </span>
+                    ))}
+                    {/* Duplicate set for seamless loop */}
+                    {service.techStack.map((tech) => (
+                      <span key={`dup-${tech}`} className="shrink-0 px-2 py-1 bg-white/15 border border-white/20 rounded-md backdrop-blur-sm whitespace-nowrap">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

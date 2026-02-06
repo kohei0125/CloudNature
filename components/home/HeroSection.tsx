@@ -30,7 +30,7 @@ const HeroSection = () => {
             {HERO_COPY.badge}
           </div>
 
-          <h1 className="text-[clamp(2.5rem,5vw,4.5rem)] font-serif font-bold leading-[1.1] text-[#19231B] tracking-tight">
+          <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-serif font-bold leading-[1.1] text-[#19231B] tracking-tight">
             {HERO_COPY.headingLine1}
             <br />
             <span className="relative inline-block text-[#19231B] hover:tracking-wide transition-all duration-500">

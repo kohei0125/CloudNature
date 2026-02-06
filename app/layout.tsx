@@ -24,9 +24,9 @@ const serif = Noto_Serif_JP({
 export const metadata: Metadata = (() => {
   const isProd = process.env.NEXT_PUBLIC_ENV === "production";
   return {
-    title: "株式会社クラウドネイチャー | AI時代を、共に歩むITパートナー",
+    title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
     description:
-      "地方企業の人手不足を解消するAIエージェントと誠実なシステム開発で、組織を「強く、しなやか」に変革するITパートナー。",
+      "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
 
     robots: isProd
       ? undefined

@@ -9,9 +9,9 @@ export const HEADER_COPY = {
 
 export const FOOTER_COPY = {
   taglineLines: [
-    "「仕組み」で、現場を変える。",
-    "AI時代を共に歩む、あなたのITパートナー。",
-    "システム開発からDX伴走支援まで、誠実にサポートします。"
+    "新潟の中小企業に、人手に代わる仕組みを。",
+    "AIと業務自動化で、現場を変える。",
+    "開発から定着支援まで、伴走型でサポートします。"
   ],
   serviceHeading: "Service",
   companyHeading: "Company",

@@ -18,6 +18,15 @@ const config: Config = {
         pebble: "#EDE8E5",
         sunset: "#DD9348",
         cloud: "#C8E8FF"
+      },
+      animation: {
+        "infinite-scroll": "infinite-scroll 25s linear infinite",
+      },
+      keyframes: {
+        "infinite-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
       }
     }
   },
