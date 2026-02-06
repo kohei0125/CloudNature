@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Menu, X, Leaf, ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { NAV_ITEMS, HEADER_COPY, FOOTER_COPY } from "@/content/strings";
 import AIConcierge from "./AIConcierge";
@@ -15,16 +15,20 @@ interface Props {
 const SiteShell = ({ children }: Props) => {
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
+    // Initial sync
+    lastScrollY.current = window.scrollY;
+    setIsScrolled(window.scrollY > 50);
+
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
       // Determine if scrolling up or down
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
         // Scrolling down & past threshold -> Hide
         setIsVisible(false);
       } else {
@@ -33,22 +37,22 @@ const SiteShell = ({ children }: Props) => {
       }
 
       setIsScrolled(currentScrollY > 50);
-      setLastScrollY(currentScrollY);
+      lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     }
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
 
@@ -59,7 +63,7 @@ const SiteShell = ({ children }: Props) => {
     <div className="flex flex-col min-h-screen font-sans text-[#19231B] selection:bg-[#DD9348] selection:text-white">
       {/* Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 transform ${isVisible ? "translate-y-0" : "-translate-y-full"
+        className={`fixed top-0 left-0 right-0 z-[10000] transition-all duration-300 transform ${isVisible ? "translate-y-0" : "-translate-y-full"
           } ${isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3" : "bg-transparent py-3 md:py-5"
           }`}
       >
@@ -117,28 +121,47 @@ const SiteShell = ({ children }: Props) => {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-30 bg-[#EDE8E5] pt-24 px-6 md:hidden animate-in slide-in-from-right duration-300">
-          <nav className="flex flex-col gap-6" aria-label="モバイルナビゲーション">
-            {NAV_ITEMS.map((item) => (
+        <div className="fixed top-0 left-0 w-full h-[100dvh] z-[9999] bg-[#F0EEE9] text-[#19231B] flex flex-col overflow-hidden animate-in slide-in-from-right duration-500 ease-in-out texture-grain">
+
+          {/* Ambient Background Blobs (Light Theme) */}
+          <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#C8E8FF] rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none animate-blob"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#DD9348] rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none animate-blob animation-delay-2000"></div>
+
+          {/* Background Watermark Logo */}
+          <div className="absolute -bottom-10 -right-10 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
+            <Image
+              src="/images/logo.png"
+              alt=""
+              fill
+              className="object-contain grayscale"
+            />
+          </div>
+
+          <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 space-y-6 z-10" aria-label="モバイルナビゲーション">
+            {NAV_ITEMS.map((item, index) => (
               <Link
                 key={item.path}
                 href={item.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-2xl font-bold ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"
-                  }`}
+                className={`text-2xl font-sans font-bold tracking-wider transition-all duration-300 transform hover:translate-x-2 hover:text-[#DD9348] animate-in slide-in-from-bottom-2 fade-in ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"}`}
+                style={{ animationDelay: `${index * 60}ms` }}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="pt-8 border-t border-gray-300">
-              <p className="text-sm text-gray-500 mb-4">{HEADER_COPY.mobilePrompt}</p>
+
+            <div
+              className="pt-8 border-t border-[#19231B]/10 animate-in slide-in-from-bottom-2 fade-in"
+              style={{ animationDelay: `${NAV_ITEMS.length * 60}ms` }}
+            >
+              <p className="text-[10px] text-gray-500 mb-4 font-bold tracking-widest uppercase">{HEADER_COPY.mobilePrompt}</p>
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between w-full bg-[#19231B] text-white px-6 py-4 rounded-full font-bold shadow-lg"
+                className="inline-flex items-center justify-between gap-3 text-base font-sans font-bold text-[#19231B] hover:text-[#DD9348] transition-colors group"
               >
-                <span>{HEADER_COPY.mobileButton}</span>
-                <ArrowRight />
+                <span className="border-b border-[#19231B]/30 pb-0.5 group-hover:border-[#DD9348] transition-colors">{HEADER_COPY.mobileButton}</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </nav>
