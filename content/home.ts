@@ -1,7 +1,7 @@
 import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
-  imageSrc: "/images/hero-office.svg",
+  imageSrc: "/images/niigata.jpeg",
   badge: "AI時代における企業の開発パートナー",
   headingLine1: "新潟の中小企業に、",
   headingLine2: "人手に代わる仕組みを。",
@@ -16,11 +16,17 @@ export const HERO_BENTO = {
   caseBadge: "Case Study",
   caseTitle: "製造業DXの軌跡",
   caseDesc: "熟練工のナレッジをAI化し、新人教育コストを40%削減。",
-  aiCardTitleLines: ["AI Agent", "Architecture"],
-  metricLabel: "Impact",
-  metricValue: "2.5",
-  metricUnit: "x",
-  metricDesc: "Dify導入による\n業務効率化実績"
+  metricLabel: "IMPACT",
+  aiCard: {
+    title: "AI業務自動化\n成果物",
+    description: "24時間稼働の「デジタル社員」。\nDify × n8n 等と連携し\n単純作業から高度な判断業務まで\nAIがあなたに代行",
+    tags: ["Dify", "LINE", "Notion", "Gmail", "Slack"]
+  },
+  metricCard: {
+    value: "2.5",
+    unit: "x",
+    description: "業務効率化の成果\n定型業務を自動化。\n残った80%を、創造化。\nより付加価値の高い営業や\n戦略立案へ"
+  }
 };
 
 export const MISSION_COPY = {
