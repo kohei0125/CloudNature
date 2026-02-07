@@ -51,7 +51,7 @@ const CasesSection = () => {
                   {/* After Block */}
                   <div className="pl-3 border-l-2 border-[#DD9348]">
                     <p className="text-[10px] text-[#DD9348] font-bold uppercase mb-1 tracking-wider">AFTER</p>
-                    <p className="text-xs text-white font-bold leading-relaxed">
+                    <p className="text-xs text-white  leading-relaxed">
                       {study.after}
                     </p>
                   </div>

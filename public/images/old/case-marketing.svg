@@ -1,0 +1,15 @@
+<svg width="900" height="600" viewBox="0 0 900 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="c_m" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF9A9E"/>
+      <stop offset="100%" stop-color="#FECFEF"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" rx="36" fill="url(#c_m)"/>
+  <g fill="#FFFFFF" fill-opacity="0.2">
+    <rect x="100" y="150" width="200" height="300" rx="20"/>
+    <rect x="350" y="100" width="200" height="400" rx="20"/>
+    <rect x="600" y="200" width="200" height="200" rx="20"/>
+  </g>
+  <text x="50" y="550" fill="#FFFFFF" font-family="Noto Sans JP, sans-serif" font-size="32" font-weight="700">コンテンツマーケティングDX</text>
+</svg>

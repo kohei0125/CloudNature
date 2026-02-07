@@ -14,8 +14,8 @@ export const HERO_COPY = {
 
 export const HERO_BENTO = {
   caseBadge: "Case Study",
-  caseTitle: "製造業DXの軌跡",
-  caseDesc: "熟練工のナレッジをAI化し、新人教育コストを40%削減。",
+  caseTitle: "営業DX：ナレッジ展開と商談自動化",
+  caseDesc: "トップ営業のノウハウをAI化し、商談後の付帯業務を80%削減。",
   metricLabel: "IMPACT",
   aiCard: {
     title: "AI業務自動化\n成果物",
@@ -99,28 +99,28 @@ export const CASES_SECTION = {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
-    id: "manufacturing",
-    title: "製造業における人手不足解消",
-    category: "製造業 × Dify",
-    before: "熟練工の勘と経験に頼り、新人の教育に2年以上を要していた。",
-    after: "熟練工の作業手順と判断基準をDifyに学習させ、新人がAIに質問しながら作業できる環境を構築。OJT期間が24ヶ月→14ヶ月に短縮、年間約360万円のコスト圧縮に成功。",
-    image: "/images/case-1.svg"
+    id: "marketing-automation",
+    title: "コンテンツマーケティングの自律的運営",
+    category: "マーケティング × n8n / Dify",
+    before: "トレンドのリサーチから記事執筆まで全て手動で行い、更新頻度が低く内容も薄くなっていた。",
+    after: "n8nでSNSや競合のトレンドを自律監視し、Difyで高品質な記事案を自動生成する仕組みを構築。執筆・投稿の工数を80%削減し、公開頻度が1.5倍、リーチ数も大幅に向上 。",
+    image: "/images/marketing.jpg"
   },
   {
-    id: "service",
-    title: "サービス業の完全自動化",
-    category: "サービス業 × n8n",
-    before: "予約管理からメール対応まですべて手作業。本来の接客業務が圧迫されていた。",
-    after: "n8nで予約受付・リマインド送信・売上集計を完全自動化。オーナーの事務作業が週15時間→2時間に削減、接客と新メニュー開発に集中できる環境を実現。",
-    image: "/images/case-2.svg"
+    id: "hr-recruitment",
+    title: "人事・採用業務の完全自動化",
+    category: "人事・採用 × n8n / Dify",
+    before: "月数百件の履歴書を手作業で確認。初期対応の遅れから、優秀な候補者を他社に逃す機会損失が発生していた。",
+    after: "AIエージェントが要件に基づき候補者を自動スコアリング。n8nで面接日程調整からリマインド送信まで完結。スクリーニング工数を90%削減し、採用リードタイムを平均2週間から5日に短縮することに成功 。",
+    image: "/images/meeting.jpg"
   },
   {
-    id: "municipality",
-    title: "地域DX実証実験",
-    category: "自治体 × Python",
-    before: "観光需要の予測が難しく、繁忙期の交通渋滞や閑散期の機会損失が発生していた。",
-    after: "過去5年分の観光データをPythonで分析し、AI需要予測モデルを構築。交通誘導の最適化で渋滞を30%緩和、閑散期のプロモーション精度も向上。",
-    image: "/images/case-3.svg"
+    id: "wholesale",
+    title: "卸売業の受発注DX",
+    category: "卸売業 × AWS",
+    before: "FAXと電話による受注対応で、聞き間違いや入力ミスが多発。事務員の残業が常態化していた。",
+    after: "AWSを活用したWeb受発注システムを構築。顧客が直接注文する仕組みにより入力工数をゼロにし、誤配送も完全に解消。",
+    image: "/images/office_room.jpg"
   }
 ];
 
