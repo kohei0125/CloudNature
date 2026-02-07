@@ -12,7 +12,7 @@ const HeroCardMain = () => {
         fill
         priority
         sizes="(min-width: 1024px) 50vw, 100vw"
-        className="object-cover transition-transform duration-[2000ms] group-hover:scale-110 saturate-[0.8] group-hover:saturate-100"
+        className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
       />
       {/* Texture Overlay on Image */}
       <div className="absolute inset-0 texture-grain opacity-20"></div>

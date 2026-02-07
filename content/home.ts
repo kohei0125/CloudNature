@@ -1,7 +1,7 @@
 import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
-  imageSrc: "/images/niigata.jpeg",
+  imageSrc: "/images/hero-office.svg",
   badge: "AI時代における企業の開発パートナー",
   headingLine1: "新潟の中小企業に、",
   headingLine2: "人手に代わる仕組みを。",
