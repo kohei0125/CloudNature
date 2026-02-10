@@ -40,7 +40,7 @@ const MissionSection = () => {
                   >
                     {/* Number */}
                     <div
-                      className="text-4xl md:text-5xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20"
+                      className="text-5xl md:text-6xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20"
                       style={{ color: color }}
                     >
                       0{index + 1}

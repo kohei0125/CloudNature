@@ -1,12 +1,12 @@
 import { ServiceItem, CaseStudy, ValueProp } from "@/types";
 
 export const HERO_COPY = {
-  imageSrc: "/images/hero-office.svg",
+  imageSrc: "/images/niigata_city.jpg",
   badge: "AI時代における企業の開発パートナー",
   headingLine1: "新潟の中小企業に、",
   headingLine2: "人手に代わる仕組みを。",
   description:
-    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
+    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、システム・AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
   primaryCta: "無料診断・相談",
   secondaryCta: "3分でわかるサービス",
   heroImageAlt: "Modern office collaboration"
@@ -59,7 +59,7 @@ export const VALUES: ValueProp[] = [
 
 export const SERVICES_SECTION = {
   eyebrow: "SOLUTIONS",
-  title: "現場に最適なテクノロジー",
+  title: "事業内容",
   cta: "全サービスを見る"
 };
 
@@ -68,7 +68,7 @@ export const SERVICES: ServiceItem[] = [
     id: "dev",
     title: "システム開発",
     description: "既存の業務システムはそのまま活かし、必要な機能だけを追加・連携。「全部作り直し」ではない、コストを抑えた段階的な開発を行います。",
-    features: ["既存システムとのAPI連携", "業務管理Webアプリ開発", "データ分析基盤の構築"],
+    features: ["既存システムとのAPI連携", "業務管理Webアプリ開発", "業務効率化・自動化システム"],
     techStack: ["Python（AI・分析）", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
   },
   {

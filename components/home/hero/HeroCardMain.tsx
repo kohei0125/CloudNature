@@ -28,7 +28,7 @@ const HeroCardMain = () => {
             {HERO_BENTO.caseBadge}
           </span>
         </div>
-        <p className="text-2xl leading-tight mb-2 font-bold">
+        <p className="text-xl md:text-2xl leading-tight mb-2 font-bold">
           {HERO_BENTO.caseTitle}
         </p>
         <p className="text-sm text-gray-300">{HERO_BENTO.caseDesc}</p>
