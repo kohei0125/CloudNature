@@ -3,14 +3,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Header from "./Header";
 import MobileMenu from "./MobileMenu";
-import Footer from "./Footer";
-import AIConcierge from "./AIConcierge";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-const SiteShell = ({ children }: Props) => {
+const HeaderWrapper = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,7 +42,7 @@ const SiteShell = ({ children }: Props) => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen font-sans text-[#19231B] selection:bg-[#DD9348] selection:text-white">
+    <>
       <Header
         isScrolled={isScrolled}
         isVisible={isVisible}
@@ -56,12 +50,9 @@ const SiteShell = ({ children }: Props) => {
         onOpenMobileMenu={handleOpenMobileMenu}
         onCloseMobileMenu={handleCloseMobileMenu}
       />
-      <main className="flex-grow">{children}</main>
       <MobileMenu isOpen={mobileMenuOpen} onClose={handleCloseMobileMenu} />
-      <Footer />
-      <AIConcierge />
-    </div>
+    </>
   );
 };
 
-export default SiteShell;
+export default HeaderWrapper;

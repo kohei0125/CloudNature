@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
-import SiteShell from "@/components/shared/SiteShell";
+import HeaderWrapper from "@/components/shared/HeaderWrapper";
+import Footer from "@/components/shared/Footer";
+import LazyAIConcierge from "@/components/shared/LazyAIConcierge";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
@@ -52,7 +54,12 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${sans.variable} ${serif.variable}`}>
-        <SiteShell>{children}</SiteShell>
+        <div className="flex flex-col min-h-screen font-sans text-[#19231B] selection:bg-[#DD9348] selection:text-white">
+          <HeaderWrapper />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <LazyAIConcierge />
+        </div>
       </body>
     </html>
   );
