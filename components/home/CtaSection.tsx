@@ -3,14 +3,14 @@ import { CTA_BANNER } from "@/content/home";
 
 const CtaSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-[#EDE8E5] relative">
+    <section className="py-16 md:py-24 bg-pebble relative">
       <div className="container mx-auto px-6 relative z-10">
         <div className="bg-white rounded-[32px] overflow-hidden shadow-xl grid md:grid-cols-2">
 
           {/* Left Column: Content */}
           <div className="p-8 md:p-16 space-y-8 flex flex-col justify-center">
             <div>
-              <h2 className="text-[clamp(1.5rem,5vw,2rem)] font-serif font-bold text-[#19231B] leading-tight mb-4">
+              <h2 className="text-[clamp(1.5rem,5vw,2rem)] font-serif font-bold text-forest leading-tight mb-4">
                 {CTA_BANNER.titleLines[0]}
                 <br />
                 {CTA_BANNER.titleLines[1]}
@@ -35,23 +35,23 @@ const CtaSection = () => {
 
             {/* Resource Box */}
             <div className="hidden md:flex bg-gray-50 rounded-xl p-5 border border-gray-100 items-start gap-4">
-              <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm text-[#8A9668]">
+              <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm text-sage">
                 <Database className="w-6 h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-[#19231B] text-sm mb-1">{CTA_BANNER.downloadTitle}</h4>
+                <h4 className="font-bold text-forest text-sm mb-1">{CTA_BANNER.downloadTitle}</h4>
                 <p className="text-xs text-gray-500 font-medium">{CTA_BANNER.downloadMeta}</p>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <button className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-[#DD9348]/20 hover:shadow-[#DD9348]/40 transition-all">
+              <button className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
                 <Download className="w-5 h-5" />
                 {CTA_BANNER.primaryCta}
               </button>
-              <button className="px-8 py-4 bg-[#19231B] text-white rounded-full font-bold hover:bg-[#261D14] transition-colors shadow-lg flex items-center justify-center gap-2">
-                <Zap className="w-4 h-4 text-[#DD9348]" />
+              <button className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg flex items-center justify-center gap-2">
+                <Zap className="w-4 h-4 text-sunset" />
                 {CTA_BANNER.secondaryCta}
               </button>
             </div>

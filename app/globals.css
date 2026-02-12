@@ -8,8 +8,8 @@
 
 body {
   font-family: var(--font-sans), "Noto Sans JP", sans-serif;
-  background-color: #EDE8E5;
-  color: #19231B;
+  background-color: theme('colors.pebble');
+  color: theme('colors.forest');
   font-feature-settings: "palt";
   font-kerning: normal;
   overflow-x: hidden;
@@ -27,16 +27,16 @@ h2 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #EDE8E5;
+  background: theme('colors.pebble');
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8A9668;
+  background: theme('colors.sage');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #19231B;
+  background: theme('colors.forest');
 }
 
 /* Grain/Noise Texture */
@@ -75,7 +75,7 @@ h2 {
 
 /* Puffy/Tactile Button */
 .btn-puffy {
-  background-color: #19231B;
+  background-color: theme('colors.forest');
   color: white;
   box-shadow:
     0px 4px 6px -1px rgba(0, 0, 0, 0.1),
@@ -100,7 +100,7 @@ h2 {
 }
 
 .btn-puffy-accent {
-  background-color: #DD9348;
+  background-color: theme('colors.sunset');
 }
 
 /* Organic Blob Animation */
@@ -136,7 +136,7 @@ h2 {
 
 /* Cloud Dancer (Off-white highlight) */
 .highlight-cloud {
-  color: #F8F9FA;
+  color: theme('colors.mist');
   text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 

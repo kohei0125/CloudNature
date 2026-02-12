@@ -62,8 +62,8 @@ const MobileCarousel = ({ children }: { children: React.ReactNode[] }) => {
             className={cn(
               "w-2 h-2 rounded-full transition-all duration-300",
               activeIndex === index
-                ? "bg-[#DD9348] w-6"
-                : "bg-[#19231B]/20 hover:bg-[#19231B]/40"
+                ? "bg-sunset w-6"
+                : "bg-forest/20 hover:bg-forest/40"
             )}
             aria-label={`Go to slide ${index + 1}`}
           />

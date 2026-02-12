@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
   eyebrow: string;
@@ -12,10 +13,10 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
   if (centered) {
     return (
       <div className="text-center mb-16">
-        <p className={`text-sm font-bold tracking-widest mb-3 uppercase ${darkMode ? "text-[#8A9668]" : "text-[#8A9668]"}`}>
+        <p className="text-sm font-bold tracking-widest mb-3 uppercase text-sage">
           {eyebrow}
         </p>
-        <h2 className={`text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold ${darkMode ? "text-white" : "text-[#19231B]"}`}>
+        <h2 className={cn("text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>
@@ -25,13 +26,13 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
   return (
     <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-6">
       <div className="mx-auto md:mx-0">
-        <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-3">{eyebrow}</p>
-        <h2 className={`text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold ${darkMode ? "text-white" : "text-[#19231B]"}`}>
+        <p className="text-sm font-bold tracking-widest text-sage mb-3">{eyebrow}</p>
+        <h2 className={cn("text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>
       {cta && (
-        <button className="text-[#DD9348] font-bold flex items-center gap-2 hover:gap-3 transition-all">
+        <button className="text-sunset font-bold flex items-center gap-2 hover:gap-3 transition-all">
           {cta.label} <ArrowRight className="w-4 h-4" />
         </button>
       )}

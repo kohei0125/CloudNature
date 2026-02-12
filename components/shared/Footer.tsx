@@ -5,7 +5,7 @@ import { HEADER_COPY, FOOTER_COPY } from "@/content/layout";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#19231B] text-white pt-24 pb-12 relative overflow-hidden">
+    <footer className="bg-forest text-white pt-24 pb-12 relative overflow-hidden">
       <div className="absolute inset-0 opacity-5 bg-[url('/images/wood-pattern.svg')]"></div>
       <div className="absolute top-10 left-10 w-64 h-64 pointer-events-none opacity-5">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full fill-current text-white">
@@ -37,7 +37,7 @@ const Footer = () => {
               {FOOTER_COPY.socials.map((s) => (
                 <div
                   key={s}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-[#DD9348] transition-colors cursor-pointer group"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-sunset transition-colors cursor-pointer group"
                 >
                   <span className="text-xs font-bold group-hover:text-white">{s}</span>
                 </div>
@@ -46,12 +46,12 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-[#8A9668] tracking-widest text-sm uppercase">{FOOTER_COPY.serviceHeading}</h4>
+            <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.serviceHeading}</h4>
             <ul className="space-y-4 text-gray-400 text-sm">
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">
-                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-[#DD9348] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-sunset opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="w-3 h-3" />
                     </span>
                     {link.label}
@@ -62,12 +62,12 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-[#8A9668] tracking-widest text-sm uppercase">{FOOTER_COPY.companyHeading}</h4>
+            <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.companyHeading}</h4>
             <ul className="space-y-4 text-gray-400 text-sm">
               {FOOTER_COPY.companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">
-                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-[#DD9348] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-sunset opacity-0 group-hover:opacity-100 transition-opacity">
                       <ArrowRight className="w-3 h-3" />
                     </span>
                     {link.label}
@@ -85,7 +85,7 @@ const Footer = () => {
               const Icon = badge.icon;
               return (
                 <div key={badge.label} className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-[#8A9668]" />
+                  <Icon className="w-4 h-4 text-sage" />
                   <span>{badge.label}</span>
                 </div>
               );

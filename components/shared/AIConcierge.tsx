@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { X, Send, Loader2, Sparkles } from "lucide-react";
-import { COLORS } from "@/content/common";
+import { cn } from "@/lib/utils";
 import { AI_COPY } from "@/content/ai";
 
 interface Message {
@@ -51,8 +51,7 @@ const AIConcierge: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group flex items-center gap-2 p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-105"
-          style={{ backgroundColor: COLORS.sageGreen, color: '#fff' }}
+          className="group flex items-center gap-2 p-4 rounded-full bg-sage text-white shadow-lg transition-all duration-300 hover:scale-105"
         >
           <Sparkles className="w-6 h-6 animate-pulse" />
           <span className="font-bold hidden group-hover:block whitespace-nowrap">AIに相談する</span>
@@ -60,11 +59,11 @@ const AIConcierge: React.FC = () => {
       )}
 
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] flex flex-col overflow-hidden border border-[#EDE8E5] animate-in slide-in-from-bottom-10 fade-in duration-300">
+        <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] flex flex-col overflow-hidden border border-pebble animate-in slide-in-from-bottom-10 fade-in duration-300">
           {/* Header */}
-          <div className="p-4 flex justify-between items-center text-white" style={{ backgroundColor: COLORS.deepForest }}>
+          <div className="p-4 flex justify-between items-center bg-forest text-white">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#DD9348]" />
+              <Sparkles className="w-5 h-5 text-sunset" />
               <div>
                 <h3 className="font-bold text-sm">CloudNature AI</h3>
                 <p className="text-xs opacity-80">24時間対応コンシェルジュ</p>
@@ -76,18 +75,19 @@ const AIConcierge: React.FC = () => {
           </div>
 
           {/* Chat Area */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F8F9FA]">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-mist">
             {messages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={cn("flex", msg.role === 'user' ? 'justify-end' : 'justify-start')}
               >
                 <div
-                  className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+                  className={cn(
+                    "max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed",
                     msg.role === 'user'
-                      ? 'bg-[#8A9668] text-white rounded-tr-none'
-                      : 'bg-white text-[#19231B] border border-gray-100 shadow-sm rounded-tl-none'
-                  }`}
+                      ? "bg-sage text-white rounded-tr-none"
+                      : "bg-white text-forest border border-gray-100 shadow-sm rounded-tl-none"
+                  )}
                 >
                   {msg.text}
                 </div>
@@ -96,7 +96,7 @@ const AIConcierge: React.FC = () => {
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm flex items-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-[#8A9668]" />
+                  <Loader2 className="w-4 h-4 animate-spin text-sage" />
                   <span className="text-xs text-gray-500">AIが入力中...</span>
                 </div>
               </div>
@@ -112,13 +112,12 @@ const AIConcierge: React.FC = () => {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={AI_COPY.inputPlaceholder}
-                className="w-full bg-[#EDE8E5] text-[#19231B] rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#8A9668] placeholder-gray-500"
+                className="w-full bg-pebble text-forest rounded-full px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sage placeholder-gray-500"
               />
               <button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: COLORS.warmSunset }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-sunset text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
               </button>

@@ -17,7 +17,13 @@ const config: Config = {
         forest: "#19231B",
         pebble: "#EDE8E5",
         sunset: "#DD9348",
-        cloud: "#C8E8FF"
+        cloud: "#C8E8FF",
+        earth: "#261D14",
+        sea: "#79C0BC",
+        stone: "#CADCEB",
+        cream: "#F0EEE9",
+        linen: "#F4F2F0",
+        mist: "#F8F9FA",
       },
       animation: {
         "infinite-scroll": "infinite-scroll 25s linear infinite",

@@ -8,8 +8,8 @@ const MissionSection = () => {
         <div className="grid md:grid-cols-2 gap-8 lg:gap-20 items-center">
           {/* Left Column: Text */}
           <div className="text-center md:text-left z-10 relative">
-            <p className="text-sm font-bold tracking-widest text-[#8A9668] mb-4">{MISSION_COPY.eyebrow}</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-serif font-bold text-[#19231B] mb-8 text-balance md:text-wrap">
+            <p className="text-sm font-bold tracking-widest text-sage mb-4">{MISSION_COPY.eyebrow}</p>
+            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
               {MISSION_COPY.title}
             </h2>
             <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">
@@ -24,7 +24,7 @@ const MissionSection = () => {
           {/* Right Column: Glassmorphism Cards */}
           <div className="relative">
             {/* Abstract Background Blob for Glass Effect */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#C8E8FF]/30 via-[#8A9668]/20 to-[#DD9348]/20 rounded-full blur-3xl opacity-60"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-cloud/30 via-sage/20 to-sunset/20 rounded-full blur-3xl opacity-60"></div>
 
             <div className="relative space-y-4 md:space-y-6">
               {VALUES.map((value, index) => {
@@ -57,7 +57,7 @@ const MissionSection = () => {
                     </div>
 
                     <div className="relative z-10">
-                      <h4 className="text-lg font-bold text-[#19231B] mb-1">{value.title.split(": ")[1]}</h4>
+                      <h4 className="text-lg font-bold text-forest mb-1">{value.title.split(": ")[1]}</h4>
                       <p className="text-xs font-bold mb-2 tracking-wider" style={{ color: color }}>{value.subtitle}</p>
                       <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                         {value.description}

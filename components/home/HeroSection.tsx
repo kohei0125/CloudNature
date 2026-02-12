@@ -11,12 +11,12 @@ const HeroSection = () => {
       {/* Dynamic Organic Background (Living Breath) */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 bg-[url('/images/hero-mobile-blob.svg'),linear-gradient(180deg,_#F0EEE9_0%,_#f5f2ec_50%,_#eef1ea_100%)] bg-cover bg-center md:bg-none">
         {/* Aurora Blobs (desktop onlyで動きを維持) */}
-        <div className="hidden md:block absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-[#C8E8FF] rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
-        <div className="hidden md:block absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#8A9668] rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="hidden md:block absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-[#DD9348] rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob animation-delay-4000"></div>
+        <div className="hidden md:block absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-cloud rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
+        <div className="hidden md:block absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-sage rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="hidden md:block absolute bottom-[-20%] left-[20%] w-[600px] h-[600px] bg-sunset rounded-full mix-blend-multiply filter blur-[120px] opacity-30 animate-blob animation-delay-4000"></div>
 
         {/* Bottom Fade to Solid Color (Seamless Transition to Wave) */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#F0EEE9] to-transparent z-10"></div>
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream to-transparent z-10"></div>
 
         {/* Noise Texture Overlay for entire section */}
         <div className="absolute inset-0 texture-grain opacity-20 md:opacity-40 mix-blend-overlay"></div>
@@ -25,18 +25,13 @@ const HeroSection = () => {
       <div className="container mx-auto px-6 relative z-10 flex flex-col lg:grid lg:grid-cols-12 gap-10 lg:gap-16 lg:items-center">
         {/* LEFT COLUMN: Text Content */}
         <div className="lg:col-span-5 space-y-6 md:space-y-10 animate-in slide-in-from-bottom-10 duration-700">
-          {/* <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/40 backdrop-blur-md rounded-full text-xs font-bold tracking-wider text-[#19231B] border border-white/50 shadow-sm hover:shadow-md transition-shadow cursor-default">
-            <span className="w-2 h-2 bg-[#DD9348] rounded-full animate-pulse"></span>
-            {HERO_COPY.badge}
-          </div> */}
-
-          <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-serif font-bold leading-[1.1] text-[#19231B] tracking-tight">
+          <h1 className="text-[clamp(2rem,4.5vw,3rem)] font-serif font-bold leading-[1.1] text-forest tracking-tight">
             {HERO_COPY.headingLine1}
             <br />
-            <span className="relative inline-block text-[#19231B] hover:tracking-wide transition-all duration-500">
+            <span className="relative inline-block text-forest hover:tracking-wide transition-all duration-500">
               {HERO_COPY.headingLine2}
               {/* Organic underline */}
-              <svg className="absolute -bottom-2 md:-bottom-3 left-0 w-full h-3 md:h-4 text-[#8A9668] opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
+              <svg className="absolute -bottom-2 md:-bottom-3 left-0 w-full h-3 md:h-4 text-sage opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
                 <path d="M0 5 Q 50 12 100 5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
               </svg>
             </span>
@@ -54,8 +49,8 @@ const HeroSection = () => {
               </div>
             </button>
 
-            <button className="w-full sm:w-auto px-8 py-3 md:py-4 bg-white/40 backdrop-blur-sm text-[#19231B] border border-white/60 rounded-full font-bold hover:bg-white/80 transition-colors shadow-sm flex items-center justify-center gap-2 group">
-              <PlayCircle className="w-5 h-5 text-[#8A9668] group-hover:scale-110 transition-transform" />
+            <button className="w-full sm:w-auto px-8 py-3 md:py-4 bg-white/40 backdrop-blur-sm text-forest border border-white/60 rounded-full font-bold hover:bg-white/80 transition-colors shadow-sm flex items-center justify-center gap-2 group">
+              <PlayCircle className="w-5 h-5 text-sage group-hover:scale-110 transition-transform" />
               <span>{HERO_COPY.secondaryCta}</span>
             </button>
           </div>

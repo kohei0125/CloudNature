@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
 
@@ -23,9 +24,15 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[999999] transition-all duration-300 transform ${isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full"
-        } ${isMobileMenuOpen ? "bg-transparent" : (isScrolled ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3" : "bg-transparent py-3 md:py-5")
-        }`}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[999999] transition-all duration-300 transform",
+        isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",
+        isMobileMenuOpen
+          ? "bg-transparent"
+          : isScrolled
+            ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3"
+            : "bg-transparent py-3 md:py-5"
+      )}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 group">
@@ -45,16 +52,18 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
             <Link
               key={item.path}
               href={item.path}
-              className={`text-sm font-medium tracking-wide transition-colors hover:text-[#DD9348] relative group ${isActive(item.path) ? "text-[#DD9348]" : "text-[#19231B]"
-                }`}
+              className={cn(
+                "text-sm font-medium tracking-wide transition-colors hover:text-sunset relative group",
+                isActive(item.path) ? "text-sunset" : "text-forest"
+              )}
             >
               {item.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#DD9348] transition-all group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-sunset transition-all group-hover:w-full"></span>
             </Link>
           ))}
           <Link
             href="/contact"
-            className="bg-[#19231B] text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-[#DD9348] transition-colors shadow-lg"
+            className="bg-forest text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-sunset transition-colors shadow-lg"
           >
             {HEADER_COPY.consultation}
           </Link>
