@@ -19,6 +19,9 @@ interface HeaderProps {
 const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
 
+  const isHome = pathname === "/";
+  const isHeroOverlay = isHome && !isScrolled;
+
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
@@ -41,7 +44,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className={cn("object-contain h-10 md:h-12 w-auto transition-all duration-300", !isScrolled && "brightness-0 invert")}
+            className={cn("object-contain h-10 md:h-12 w-auto transition-all duration-300", isHeroOverlay && "brightness-0 invert")}
             priority
           />
         </Link>
@@ -54,7 +57,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
               href={item.path}
               className={cn(
                 "text-sm font-medium tracking-wide transition-colors hover:text-sunset relative group",
-                isActive(item.path) ? "text-sunset" : isScrolled ? "text-forest" : "text-white"
+                isActive(item.path) ? "text-sunset" : isHeroOverlay ? "text-white" : "text-forest"
               )}
             >
               {item.label}
@@ -65,7 +68,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
             href="/contact"
             className={cn(
               "px-6 py-2 rounded-full text-sm font-bold transition-colors shadow-lg",
-              isScrolled ? "bg-forest text-white hover:bg-sunset" : "bg-white text-forest hover:bg-sunset hover:text-white"
+              isHeroOverlay ? "bg-white text-forest hover:bg-sunset hover:text-white" : "bg-forest text-white hover:bg-sunset"
             )}
           >
             {HEADER_COPY.consultation}
@@ -75,7 +78,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className={cn("md:hidden p-2", isScrolled ? "text-forest" : "text-white")}
+          className={cn("md:hidden p-2", isHeroOverlay ? "text-white" : "text-forest")}
           onClick={isMobileMenuOpen ? onCloseMobileMenu : onOpenMobileMenu}
           aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isMobileMenuOpen}
