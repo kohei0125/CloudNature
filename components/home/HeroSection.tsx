@@ -15,11 +15,11 @@ const HeroSection = () => {
         className="object-cover"
       />
 
-      {/* Dark gradient from top */}
-      <div className="absolute inset-0 bg-gradient-to-b from-forest via-forest/60 to-forest/10" />
+      {/* Soft gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-forest/70 via-forest/30 to-transparent" />
 
-      {/* Light fade at bottom for transition to next section */}
-      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent" />
+      {/* Warm fade at bottom for transition to next section */}
+      <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-cream to-transparent" />
 
       {/* Decorative metric (desktop only) */}
       <div className="hidden lg:block absolute right-12 bottom-48 select-none pointer-events-none">
