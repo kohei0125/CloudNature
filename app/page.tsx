@@ -17,20 +17,20 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.example.com/",
-    images: [{ url: "/images/hero-office.svg", width: 1200, height: 800, alt: HERO_COPY.heroImageAlt }]
+    images: [{ url: "/images/niigata_city.jpg", width: 1200, height: 800, alt: HERO_COPY.heroImageAlt }]
   },
   twitter: {
     card: "summary_large_image",
     title: PAGE_META.home.title,
     description: PAGE_META.home.description,
-    images: ["/images/hero-office.svg"]
+    images: ["/images/niigata_city.jpg"]
   }
 };
 
 const Home = () => (
   <div className="w-full bg-cream">
     <HeroSection />
-    <WaveSeparator position="bottom" color="#F0EEE9" bgColor="#ffffff" />
+    {/* <WaveSeparator position="bottom" color="#F0EEE9" bgColor="#ffffff" /> */}
     <MissionSection />
     <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
     <ServicesSection />
