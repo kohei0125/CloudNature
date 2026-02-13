@@ -41,7 +41,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className="object-contain h-10 md:h-12 w-auto"
+            className={cn("object-contain h-10 md:h-12 w-auto transition-all duration-300", !isScrolled && "brightness-0 invert")}
             priority
           />
         </Link>
@@ -54,7 +54,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
               href={item.path}
               className={cn(
                 "text-sm font-medium tracking-wide transition-colors hover:text-sunset relative group",
-                isActive(item.path) ? "text-sunset" : "text-forest"
+                isActive(item.path) ? "text-sunset" : isScrolled ? "text-forest" : "text-white"
               )}
             >
               {item.label}
@@ -63,7 +63,10 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
           ))}
           <Link
             href="/contact"
-            className="bg-forest text-white px-6 py-2 rounded-full text-sm font-bold hover:bg-sunset transition-colors shadow-lg"
+            className={cn(
+              "px-6 py-2 rounded-full text-sm font-bold transition-colors shadow-lg",
+              isScrolled ? "bg-forest text-white hover:bg-sunset" : "bg-white text-forest hover:bg-sunset hover:text-white"
+            )}
           >
             {HEADER_COPY.consultation}
           </Link>
@@ -72,7 +75,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className="md:hidden p-2"
+          className={cn("md:hidden p-2", isScrolled ? "text-forest" : "text-white")}
           onClick={isMobileMenuOpen ? onCloseMobileMenu : onOpenMobileMenu}
           aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isMobileMenuOpen}

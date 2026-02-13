@@ -2,6 +2,12 @@ import { CheckCircle2 } from "lucide-react";
 import { SERVICES_SECTION, SERVICES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
 
+const topBorders: Record<number, string> = {
+  0: "border-t-sage",
+  1: "border-t-sunset",
+  2: "border-t-sea",
+};
+
 const ServicesSection = () => {
   return (
     <section className="py-16 md:py-24 bg-mist texture-grain overflow-hidden">
@@ -13,10 +19,10 @@ const ServicesSection = () => {
         />
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {SERVICES.map((service) => (
+          {SERVICES.map((service, index) => (
             <div
               key={service.id}
-              className="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col h-full border border-gray-100 group"
+              className={`bg-white overflow-hidden shadow-sm transition-all duration-300 flex flex-col h-full border-t-[3px] ${topBorders[index]} group`}
             >
               <div className="p-6 md:p-8 flex-1">
                 <h4 className="text-2xl font-bold text-forest mb-4">{service.title}</h4>
@@ -30,23 +36,13 @@ const ServicesSection = () => {
                   ))}
                 </ul>
               </div>
-              {/* Refined Tech Tags: Better Visibility */}
-              <div className="px-8 py-6 bg-forest text-white/80 text-xs border-t border-white/10 group-hover:bg-sunset transition-colors duration-300">
-                <div className="flex overflow-hidden group/tags">
-                  <div className="flex gap-2 animate-infinite-scroll w-max group-hover/tags:paused">
-                    {/* First set of tags */}
-                    {service.techStack.map((tech) => (
-                      <span key={`org-${tech}`} className="shrink-0 px-2 py-1 bg-white/15 border border-white/20 rounded-md backdrop-blur-sm whitespace-nowrap">
-                        {tech}
-                      </span>
-                    ))}
-                    {/* Duplicate set for seamless loop */}
-                    {service.techStack.map((tech) => (
-                      <span key={`dup-${tech}`} className="shrink-0 px-2 py-1 bg-white/15 border border-white/20 rounded-md backdrop-blur-sm whitespace-nowrap">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+              <div className="px-8 py-6 bg-forest text-white/80 text-xs">
+                <div className="flex flex-wrap gap-2">
+                  {service.techStack.map((tech) => (
+                    <span key={tech} className="px-2 py-1 bg-white/15 border border-white/20 rounded-md whitespace-nowrap">
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>

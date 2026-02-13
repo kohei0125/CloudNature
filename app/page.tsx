@@ -30,7 +30,6 @@ export const metadata: Metadata = {
 const Home = () => (
   <div className="w-full bg-cream">
     <HeroSection />
-    {/* <WaveSeparator position="bottom" color="#F0EEE9" bgColor="#ffffff" /> */}
     <MissionSection />
     <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
     <ServicesSection />

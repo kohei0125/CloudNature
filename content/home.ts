@@ -69,7 +69,7 @@ export const SERVICES: ServiceItem[] = [
     title: "システム開発",
     description: "既存の業務システムはそのまま活かし、必要な機能だけを追加・連携。「全部作り直し」ではない、コストを抑えた段階的な開発を行います。",
     features: ["既存システムとのAPI連携", "業務管理Webアプリ開発", "業務効率化・自動化システム"],
-    techStack: ["Python（AI・分析）", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
+    techStack: ["Python", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
   },
   {
     id: "ai",
