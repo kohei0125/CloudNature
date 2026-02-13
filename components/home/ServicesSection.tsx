@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { SERVICES_SECTION, SERVICES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
 
@@ -22,12 +23,12 @@ const ServicesSection = () => {
           {SERVICES.map((service, index) => (
             <div
               key={service.id}
-              className={`bg-white overflow-hidden shadow-sm transition-all duration-300 flex flex-col h-full border-t-[3px] ${topBorders[index]} group`}
+              className={cn("bg-white overflow-hidden shadow-sm transition-all duration-300 flex flex-col h-full border-t-[3px]", topBorders[index], "group")}
             >
               <div className="p-6 md:p-8 flex-1">
                 <h4 className="text-2xl font-bold text-forest mb-4">{service.title}</h4>
                 <p className="text-gray-600 mb-6 text-sm leading-relaxed">{service.description}</p>
-                <ul className="space-y-3">
+                <ul className="flex flex-col gap-3">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-sm text-forest font-medium">
                       <CheckCircle2 className="w-4 h-4 text-sage" />

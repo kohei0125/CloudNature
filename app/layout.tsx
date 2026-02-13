@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
 import Footer from "@/components/shared/Footer";
 import LazyAIConcierge from "@/components/shared/LazyAIConcierge";
@@ -53,7 +54,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body className={`${sans.variable} ${serif.variable}`}>
+      <body className={cn(sans.variable, serif.variable)}>
         <div className="flex flex-col min-h-screen font-sans text-forest selection:bg-sunset selection:text-white">
           <HeaderWrapper />
           <main className="flex-grow">{children}</main>

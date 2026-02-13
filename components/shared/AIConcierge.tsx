@@ -65,7 +65,7 @@ const AIConcierge: React.FC = () => {
           </div>
 
           {/* Chat Area */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 bg-mist">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-mist">
             {messages.map((msg, index) => (
               <div
                 key={index}

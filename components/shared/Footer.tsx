@@ -53,7 +53,7 @@ const Footer = () => {
 
           <div>
             <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.serviceHeading}</h4>
-            <ul className="space-y-4 text-gray-400 text-sm">
+            <ul className="flex flex-col gap-4 text-gray-400 text-sm">
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">
@@ -69,7 +69,7 @@ const Footer = () => {
 
           <div>
             <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.companyHeading}</h4>
-            <ul className="space-y-4 text-gray-400 text-sm">
+            <ul className="flex flex-col gap-4 text-gray-400 text-sm">
               {FOOTER_COPY.companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">

@@ -37,10 +37,10 @@ const CasesSection = () => {
               </div>
 
               {/* Content Area */}
-              <div className="space-y-4">
+              <div className="flex flex-col gap-4">
                 <h4 className="text-lg font-bold text-white leading-tight">{study.title}</h4>
 
-                <div className="space-y-3">
+                <div className="flex flex-col gap-3">
                   {/* Before Block */}
                   <div className="pl-3 border-l-2 border-white/20">
                     <p className="text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-wider">BEFORE</p>

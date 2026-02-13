@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from "@/lib/utils";
 
 interface WaveSeparatorProps {
   position?: 'top' | 'bottom';
@@ -13,14 +14,14 @@ const WaveSeparator: React.FC<WaveSeparatorProps> = ({
   color = '#ffffff',
   bgColor = 'transparent',
   gradientStops,
-  className = ''
+  className
 }) => {
   const gradientId = React.useId();
   const shouldUseGradient = !!gradientStops && gradientStops.length > 0;
 
   return (
     <div
-      className={`w-full overflow-hidden leading-[0] relative texture-grain ${position === 'top' ? 'rotate-180' : ''} ${className}`}
+      className={cn("w-full overflow-hidden leading-[0] relative texture-grain", position === 'top' && "rotate-180", className)}
       style={{ backgroundColor: bgColor }}
     >
       <svg

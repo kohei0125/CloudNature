@@ -60,7 +60,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
         </div>
       )}
 
-      <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 space-y-6 z-10" aria-label="モバイルナビゲーション">
+      <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 gap-6 z-10" aria-label="モバイルナビゲーション">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.path}

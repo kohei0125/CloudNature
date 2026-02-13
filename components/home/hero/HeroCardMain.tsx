@@ -24,7 +24,7 @@ const HeroCardMain = () => {
       <div className="absolute bottom-8 left-8 right-8 text-white">
         <div className="inline-flex items-center gap-2 mb-3 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
           <Users className="w-3 h-3 text-sunset" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[#F0F2F5]">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-mist">
             {HERO_BENTO.caseBadge}
           </span>
         </div>

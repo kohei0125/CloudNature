@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Download, Zap, Database } from "lucide-react";
 import { CTA_BANNER } from "@/content/home";
 
@@ -46,14 +47,14 @@ const CtaSection = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <button className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
+              <Link href="/contact" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
                 <Download className="w-5 h-5" />
                 {CTA_BANNER.primaryCta}
-              </button>
-              <button className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg flex items-center justify-center gap-2">
+              </Link>
+              <Link href="/contact" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg flex items-center justify-center gap-2">
                 <Zap className="w-4 h-4 text-sunset" />
                 {CTA_BANNER.secondaryCta}
-              </button>
+              </Link>
             </div>
           </div>
 
