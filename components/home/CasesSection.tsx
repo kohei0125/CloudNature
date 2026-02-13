@@ -1,5 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { CASES_SECTION, CASE_STUDIES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
 
@@ -62,9 +63,9 @@ const CasesSection = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <button className="text-sunset font-bold inline-flex items-center gap-2 hover:gap-3 transition-all">
+          <Link href="/cases" className="text-sunset font-bold inline-flex items-center gap-2 hover:gap-3 transition-all">
             {CASES_SECTION.cta} <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

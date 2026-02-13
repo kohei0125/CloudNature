@@ -1,5 +1,3 @@
-import { ShieldCheck, Check } from "lucide-react";
-
 export const HEADER_COPY = {
   brand: "CloudNature",
   consultation: "無料相談",
@@ -28,8 +26,11 @@ export const FOOTER_COPY = {
   ],
   copyright: "© 2026 CloudNature Co., Ltd. All Rights Reserved.",
   badges: [
-    { icon: ShieldCheck, label: "AI Guidelines" },
-    { icon: Check, label: "GDPR Compliant" }
+    { icon: "ShieldCheck" as const, label: "AI Guidelines" },
+    { icon: "Check" as const, label: "GDPR Compliant" }
   ],
-  socials: ["FB", "X"]
+  socials: [
+    { abbr: "FB", label: "Facebook", href: "https://facebook.com/" },
+    { abbr: "X", label: "X (Twitter)", href: "https://x.com/" }
+  ]
 };

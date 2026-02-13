@@ -48,17 +48,7 @@ const AIConcierge: React.FC = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="group flex items-center gap-2 p-4 rounded-full bg-sage text-white shadow-lg transition-all duration-300 hover:scale-105"
-        >
-          <Sparkles className="w-6 h-6 animate-pulse" />
-          <span className="font-bold hidden group-hover:block whitespace-nowrap">AIに相談する</span>
-        </button>
-      )}
-
-      {isOpen && (
+      {isOpen ? (
         <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] flex flex-col overflow-hidden border border-pebble animate-in slide-in-from-bottom-10 fade-in duration-300">
           {/* Header */}
           <div className="p-4 flex justify-between items-center bg-forest text-white">
@@ -127,6 +117,14 @@ const AIConcierge: React.FC = () => {
             </p>
           </div>
         </div>
+      ) : (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="group flex items-center gap-2 p-4 rounded-full bg-sage text-white shadow-lg transition-all duration-300 hover:scale-105"
+        >
+          <Sparkles className="w-6 h-6 animate-pulse" />
+          <span className="font-bold hidden group-hover:block whitespace-nowrap">AIに相談する</span>
+        </button>
       )}
     </div>
   );

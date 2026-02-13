@@ -49,14 +49,16 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       <div className="absolute bottom-0 right-0 w-[80vw] h-[80vw] bg-sunset rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none"></div>
 
       {/* Background Watermark Logo */}
-      <div className="absolute bottom-10 right-0 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
-        <Image
-          src="/images/logo.png"
-          alt=""
-          fill
-          className="object-contain grayscale"
-        />
-      </div>
+      {isOpen && (
+        <div className="absolute bottom-10 right-0 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
+          <Image
+            src="/images/logo.png"
+            alt=""
+            fill
+            className="object-contain grayscale"
+          />
+        </div>
+      )}
 
       <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 space-y-6 z-10" aria-label="モバイルナビゲーション">
         {NAV_ITEMS.map((item) => (

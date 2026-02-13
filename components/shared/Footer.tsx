@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { HEADER_COPY, FOOTER_COPY } from "@/content/layout";
+
+const BADGE_ICONS = { ShieldCheck, Check } as const;
 
 const Footer = () => {
   return (
@@ -35,12 +37,16 @@ const Footer = () => {
             </p>
             <div className="flex gap-4 pl-1">
               {FOOTER_COPY.socials.map((s) => (
-                <div
-                  key={s}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-sunset transition-colors cursor-pointer group"
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-sunset transition-colors group"
                 >
-                  <span className="text-xs font-bold group-hover:text-white">{s}</span>
-                </div>
+                  <span className="text-xs font-bold group-hover:text-white">{s.abbr}</span>
+                </a>
               ))}
             </div>
           </div>
@@ -82,7 +88,7 @@ const Footer = () => {
           <p>{FOOTER_COPY.copyright}</p>
           <div className="flex gap-8 mt-4 md:mt-0">
             {FOOTER_COPY.badges.map((badge) => {
-              const Icon = badge.icon;
+              const Icon = BADGE_ICONS[badge.icon];
               return (
                 <div key={badge.label} className="flex items-center gap-2">
                   <Icon className="w-4 h-4 text-sage" />
