@@ -39,7 +39,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     <div
       id="mobile-navigation"
       className={cn(
-        "!fixed inset-0 w-full h-screen min-h-[100dvh] z-[99999] bg-cream text-forest flex flex-col overflow-y-auto overflow-x-hidden overscroll-none texture-grain transition-opacity duration-200",
+        "!fixed inset-0 w-full h-screen min-h-[100dvh] z-[99999] bg-cream text-forest v-stack overflow-y-auto overflow-x-hidden overscroll-none texture-grain transition-opacity duration-200",
         isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
       )}
       aria-hidden={!isOpen}
@@ -60,7 +60,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
         </div>
       )}
 
-      <nav className="flex flex-col justify-center flex-grow px-8 pb-32 pt-24 gap-6 z-10" aria-label="モバイルナビゲーション">
+      <nav className="v-stack justify-center flex-grow px-8 pb-32 pt-24 gap-6 z-10" aria-label="モバイルナビゲーション">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.path}

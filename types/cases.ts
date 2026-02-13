@@ -6,3 +6,21 @@ export interface CaseStudy {
   after: string;
   image: string;
 }
+
+export interface CaseStudyDetail {
+  id: string;
+  title: string;
+  category: string;
+  client: string;
+  challenge: string;
+  solution: string;
+  results: string[];
+  quote?: { text: string; author: string; role: string };
+  image: string;
+}
+
+export interface KpiHighlight {
+  value: string;
+  unit: string;
+  label: string;
+}

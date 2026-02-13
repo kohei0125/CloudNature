@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Layout Stack Utilities */
+@layer utilities {
+  .v-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .h-stack {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 :root {
   color-scheme: light;
 }

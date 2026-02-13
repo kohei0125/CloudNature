@@ -9,7 +9,7 @@ const CtaSection = () => {
         <div className="bg-white rounded-[32px] overflow-hidden shadow-xl grid md:grid-cols-2">
 
           {/* Left Column: Content */}
-          <div className="p-8 md:p-16 space-y-8 flex flex-col justify-center">
+          <div className="p-8 md:p-16 space-y-8 v-stack justify-center">
             <div>
               <h2 className="text-[clamp(1.5rem,5vw,2rem)] font-serif font-bold text-forest leading-tight mb-4">
                 {CTA_BANNER.titleLines[0]}
@@ -19,11 +19,11 @@ const CtaSection = () => {
 
               {/* Mobile Image Placeholder (Visible only on mobile) */}
               <div className="block md:hidden mb-6">
-                <div className="bg-gray-50 p-8 flex items-center justify-center border border-gray-100 rounded-2xl relative overflow-hidden">
+                <div className="bg-gray-50 p-8 center border border-gray-100 rounded-2xl relative overflow-hidden">
                   {/* Decorative background blur */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
                   {/* Placeholder Box */}
-                  <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
+                  <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl v-stack items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
                     <p className="font-bold tracking-widest text-[10px] uppercase">Book Cover Image</p>
                   </div>
                 </div>
@@ -46,12 +46,12 @@ const CtaSection = () => {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <Link href="/contact" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold flex items-center justify-center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
+            <div className="v-stack sm:h-stack gap-4 pt-2">
+              <Link href="/contact" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
                 <Download className="w-5 h-5" />
                 {CTA_BANNER.primaryCta}
               </Link>
-              <Link href="/contact" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg flex items-center justify-center gap-2">
+              <Link href="/contact" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg center gap-2">
                 <Zap className="w-4 h-4 text-sunset" />
                 {CTA_BANNER.secondaryCta}
               </Link>
@@ -64,7 +64,7 @@ const CtaSection = () => {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
 
             {/* Placeholder Box */}
-            <div className="w-full h-full min-h-[300px] border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
+            <div className="w-full h-full min-h-[300px] border-2 border-dashed border-gray-300 rounded-2xl v-stack items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
               <p className="font-bold tracking-widest text-xs uppercase">Book Cover Image</p>
             </div>
           </div>

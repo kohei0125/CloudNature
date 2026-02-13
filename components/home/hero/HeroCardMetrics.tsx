@@ -3,7 +3,7 @@ import { HERO_BENTO } from "@/content/home";
 
 const HeroCardMetrics = () => {
   return (
-    <div className="h-[260px] md:h-[220px] lg:h-full rounded-[24px] md:rounded-[40px] glass-card-dark p-4 md:p-6 flex flex-col justify-center relative overflow-hidden group shadow-2xl texture-grain border border-white/5 w-full">
+    <div className="h-[260px] md:h-[220px] lg:h-full rounded-[24px] md:rounded-[40px] glass-card-dark p-4 md:p-6 v-stack justify-center relative overflow-hidden group shadow-2xl texture-grain border border-white/5 w-full">
       {/* Dynamic abstract background line */}
       <div className="absolute top-1/2 left-0 w-full h-32 bg-gradient-to-t from-sage/20 to-transparent transform -skew-y-12 translate-y-4"></div>
 

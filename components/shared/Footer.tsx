@@ -43,7 +43,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-sunset transition-colors group"
+                  className="w-10 h-10 rounded-full bg-white/10 center hover:bg-sunset transition-colors group"
                 >
                   <span className="text-xs font-bold group-hover:text-white">{s.abbr}</span>
                 </a>
@@ -53,7 +53,7 @@ const Footer = () => {
 
           <div>
             <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.serviceHeading}</h4>
-            <ul className="flex flex-col gap-4 text-gray-400 text-sm">
+            <ul className="v-stack gap-4 text-gray-400 text-sm">
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">
@@ -69,7 +69,7 @@ const Footer = () => {
 
           <div>
             <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.companyHeading}</h4>
-            <ul className="flex flex-col gap-4 text-gray-400 text-sm">
+            <ul className="v-stack gap-4 text-gray-400 text-sm">
               {FOOTER_COPY.companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link href={link.path} className="group hover:text-white transition-colors relative block">
@@ -84,7 +84,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+        <div className="border-t border-white/10 pt-8 v-stack md:h-stack justify-between items-center text-xs text-gray-500">
           <p>{FOOTER_COPY.copyright}</p>
           <div className="flex gap-8 mt-4 md:mt-0">
             {FOOTER_COPY.badges.map((badge) => {

@@ -55,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={cn(sans.variable, serif.variable)}>
-        <div className="flex flex-col min-h-screen font-sans text-forest selection:bg-sunset selection:text-white">
+        <div className="v-stack min-h-screen font-sans text-forest selection:bg-sunset selection:text-white">
           <HeaderWrapper />
           <main className="flex-grow">{children}</main>
           <Footer />

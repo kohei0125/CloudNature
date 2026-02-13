@@ -49,7 +49,7 @@ const AIConcierge: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
       {isOpen ? (
-        <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] flex flex-col overflow-hidden border border-pebble animate-in slide-in-from-bottom-10 fade-in duration-300">
+        <div className="bg-white rounded-2xl shadow-2xl w-[350px] sm:w-[400px] h-[500px] v-stack overflow-hidden border border-pebble animate-in slide-in-from-bottom-10 fade-in duration-300">
           {/* Header */}
           <div className="p-4 flex justify-between items-center bg-forest text-white">
             <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ const AIConcierge: React.FC = () => {
           </div>
 
           {/* Chat Area */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 bg-mist">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 v-stack gap-4 bg-mist">
             {messages.map((msg, index) => (
               <div
                 key={index}

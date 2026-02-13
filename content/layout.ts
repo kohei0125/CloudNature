@@ -20,6 +20,7 @@ export const FOOTER_COPY = {
   ],
   companyLinks: [
     { label: "想い (Philosophy)", path: "/philosophy" },
+    { label: "企業情報", path: "/company" },
     { label: "導入事例", path: "/cases" },
     { label: "プライバシーポリシー", path: "/privacy" },
     { label: "情報セキュリティ方針", path: "/security" }

@@ -1,5 +1,12 @@
 import { NavItem } from "@/types";
 
+export const ESTIMATE_URL = "https://ai.cloudnature.jp";
+
+export const SITE_CTA = {
+  primary: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp" },
+  secondary: { label: "お問い合わせ・ご相談", href: "/contact" },
+};
+
 export const COLORS = {
   sageGreen: "#8A9668",
   deepForest: "#19231B",
@@ -16,6 +23,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "想い", path: "/philosophy" },
   { label: "サービス", path: "/services" },
   { label: "事例", path: "/cases" },
+  { label: "企業情報", path: "/company" },
   { label: "お問い合わせ", path: "/contact" }
 ];
 
@@ -44,6 +52,10 @@ export const PAGE_META = {
   privacy: {
     title: "プライバシーポリシー | 株式会社クラウドネイチャー",
     description: "個人情報の取り扱い方針についてご案内します。"
+  },
+  company: {
+    title: "企業情報 | 株式会社クラウドネイチャー",
+    description: "株式会社クラウドネイチャーの会社概要・代表メッセージ・沿革・アクセス情報。新潟の中小企業に寄り添うAI・システム開発パートナーです。"
   },
   security: {
     title: "情報セキュリティ方針 | 株式会社クラウドネイチャー",

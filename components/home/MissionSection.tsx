@@ -46,7 +46,7 @@ const MissionSection = () => {
                       0{index + 1}
                     </div>
 
-                    <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm transition-colors relative z-10">
+                    <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full center shadow-sm transition-colors relative z-10">
                       <Image
                         src={iconSrc}
                         alt=""

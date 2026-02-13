@@ -34,7 +34,7 @@ const MobileCarousel = ({ children }: { children: React.ReactNode[] }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="v-stack gap-4">
       {/* Scroll Container */}
       <div
         ref={scrollRef}
