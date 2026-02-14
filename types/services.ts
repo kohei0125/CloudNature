@@ -14,6 +14,7 @@ export interface ServiceDetail {
   features: { title: string; description: string }[];
   techStack: string[];
   accentColor: string;
+  image?: string;
 }
 
 export interface FlowStep {

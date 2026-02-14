@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { FaqItem } from "@/types";
+import type { FaqItem } from "@/types";
 
 interface FaqAccordionProps {
   items: FaqItem[];

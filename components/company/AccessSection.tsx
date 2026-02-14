@@ -15,7 +15,7 @@ const AccessSection = () => {
         <div className="glass-card rounded-2xl p-8 md:p-10">
           <div className="v-stack gap-6">
             <div className="h-stack gap-4 items-start">
-              <div className="w-10 h-10 rounded-full bg-sage/10 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-full bg-sage/10 center shrink-0">
                 <MapPin className="w-5 h-5 text-sage" />
               </div>
               <div>
@@ -28,7 +28,7 @@ const AccessSection = () => {
             </div>
 
             <div className="h-stack gap-4 items-start">
-              <div className="w-10 h-10 rounded-full bg-sunset/10 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-full bg-sunset/10 center shrink-0">
                 <Train className="w-5 h-5 text-sunset" />
               </div>
               <div>

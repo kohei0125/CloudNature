@@ -9,7 +9,7 @@ const StepFlow = () => {
       {STEP_FLOW.map((item, index) => (
         <motion.div
           key={item.step}
-          className="flex gap-4"
+          className="h-stack gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}

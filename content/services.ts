@@ -19,7 +19,8 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "業務効率化・自動化システム", description: "手作業で行っていたデータ入力、帳票作成、メール送信などを自動化。ヒューマンエラーを削減し、生産性を向上。" }
     ],
     techStack: ["Python", "PHP", "React", "AWS"],
-    accentColor: "sage"
+    accentColor: "sage",
+    image: "/images/services/system_dev.png"
   },
   {
     id: "ai",
@@ -32,7 +33,8 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "SaaS間のデータ自動連携", description: "n8nを活用し、Slack・Gmail・Notion・kintoneなど各種SaaSを自動連携。データの手動転記を完全に撲滅します。" }
     ],
     techStack: ["Dify", "n8n", "OpenAI", "Gemini"],
-    accentColor: "sunset"
+    accentColor: "sunset",
+    image: "/images/services/ai_agent.png"
   },
   {
     id: "dx",
@@ -45,7 +47,8 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "データに基づく経営判断支援", description: "散在するデータを可視化し、経営判断に必要な数字をリアルタイムで把握できる環境を構築します。" }
     ],
     techStack: ["現状分析", "導入研修", "運用定着支援"],
-    accentColor: "sea"
+    accentColor: "sea",
+    image: "/images/services/dx_support.png"
   }
 ];
 

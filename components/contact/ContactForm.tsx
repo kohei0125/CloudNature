@@ -66,7 +66,7 @@ const ContactForm = () => {
           type="text"
           required
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors"
         />
       </div>
@@ -81,7 +81,7 @@ const ContactForm = () => {
           type="email"
           required
           value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors"
         />
       </div>
@@ -94,7 +94,7 @@ const ContactForm = () => {
         <input
           type="text"
           value={formData.company}
-          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors"
         />
       </div>
@@ -106,7 +106,7 @@ const ContactForm = () => {
         </label>
         <select
           value={formData.subject}
-          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors bg-white"
         >
           {CONTACT_SUBJECTS.map((subject) => (
@@ -127,7 +127,7 @@ const ContactForm = () => {
           required
           rows={3}
           value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
           placeholder="例：社員10名の事務所で、請求書処理を自動化したい"
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors resize-vertical"
         />

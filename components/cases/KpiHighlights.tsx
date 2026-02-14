@@ -1,5 +1,3 @@
-"use client";
-
 import { KPI_HIGHLIGHTS, KPI_NOTE } from "@/content/cases";
 import NumberTicker from "@/components/shared/NumberTicker";
 

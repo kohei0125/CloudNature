@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { LegalSection } from "@/types";
+import type { LegalSection } from "@/types";
 
 interface LegalDocumentProps {
   sections: LegalSection[];
@@ -18,7 +18,7 @@ const LegalDocument = ({ sections, relatedLink }: LegalDocumentProps) => {
               {Array.isArray(section.content) ? (
                 <ul className="space-y-2">
                   {section.content.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-gray-600 leading-relaxed">
+                    <li key={idx} className="h-stack items-start gap-3 text-sm text-gray-600 leading-relaxed">
                       <span className="w-1.5 h-1.5 rounded-full bg-sage mt-2 flex-shrink-0" />
                       {item}
                     </li>

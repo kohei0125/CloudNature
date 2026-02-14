@@ -46,7 +46,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
 
         <ul className="space-y-2 mb-6">
           {study.results.map((result) => (
-            <li key={result} className="flex items-start gap-2">
+            <li key={result} className="h-stack items-start gap-2">
               <CheckCircle2 className="w-5 h-5 text-sage flex-shrink-0 mt-0.5" />
               <span className="text-sm text-forest font-medium">{result}</span>
             </li>
