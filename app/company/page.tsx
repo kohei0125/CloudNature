@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: PAGE_META.company.description,
     type: "website",
     locale: "ja_JP",
-    url: "https://cloudnature.example.com/company",
+    url: "https://cloudnature.jp/company",
   },
   twitter: {
     card: "summary_large_image",

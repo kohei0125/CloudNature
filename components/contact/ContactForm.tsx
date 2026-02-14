@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
 import { ESTIMATE_URL } from "@/content/common";
@@ -14,12 +14,51 @@ const ContactForm = () => {
     subject: CONTACT_SUBJECTS[0],
     message: "",
   });
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const validate = (field: string, value: string) => {
+    if (field === "name" && !value.trim()) return "お名前を入力してください";
+    if (field === "email" && !value.trim()) return "メールアドレスを入力してください";
+    if (field === "email" && value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+      return "正しいメールアドレスを入力してください";
+    if (field === "message" && !value.trim()) return "お問い合わせ内容を入力してください";
+    return "";
+  };
+
+  const getError = (field: string) => {
+    if (!touched[field]) return "";
+    return validate(field, formData[field as keyof typeof formData]);
+  };
+
+  const handleBlur = (field: string) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
+
+  const isValid =
+    formData.name.trim() !== "" &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+    formData.message.trim() !== "";
 
   // TODO: Integrate with backend API
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setTouched({ name: true, email: true, message: true });
+    if (!isValid) return;
+
+    setSubmitting(true);
+    setError("");
+    try {
+      // Replace with actual API call
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      setSubmitted(true);
+    } catch {
+      setError("送信に失敗しました。しばらく経ってから再度お試しください。");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -55,7 +94,7 @@ const ContactForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 space-y-5">
+    <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 space-y-5" noValidate>
       {/* Name */}
       <div>
         <label className="block text-sm font-bold text-forest mb-1.5">
@@ -67,8 +106,10 @@ const ContactForm = () => {
           required
           value={formData.name}
           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-          className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors"
+          onBlur={() => handleBlur("name")}
+          className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("name") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
+        {getError("name") && <p className="text-red-500 text-xs mt-1">{getError("name")}</p>}
       </div>
 
       {/* Email */}
@@ -82,8 +123,10 @@ const ContactForm = () => {
           required
           value={formData.email}
           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-          className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors"
+          onBlur={() => handleBlur("email")}
+          className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("email") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
+        {getError("email") && <p className="text-red-500 text-xs mt-1">{getError("email")}</p>}
       </div>
 
       {/* Company */}
@@ -128,18 +171,35 @@ const ContactForm = () => {
           rows={3}
           value={formData.message}
           onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+          onBlur={() => handleBlur("message")}
           placeholder="例：社員10名の事務所で、請求書処理を自動化したい"
-          className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors resize-vertical"
+          className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors resize-vertical ${getError("message") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
+        {getError("message") && <p className="text-red-500 text-xs mt-1">{getError("message")}</p>}
       </div>
+
+      {/* Error message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm">
+          {error}
+        </div>
+      )}
 
       {/* Submit */}
       <div>
         <button
           type="submit"
-          className="btn-puffy btn-puffy-accent w-full py-3.5 rounded-xl text-white font-bold text-base"
+          disabled={submitting}
+          className="btn-puffy btn-puffy-accent w-full py-3.5 rounded-xl text-white font-bold text-base disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
         >
-          {CONTACT_FORM_LABELS.submit}
+          {submitting ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              送信中...
+            </>
+          ) : (
+            CONTACT_FORM_LABELS.submit
+          )}
         </button>
         <p className="text-xs text-gray-500 text-center mt-2">
           {CONTACT_FORM_LABELS.submitNote}

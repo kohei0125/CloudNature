@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     description: PAGE_META.home.description,
     type: "website",
     locale: "ja_JP",
-    url: "https://cloudnature.example.com/",
+    url: "https://cloudnature.jp/",
     images: [{ url: "/images/niigata_city.jpg", width: 1200, height: 800, alt: HERO_COPY.heroImageAlt }]
   },
   twitter: {

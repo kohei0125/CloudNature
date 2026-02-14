@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { MISSION_COPY, VALUES } from "@/content/home";
 
 const MissionSection = () => {
@@ -28,9 +30,9 @@ const MissionSection = () => {
 
             <div className="relative space-y-4 md:space-y-6">
               {VALUES.map((value, index) => {
-                const colors = ["#8A9668", "#DD9348", "#79C0BC"];
+                const textColors = ["text-sage", "text-sunset", "text-sea"] as const;
                 const icons = ["/images/logo_green.png", "/images/logo_orange.png", "/images/logo_blue.png"];
-                const color = colors[index];
+                const textColor = textColors[index];
                 const iconSrc = icons[index];
 
                 return (
@@ -40,8 +42,7 @@ const MissionSection = () => {
                   >
                     {/* Number */}
                     <div
-                      className="text-5xl md:text-6xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20"
-                      style={{ color: color }}
+                      className={`text-5xl md:text-6xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20 ${textColor}`}
                     >
                       0{index + 1}
                     </div>
@@ -58,7 +59,7 @@ const MissionSection = () => {
 
                     <div className="relative z-10">
                       <h4 className="text-lg font-bold text-forest mb-1">{value.title.split(": ")[1]}</h4>
-                      <p className="text-xs font-bold mb-2 tracking-wider" style={{ color: color }}>{value.subtitle}</p>
+                      <p className={`text-xs font-bold mb-2 tracking-wider ${textColor}`}>{value.subtitle}</p>
                       <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                         {value.description}
                       </p>
@@ -68,6 +69,13 @@ const MissionSection = () => {
               })}
             </div>
           </div>
+        </div>
+
+        {/* CTA */}
+        <div className="mt-12 text-center">
+          <Link href="/philosophy" className="text-sage font-bold inline-flex items-center gap-2 hover:gap-3 transition-all">
+            私たちの想いを詳しく見る <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
         {/* SEO Content (Screen Reader Only) - Values List */}

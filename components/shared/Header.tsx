@@ -28,7 +28,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-[999999] transition-all duration-300 transform",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform",
         isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",
         isMobileMenuOpen
           ? "bg-transparent"

@@ -27,6 +27,7 @@ const serif = Noto_Serif_JP({
 export const metadata: Metadata = (() => {
   const isProd = process.env.NEXT_PUBLIC_ENV === "production";
   return {
+    metadataBase: new URL("https://cloudnature.jp"),
     title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
     description:
       "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",

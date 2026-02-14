@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { HERO_COPY, HERO_BENTO } from "@/content/home";
+import { ESTIMATE_URL } from "@/content/common";
 
 const HeroSection = () => {
   return (
@@ -56,14 +57,14 @@ const HeroSection = () => {
           </p>
 
           <div className="v-stack sm:h-stack gap-4">
-            <Link href="/contact" className="w-full sm:w-auto btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 text-white group bg-sunset shadow-lg shadow-sunset/30 hover:shadow-sunset/50 transition-all hover:-translate-y-0.5">
+            <a href={ESTIMATE_URL} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 text-white group bg-sunset shadow-lg shadow-sunset/30 hover:shadow-sunset/50 transition-all hover:-translate-y-0.5">
               {HERO_COPY.primaryCta}
               <div className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
                 <ArrowRight className="w-4 h-4" />
               </div>
-            </Link>
+            </a>
 
-            <Link href="/cases" className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-full font-bold hover:bg-white/20 transition-colors center gap-2 group">
+            <Link href="/services" className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-full font-bold hover:bg-white/20 transition-colors center gap-2 group">
               <PlayCircle className="w-5 h-5 text-white/70 group-hover:scale-110 transition-transform" />
               <span>{HERO_COPY.secondaryCta}</span>
             </Link>

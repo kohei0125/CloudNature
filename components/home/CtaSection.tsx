@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download, Zap, Database } from "lucide-react";
+import { Download, Zap, Database, FileText } from "lucide-react";
 import { CTA_BANNER } from "@/content/home";
 
 const CtaSection = () => {
@@ -17,14 +17,15 @@ const CtaSection = () => {
                 {CTA_BANNER.titleLines[1]}
               </h2>
 
-              {/* Mobile Image Placeholder (Visible only on mobile) */}
+              {/* Mobile Resource Card */}
               <div className="block md:hidden mb-6">
-                <div className="bg-gray-50 p-8 center border border-gray-100 rounded-2xl relative overflow-hidden">
-                  {/* Decorative background blur */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-                  {/* Placeholder Box */}
-                  <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl v-stack items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
-                    <p className="font-bold tracking-widest text-[10px] uppercase">Book Cover Image</p>
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex items-start gap-4">
+                  <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm text-sage flex-shrink-0">
+                    <Database className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-forest text-sm mb-1">{CTA_BANNER.downloadTitle}</h4>
+                    <p className="text-xs text-gray-500 font-medium">{CTA_BANNER.downloadMeta}</p>
                   </div>
                 </div>
               </div>
@@ -34,7 +35,7 @@ const CtaSection = () => {
               </p>
             </div>
 
-            {/* Resource Box */}
+            {/* Resource Box (Desktop) */}
             <div className="hidden md:flex bg-gray-50 rounded-xl p-5 border border-gray-100 items-start gap-4">
               <div className="p-3 bg-white rounded-lg border border-gray-100 shadow-sm text-sage">
                 <Database className="w-6 h-6" />
@@ -58,14 +59,32 @@ const CtaSection = () => {
             </div>
           </div>
 
-          {/* Right Column: Image Placeholder */}
-          <div className="hidden md:flex bg-gray-50 p-10 md:p-16 items-center justify-center border-t md:border-t-0 md:border-l border-gray-100 relative overflow-hidden">
-            {/* Decorative background blur */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+          {/* Right Column: Styled PDF Resource Preview */}
+          <div className="hidden md:flex bg-gradient-to-br from-forest to-earth p-10 md:p-16 items-center justify-center border-t md:border-t-0 relative overflow-hidden">
+            {/* Decorative blurs */}
+            <div className="absolute top-10 right-10 w-32 h-32 bg-sage/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-10 left-10 w-24 h-24 bg-sunset/15 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Placeholder Box */}
-            <div className="w-full h-full min-h-[300px] border-2 border-dashed border-gray-300 rounded-2xl v-stack items-center justify-center text-gray-400 relative z-10 bg-white/50 backdrop-blur-sm">
-              <p className="font-bold tracking-widest text-xs uppercase">Book Cover Image</p>
+            {/* Document mock */}
+            <div className="relative bg-white rounded-xl shadow-2xl p-8 max-w-[260px] transform rotate-2 hover:rotate-0 transition-transform duration-300">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="w-5 h-5 text-sage" />
+                <div className="h-1 bg-sage rounded-full flex-1" />
+              </div>
+              <p className="text-forest font-serif font-bold text-sm leading-snug mb-4">
+                {CTA_BANNER.downloadTitle}
+              </p>
+              <div className="space-y-2.5 mb-5">
+                <div className="h-2 bg-gray-100 rounded w-full" />
+                <div className="h-2 bg-gray-100 rounded w-4/5" />
+                <div className="h-2 bg-gray-100 rounded w-3/5" />
+                <div className="h-2 bg-gray-100 rounded w-full" />
+                <div className="h-2 bg-gray-100 rounded w-2/3" />
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-gray-400 font-medium">{CTA_BANNER.downloadMeta}</p>
+                <span className="px-2 py-0.5 bg-sage/10 text-sage text-[10px] font-bold rounded">PDF</span>
+              </div>
             </div>
           </div>
 
