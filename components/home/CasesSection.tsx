@@ -20,7 +20,7 @@ const CasesSection = () => {
           {CASE_STUDIES.map((study) => (
             <div key={study.id} className="group">
               {/* Image Area */}
-              <div className="relative h-48 md:h-60 rounded-[20px] overflow-hidden mb-6">
+              <div className="relative h-48 md:h-60 rounded-[15px] overflow-hidden mb-6">
                 <Image
                   src={study.image}
                   alt={study.title}
