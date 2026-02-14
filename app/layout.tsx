@@ -4,7 +4,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
 import Footer from "@/components/shared/Footer";
-import LazyAIConcierge from "@/components/shared/LazyAIConcierge";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
@@ -60,7 +59,6 @@ export default function RootLayout({
           <HeaderWrapper />
           <main className="flex-grow">{children}</main>
           <Footer />
-          <LazyAIConcierge />
         </div>
       </body>
     </html>

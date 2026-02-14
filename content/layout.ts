@@ -29,9 +29,5 @@ export const FOOTER_COPY = {
   badges: [
     { icon: "ShieldCheck" as const, label: "AI Guidelines" },
     { icon: "Check" as const, label: "GDPR Compliant" }
-  ],
-  socials: [
-    { abbr: "FB", label: "Facebook", href: "https://facebook.com/" },
-    { abbr: "X", label: "X (Twitter)", href: "https://x.com/" }
   ]
 };
