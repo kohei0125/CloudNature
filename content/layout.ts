@@ -16,7 +16,7 @@ export const FOOTER_COPY = {
   serviceLinks: [
     { label: "システム開発", path: "/services" },
     { label: "AIエージェント開発", path: "/services" },
-    { label: "DX伴走支援", path: "/services" }
+    { label: "AI活用支援", path: "/services" }
   ],
   companyLinks: [
     { label: "想い (Philosophy)", path: "/philosophy" },

@@ -4,6 +4,8 @@ export interface ServiceItem {
   description: string;
   features: string[];
   techStack: string[];
+  ctaUrl?: string;
+  ctaLabel?: string;
 }
 
 export interface ServiceDetail {
@@ -15,6 +17,7 @@ export interface ServiceDetail {
   techStack: string[];
   accentColor: string;
   image?: string;
+  externalUrl?: string;
 }
 
 export interface FlowStep {

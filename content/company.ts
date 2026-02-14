@@ -16,7 +16,7 @@ export const COMPANY_OVERVIEW: CompanyInfo[] = [
   {
     label: "事業内容",
     value:
-      "AIエージェント開発 / 業務システム開発 / DX伴走支援 / Webアプリケーション開発",
+      "AIエージェント開発 / 業務システム開発 / AI活用支援 / Webアプリケーション開発",
   },
   {
     label: "主要技術",

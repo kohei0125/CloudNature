@@ -37,18 +37,32 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     image: "/images/services/ai_agent.png"
   },
   {
-    id: "dx",
-    title: "DXサポート（伴走型）",
-    subtitle: "DX Consulting & Support",
-    description: "「何から始めればいいかわからない」を解決。現場ヒアリングから課題を可視化し、最もコスパの高い施策から段階的に導入。社員研修と定着支援まで一貫サポートします。",
+    id: "ai-training",
+    title: "AI活用支援",
+    subtitle: "AI Training & Academy",
+    description:
+      "「AIを導入したいが、社員が使いこなせるか不安」——その課題を、新潟AIアカデミーが解決します。未経験者でも最短1ヶ月でAI業務活用スキルを習得。資料作成3時間→30分、年収15%アップなど、受講者から具体的な成果が出ています。",
     features: [
-      { title: "現場ヒアリング・課題の可視化", description: "現場の声を丁寧に拾い上げ、本当のボトルネックを特定。経営者と現場の認識ギャップを埋めます。" },
-      { title: "社員向け導入研修・マニュアル整備", description: "「導入したけど使われない」を防ぐため、現場目線の研修とわかりやすいマニュアルを作成します。" },
-      { title: "データに基づく経営判断支援", description: "散在するデータを可視化し、経営判断に必要な数字をリアルタイムで把握できる環境を構築します。" }
+      {
+        title: "法人向けAIセミナー・研修",
+        description:
+          "にいがたAIサミットをはじめ、御社向けのカスタマイズ研修を実施。経営層から現場社員まで、レベルに合わせたプログラムで全社的なAIリテラシーを底上げします。"
+      },
+      {
+        title: "個別スクール（通学・オンライン対応）",
+        description:
+          "AI入門・業務効率化特化・AIプログラミングの3コースをプロ講師がマンツーマン指導。新潟市古町校・女池校またはZoomで受講可能。全額返金保証付き。"
+      },
+      {
+        title: "受講後の継続サポート・キャリア支援",
+        description:
+          "スキルを身につけて終わりにしません。受講後も継続的なサポートと、AIスキルを活かせる仕事の紹介で、学びを確実に成果につなげます。"
+      }
     ],
-    techStack: ["現状分析", "導入研修", "運用定着支援"],
+    techStack: ["セミナー", "個別スクール", "法人研修", "オンライン対応"],
     accentColor: "sea",
-    image: "/images/services/dx_support.png"
+    image: "/images/services/dx_support.png",
+    externalUrl: "https://niigata-ai-academy.com"
   }
 ];
 

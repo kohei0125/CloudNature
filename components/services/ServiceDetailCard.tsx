@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { ServiceDetail } from "@/types";
@@ -52,7 +52,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
         </div>
       )}
 
-      <div className="p-6 md:p-10 md:w-3/5 flex flex-col relative justify-center">
+      <div className="p-6 md:p-10 md:w-3/5 v-stack relative justify-center">
         {/* Background Number */}
         <span
           className={cn(
@@ -110,6 +110,18 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
               </span>
             ))}
           </div>
+
+          {service.externalUrl && (
+            <a
+              href={service.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 btn-puffy btn-puffy-accent px-6 py-3 rounded-full font-bold text-sm text-white inline-flex items-center gap-2"
+            >
+              詳しくはこちら
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          )}
         </div>
       </div>
     </div>

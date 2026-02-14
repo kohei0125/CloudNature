@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICES_SECTION, SERVICES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
@@ -36,6 +36,17 @@ const ServicesSection = () => {
                     </li>
                   ))}
                 </ul>
+                {service.ctaUrl && (
+                  <a
+                    href={service.ctaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 text-sm font-bold text-sea inline-flex items-center gap-1 hover:underline transition-colors"
+                  >
+                    {service.ctaLabel || "詳しくはこちら"}
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                )}
               </div>
               <div className="px-5 py-6 bg-forest text-white/80 text-xs">
                 <div className="md:hidden overflow-hidden">
