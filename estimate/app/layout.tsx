@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "次世代AIシステム見積もり・要件定義プラットフォーム | CloudNature",
   description:
     "ハイブリッドAIエージェントが最適なアーキテクチャを逆算し、精緻なWBSと確率論的見積もりを最短1分で自動生成。そのまま稟議書として活用できます。",
+  icons: {
+    icon: "/favicon.png",
+  },
   ...(!isProduction && {
     robots: { index: false, follow: false },
   }),
