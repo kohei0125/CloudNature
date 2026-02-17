@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .v-stack {
+    display: flex;
+    flex-direction: column;
+  }
+  .h-stack {
+    display: flex;
+    flex-direction: row;
+  }
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+:root {
+  color-scheme: light;
+  --font-sans: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Noto Serif JP", -apple-system, BlinkMacSystemFont, "Segoe UI", serif;
+  --accent: 138 150 104;        /* sage #8A9668 */
+  --accent-dark: 25 35 27;      /* forest #19231B */
+  --accent-warm: 221 147 72;    /* sunset #DD9348 */
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  html {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+body {
+  font-family: var(--font-sans), "Noto Sans JP", sans-serif;
+  background-color: theme('colors.linen');
+  color: #19231B;
+  font-feature-settings: "palt";
+  font-kerning: normal;
+  overflow-x: hidden;
+}
+
+/* Option card */
+.option-card {
+  background: white;
+  border: 1.5px solid #d6d3cd;
+  border-radius: 14px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  font-size: 0.9375rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.option-card:hover {
+  border-color: #8A9668;
+  background: #f9f8f5;
+  box-shadow: 0 2px 8px rgba(138, 150, 104, 0.1);
+}
+
+.option-card:active {
+  transform: scale(0.985);
+}
+
+.option-card--selected {
+  border-color: #8A9668;
+  background: linear-gradient(135deg, #f5f7f0 0%, #eef1e8 100%);
+  box-shadow: 0 2px 12px rgba(138, 150, 104, 0.15);
+}
+
+/* Submit / Next button */
+.btn-submit {
+  background: linear-gradient(135deg, #19231B 0%, #2d3b2f 100%);
+  color: white;
+  box-shadow:
+    0px 4px 12px -2px rgba(25, 35, 27, 0.25),
+    0px 2px 4px -1px rgba(25, 35, 27, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0px 8px 20px -4px rgba(25, 35, 27, 0.3),
+    0px 4px 8px -2px rgba(25, 35, 27, 0.15);
+}
+
+.btn-submit:active {
+  transform: translateY(1px);
+  box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.btn-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+/* Puffy button */
+.btn-puffy {
+  background-color: #19231B;
+  color: white;
+  box-shadow:
+    0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-puffy:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0px 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.15);
+}
+
+.btn-puffy:active {
+  transform: translateY(1px);
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-puffy-accent {
+  background-color: #DD9348;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

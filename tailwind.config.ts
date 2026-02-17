@@ -25,6 +25,9 @@ const config: Config = {
         linen: "#F4F2F0",
         mist: "#F8F9FA",
       },
+      backgroundImage: {
+        "inorganic-lines": "repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 20px)",
+      },
       animation: {
         "infinite-scroll": "infinite-scroll 25s linear infinite",
       },

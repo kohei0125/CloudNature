@@ -1,5 +1,8 @@
 import nextConfig from "eslint-config-next";
 
-const config = [...nextConfig];
+const config = [
+  { ignores: ["estimate/", "backend/"] },
+  ...nextConfig,
+];
 
 export default config;
