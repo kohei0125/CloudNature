@@ -6,45 +6,51 @@ CloudNature コーポレートサイト & AI見積もりシステムのモノレ
 
 ```
 ├── app/             コーポレートサイト (Next.js)   → cloudnature.jp
-├── estimate/        AI見積もりシステム (Next.js)    → ai.cloudnature.jp
-├── backend/         見積もりAPI (FastAPI)           → api
-└── docker-compose.yml
+├── estimate/        AI見積もりフロントエンド (Next.js) → ai.cloudnature.jp
+├── backend/         見積もりAPI (FastAPI)           → Cloud Run
+├── docs/            設計書・TODO
+└── docker-compose.yml  ローカル開発用
 ```
 
 | サービス | 技術スタック | ポート |
 |---|---|---|
 | コーポレートサイト | Next.js 16, React 19, Tailwind CSS | 3000 |
 | AI見積もりフロントエンド | Next.js 16, React 19, Tailwind CSS, react-pdf | 3001 |
-| 見積もりバックエンド | FastAPI, SQLModel (SQLite), OpenAI API | 8000 |
+| 見積もりバックエンド | FastAPI, SQLModel, OpenAI API | 8000 |
+
+### データベース
+
+- **ローカル開発**: SQLite (`backend/estimate.db`)
+- **本番**: Neon (Serverless PostgreSQL)
+
+`backend/app/db.py` が `DATABASE_URL` のスキーマに応じて SQLite / PostgreSQL を自動切替。
+
+### 認証
+
+Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護。
+`API_KEY` が空の場合はスキップされる（ローカル開発用）。
 
 ---
 
-## ローカル起動（Docker Compose 推奨）
+## ローカル起動
 
-### 前提条件
-
-- Docker / Docker Compose
-
-### 1. 環境変数を設定
+### Docker Compose（推奨）
 
 ```bash
-cd backend
-cp .env.sample .env
-# .env を編集して OPENAI_API_KEY と RESEND_API_KEY を設定
-```
+# 1. 環境変数を設定
+cp backend/.env.sample backend/.env
+# backend/.env を編集して OPENAI_API_KEY を設定
 
-### 2. AI見積もりシステム（バックエンド + フロントエンド一括起動）
-
-```bash
+# 2. 起動
 docker compose up --build
 # → フロントエンド: http://localhost:3001
 # → バックエンド:   http://localhost:8000
 # → Swagger UI:     http://localhost:8000/docs
 ```
 
-ソースコードの変更はホットリロードで即反映されます（volume mount済み）。
+ソースコードの変更はホットリロードで即反映されます。
 
-### 3. コーポレートサイト（ルート）
+### コーポレートサイト（別途起動）
 
 ```bash
 npm install
@@ -55,7 +61,7 @@ npm run dev
 ### Docker を使わない場合
 
 <details>
-<summary>直接起動する方法（Node.js 20+ / Python 3.11+ が必要）</summary>
+<summary>直接起動する方法（Node.js 20+ / Python 3.12+ が必要）</summary>
 
 #### バックエンド
 
@@ -63,16 +69,17 @@ npm run dev
 cd backend
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-cp .env.sample .env  # APIキーを設定
+cp .env.sample .env  # OPENAI_API_KEY を設定
 .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### フロントエンド
+#### 見積もりフロントエンド
 
 ```bash
 cd estimate
 npm install
-BACKEND_URL=http://localhost:8000 npm run dev
+cp .env.sample .env.local  # 必要に応じて編集
+npm run dev
 ```
 
 </details>
@@ -83,16 +90,36 @@ BACKEND_URL=http://localhost:8000 npm run dev
 
 ### backend/.env
 
-```
+```bash
+# Database（ローカルは SQLite、本番は Neon PostgreSQL）
+DATABASE_URL=sqlite:///./estimate.db
+
+# API Key（Vercel → backend 間認証、ローカルでは空でスキップ）
+API_KEY=
+
+# LLM
 OPENAI_API_KEY=<your-openai-api-key>
 OPENAI_MODEL=gpt-4o
 LLM_MAX_RETRIES=3
 LLM_TIMEOUT=30
+
+# Email
 RESEND_API_KEY=<your-resend-api-key>
-DATABASE_URL=sqlite:///./estimate.db
+EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>
+
+# App
 FRONTEND_URL=http://localhost:3001
 CORS_ORIGINS=http://localhost:3001
 DATA_TTL_DAYS=31
+```
+
+### estimate/.env.local
+
+```bash
+BACKEND_URL=http://localhost:8000
+NEXT_PUBLIC_API_BASE=
+NEXT_PUBLIC_ENV=development
+BACKEND_API_KEY=
 ```
 
 ---
@@ -102,11 +129,28 @@ DATA_TTL_DAYS=31
 | メソッド | パス | 概要 |
 |---|---|---|
 | POST | `/api/v1/estimate/session` | セッション作成 |
-| GET | `/api/v1/estimate/session/{id}` | セッション復元 |
-| POST | `/api/v1/estimate/step` | ステップ回答送信 |
+| GET | `/api/v1/estimate/session/{id}` | セッション取得 |
+| POST | `/api/v1/estimate/step` | ステップ回答送信（fire-and-forget） |
 | POST | `/api/v1/estimate/generate` | 見積もり生成トリガー |
-| GET | `/api/v1/estimate/result/{id}` | 生成結果取得 |
-| GET | `/api/v1/health` | ヘルスチェック |
+| GET | `/api/v1/estimate/result/{id}` | 生成結果ポーリング |
+| GET | `/api/v1/health` | ヘルスチェック（API Key 不要） |
+
+`/step` は Step 7 以外 `BackgroundTasks` で DB 保存を非同期化し、レスポンスを高速化している。
+Step 7 のみ動的質問生成のために同期保存。
+
+---
+
+## 本番デプロイ
+
+| コンポーネント | デプロイ先 |
+|---|---|
+| コーポレートサイト | Vercel |
+| AI見積もりフロントエンド | Vercel (`estimate/` を Root Directory に指定) |
+| 見積もりバックエンド | GCP Cloud Run (asia-northeast1) |
+| データベース | Neon (Serverless PostgreSQL) |
+
+詳細は [`docs/20260217_estimate_deploy_design.md`](docs/20260217_estimate_deploy_design.md) を参照。
+デプロイ手順のチェックリストは [`docs/TODO.md`](docs/TODO.md) を参照。
 
 ---
 
@@ -114,12 +158,21 @@ DATA_TTL_DAYS=31
 
 ```bash
 # コーポレートサイト
-npm run build
 npm run lint -- --max-warnings=0
+npm run build
 
 # 見積もりフロントエンド
 cd estimate && npm run build
-
-# バックエンドテスト
-cd backend && .venv/bin/python -m pytest
 ```
+
+---
+
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [`docs/TODO.md`](docs/TODO.md) | デプロイチェックリスト & 技術的負債 |
+| [`docs/20260217_estimate_deploy_design.md`](docs/20260217_estimate_deploy_design.md) | デプロイ設計（Cloud Run + Neon + Vercel） |
+| [`docs/20260216_estimate_strategy.md`](docs/20260216_estimate_strategy.md) | 見積もりシステム戦略 |
+| [`docs/20260216_estimate_top_design.md`](docs/20260216_estimate_top_design.md) | 見積もり UI/UX 設計 |
+| [`docs/20260212_estimate_system_design.md`](docs/20260212_estimate_system_design.md) | システム設計 |
