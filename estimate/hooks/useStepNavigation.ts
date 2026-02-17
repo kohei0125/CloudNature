@@ -51,7 +51,7 @@ export function useStepNavigation() {
   useEffect(() => {
     canGoNextRef.current = canGoNext;
     canGoBackRef.current = canGoBack;
-  });
+  }, [canGoNext, canGoBack]);
 
   const goNext = useCallback(() => {
     if (canGoNextRef.current) {

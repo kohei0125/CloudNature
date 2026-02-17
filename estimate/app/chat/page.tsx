@@ -3,7 +3,7 @@
 import { useEffect, useCallback, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Send } from "lucide-react";
 import { EstimateProvider, useEstimateSession } from "@/hooks/useEstimateSession";
 import { useStepNavigation } from "@/hooks/useStepNavigation";
@@ -67,11 +67,11 @@ function ChatPageContent() {
   }, [stepConfig?.aiGenerated, state.aiOptions.step8Features]);
 
   // Typing message for AI steps
-  const typingMessage = useMemo(() => {
-    if (!isGenerating) return undefined;
-    if (stepConfig?.aiGenerated || currentStep === 7) return AI_MESSAGES.generatingFeatures;
-    return AI_MESSAGES.generatingEstimate;
-  }, [isGenerating, currentStep, stepConfig?.aiGenerated]);
+  const typingMessage = !isGenerating
+    ? undefined
+    : (stepConfig?.aiGenerated || currentStep === 7)
+      ? AI_MESSAGES.generatingFeatures
+      : AI_MESSAGES.generatingEstimate;
 
   // Handle advancing to next step (used by select auto-advance and next button)
   // Uses dispatch directly instead of goNext() to avoid stale canGoNextRef
@@ -162,7 +162,14 @@ function ChatPageContent() {
             ) : isError ? (
               <ErrorRetry key="error" onRetry={handleRetry} />
             ) : (
-              <div key={`step-${currentStep}`} className="v-stack gap-8">
+              <motion.div
+                key={`step-${currentStep}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="v-stack gap-8"
+              >
                 {/* Question bubble with avatar */}
                 <QuestionBubble question={questionText} />
 
@@ -202,7 +209,7 @@ function ChatPageContent() {
                     )}
                   </div>
                 )}
-              </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>

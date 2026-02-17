@@ -53,11 +53,11 @@ export default function TextInput({
         ) : (
           <span />
         )}
-        {maxLength && (
+        {maxLength != null ? (
           <span>
             {trimmedLen}/{maxLength}
           </span>
-        )}
+        ) : null}
       </div>
     </motion.div>
   );

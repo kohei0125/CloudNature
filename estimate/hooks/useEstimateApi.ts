@@ -23,7 +23,7 @@ export function useEstimateApi() {
   const sessionIdRef = useRef(state.sessionId);
   useEffect(() => {
     sessionIdRef.current = state.sessionId;
-  });
+  }, [state.sessionId]);
 
   const addMessage = useCallback(
     (prefix: string, content: string) => {
