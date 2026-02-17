@@ -92,7 +92,7 @@ function CostSimulator() {
       {/* Simulator CTA */}
       <Link
         href="/chat"
-        className="group mt-3 md:mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-forest py-2.5 md:py-3 text-sm font-bold text-white transition-colors hover:bg-earth"
+        className="group mt-3 md:mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-sunset md:bg-forest py-2.5 md:py-3 text-sm font-bold text-white transition-colors hover:brightness-110 md:hover:bg-earth"
       >
         この条件で詳しく見積もる
         <ArrowRight className="h-3.5 w-3.5 animate-nudge-x" />
@@ -105,7 +105,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-svh md:min-h-[92vh] flex-col justify-center overflow-hidden pt-20 md:pt-24">
+    <section className="relative flex min-h-svh md:min-h-[92vh] flex-col justify-center overflow-hidden pt-20 pb-16 md:pt-24 md:pb-0">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10 h-full w-full">
         <Image
