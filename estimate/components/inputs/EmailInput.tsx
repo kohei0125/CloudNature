@@ -9,12 +9,14 @@ interface EmailInputProps {
   value: string;
   onChange: (value: string) => void;
   maxLength?: number;
+  "aria-label"?: string;
 }
 
 export default function EmailInput({
   value,
   onChange,
   maxLength = 254,
+  "aria-label": ariaLabel = "メールアドレス",
 }: EmailInputProps) {
   const [touched, setTouched] = useState(false);
   const isValid = EMAIL_REGEX.test(value.trim());
@@ -30,6 +32,7 @@ export default function EmailInput({
       <input
         type="email"
         inputMode="email"
+        aria-label={ariaLabel}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onBlur={() => setTouched(true)}

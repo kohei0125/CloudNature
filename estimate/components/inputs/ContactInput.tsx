@@ -56,6 +56,10 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
     touched.email && contact.email.length > 0 && !EMAIL_REGEX.test(contact.email.trim())
       ? ERROR_MESSAGES.invalidEmail
       : null;
+  const companyError =
+    touched.company && contact.company.trim().length === 0
+      ? "企業・団体名をご入力ください"
+      : null;
 
   const fieldClass = (hasError: boolean) =>
     cn(
@@ -127,17 +131,27 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
       {/* Company */}
       <div className="v-stack gap-1.5">
         <label htmlFor="contact-company" className="text-sm font-medium text-gray-700">
-          企業・団体名
+          企業・団体名 <span className="text-red-400">*</span>
         </label>
         <input
           id="contact-company"
           type="text"
           value={contact.company}
           onChange={(e) => handleChange("company", e.target.value)}
+          onBlur={() => handleBlur("company")}
           placeholder="株式会社〇〇"
           maxLength={100}
-          className={fieldClass(false)}
+          className={fieldClass(!!companyError)}
         />
+        {companyError && (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-xs text-red-500"
+          >
+            {companyError}
+          </motion.span>
+        )}
       </div>
 
       {/* Email */}

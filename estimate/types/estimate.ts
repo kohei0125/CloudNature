@@ -13,6 +13,8 @@ export interface StepConfig {
   type: StepType;
   required: boolean;
   maxLength?: number;
+  minLength?: number;
+  placeholder?: string;
   aiGenerated?: boolean;
   options?: StepOption[];
   validation?: (value: string | string[]) => string | null;

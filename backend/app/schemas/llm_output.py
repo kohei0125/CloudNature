@@ -1,5 +1,7 @@
 """JSON Schema definitions and validation for LLM outputs."""
 
+import re
+
 import jsonschema
 
 DYNAMIC_QUESTIONS_SCHEMA: dict = {
@@ -69,13 +71,29 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
 }
 
 
+# Patterns that indicate placeholder/generic labels (e.g. "機能1の提案", "Feature A")
+_PLACEHOLDER_RE = re.compile(
+    r"機能\d|提案\d|機能[A-Za-z]|Feature\s*\d|おすすめ機能\d|機能\d+の提案",
+)
+
+
 def validate_dynamic_questions(data: dict) -> bool:
-    """Validate LLM output for dynamic questions (Steps 8-10)."""
+    """Validate LLM output for dynamic questions (Steps 8-10).
+
+    Rejects responses with placeholder-like labels.
+    """
     try:
         jsonschema.validate(instance=data, schema=DYNAMIC_QUESTIONS_SCHEMA)
-        return True
     except jsonschema.ValidationError:
         return False
+
+    # Reject placeholder labels
+    for feature in data.get("step8_features", []):
+        label = feature.get("label", "")
+        if _PLACEHOLDER_RE.search(label):
+            return False
+
+    return True
 
 
 def validate_estimate_output(data: dict) -> bool:

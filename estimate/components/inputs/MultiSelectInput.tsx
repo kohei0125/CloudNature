@@ -9,12 +9,14 @@ interface MultiSelectInputProps {
   options: StepOption[];
   value: string[];
   onChange: (value: string[]) => void;
+  "aria-label"?: string;
 }
 
 export default function MultiSelectInput({
   options,
   value,
   onChange,
+  "aria-label": ariaLabel,
 }: MultiSelectInputProps) {
   function toggleOption(optionValue: string) {
     if (value.includes(optionValue)) {
@@ -26,6 +28,8 @@ export default function MultiSelectInput({
 
   return (
     <motion.div
+      role="group"
+      aria-label={ariaLabel}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}

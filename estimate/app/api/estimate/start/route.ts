@@ -29,7 +29,8 @@ export async function POST() {
       sessionId: data.session_id,
       status: data.status,
     });
-  } catch {
+  } catch (error) {
+    console.error("[estimate/start]", error);
     return NextResponse.json(
       { error: "Failed to create session" },
       { status: 502 }

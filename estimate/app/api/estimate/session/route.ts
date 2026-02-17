@@ -91,7 +91,8 @@ export async function GET(request: NextRequest) {
       sessionId: data.session_id,
       status: data.status,
     });
-  } catch {
+  } catch (error) {
+    console.error("[estimate/session]", error);
     return NextResponse.json(
       { error: "Failed to get session" },
       { status: 502 }

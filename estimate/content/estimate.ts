@@ -99,7 +99,6 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
   systemType: [
     { value: "web_app", label: "WEBアプリ" },
     { value: "mobile_app", label: "スマホアプリ" },
-    { value: "software", label: "ソフトウェア" },
     { value: "undecided_other", label: "決まっていない/その他" },
   ],
   developmentType: [
@@ -126,9 +125,7 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
     { value: "500k_1m", label: "50万円〜100万円" },
     { value: "1m_3m", label: "100万円〜300万円" },
     { value: "3m_5m", label: "300万円〜500万円" },
-    { value: "5m_10m", label: "500万円〜1,000万円" },
-    { value: "10m_30m", label: "1,000万円〜3,000万円" },
-    { value: "30m_plus", label: "3,000万円以上" },
+    { value: "5m_plus", label: "500万円以上" },
     { value: "unknown", label: "わからない・未定" },
   ],
 };
@@ -286,7 +283,7 @@ export const LP_COPY = {
         path: "https://cloudnature.jp/security",
       },
     ],
-    copyright: "© 2026 CloudNature Co., Ltd. All Rights Reserved.",
+    copyright: `© ${new Date().getFullYear()} CloudNature Co., Ltd. All Rights Reserved.`,
     badges: [
       { icon: "ShieldCheck" as const, label: "AI Guidelines" },
       { icon: "Check" as const, label: "GDPR Compliant" },
@@ -350,8 +347,8 @@ export const COMMON_LABELS = {
 // ---------------------------------------------------------------------------
 export const AI_MESSAGES = {
   generatingQuestion: "AIがあなた専用の質問を作成中...",
-  generatingOptions: "御社に最適な選択肢を分析中...",
-  generatingFeatures: "おすすめの機能を選定中...",
+  generatingOptions: "貴社に最適な選択肢を分析中...",
+  generatingFeatures: "準備中です。少々お待ちください...",
   generatingEstimate: "お見積もりを作成中です。少々お待ちください...",
   estimateReady: "お見積もりが完成しました。",
   error: "エラーが発生しました。もう一度お試しください。",

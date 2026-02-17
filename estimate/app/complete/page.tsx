@@ -14,6 +14,7 @@ import {
   Clock,
 } from "lucide-react";
 import { load, clear } from "@/lib/sessionStorage";
+import { TOTAL_STEPS } from "@/lib/stepConfig";
 import type { EstimateSession, GeneratedEstimate } from "@/types/estimate";
 
 /* ------------------------------------------------------------------ */
@@ -35,7 +36,7 @@ export default function CompletePage() {
     function loadData() {
       const session = load<EstimateSession>("session");
       if (session?.answers) {
-        const raw = session.answers[13];
+        const raw = session.answers[TOTAL_STEPS];
         if (typeof raw === "string") {
           try {
             const contact = JSON.parse(raw);
@@ -80,10 +81,10 @@ export default function CompletePage() {
     );
   }
 
-  const savings = estimate.totalCost.standard - estimate.totalCost.hybrid;
-  const savingsPercent = Math.round(
-    (savings / estimate.totalCost.standard) * 100
-  );
+  const standard = estimate.totalCost?.standard ?? 0;
+  const hybrid = estimate.totalCost?.hybrid ?? 0;
+  const savings = standard - hybrid;
+  const savingsPercent = standard > 0 ? Math.round((savings / standard) * 100) : 0;
 
   return (
     <div className="min-h-[100dvh] bg-linen">

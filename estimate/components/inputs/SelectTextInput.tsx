@@ -10,6 +10,7 @@ interface SelectTextInputProps {
   value: string | string[];
   onChange: (value: string | string[]) => void;
   onAutoAdvance?: () => void;
+  "aria-label"?: string;
 }
 
 const OTHER_VALUE = "__other__";
@@ -19,6 +20,7 @@ export default function SelectTextInput({
   value,
   onChange,
   onAutoAdvance,
+  "aria-label": ariaLabel,
 }: SelectTextInputProps) {
   const currentValue = typeof value === "string" ? value : "";
   const isOther = currentValue.startsWith(OTHER_VALUE + ":");
@@ -44,6 +46,8 @@ export default function SelectTextInput({
 
   return (
     <motion.div
+      role="radiogroup"
+      aria-label={ariaLabel}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -87,9 +91,11 @@ export default function SelectTextInput({
             transition={{ duration: 0.2 }}
           >
             <textarea
+              aria-label="その他の詳細"
               value={otherText}
               onChange={(e) => handleOtherTextChange(e.target.value)}
               placeholder="詳細をご入力ください..."
+              maxLength={500}
               rows={3}
               className={cn(
                 "mt-1 w-full resize-none rounded-[14px] border-[1.5px] border-[#d6d3cd] bg-white px-5 py-4",

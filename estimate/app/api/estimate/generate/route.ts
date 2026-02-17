@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
       status: data.status,
       estimate,
     });
-  } catch {
+  } catch (error) {
+    console.error("[estimate/generate]", error);
     return NextResponse.json(
       { error: "Failed to generate estimate" },
       { status: 502 }

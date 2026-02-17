@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
       nextStep: data.next_step,
       aiOptions,
     });
-  } catch {
+  } catch (error) {
+    console.error("[estimate/step]", error);
     return NextResponse.json(
       { error: "Failed to submit step" },
       { status: 502 }

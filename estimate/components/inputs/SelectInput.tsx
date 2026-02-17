@@ -10,6 +10,7 @@ interface SelectInputProps {
   value: string;
   onChange: (value: string) => void;
   onAutoAdvance?: () => void;
+  "aria-label"?: string;
 }
 
 export default function SelectInput({
@@ -17,6 +18,7 @@ export default function SelectInput({
   value,
   onChange,
   onAutoAdvance,
+  "aria-label": ariaLabel,
 }: SelectInputProps) {
   function handleSelect(optionValue: string) {
     onChange(optionValue);
@@ -28,6 +30,7 @@ export default function SelectInput({
   return (
     <motion.div
       role="radiogroup"
+      aria-label={ariaLabel}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}

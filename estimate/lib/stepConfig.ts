@@ -30,6 +30,9 @@ export const STEP_CONFIGS: StepConfig[] = [
     type: "text",
     required: true,
     maxLength: 500,
+    minLength: 10,
+    placeholder:
+      "例：紙の請求書管理に時間がかかっており、電子化して業務を効率化したい",
     validation: (value) => {
       if (typeof value === "string" && value.trim().length < 10) {
         return "10文字以上でご入力ください";
@@ -58,11 +61,11 @@ export const STEP_CONFIGS: StepConfig[] = [
     required: true,
     options: STEP_OPTIONS.developmentType,
   },
-  // Step 8: AI-generated feature suggestions (multi-select)
+  // Step 8: AI-generated feature suggestions (multi-select, optional)
   {
     id: 8,
     type: "multi-select",
-    required: true,
+    required: false,
     aiGenerated: true,
   },
   // Step 9: Timeline
@@ -104,6 +107,9 @@ export const STEP_CONFIGS: StepConfig[] = [
         const parsed = JSON.parse(value);
         if (!parsed.name || parsed.name.trim().length < 2) {
           return "お名前を2文字以上でご入力ください";
+        }
+        if (!parsed.company || parsed.company.trim().length < 1) {
+          return "企業・団体名をご入力ください";
         }
         if (!parsed.email || !EMAIL_REGEX.test(parsed.email.trim())) {
           return "有効なメールアドレスをご入力ください";

@@ -20,7 +20,7 @@ export default function ProgressBar({
         aria-valuenow={currentStep}
         aria-valuemin={1}
         aria-valuemax={totalSteps}
-        aria-label={`ステップ ${currentStep} / ${totalSteps}`}
+        aria-label={`ステップ ${currentStep}（全${totalSteps}ステップ）`}
         className="h-2 overflow-hidden rounded-full bg-clay"
       >
         <motion.div

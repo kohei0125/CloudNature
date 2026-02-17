@@ -20,7 +20,6 @@ export default function NavigationControls({
         type="button"
         onClick={onBack}
         disabled={!canGoBack}
-        aria-disabled={!canGoBack}
         aria-label="前のステップに戻る"
         className={cn(
           "inline-flex items-center gap-1 text-sm font-medium transition-colors",

@@ -1,6 +1,7 @@
 "use client";
 
 import type { StepConfig, StepOption } from "@/types/estimate";
+import { STEP_MESSAGES } from "@/content/estimate";
 import SelectInput from "@/components/inputs/SelectInput";
 import MultiSelectInput from "@/components/inputs/MultiSelectInput";
 import TextInput from "@/components/inputs/TextInput";
@@ -24,6 +25,7 @@ export default function StepRenderer({
   onAutoAdvance,
 }: StepRendererProps) {
   const options = stepConfig.aiGenerated ? aiOptions : stepConfig.options;
+  const ariaLabel = STEP_MESSAGES[stepConfig.id]?.description;
 
   switch (stepConfig.type) {
     case "select":
@@ -33,6 +35,7 @@ export default function StepRenderer({
           value={typeof value === "string" ? value : ""}
           onChange={(v) => onChange(v)}
           onAutoAdvance={onAutoAdvance}
+          aria-label={ariaLabel}
         />
       );
 
@@ -42,6 +45,7 @@ export default function StepRenderer({
           options={options ?? []}
           value={Array.isArray(value) ? value : []}
           onChange={(v) => onChange(v)}
+          aria-label={ariaLabel}
         />
       );
 
@@ -51,6 +55,9 @@ export default function StepRenderer({
           value={typeof value === "string" ? value : ""}
           onChange={(v) => onChange(v)}
           maxLength={stepConfig.maxLength}
+          minLength={stepConfig.minLength}
+          placeholder={stepConfig.placeholder}
+          aria-label={ariaLabel}
         />
       );
 
@@ -60,6 +67,7 @@ export default function StepRenderer({
           value={typeof value === "string" ? value : ""}
           onChange={(v) => onChange(v)}
           maxLength={stepConfig.maxLength}
+          aria-label={ariaLabel}
         />
       );
 
@@ -78,6 +86,7 @@ export default function StepRenderer({
           value={value}
           onChange={onChange}
           onAutoAdvance={onAutoAdvance}
+          aria-label={ariaLabel}
         />
       );
 

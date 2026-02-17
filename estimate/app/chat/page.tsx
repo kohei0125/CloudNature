@@ -38,7 +38,6 @@ function ChatPageContent() {
     canGoNext,
     canGoBack,
     isLastStep,
-    goNext,
     goBack,
     setAnswer,
   } = useStepNavigation();
@@ -58,20 +57,25 @@ function ChatPageContent() {
     initSession();
   }, [state.sessionId, startSession]);
 
-  // Get AI options for the current step
+  // Get AI options for the current step (append "その他" for step 8)
   const aiOptions: StepOption[] | undefined = useMemo(() => {
-    if (currentStep === 8) return state.aiOptions.step8Features;
+    if (stepConfig?.aiGenerated) {
+      const features = state.aiOptions.step8Features ?? [];
+      return [...features, { value: "other", label: "その他" }];
+    }
     return undefined;
-  }, [currentStep, state.aiOptions.step8Features]);
+  }, [stepConfig?.aiGenerated, state.aiOptions.step8Features]);
 
   // Typing message for AI steps
   const typingMessage = useMemo(() => {
     if (!isGenerating) return undefined;
-    if (currentStep === 8) return AI_MESSAGES.generatingFeatures;
+    if (stepConfig?.aiGenerated || currentStep === 7) return AI_MESSAGES.generatingFeatures;
     return AI_MESSAGES.generatingEstimate;
-  }, [isGenerating, currentStep]);
+  }, [isGenerating, currentStep, stepConfig?.aiGenerated]);
 
   // Handle advancing to next step (used by select auto-advance and next button)
+  // Uses dispatch directly instead of goNext() to avoid stale canGoNextRef
+  // after async submitStep (which temporarily sets status to "generating").
   const handleNext = useCallback(async () => {
     const { answers, sessionId } = stateRef.current;
     const answer = answers[currentStep];
@@ -81,8 +85,8 @@ function ChatPageContent() {
       await submitStep(currentStep, answer);
     }
 
-    goNext();
-  }, [currentStep, goNext, submitStep]);
+    dispatch({ type: "NEXT_STEP" });
+  }, [currentStep, dispatch, submitStep]);
 
   // Handle final submission
   const handleSubmit = useCallback(async () => {

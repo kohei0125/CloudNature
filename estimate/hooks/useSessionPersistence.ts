@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useEstimateSession, initialSession } from "./useEstimateSession";
 import { save, load, clear } from "@/lib/sessionStorage";
+import { TOTAL_STEPS } from "@/lib/stepConfig";
 import type { EstimateSession } from "@/types/estimate";
 
 const SESSION_KEY = "session";
@@ -20,7 +21,7 @@ export function useSessionPersistence() {
       restoredRef.current = true;
 
       const saved = load<EstimateSession>(SESSION_KEY);
-      if (saved && saved.currentStep > 1) {
+      if (saved && saved.currentStep > 1 && saved.currentStep <= TOTAL_STEPS) {
         dispatch({ type: "RESTORE_SESSION", session: saved });
       }
     }

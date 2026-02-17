@@ -20,6 +20,91 @@
   postgresql://estimate_user:PASSWORD@ep-xxxx-pooler.REGION.aws.neon.tech/estimate?sslmode=require
   ```
 
+##### スキーマ詳細
+
+テーブルは Backend 起動時に SQLModel の `metadata.create_all()` で自動作成される（`app/db.py`）。
+手動作成が必要な場合は以下の DDL を Neon Console の SQL Editor で実行する。
+
+```sql
+-- 1. estimate_sessions: 見積もりウィザードのセッション管理
+CREATE TABLE IF NOT EXISTS estimate_sessions (
+    id          TEXT        PRIMARY KEY,            -- UUID v4
+    status      TEXT        NOT NULL DEFAULT 'in_progress',
+                                                    -- in_progress / generating / completed / error
+    email       TEXT,                               -- Step 13 で取得（メール送信用、現在は未使用）
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- 2. step_answers: 各ステップの回答を保存
+CREATE TABLE IF NOT EXISTS step_answers (
+    id            SERIAL      PRIMARY KEY,
+    session_id    TEXT        NOT NULL REFERENCES estimate_sessions(id),
+    step_number   INTEGER     NOT NULL,             -- 1〜13
+    answer_value  TEXT        NOT NULL,             -- 単一値はそのまま、配列は JSON 文字列
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_session_step UNIQUE (session_id, step_number)
+);
+CREATE INDEX IF NOT EXISTS ix_step_answers_session_id  ON step_answers(session_id);
+CREATE INDEX IF NOT EXISTS ix_step_answers_step_number ON step_answers(step_number);
+
+-- 3. generated_estimates: LLM が生成した見積もり結果
+CREATE TABLE IF NOT EXISTS generated_estimates (
+    id          SERIAL      PRIMARY KEY,
+    session_id  TEXT        NOT NULL REFERENCES estimate_sessions(id),
+    raw_json    TEXT        NOT NULL DEFAULT '',     -- LLM レスポンス全体の JSON
+    status      TEXT        NOT NULL DEFAULT 'processing',
+                                                    -- processing / completed / error
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS ix_generated_estimates_session_id ON generated_estimates(session_id);
+```
+
+**ER 図（簡易）**
+
+```
+estimate_sessions  1 ──< N  step_answers
+       │
+       1 ──< N  generated_estimates
+```
+
+| テーブル | 行数目安 | 備考 |
+|---|---|---|
+| `estimate_sessions` | 1 セッション / 見積もり | TTL: `DATA_TTL_DAYS`（デフォルト 31 日）で自動削除 |
+| `step_answers` | 最大 13 行 / セッション | Step 1〜13 の回答。`UNIQUE(session_id, step_number)` で UPSERT |
+| `generated_estimates` | 通常 1 行 / セッション | `raw_json` に LLM の全レスポンスを格納 |
+
+**step_number と回答の対応**
+
+| Step | 質問内容 | 型 | answer_value 例 |
+|------|---------|-----|----------------|
+| 1 | 事業形態 | select | `corporation` |
+| 2 | 業種 | select | `manufacturing` |
+| 3 | 従業員規模 | select | `21-50` |
+| 4 | 課題・要望 | text | `在庫管理の効率化…` |
+| 5 | 導入先 | select | `internal` |
+| 6 | システム種別 | select | `web_app` |
+| 7 | 新規/移行 | select | `new` |
+| 8 | 機能候補（AI生成） | multi-select | `["user_auth","dashboard"]` |
+| 9 | 導入時期 | select | `3months` |
+| 10 | 利用デバイス | select | `both` |
+| 11 | 予算 | select | `1m_3m` |
+| 12 | 追加要望（任意） | text | `（空文字可）` |
+| 13 | 連絡先 | contact(JSON) | `{"name":"…","company":"…","email":"…"}` |
+
+**接続プール設定（`app/db.py`）**
+
+| パラメータ | 値 | 説明 |
+|---|---|---|
+| `pool_size` | 2 | 常駐コネクション数 |
+| `max_overflow` | 3 | 一時的な追加コネクション上限 |
+| `pool_pre_ping` | true | 接続の死活チェック（Neon のスリープ復帰対策） |
+
+**TTL クリーンアップ**
+
+- `DATA_TTL_DAYS`（デフォルト 31）日を超えたセッションとその関連レコード（`step_answers`, `generated_estimates`）を一括削除
+- Backend 起動時に初回実行、以降 6 時間ごとにバックグラウンドタスクで自動実行（`app/main.py`）
+
 #### 1-2. GCP プロジェクト準備
 - [ ] GCP プロジェクトを選択 / 作成
   ```bash
@@ -63,7 +148,8 @@
 #### 1-6. Secret Manager の IAM 権限付与
 - [ ] Cloud Run サービスアカウントに `secretAccessor` ロールを付与
   ```bash
-  SA_EMAIL=cloudrun-backend@PROJECT_ID.iam.gserviceaccount.com
+  PROJECT_ID=$(gcloud config get-value project)
+  SA_EMAIL=cloudrun-backend@${PROJECT_ID}.iam.gserviceaccount.com
   for SECRET in api-key openai-api-key resend-api-key database-url; do
     gcloud secrets add-iam-policy-binding $SECRET \
       --member="serviceAccount:${SA_EMAIL}" \
@@ -88,15 +174,18 @@
 #### 2-1. Docker イメージ ビルド & プッシュ
 - [ ] backend イメージをビルド
   ```bash
-  docker build -t asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest ./backend
-  docker push asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest
+  PROJECT_ID=$(gcloud config get-value project)
+  docker build --platform linux/amd64 \
+    -t asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest ./backend
+  docker push asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest
   ```
 
 #### 2-2. Cloud Run デプロイ
 - [ ] デプロイ実行
   ```bash
+  PROJECT_ID=$(gcloud config get-value project)
   gcloud run deploy backend \
-    --image=asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest \
+    --image=asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest \
     --region=asia-northeast1 \
     --platform=managed \
     --port=8000 \
@@ -104,9 +193,9 @@
     --cpu=1 \
     --min-instances=0 \
     --max-instances=3 \
-    --service-account=cloudrun-backend@PROJECT_ID.iam.gserviceaccount.com \
+    --service-account=cloudrun-backend@${PROJECT_ID}.iam.gserviceaccount.com \
     --set-secrets=API_KEY=api-key:latest,OPENAI_API_KEY=openai-api-key:latest,RESEND_API_KEY=resend-api-key:latest,DATABASE_URL=database-url:latest \
-    --set-env-vars=OPENAI_MODEL=gpt-4o,LLM_MAX_RETRIES=3,LLM_TIMEOUT=30,FRONTEND_URL=https://ai.cloudnature.jp,CORS_ORIGINS=https://ai.cloudnature.jp,DATA_TTL_DAYS=31,"EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>" \
+    --set-env-vars=OPENAI_MODEL=gpt-4o,LLM_MAX_RETRIES=3,LLM_TIMEOUT=30,FRONTEND_URL=https://ai.cloudnature.jp,CORS_ORIGINS=https://ai.cloudnature.jp,DATA_TTL_DAYS=31,"EMAIL_FROM=CloudNature <noreply@cloudnature.jp>" \
     --allow-unauthenticated
   ```
 - [ ] デプロイ後の Cloud Run URL を控える（例: `https://backend-xxxxx-an.a.run.app`）
