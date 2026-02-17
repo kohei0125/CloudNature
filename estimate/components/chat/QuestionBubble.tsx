@@ -10,9 +10,8 @@ interface QuestionBubbleProps {
 export default function QuestionBubble({ question }: QuestionBubbleProps) {
   return (
     <motion.div
-      key={question}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ y: 10 }}
+      animate={{ y: 0 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="h-stack items-start gap-4"
     >

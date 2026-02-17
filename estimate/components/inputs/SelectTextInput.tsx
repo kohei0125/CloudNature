@@ -45,12 +45,9 @@ export default function SelectTextInput({
   }
 
   return (
-    <motion.div
+    <div
       role="radiogroup"
       aria-label={ariaLabel}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
       className="v-stack gap-3"
     >
       {[...options, { value: OTHER_VALUE, label: "その他（自由記述）" }].map(
@@ -60,8 +57,8 @@ export default function SelectTextInput({
             <motion.button
               key={option.value}
               type="button"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ y: 6 }}
+              animate={{ y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
               onClick={() => handleSelect(option.value)}
               className={cn("option-card", selected && "option-card--selected")}
@@ -107,6 +104,6 @@ export default function SelectTextInput({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

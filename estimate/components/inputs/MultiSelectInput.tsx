@@ -27,12 +27,9 @@ export default function MultiSelectInput({
   }
 
   return (
-    <motion.div
+    <div
       role="group"
       aria-label={ariaLabel}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
       className="v-stack gap-3"
     >
       <p className="text-xs font-medium text-gray-400">複数選択できます</p>
@@ -44,8 +41,8 @@ export default function MultiSelectInput({
             type="button"
             role="checkbox"
             aria-checked={selected}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 6 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.25, delay: i * 0.04 }}
             onClick={() => toggleOption(option.value)}
             className={cn("option-card", selected && "option-card--selected")}
@@ -73,6 +70,6 @@ export default function MultiSelectInput({
           </motion.button>
         );
       })}
-    </motion.div>
+    </div>
   );
 }

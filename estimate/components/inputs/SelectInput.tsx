@@ -28,12 +28,9 @@ export default function SelectInput({
   }
 
   return (
-    <motion.div
+    <div
       role="radiogroup"
       aria-label={ariaLabel}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
       className="v-stack gap-3"
     >
       {options.map((option, i) => {
@@ -44,8 +41,8 @@ export default function SelectInput({
             type="button"
             role="radio"
             aria-checked={selected}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ y: 6 }}
+            animate={{ y: 0 }}
             transition={{ duration: 0.25, delay: i * 0.04 }}
             onClick={() => handleSelect(option.value)}
             className={cn("option-card", selected && "option-card--selected")}
@@ -64,6 +61,6 @@ export default function SelectInput({
           </motion.button>
         );
       })}
-    </motion.div>
+    </div>
   );
 }
