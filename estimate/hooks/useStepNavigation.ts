@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useEstimateSession } from "./useEstimateSession";
 import { getStepConfig, TOTAL_STEPS } from "@/lib/stepConfig";
 import type { StepConfig } from "@/types/estimate";
@@ -44,17 +44,24 @@ export function useStepNavigation() {
 
   const isLastStep = currentStep === TOTAL_STEPS;
 
+  // Refs so that goNext/goBack always read the latest value,
+  // even when called from a stale closure (e.g. SelectInput auto-advance).
+  const canGoNextRef = useRef(canGoNext);
+  canGoNextRef.current = canGoNext;
+  const canGoBackRef = useRef(canGoBack);
+  canGoBackRef.current = canGoBack;
+
   const goNext = useCallback(() => {
-    if (canGoNext) {
+    if (canGoNextRef.current) {
       dispatch({ type: "NEXT_STEP" });
     }
-  }, [canGoNext, dispatch]);
+  }, [dispatch]);
 
   const goBack = useCallback(() => {
-    if (canGoBack) {
+    if (canGoBackRef.current) {
       dispatch({ type: "PREV_STEP" });
     }
-  }, [canGoBack, dispatch]);
+  }, [dispatch]);
 
   const setAnswer = useCallback(
     (value: string | string[]) => {
