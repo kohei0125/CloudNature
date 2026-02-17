@@ -35,7 +35,7 @@ export default function SelectTextInput({
     } else {
       onChange(optionValue);
       if (onAutoAdvance) {
-        setTimeout(onAutoAdvance, 250);
+        setTimeout(onAutoAdvance, 120);
       }
     }
   }

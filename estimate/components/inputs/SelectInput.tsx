@@ -23,7 +23,7 @@ export default function SelectInput({
   function handleSelect(optionValue: string) {
     onChange(optionValue);
     if (onAutoAdvance) {
-      setTimeout(onAutoAdvance, 250);
+      setTimeout(onAutoAdvance, 120);
     }
   }
 

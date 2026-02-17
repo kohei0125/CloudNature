@@ -15,7 +15,7 @@ export default function NavigationControls({
   onExit,
 }: NavigationControlsProps) {
   return (
-    <div className="h-stack items-center justify-between px-4 py-3 md:px-6">
+    <div className="h-stack items-center justify-between px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] md:px-6">
       <button
         type="button"
         onClick={onBack}

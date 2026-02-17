@@ -82,7 +82,13 @@ function ChatPageContent() {
 
     // Submit step to backend
     if (sessionId && answer !== undefined) {
-      await submitStep(currentStep, answer);
+      if (currentStep === 7) {
+        // Step 7 は await 必須 — AI オプション生成が必要
+        await submitStep(currentStep, answer);
+      } else {
+        // それ以外は fire-and-forget で即座に遷移
+        submitStep(currentStep, answer).catch(() => { });
+      }
     }
 
     dispatch({ type: "NEXT_STEP" });
@@ -128,18 +134,6 @@ function ChatPageContent() {
 
   return (
     <div className="v-stack min-h-[100dvh]">
-      {/* Logo header */}
-      <div className="center py-4">
-        <Image
-          src="/images/header_logo.png"
-          alt="CloudNature"
-          width={180}
-          height={40}
-          className="h-8 w-auto md:h-9"
-          priority
-        />
-      </div>
-
       {/* Top navigation bar */}
       <NavigationControls
         canGoBack={canGoBack}
