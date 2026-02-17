@@ -105,7 +105,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-svh md:min-h-[92vh] flex-col justify-center overflow-hidden">
+    <section className="relative flex min-h-svh md:min-h-[92vh] flex-col justify-center overflow-hidden pt-20 md:pt-24">
       {/* Background Image */}
       <div className="absolute inset-0 -z-10 h-full w-full">
         <Image
