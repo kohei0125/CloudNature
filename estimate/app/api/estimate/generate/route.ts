@@ -7,6 +7,7 @@ const TIMEOUT_MS = 120_000; // Estimate generation can take up to 2 minutes
 
 interface GenerateRequestBody {
   sessionId: string;
+  answers: Record<string, string | string[]>;
 }
 
 export async function POST(request: NextRequest) {
@@ -18,7 +19,10 @@ export async function POST(request: NextRequest) {
     const res = await fetch(`${BACKEND_URL}/api/v1/estimate/generate`, {
       method: "POST",
       headers: getBackendHeaders(),
-      body: JSON.stringify({ session_id: body.sessionId }),
+      body: JSON.stringify({
+        session_id: body.sessionId,
+        answers: body.answers,
+      }),
       signal: controller.signal,
     });
 

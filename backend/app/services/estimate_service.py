@@ -8,8 +8,7 @@ from app.core.llm.factory import create_llm_adapter
 from app.core.sanitizer import sanitize_for_llm
 from app.db import get_session
 from app.models.generated import GeneratedEstimate
-from app.schemas.llm_output import validate_dynamic_questions, validate_estimate_output
-from app.services.session_service import get_answers_as_dict, update_session_status
+from app.services.session_service import save_session_answers, update_session_status
 
 logger = logging.getLogger(__name__)
 
@@ -50,14 +49,26 @@ def _validate_estimate_financials(data: dict) -> bool:
     return True
 
 
-async def generate_dynamic_questions(session_id: str) -> dict | None:
+def _normalize_answers(answers: dict) -> dict:
+    """Normalize frontend answers dict to step_N keyed format for LLM."""
+    normalized = {}
+    for key, value in answers.items():
+        # Accept both "1" and "step_1" style keys
+        if key.startswith("step_"):
+            normalized[key] = value
+        else:
+            normalized[f"step_{key}"] = value
+    return normalized
+
+
+async def generate_dynamic_questions(answers: dict) -> dict | None:
     """Generate AI-powered dynamic questions for Steps 8-10.
 
     Retries up to LLM_MAX_RETRIES times with JSON schema validation.
     Falls back to template on failure.
     """
-    answers = get_answers_as_dict(session_id)
-    sanitized = sanitize_for_llm(answers)
+    normalized = _normalize_answers(answers)
+    sanitized = sanitize_for_llm(normalized)
 
     # Build context from all static steps (1-7)
     context = {
@@ -69,6 +80,8 @@ async def generate_dynamic_questions(session_id: str) -> dict | None:
         "system_type": sanitized.get("step_6", ""),
         "development_type": sanitized.get("step_7", ""),
     }
+
+    from app.schemas.llm_output import validate_dynamic_questions
 
     for attempt in range(settings.llm_max_retries):
         try:
@@ -86,10 +99,9 @@ async def generate_dynamic_questions(session_id: str) -> dict | None:
             )
         except Exception:
             logger.error(
-                "LLM error generating dynamic questions (attempt %d/%d) for session %s",
+                "LLM error generating dynamic questions (attempt %d/%d)",
                 attempt + 1,
                 settings.llm_max_retries,
-                session_id,
             )
 
     # Fallback: use the fallback adapter directly
@@ -103,12 +115,15 @@ async def generate_dynamic_questions(session_id: str) -> dict | None:
     )
 
 
-async def generate_estimate(session_id: str) -> dict | None:
+async def generate_estimate(session_id: str, answers: dict) -> dict | None:
     """Generate a full estimate for a session.
 
     Stores the result in the database and updates session status.
     Retries up to LLM_MAX_RETRIES times with JSON schema + financial validation.
     """
+    # Save answers to session
+    save_session_answers(session_id, answers)
+
     # Create a processing record
     with get_session() as db:
         record = GeneratedEstimate(session_id=session_id, status="processing")
@@ -117,8 +132,10 @@ async def generate_estimate(session_id: str) -> dict | None:
         db.refresh(record)
         record_id = record.id
 
-    answers = get_answers_as_dict(session_id)
-    sanitized = sanitize_for_llm(answers)
+    normalized = _normalize_answers(answers)
+    sanitized = sanitize_for_llm(normalized)
+
+    from app.schemas.llm_output import validate_estimate_output
 
     result = None
     for attempt in range(settings.llm_max_retries):

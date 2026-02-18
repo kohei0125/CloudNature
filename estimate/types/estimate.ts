@@ -20,11 +20,6 @@ export interface StepConfig {
   validation?: (value: string | string[]) => string | null;
 }
 
-export interface StepAnswer {
-  stepId: number;
-  value: string | string[];
-}
-
 export interface AiGeneratedOptions {
   step8Features?: StepOption[];
 }

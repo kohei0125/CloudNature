@@ -1,6 +1,5 @@
 """Service layer for session management."""
 
-import json
 import logging
 from datetime import datetime, timedelta, timezone
 from time import time
@@ -11,7 +10,6 @@ from app.config import settings
 from app.db import get_session
 from app.models.generated import GeneratedEstimate
 from app.models.session import EstimateSession
-from app.models.step_answer import StepAnswer
 from app.schemas.response import SessionResponse
 
 logger = logging.getLogger(__name__)
@@ -49,57 +47,14 @@ def get_estimate_session(session_id: str) -> EstimateSession | None:
         return db.get(EstimateSession, session_id)
 
 
-def save_step_answer(session_id: str, step_number: int, value: str | list[str]) -> None:
-    """Save or update a step answer for a session."""
-    answer_value = json.dumps(value, ensure_ascii=False) if isinstance(value, list) else value
-
+def save_session_answers(session_id: str, answers: dict) -> None:
+    """Save all answers to the session at final submission."""
     with get_session() as db:
-        # Check for existing answer at this step
-        statement = select(StepAnswer).where(
-            StepAnswer.session_id == session_id,
-            StepAnswer.step_number == step_number,
-        )
-        existing = db.exec(statement).first()
-
-        if existing:
-            existing.answer_value = answer_value
-        else:
-            answer = StepAnswer(
-                session_id=session_id,
-                step_number=step_number,
-                answer_value=answer_value,
-            )
-            db.add(answer)
-
-        # Update session timestamp
         session = db.get(EstimateSession, session_id)
         if session:
+            session.answers = answers
             session.updated_at = datetime.now(timezone.utc)
-
-        db.commit()
-
-
-def get_all_answers(session_id: str) -> list[StepAnswer]:
-    """Get all step answers for a session, ordered by step number."""
-    with get_session() as db:
-        statement = (
-            select(StepAnswer)
-            .where(StepAnswer.session_id == session_id)
-            .order_by(StepAnswer.step_number)
-        )
-        return list(db.exec(statement).all())
-
-
-def get_answers_as_dict(session_id: str) -> dict:
-    """Get all step answers as a dictionary keyed by step number."""
-    answers = get_all_answers(session_id)
-    result = {}
-    for answer in answers:
-        try:
-            result[f"step_{answer.step_number}"] = json.loads(answer.answer_value)
-        except (json.JSONDecodeError, TypeError):
-            result[f"step_{answer.step_number}"] = answer.answer_value
-    return result
+            db.commit()
 
 
 def update_session_status(session_id: str, status: str) -> None:
@@ -124,13 +79,6 @@ def check_ttl() -> int:
         expired_sessions = db.exec(statement).all()
 
         for session in expired_sessions:
-            # Delete related step answers
-            answers_stmt = select(StepAnswer).where(
-                StepAnswer.session_id == session.id
-            )
-            for answer in db.exec(answers_stmt).all():
-                db.delete(answer)
-
             # Delete related estimates
             estimates_stmt = select(GeneratedEstimate).where(
                 GeneratedEstimate.session_id == session.id
@@ -139,6 +87,7 @@ def check_ttl() -> int:
                 db.delete(estimate)
 
             db.delete(session)
+            _session_cache.pop(session.id, None)
             deleted_count += 1
 
         db.commit()

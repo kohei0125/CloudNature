@@ -21,9 +21,11 @@ function createMessage(
 export function useEstimateApi() {
   const { state, dispatch } = useEstimateSession();
   const sessionIdRef = useRef(state.sessionId);
+  const stateRef = useRef(state);
   useEffect(() => {
     sessionIdRef.current = state.sessionId;
-  }, [state.sessionId]);
+    stateRef.current = state;
+  });
 
   const addMessage = useCallback(
     (prefix: string, content: string) => {
@@ -48,7 +50,7 @@ export function useEstimateApi() {
 
   /** Submit a step answer and handle AI generation for steps 8-10. */
   const submitStep = useCallback(
-    async (stepNumber: number, value: string | string[]) => {
+    async (stepNumber: number, value: string | string[], allAnswers?: Record<string, string | string[]>) => {
       const sessionId = sessionIdRef.current;
       if (!sessionId) return null;
 
@@ -57,7 +59,7 @@ export function useEstimateApi() {
           dispatch({ type: "SET_STATUS", status: "generating" });
         }
 
-        const res = await api.submitStep(sessionId, stepNumber, value);
+        const res = await api.submitStep(sessionId, stepNumber, value, allAnswers);
 
         if (res.aiOptions) {
           dispatch({ type: "SET_AI_OPTIONS", payload: res.aiOptions });
@@ -131,7 +133,8 @@ export function useEstimateApi() {
       dispatch({ type: "SET_STATUS", status: "generating" });
       addMessage("system-api", AI_MESSAGES.generatingEstimate);
 
-      const res = await api.generateEstimate(sessionId);
+      const answers = stateRef.current.answers as Record<string, string | string[]>;
+      const res = await api.generateEstimate(sessionId, answers);
 
       if (res.status === "completed" && res.estimate) {
         dispatch({ type: "SET_STATUS", status: "completed" });

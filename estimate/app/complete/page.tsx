@@ -207,10 +207,10 @@ export default function CompletePage() {
         {/* ── Back to top ── */}
         <div className="mt-8 text-center">
           <a
-            href="https://cloudnature.jp"
+            href="/"
             className="inline-flex items-center gap-1.5 text-sm text-forest/45 transition-colors hover:text-forest/70"
           >
-            TOPページにもどる
+            お見積もりTOPにもどる
           </a>
         </div>
 

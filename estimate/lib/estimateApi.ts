@@ -76,27 +76,29 @@ export async function getSession(
 export async function submitStep(
   sessionId: string,
   stepNumber: number,
-  value: string | string[]
+  value: string | string[],
+  answers?: Record<string, string | string[]>,
 ): Promise<StepResponse & { aiOptions?: AiGeneratedOptions }> {
+  const payload: Record<string, unknown> = { sessionId, stepNumber, value };
+  if (answers) {
+    payload.answers = answers;
+  }
   return apiFetch("/api/estimate/step", {
     method: "POST",
-    body: JSON.stringify({
-      sessionId,
-      stepNumber,
-      value,
-    }),
+    body: JSON.stringify(payload),
   });
 }
 
 /** Trigger estimate generation. */
 export async function generateEstimate(
-  sessionId: string
+  sessionId: string,
+  answers: Record<string, string | string[]>,
 ): Promise<EstimateResultResponse> {
   return apiFetch<EstimateResultResponse>(
     "/api/estimate/generate",
     {
       method: "POST",
-      body: JSON.stringify({ sessionId }),
+      body: JSON.stringify({ sessionId, answers }),
     },
     120_000,
   );

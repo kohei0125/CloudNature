@@ -9,6 +9,7 @@ interface StepRequestBody {
   sessionId: string;
   stepNumber: number;
   value: string | string[];
+  answers?: Record<string, string | string[]>;
 }
 
 export async function POST(request: NextRequest) {
@@ -17,14 +18,21 @@ export async function POST(request: NextRequest) {
   try {
     const body: StepRequestBody = await request.json();
 
+    const payload: Record<string, unknown> = {
+      session_id: body.sessionId,
+      step_number: body.stepNumber,
+      value: body.value,
+    };
+
+    // Include answers for step 7 (AI dynamic question generation)
+    if (body.answers) {
+      payload.answers = body.answers;
+    }
+
     const res = await fetch(`${BACKEND_URL}/api/v1/estimate/step`, {
       method: "POST",
       headers: getBackendHeaders(),
-      body: JSON.stringify({
-        session_id: body.sessionId,
-        step_number: body.stepNumber,
-        value: body.value,
-      }),
+      body: JSON.stringify(payload),
       signal: controller.signal,
     });
 

@@ -80,36 +80,26 @@ function ChatPageContent() {
     const { answers, sessionId } = stateRef.current;
     const answer = answers[currentStep];
 
-    // Submit step to backend
-    if (sessionId && answer !== undefined) {
-      if (currentStep === 7) {
-        // Step 7 は await 必須 — AI オプション生成が必要
-        await submitStep(currentStep, answer);
-      } else {
-        // それ以外は fire-and-forget で即座に遷移
-        submitStep(currentStep, answer).catch(() => { });
-      }
+    // Step 7: await AI option generation — pass all answers explicitly
+    if (currentStep === 7 && sessionId && answer !== undefined) {
+      const allAnswers = { ...answers, [currentStep]: answer } as Record<string, string | string[]>;
+      await submitStep(currentStep, answer, allAnswers);
     }
 
     dispatch({ type: "NEXT_STEP" });
   }, [currentStep, dispatch, submitStep]);
 
-  // Handle final submission
+  // Handle final submission — all answers are sent via triggerGenerate
   const handleSubmit = useCallback(async () => {
-    const { sessionId, answers } = stateRef.current;
+    const { sessionId } = stateRef.current;
     if (!sessionId) return;
-
-    const lastAnswer = answers[currentStep];
-    if (lastAnswer !== undefined) {
-      await submitStep(currentStep, lastAnswer);
-    }
 
     const result = await triggerGenerate();
     if (result?.estimate) {
       save("estimate_result", result.estimate);
       router.push("/complete");
     }
-  }, [currentStep, submitStep, triggerGenerate, router]);
+  }, [triggerGenerate, router]);
 
   const handleRetry = useCallback(() => {
     dispatch({ type: "SET_STATUS", status: "in_progress" });

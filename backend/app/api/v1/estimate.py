@@ -2,7 +2,7 @@
 
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.request import (
     CreateSessionRequest,
@@ -41,11 +41,11 @@ async def get_session(session_id: str) -> SessionResponse:
 @router.post("/step", response_model=StepResponse)
 async def submit_step(
     request: SubmitStepRequest,
-    background_tasks: BackgroundTasks,
 ) -> StepResponse:
     """Submit a step answer.
 
-    If step 7 is completed, triggers AI dynamic question generation.
+    If step 7 is completed, triggers AI dynamic question generation
+    using the answers provided in the request body.
     """
     session = session_service.get_session_cached(request.session_id)
     if session is None:
@@ -54,26 +54,14 @@ async def submit_step(
     next_step = request.step_number + 1
     ai_options = None
 
-    # Step 7: save synchronously — dynamic question generation reads this answer from DB
-    if request.step_number == 7:
-        session_service.save_step_answer(
-            session_id=request.session_id,
-            step_number=request.step_number,
-            value=request.value,
-        )
+    # Step 7: generate AI dynamic questions from answers in request body
+    if request.step_number == 7 and request.answers:
         try:
             ai_options = await estimate_service.generate_dynamic_questions(
-                request.session_id
+                request.answers
             )
         except Exception:
             logger.exception("Failed to generate dynamic questions")
-    else:
-        background_tasks.add_task(
-            session_service.save_step_answer,
-            session_id=request.session_id,
-            step_number=request.step_number,
-            value=request.value,
-        )
 
     return StepResponse(
         success=True,
@@ -91,7 +79,9 @@ async def generate_estimate(
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    result = await estimate_service.generate_estimate(request.session_id)
+    result = await estimate_service.generate_estimate(
+        request.session_id, request.answers
+    )
     if result:
         return EstimateResultResponse(status="completed", estimate=result)
 

@@ -86,7 +86,7 @@ export async function setupApiMocks(page: Page) {
       nextStep: body.stepNumber + 1,
     };
 
-    // Step 7 triggers AI feature generation
+    // Step 7 triggers AI feature generation (answers included in body)
     if (body.stepNumber === 7) {
       response.aiOptions = { step8Features: MOCK_AI_FEATURES };
     }
@@ -98,7 +98,7 @@ export async function setupApiMocks(page: Page) {
     });
   });
 
-  // Mock: POST /api/estimate/generate
+  // Mock: POST /api/estimate/generate (answers included in body)
   await page.route("**/api/estimate/generate", (route) =>
     route.fulfill({
       status: 200,
