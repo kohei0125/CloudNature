@@ -76,6 +76,11 @@ _PLACEHOLDER_RE = re.compile(
     r"機能\d|提案\d|機能[A-Za-z]|Feature\s*\d|おすすめ機能\d|機能\d+の提案",
 )
 
+# Patterns that indicate error/refusal messages used as labels
+_REFUSAL_RE = re.compile(
+    r"不足|提供できません|判断できません|特定できません|情報が必要",
+)
+
 
 def validate_dynamic_questions(data: dict) -> bool:
     """Validate LLM output for dynamic questions (Steps 8-10).
@@ -87,10 +92,12 @@ def validate_dynamic_questions(data: dict) -> bool:
     except jsonschema.ValidationError:
         return False
 
-    # Reject placeholder labels
+    # Reject placeholder or refusal labels
     for feature in data.get("step8_features", []):
         label = feature.get("label", "")
         if _PLACEHOLDER_RE.search(label):
+            return False
+        if _REFUSAL_RE.search(label):
             return False
 
     return True
