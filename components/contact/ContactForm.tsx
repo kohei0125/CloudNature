@@ -1,10 +1,22 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
 import { ESTIMATE_URL } from "@/content/common";
+
+const Turnstile = dynamic(
+  () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
+  { ssr: false }
+);
+
+const IS_PRODUCTION = process.env.NEXT_PUBLIC_ENV === "production";
+const TURNSTILE_SITE_KEY = IS_PRODUCTION
+  ? (process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY ?? "")
+  : "";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +30,9 @@ const ContactForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
+  const turnstileTokenRef = useRef<string | null>(null);
 
   const validate = (field: string, value: string) => {
     if (field === "name" && !value.trim()) return "お名前を入力してください";
@@ -42,7 +57,6 @@ const ContactForm = () => {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
     formData.message.trim() !== "";
 
-  // TODO: Integrate with backend API
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setTouched({ name: true, email: true, message: true });
@@ -51,13 +65,29 @@ const ContactForm = () => {
     setSubmitting(true);
     setError("");
     try {
-      // Replace with actual API call
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          turnstileToken: turnstileTokenRef.current ?? undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "送信に失敗しました。しばらく経ってから再度お試しください。");
+        return;
+      }
+
       setSubmitted(true);
     } catch {
       setError("送信に失敗しました。しばらく経ってから再度お試しください。");
     } finally {
       setSubmitting(false);
+      turnstileRef.current?.reset();
+      turnstileTokenRef.current = null;
     }
   };
 
@@ -183,6 +213,17 @@ const ContactForm = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-red-600 text-sm">
           {error}
         </div>
+      )}
+
+      {/* Turnstile */}
+      {TURNSTILE_SITE_KEY && (
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={TURNSTILE_SITE_KEY}
+          onSuccess={(token) => { turnstileTokenRef.current = token; }}
+          onExpire={() => { turnstileTokenRef.current = null; }}
+          options={{ size: "compact", theme: "light" }}
+        />
       )}
 
       {/* Submit */}

@@ -1,16 +1,10 @@
-import { TrustBadge, StepFlowItem, FaqItem, ContactFormLabels } from "@/types";
+import { StepFlowItem, FaqItem, ContactFormLabels } from "@/types";
 
 export const CONTACT_HERO = {
   eyebrow: "CONTACT",
-  title: "人手不足の解決策を、無料で診断します",
-  description: "30分のヒアリングで、御社の自動化ポテンシャルと概算コストをお伝えします。営業電話は一切ありません。"
+  title: "システム開発や業務自動化について、お気軽にご相談ください",
+  description: "「こんなシステムは作れる？」「まずは費用感だけ知りたい」など、30分のオンライン相談で専門家がお答えします。"
 };
-
-export const TRUST_BADGES: TrustBadge[] = [
-  { icon: "CircleDollarSign", label: "相談無料" },
-  { icon: "Lock", label: "秘密厳守" },
-  { icon: "PhoneOff", label: "営業電話なし" }
-];
 
 export const CONTACT_FORM_LABELS: ContactFormLabels = {
   name: "お名前",
@@ -24,7 +18,7 @@ export const CONTACT_FORM_LABELS: ContactFormLabels = {
   required: "必須",
   successTitle: "お問い合わせを受け付けました",
   successMessage: "担当者より2営業日以内にメールでご連絡いたします。",
-  successCta: "待ち時間に導入事例をご覧ください",
+  successCta: "導入事例を見る",
   estimateCta: "今すぐAI見積もりを試す"
 };
 

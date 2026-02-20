@@ -1,8 +1,3 @@
-export interface TrustBadge {
-  icon: string;
-  label: string;
-}
-
 export interface StepFlowItem {
   step: number;
   title: string;

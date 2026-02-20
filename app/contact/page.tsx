@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
 import { CONTACT_HERO, STEP_FLOW_TITLE } from "@/content/contact";
 import PageHero from "@/components/shared/PageHero";
-import TrustBadges from "@/components/contact/TrustBadges";
 import ContactForm from "@/components/contact/ContactForm";
 import StepFlow from "@/components/contact/StepFlow";
 import AlternativeContact from "@/components/contact/AlternativeContact";
@@ -35,8 +34,6 @@ export default function ContactPage() {
         title={CONTACT_HERO.title}
         description={CONTACT_HERO.description}
       />
-      <TrustBadges />
-
       {/* Form + Step Flow 2-column layout */}
       <ScrollReveal>
         <section className="py-16 md:py-24">
