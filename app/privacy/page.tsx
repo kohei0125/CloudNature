@@ -17,7 +17,8 @@ export const metadata: Metadata = {
     card: "summary",
     title: PAGE_META.privacy.title,
     description: PAGE_META.privacy.description,
-  }
+  },
+  alternates: { canonical: "https://cloudnature.jp/privacy" },
 };
 
 export default function PrivacyPage() {

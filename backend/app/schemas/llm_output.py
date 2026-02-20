@@ -78,7 +78,7 @@ _PLACEHOLDER_RE = re.compile(
 
 # Patterns that indicate error/refusal messages used as labels
 _REFUSAL_RE = re.compile(
-    r"不足|提供できません|判断できません|特定できません|情報が必要",
+    r"情報が不足|提供できません|判断できません|特定できません|情報が必要",
 )
 
 

@@ -31,6 +31,7 @@ const WaveSeparator: React.FC<WaveSeparatorProps> = ({
         viewBox="0 0 1200 120"
         preserveAspectRatio="none"
         shapeRendering="geometricPrecision"
+        aria-hidden="true"
       >
         {shouldUseGradient && (
           <defs>

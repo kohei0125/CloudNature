@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -16,6 +16,8 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const pathname = usePathname();
+  const menuRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -23,11 +25,13 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
       document.documentElement.style.overflow = "";
+      previousFocusRef.current?.focus();
     }
     return () => {
       document.body.style.overflow = "";
@@ -35,9 +39,54 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     };
   }, [isOpen]);
 
+  // Focus trap and ESC key handler
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!isOpen) return;
+
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
+
+    if (e.key === "Tab" && menuRef.current) {
+      const focusableElements = menuRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableElements.length === 0) return;
+
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  // Auto-focus first link when opened
+  useEffect(() => {
+    if (isOpen && menuRef.current) {
+      const firstLink = menuRef.current.querySelector<HTMLElement>("a[href]");
+      firstLink?.focus();
+    }
+  }, [isOpen]);
+
   return (
     <div
+      ref={menuRef}
       id="mobile-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-label="モバイルメニュー"
       className={cn(
         "!fixed inset-0 w-full h-screen min-h-[100dvh] z-[99999] bg-cream text-forest v-stack overflow-y-auto overflow-x-hidden overscroll-none texture-grain transition-opacity duration-200",
         isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
@@ -66,6 +115,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             key={item.path}
             href={item.path}
             onClick={onClose}
+            aria-current={isActive(item.path) ? "page" : undefined}
             className={cn(
               "text-2xl font-sans font-bold tracking-wider transition-all duration-300 transform hover:text-sunset",
               isActive(item.path) ? "text-sunset" : "text-forest"

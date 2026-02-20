@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     title: PAGE_META.contact.title,
     description: PAGE_META.contact.description,
   },
+  alternates: { canonical: "https://cloudnature.jp/contact" },
 };
 
 export default function ContactPage() {

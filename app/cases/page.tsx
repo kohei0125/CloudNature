@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     title: PAGE_META.cases.title,
     description: PAGE_META.cases.description,
   },
+  alternates: { canonical: "https://cloudnature.jp/cases" },
 };
 
 export default function CasesPage() {

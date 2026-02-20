@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     title: PAGE_META.philosophy.title,
     description: PAGE_META.philosophy.description,
   },
+  alternates: { canonical: "https://cloudnature.jp/philosophy" },
 };
 
 export default function PhilosophyPage() {

@@ -42,16 +42,19 @@ export const MISSION_COPY = {
 export const VALUES: ValueProp[] = [
   {
     title: "VALUE 1: 実用本位のエンジニアリング",
+    displayTitle: "実用本位のエンジニアリング",
     subtitle: "Practical Engineering",
     description: "「本当に必要な機能」だけを、適正価格で。大手が提案する高額なパッケージではなく、御社の業務フローに合わせた最小構成で開発します。結果、導入コストは半分以下、運用負担もゼロに近づけます。"
   },
   {
     title: "VALUE 2: 運用まで見据えた伴走",
+    displayTitle: "運用まで見据えた伴走",
     subtitle: "Sustainable Partnership",
     description: "導入後の運用サポート、現場向けマニュアル作成、そして社員研修まで。「使われないシステム」を作らないために、CloudNatureは御社の一員として動きます。急なトラブルにも、新潟市内なら即日訪問対応が可能です。"
   },
   {
     title: "VALUE 3: 誠実な実装、確実な成果",
+    displayTitle: "誠実な実装、確実な成果",
     subtitle: "Integrity & Results",
     description: "見積もりから納品まで、すべてのプロセスを明確にお伝えします。追加費用が発生する場合は必ず事前相談。新潟の企業様との長期的な信頼関係を、誠実な仕事の積み重ねで築きます。"
   }

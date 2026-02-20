@@ -24,7 +24,8 @@ export const metadata: Metadata = {
     title: PAGE_META.home.title,
     description: PAGE_META.home.description,
     images: ["/images/niigata_city.jpg"]
-  }
+  },
+  alternates: { canonical: "https://cloudnature.jp/" }
 };
 
 const Home = () => (

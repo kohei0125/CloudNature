@@ -55,6 +55,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
             <Link
               key={item.path}
               href={item.path}
+              aria-current={isActive(item.path) ? "page" : undefined}
               className={cn(
                 "text-sm font-medium tracking-wide transition-colors hover:text-sunset relative group",
                 isActive(item.path) ? "text-sunset" : isHeroOverlay ? "text-white" : "text-forest"

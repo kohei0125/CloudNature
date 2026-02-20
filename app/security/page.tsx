@@ -17,7 +17,8 @@ export const metadata: Metadata = {
     card: "summary",
     title: PAGE_META.security.title,
     description: PAGE_META.security.description,
-  }
+  },
+  alternates: { canonical: "https://cloudnature.jp/security" },
 };
 
 export default function SecurityPage() {

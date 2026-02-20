@@ -58,7 +58,7 @@ const MissionSection = () => {
                     </div>
 
                     <div className="relative z-10">
-                      <h4 className="text-lg font-bold text-forest mb-1">{value.title.split(": ")[1]}</h4>
+                      <h4 className="text-lg font-bold text-forest mb-1">{value.displayTitle}</h4>
                       <p className={`text-xs font-bold mb-2 tracking-wider ${textColor}`}>{value.subtitle}</p>
                       <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                         {value.description}

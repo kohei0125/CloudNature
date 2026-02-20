@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,9 +33,9 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
         </h2>
       </div>
       {cta ? (
-        <button className="text-sunset font-bold flex items-center gap-2 hover:gap-3 transition-all">
+        <Link href={cta.href} className="text-sunset font-bold flex items-center gap-2 hover:gap-3 transition-all">
           {cta.label} <ArrowRight className="w-4 h-4" />
-        </button>
+        </Link>
       ) : null}
     </div>
   );

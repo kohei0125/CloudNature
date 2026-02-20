@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     title: PAGE_META.services.title,
     description: PAGE_META.services.description,
   },
+  alternates: { canonical: "https://cloudnature.jp/services" },
 };
 
 export default function ServicesPage() {
