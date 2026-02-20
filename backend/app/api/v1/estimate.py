@@ -1,8 +1,9 @@
 """Estimate API endpoints."""
 
+import json
 import logging
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, BackgroundTasks, HTTPException
 
 from app.schemas.request import (
     CreateSessionRequest,
@@ -19,6 +20,58 @@ from app.services import estimate_service, session_service
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/estimate", tags=["estimate"])
+
+
+def _parse_contact(answers: dict) -> dict:
+    """Extract contact info from step 13 answer.
+
+    Returns dict with name, company, email keys (empty strings as defaults).
+    """
+    raw = answers.get("13", answers.get("step_13", ""))
+    if not raw:
+        return {"name": "", "company": "", "email": ""}
+    try:
+        parsed = json.loads(raw) if isinstance(raw, str) else raw
+        return {
+            "name": parsed.get("name", ""),
+            "company": parsed.get("company", ""),
+            "email": parsed.get("email", ""),
+        }
+    except (json.JSONDecodeError, AttributeError):
+        return {"name": "", "company": "", "email": ""}
+
+
+async def _send_emails(estimate_data: dict, answers: dict) -> None:
+    """Background task: generate PDF and send emails to customer and operator."""
+    from app.services.email_service import (
+        send_estimate_email,
+        send_estimate_notification,
+    )
+    from app.services.pdf_service import fetch_pdf_from_frontend
+
+    contact = _parse_contact(answers)
+    customer_email = contact["email"]
+    if not customer_email:
+        logger.warning("No customer email found in answers, skipping email send")
+        return
+
+    # Generate PDF (failure is non-fatal — emails are sent without attachment)
+    pdf_data = await fetch_pdf_from_frontend(
+        estimate_data, client_name=contact["name"]
+    )
+    if not pdf_data:
+        logger.warning("PDF generation failed, sending emails without attachment")
+
+    # Send customer email
+    await send_estimate_email(customer_email, pdf_data=pdf_data)
+
+    # Send operator notification
+    await send_estimate_notification(
+        client_name=contact["name"],
+        client_company=contact["company"],
+        client_email=customer_email,
+        pdf_data=pdf_data,
+    )
 
 
 @router.post("/session", response_model=SessionResponse)
@@ -73,6 +126,7 @@ async def submit_step(
 @router.post("/generate", response_model=EstimateResultResponse)
 async def generate_estimate(
     request: GenerateEstimateRequest,
+    background_tasks: BackgroundTasks,
 ) -> EstimateResultResponse:
     """Trigger estimate generation for a session."""
     session = session_service.get_estimate_session(request.session_id)
@@ -83,6 +137,7 @@ async def generate_estimate(
         request.session_id, request.answers
     )
     if result:
+        background_tasks.add_task(_send_emails, result, request.answers)
         return EstimateResultResponse(status="completed", estimate=result)
 
     return EstimateResultResponse(status="processing")

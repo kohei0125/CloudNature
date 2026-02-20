@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     llm_timeout: int = 30
     resend_api_key: str = ""
     email_from: str = "CloudNature <noreply@cloudnature.co.jp>"
+    notify_email: str = ""
     database_url: str = "sqlite:///./estimate.db"
     frontend_url: str = "http://localhost:3001"
     cors_origins: str = "http://localhost:3001"
