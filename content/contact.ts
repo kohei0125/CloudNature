@@ -48,7 +48,7 @@ export const STEP_FLOW: StepFlowItem[] = [
 export const ALTERNATIVE_CONTACT = {
   title: "その他のお問い合わせ方法",
   phone: { label: "お電話", value: "025-XXX-XXXX", note: "平日 9:00〜18:00" },
-  email: { label: "メール", value: "info@cloudnature.co.jp" }
+  email: { label: "メール", value: "info@cloudnature.jp" }
 };
 
 export const CONTACT_FAQ: FaqItem[] = [

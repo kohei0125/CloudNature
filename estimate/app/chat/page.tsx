@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send } from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import { EstimateProvider, useEstimateSession } from "@/hooks/useEstimateSession";
 import { useStepNavigation } from "@/hooks/useStepNavigation";
 import { useSessionPersistence } from "@/hooks/useSessionPersistence";
@@ -20,6 +21,8 @@ import ErrorRetry from "@/components/chat/ErrorRetry";
 import { STEP_MESSAGES, AI_MESSAGES } from "@/content/estimate";
 import type { StepOption } from "@/types/estimate";
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY ?? "";
+
 function ChatPageContent() {
   const router = useRouter();
   const { state, dispatch } = useEstimateSession();
@@ -27,6 +30,8 @@ function ChatPageContent() {
   const { startSession, submitStep, triggerGenerate } = useEstimateApi();
   const sessionInitRef = useRef(false);
   const stateRef = useRef(state);
+  const turnstileRef = useRef<TurnstileInstance | null>(null);
+  const turnstileTokenRef = useRef<string | null>(null);
   useEffect(() => {
     stateRef.current = state;
   });
@@ -94,7 +99,11 @@ function ChatPageContent() {
     const { sessionId } = stateRef.current;
     if (!sessionId) return;
 
-    const result = await triggerGenerate();
+    const token = turnstileTokenRef.current ?? undefined;
+    const result = await triggerGenerate(token);
+    // Reset Turnstile for potential retry
+    turnstileRef.current?.reset();
+    turnstileTokenRef.current = null;
     if (result?.estimate) {
       save("estimate_result", result.estimate);
       router.push("/complete");
@@ -187,15 +196,26 @@ function ChatPageContent() {
                     )}
 
                     {isLastStep && (
-                      <button
-                        type="button"
-                        onClick={handleSubmit}
-                        disabled={!canProceed}
-                        className="btn-submit mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold md:w-auto md:self-end md:text-base"
-                      >
-                        <Send className="h-4 w-4" />
-                        送信する
-                      </button>
+                      <>
+                        {TURNSTILE_SITE_KEY && (
+                          <Turnstile
+                            ref={turnstileRef}
+                            siteKey={TURNSTILE_SITE_KEY}
+                            onSuccess={(token) => { turnstileTokenRef.current = token; }}
+                            onExpire={() => { turnstileTokenRef.current = null; }}
+                            options={{ size: "compact", theme: "light" }}
+                          />
+                        )}
+                        <button
+                          type="button"
+                          onClick={handleSubmit}
+                          disabled={!canProceed}
+                          className="btn-submit mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold md:w-auto md:self-end md:text-base"
+                        >
+                          <Send className="h-4 w-4" />
+                          送信する
+                        </button>
+                      </>
                     )}
                   </div>
                 )}

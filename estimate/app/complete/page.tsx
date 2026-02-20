@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   CheckCircle,
@@ -206,12 +207,12 @@ export default function CompletePage() {
 
         {/* ── Back to top ── */}
         <div className="mt-8 text-center">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-sm text-forest/45 transition-colors hover:text-forest/70"
           >
             お見積もりTOPにもどる
-          </a>
+          </Link>
         </div>
 
         {/* ── Disclaimer ── */}

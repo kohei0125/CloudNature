@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     llm_max_retries: int = 3
     llm_timeout: int = 30
     resend_api_key: str = ""
-    email_from: str = "CloudNature <noreply@cloudnature.co.jp>"
+    email_from: str = "CloudNature <cloudnature@stage-site.net>"
     notify_email: str = ""
     database_url: str = "sqlite:///./estimate.db"
     frontend_url: str = "http://localhost:3001"

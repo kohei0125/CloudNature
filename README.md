@@ -105,7 +105,7 @@ LLM_TIMEOUT=30
 
 # Email
 RESEND_API_KEY=<your-resend-api-key>
-EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>
+EMAIL_FROM=CloudNature <noreply@cloudnature.jp>
 
 # App
 FRONTEND_URL=http://localhost:3001

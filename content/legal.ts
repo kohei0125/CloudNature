@@ -54,7 +54,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
   },
   {
     title: "9. お問い合わせ窓口",
-    content: "個人情報の取り扱いに関するお問い合わせは、下記までご連絡ください。\n\n株式会社クラウドネイチャー\nメール: privacy@cloudnature.co.jp\n所在地: 新潟県新潟市中央区\n\n制定日: 2026年1月1日\n最終改定日: 2026年2月1日"
+    content: "個人情報の取り扱いに関するお問い合わせは、下記までご連絡ください。\n\n株式会社クラウドネイチャー\nメール: info@cloudnature.jp\n所在地: 新潟県新潟市中央区\n\n制定日: 2026年1月1日\n最終改定日: 2026年2月1日"
   }
 ];
 

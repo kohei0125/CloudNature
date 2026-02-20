@@ -93,12 +93,13 @@ export async function submitStep(
 export async function generateEstimate(
   sessionId: string,
   answers: Record<string, string | string[]>,
+  turnstileToken?: string,
 ): Promise<EstimateResultResponse> {
   return apiFetch<EstimateResultResponse>(
     "/api/estimate/generate",
     {
       method: "POST",
-      body: JSON.stringify({ sessionId, answers }),
+      body: JSON.stringify({ sessionId, answers, turnstileToken }),
     },
     120_000,
   );

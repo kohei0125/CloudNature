@@ -125,7 +125,7 @@ export function useEstimateApi() {
   );
 
   /** Trigger final estimate generation. */
-  const triggerGenerate = useCallback(async () => {
+  const triggerGenerate = useCallback(async (turnstileToken?: string) => {
     const sessionId = sessionIdRef.current;
     if (!sessionId) return null;
 
@@ -134,7 +134,7 @@ export function useEstimateApi() {
       addMessage("system-api", AI_MESSAGES.generatingEstimate);
 
       const answers = stateRef.current.answers as Record<string, string | string[]>;
-      const res = await api.generateEstimate(sessionId, answers);
+      const res = await api.generateEstimate(sessionId, answers, turnstileToken);
 
       if (res.status === "completed" && res.estimate) {
         dispatch({ type: "SET_STATUS", status: "completed" });
