@@ -15,6 +15,7 @@ import {
   Clock,
 } from "lucide-react";
 import { load, clear } from "@/lib/sessionStorage";
+import { parseContact } from "@/lib/utils";
 import { TOTAL_STEPS } from "@/lib/stepConfig";
 import type { EstimateSession, GeneratedEstimate } from "@/types/estimate";
 
@@ -39,12 +40,7 @@ export default function CompletePage() {
       if (session?.answers) {
         const raw = session.answers[TOTAL_STEPS];
         if (typeof raw === "string") {
-          try {
-            const contact = JSON.parse(raw);
-            setClientName(contact.name ?? "");
-          } catch {
-            setClientName("");
-          }
+          setClientName(parseContact(raw).name);
         }
       }
       const saved = load<GeneratedEstimate>("estimate_result");

@@ -3,32 +3,13 @@
 import { useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, BellOff } from "lucide-react";
-import { cn, EMAIL_REGEX } from "@/lib/utils";
+import { cn, EMAIL_REGEX, parseContact } from "@/lib/utils";
+import type { ContactValue } from "@/lib/utils";
 import { ERROR_MESSAGES } from "@/content/estimate";
-
-interface ContactValue {
-  name: string;
-  company: string;
-  email: string;
-}
 
 interface ContactInputProps {
   value: string;
   onChange: (value: string) => void;
-}
-
-function parseContact(value: string): ContactValue {
-  if (!value) return { name: "", company: "", email: "" };
-  try {
-    const parsed = JSON.parse(value);
-    return {
-      name: parsed.name ?? "",
-      company: parsed.company ?? "",
-      email: parsed.email ?? "",
-    };
-  } catch {
-    return { name: "", company: "", email: "" };
-  }
 }
 
 export default function ContactInput({ value, onChange }: ContactInputProps) {

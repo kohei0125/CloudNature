@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { Send } from "lucide-react";
-import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import dynamic from "next/dynamic";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
+
+const Turnstile = dynamic(
+  () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
+  { ssr: false }
+);
 import { EstimateProvider, useEstimateSession } from "@/hooks/useEstimateSession";
 import { useStepNavigation } from "@/hooks/useStepNavigation";
 import { useSessionPersistence } from "@/hooks/useSessionPersistence";
