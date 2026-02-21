@@ -3,6 +3,7 @@ import type {
   StepResponse,
   EstimateResultResponse,
   AiGeneratedOptions,
+  GeneratedEstimate,
 } from "@/types/estimate";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
@@ -112,6 +113,23 @@ export async function getEstimateResult(
   return apiFetch<EstimateResultResponse>(
     `/api/estimate/session?sessionId=${encodeURIComponent(sessionId)}&result=true`
   );
+}
+
+/** Send estimate email (fire-and-forget from client). */
+export async function sendEstimateEmail(
+  estimate: GeneratedEstimate,
+  clientName: string,
+  clientEmail: string,
+  clientCompany: string,
+): Promise<void> {
+  try {
+    await apiFetch("/api/estimate/email", {
+      method: "POST",
+      body: JSON.stringify({ estimate, clientName, clientEmail, clientCompany }),
+    });
+  } catch (error) {
+    console.error("[sendEstimateEmail]", error);
+  }
 }
 
 export { ApiError };

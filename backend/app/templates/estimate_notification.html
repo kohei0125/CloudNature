@@ -1,19 +1,57 @@
-<h2>新しいお見積もり依頼がありました</h2>
-<p>以下のお客様からAI概算見積もりのご依頼がありました。</p>
-<table style="border-collapse: collapse; margin: 16px 0;">
-  <tr>
-    <td style="padding: 8px 16px 8px 0; font-weight: bold;">お名前</td>
-    <td style="padding: 8px 0;">{{client_name}}</td>
-  </tr>
-  <tr>
-    <td style="padding: 8px 16px 8px 0; font-weight: bold;">企業・団体名</td>
-    <td style="padding: 8px 0;">{{client_company}}</td>
-  </tr>
-  <tr>
-    <td style="padding: 8px 16px 8px 0; font-weight: bold;">メールアドレス</td>
-    <td style="padding: 8px 0;">{{client_email}}</td>
-  </tr>
-</table>
-<p>概算見積書を添付ファイルにてお送りいたします。</p>
-<br>
-<p>CloudNature 見積もりシステム</p>
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body
+  style="background-color: #EDE8E5; font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; color: #19231B; line-height: 1.6; margin: 0; padding: 40px 20px;">
+  <div
+    style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <div style="background-color: #19231B; padding: 24px; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: bold; letter-spacing: 1px;">CloudNature</h1>
+    </div>
+    <div style="padding: 40px 32px;">
+      <h2
+        style="color: #19231B; font-size: 18px; margin-top: 0; margin-bottom: 24px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+        新しい概算見積もりリクエスト
+      </h2>
+      <h3 style="color: #19231B; font-size: 16px; margin-top: 0; margin-bottom: 16px;">
+        ■ 顧客情報
+      </h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 32px;">
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; width: 30%; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">
+            お名前</td>
+          <td
+            style="padding: 12px; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">
+            {{client_name}}</td>
+        </tr>
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">
+            メールアドレス</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;"><a
+              href="mailto:{{client_email}}" style="color: #8A9668;">{{client_email}}</a></td>
+        </tr>
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">
+            会社名</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">{{client_company}}</td>
+        </tr>
+      </table>
+
+      <p style="margin-top: 24px; font-size: 13px; color: #888888;">
+        ※ PDFお見積書がこのメールに添付されています。
+      </p>
+    </div>
+    <div style="background-color: #F8F9FA; padding: 20px; text-align: center; border-top: 1px solid #EDE8E5;">
+      <p style="margin: 0; font-size: 12px; color: #888888;">このメールは CloudNature 概算見積もりツールから自動送信されました。</p>
+    </div>
+  </div>
+</body>
+
+</html>

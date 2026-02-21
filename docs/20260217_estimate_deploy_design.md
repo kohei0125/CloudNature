@@ -12,13 +12,14 @@ backend は GCP Cloud Run、データベースは Neon（Serverless PostgreSQL�
 |---|---|---|
 | estimate（フロントエンド） | Next.js 16 / React 19 / TypeScript | Vercel |
 | backend（API） | Python 3.12 / FastAPI / SQLModel | GCP Cloud Run |
-| データベース | PostgreSQL（Serverless） | Neon |
+| データベース | PostgreSQL 17（Serverless） | Neon |
 
 ### 1.2 設計方針
 
 - **コスト最小化**: Neon Free Tier + Cloud Run 従量課金で固定費 $0 を実現
 - **レイテンシ対策**: DB 書き込みの非同期化（fire-and-forget）で Neon のリージョン遅延を吸収
 - **運用簡素化**: マネージドサービスの組合せで、インフラ管理を最小限に
+- **環境統一**: ローカル開発・本番ともに Neon に接続（環境差異を排除）
 
 ---
 
@@ -55,7 +56,7 @@ backend は GCP Cloud Run、データベースは Neon（Serverless PostgreSQL�
 │  Neon                │
 │  (Singapore)         │
 │                      │
-│  PostgreSQL          │
+│  PostgreSQL 17       │
 │  (pooled endpoint)   │
 └──────────────────────┘
 ```
@@ -83,7 +84,19 @@ backend は GCP Cloud Run、データベースは Neon（Serverless PostgreSQL�
 
 ## 3. Neon 構成詳細
 
-### 3.1 プラン
+### 3.1 プロジェクト情報
+
+| 項目 | 値 |
+|---|---|
+| Project ID | `long-math-54903705` |
+| Project 名 | `cloudnature-estimate` |
+| リージョン | Singapore (ap-southeast-1) |
+| PostgreSQL | 17 |
+| Database 名 | `neondb` |
+| Role | `neondb_owner` |
+| Endpoint | `ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech` |
+
+### 3.2 プラン
 
 **Free Tier** で開始する。
 
@@ -96,17 +109,12 @@ backend は GCP Cloud Run、データベースは Neon（Serverless PostgreSQL�
 | 接続プーリング | Neon pooler 内蔵 |
 | バックアップ | 24 時間以内の Branch Restore |
 
-### 3.2 リージョン
-
-Neon は東京リージョン未提供のため、最寄りの **Singapore (ap-southeast-1)** を選択する。
-Cloud Run（asia-northeast1）との間のレイテンシは ~60-80ms だが、非同期設計で吸収する（§4 参照）。
-
 ### 3.3 接続方式
 
 Neon の **pooled endpoint** を使用し、TLS を必須化する。
 
 ```
-DATABASE_URL=postgresql://USER:PASSWORD@EP-XXXX-pooler.ap-southeast-1.aws.neon.tech/estimate?sslmode=require
+DATABASE_URL=postgresql://neondb_owner:<PASSWORD>@ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
 ```
 
 - pooled endpoint は PgBouncer ベースの接続プーリングを提供
@@ -118,7 +126,6 @@ DATABASE_URL=postgresql://USER:PASSWORD@EP-XXXX-pooler.ap-southeast-1.aws.neon.t
 | テーブル | 1レコードあたり | 月間想定件数 | 月間増分 |
 |---|---|---|---|
 | EstimateSession | ~200 bytes | ~100 | ~20 KB |
-| StepAnswer | ~300 bytes | ~1,000 (100 × 10steps) | ~300 KB |
 | GeneratedEstimate | ~5 KB (JSON) | ~100 | ~500 KB |
 
 TTL 31日で自動削除するため、累積ストレージは **~1 MB 程度** で安定し、Free Tier の 0.5 GB を十分下回る。
@@ -149,15 +156,6 @@ DB 書き込みをバックグラウンドタスクにし、レスポンスを�
 **変更対象: `backend/app/api/v1/estimate.py` — `/step` エンドポイント**
 
 ```python
-# 変更前: DB完了を待ってからレスポンス
-session_service.save_step_answer(
-    session_id=request.session_id,
-    step_number=request.step_number,
-    value=request.value,
-)
-return StepResponse(success=True, next_step=next_step, ai_options=ai_options)
-
-# 変更後: バックグラウンドで保存、即座にレスポンス
 from fastapi import BackgroundTasks
 
 @router.post("/step", response_model=StepResponse)
@@ -192,33 +190,43 @@ async def submit_step(
     return StepResponse(success=True, next_step=next_step, ai_options=ai_options)
 ```
 
-### 4.3 セッション検証のキャッシュ
+### 4.3 コネクションプール設定
+
+`backend/app/db.py`:
+
+```python
+engine = create_engine(
+    settings.database_url,
+    echo=False,
+    pool_size=2,
+    max_overflow=3,
+    pool_pre_ping=True,
+)
+```
+
+- `pool_size=2`: Neon Free Tier の接続制限を考慮し小さめに設定
+- `max_overflow=3`: Cloud Run の瞬間的な負荷に対応
+- `pool_pre_ping=True`: Neon の接続切断（アイドルタイムアウト等）を自動検知
+
+### 4.4 セッション検証のキャッシュ
 
 セッション存在確認（SELECT）を TTL 付きキャッシュで高速化する。
 
-**追加: `backend/app/services/session_service.py`**
-
 ```python
-from functools import lru_cache
-from time import time
-
 _session_cache: dict[str, float] = {}
 _CACHE_TTL = 300  # 5分
 
 def get_session_cached(session_id: str) -> EstimateSession | None:
-    """キャッシュ付きセッション取得。存在確認のみに使用。"""
     now = time()
     if session_id in _session_cache and now - _session_cache[session_id] < _CACHE_TTL:
-        # キャッシュヒット: DBアクセス不要
         return EstimateSession(id=session_id, status="in_progress")
-
     session = get_estimate_session(session_id)
     if session:
         _session_cache[session_id] = now
     return session
 ```
 
-### 4.4 レイテンシ影響の最終評価
+### 4.5 レイテンシ影響の最終評価
 
 | API | 対策後の同期 DB 処理 | ユーザー体感への影響 |
 |---|---|---|
@@ -230,90 +238,14 @@ def get_session_cached(session_id: str) -> EstimateSession | None:
 
 ---
 
-## 5. データベース移行（SQLite → PostgreSQL）
+## 5. API Key 認証
 
-### 5.1 変更対象ファイル
-
-| ファイル | 変更内容 |
-|---|---|
-| `backend/requirements.txt` | `psycopg2-binary>=2.9.10` を追加 |
-| `backend/app/db.py` | SQLite 固有の `check_same_thread=False` を条件付きに変更、コネクションプール設定追加 |
-| `backend/app/config.py` | `api_key` 設定を追加 |
-| `backend/app/main.py` | API Key 検証ミドルウェアを追加 |
-| `backend/app/api/v1/estimate.py` | `/step` の fire-and-forget 化 |
-| `backend/app/services/session_service.py` | セッションキャッシュ追加 |
-| `backend/.env.sample` | `DATABASE_URL` を Neon 形式に更新、`API_KEY` を追加 |
-
-### 5.2 db.py 変更内容
-
-**変更前（SQLite）:**
-```python
-engine = create_engine(
-    settings.database_url,
-    echo=False,
-    connect_args={"check_same_thread": False},
-)
-```
-
-**変更後（PostgreSQL / SQLite 両対応）:**
-```python
-connect_args = {}
-if settings.database_url.startswith("sqlite"):
-    connect_args["check_same_thread"] = False
-
-engine = create_engine(
-    settings.database_url,
-    echo=False,
-    pool_size=2,
-    max_overflow=3,
-    pool_pre_ping=True,
-    connect_args=connect_args,
-)
-```
-
-- `pool_size=2`: Neon Free Tier の接続制限を考慮し小さめに設定
-- `max_overflow=3`: Cloud Run の瞬間的な負荷に対応
-- `pool_pre_ping=True`: Neon の接続切断（アイドルタイムアウト等）を自動検知
-
-### 5.3 スキーマ移行
-
-SQLModel の `create_db_and_tables()` が起動時にテーブルを自動作成するため、Alembic 等のマイグレーションツールは初期段階では不要。既存のモデル定義（`EstimateSession`, `StepAnswer`, `GeneratedEstimate`）はそのまま PostgreSQL で動作する。
-
-### 5.4 .env.sample 更新
-
-```bash
-# Database (Neon pooled endpoint)
-DATABASE_URL=postgresql://USER:PASSWORD@EP-XXXX-pooler.ap-southeast-1.aws.neon.tech/estimate?sslmode=require
-
-# API Key (Vercel → backend 間認証)
-API_KEY=
-
-# LLM
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o
-LLM_MAX_RETRIES=3
-LLM_TIMEOUT=30
-
-# Email
-RESEND_API_KEY=
-EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>
-
-# App
-FRONTEND_URL=https://estimate.cloudnature.co.jp
-CORS_ORIGINS=https://estimate.cloudnature.co.jp
-DATA_TTL_DAYS=31
-```
-
----
-
-## 6. API Key 認証
-
-### 6.1 方式
+### 5.1 方式
 
 Vercel Functions（estimate の API Routes）から Cloud Run（backend）への通信を API Key で保護する。
 Cloud Run 自体は `--allow-unauthenticated` とし、アプリケーションレベルで API Key を検証する。
 
-### 6.2 フロー
+### 5.2 フロー
 
 ```
 estimate (Vercel Functions)
@@ -323,55 +255,23 @@ estimate (Vercel Functions)
     → 不一致の場合 403 Forbidden
 ```
 
-### 6.3 backend 側の実装
-
-`app/config.py` に追加:
-```python
-api_key: str = ""
-```
-
-`app/main.py` に API Key 検証ミドルウェアを追加:
-```python
-class ApiKeyMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        if request.url.path == "/api/v1/health":
-            return await call_next(request)
-        if settings.api_key:
-            provided = request.headers.get("X-API-Key", "")
-            if provided != settings.api_key:
-                raise HTTPException(status_code=403, detail="Invalid API key")
-        return await call_next(request)
-```
-
-### 6.4 estimate 側の実装
-
-各 API Route (`estimate/app/api/estimate/*/route.ts`) の `fetch` 呼び出しに API Key ヘッダを付与:
-```typescript
-const res = await fetch(`${BACKEND_URL}/api/v1/...`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "X-API-Key": process.env.BACKEND_API_KEY ?? "",
-  },
-  body: JSON.stringify(payload),
-});
-```
-
-### 6.5 シークレット管理
+### 5.3 シークレット管理
 
 | シークレット | 保管先 | 用途 |
 |---|---|---|
 | `API_KEY` | GCP Secret Manager | backend の API Key 検証用 |
-| `BACKEND_API_KEY` | Vercel 環境変数 | estimate → backend 通信用（同じ値） |
+| `BACKEND_API_KEY` | Vercel 環境変数 | estimate → backend 通信用（`API_KEY` と同じ値） |
 | `OPENAI_API_KEY` | GCP Secret Manager | LLM 呼び出し |
 | `RESEND_API_KEY` | GCP Secret Manager | メール送信 |
 | `DATABASE_URL` | GCP Secret Manager | Neon 接続文字列 |
 
 ---
 
-## 7. Vercel デプロイ設定（estimate）
+## 6. Vercel デプロイ設定（estimate）
 
-### 7.1 プロジェクト設定
+estimate フロントエンドは `git push` で自動デプロイされる。
+
+### 6.1 プロジェクト設定
 
 | 項目 | 値 |
 |---|---|
@@ -381,58 +281,38 @@ const res = await fetch(`${BACKEND_URL}/api/v1/...`, {
 | Output | standalone（`next.config.mjs` で設定済み） |
 | Node.js Version | 20.x |
 
-### 7.2 環境変数
+### 6.2 環境変数（Vercel ダッシュボードで設定）
 
 | 変数名 | 値 | スコープ |
 |---|---|---|
 | `BACKEND_URL` | `https://backend-xxxxx-an.a.run.app` | Production / Preview |
-| `BACKEND_API_KEY` | （Secret Manager と同じ値） | Production / Preview |
+| `BACKEND_API_KEY` | （Secret Manager の `API_KEY` と同じ値） | Production / Preview |
+| `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY` | （Turnstile サイトキー） | Production / Preview |
+| `CLOUDFLARE_TURNSTILE_SECRET_KEY` | （Turnstile シークレットキー） | Production / Preview |
 
-### 7.3 カスタムドメイン
+### 6.3 カスタムドメイン
 
 Vercel ダッシュボードで `estimate.cloudnature.co.jp` を追加し、DNS に CNAME レコードを設定する。
 
 ---
 
-## 8. Cloud Run デプロイ手順
+## 7. Cloud Run デプロイ手順
 
-### 8.1 前提条件
+### 7.1 前提条件（初回のみ）
 
 ```bash
+# GCP にログイン
 gcloud auth login
 gcloud config set project PROJECT_ID
+
+# 必要な API を有効化
 gcloud services enable \
   run.googleapis.com \
   artifactregistry.googleapis.com \
   secretmanager.googleapis.com
 ```
 
-※ Cloud SQL を使わないため `sqladmin.googleapis.com` は不要。
-
-### 8.2 Neon セットアップ
-
-Neon コンソール（https://console.neon.tech）で操作:
-
-1. **Project 作成**: リージョン `Singapore (ap-southeast-1)` を選択
-2. **Database 作成**: `estimate`
-3. **Role 作成**: `estimate_user`（パスワード自動生成）
-4. **接続文字列を取得**: pooled endpoint 形式（`-pooler` を含む URL）
-
-```
-postgresql://estimate_user:PASSWORD@ep-xxxx-pooler.ap-southeast-1.aws.neon.tech/estimate?sslmode=require
-```
-
-### 8.3 Secret Manager 登録
-
-```bash
-echo -n "GENERATED_API_KEY" | gcloud secrets create api-key --data-file=-
-echo -n "sk-xxx" | gcloud secrets create openai-api-key --data-file=-
-echo -n "re_xxx" | gcloud secrets create resend-api-key --data-file=-
-echo -n "postgresql://estimate_user:PASS@ep-xxxx-pooler.ap-southeast-1.aws.neon.tech/estimate?sslmode=require" \
-  | gcloud secrets create database-url --data-file=-
-```
-
-### 8.4 Artifact Registry & イメージビルド
+### 7.2 Artifact Registry 作成（初回のみ）
 
 ```bash
 gcloud artifacts repositories create cloudnature \
@@ -440,12 +320,45 @@ gcloud artifacts repositories create cloudnature \
   --location=asia-northeast1
 
 gcloud auth configure-docker asia-northeast1-docker.pkg.dev
+```
 
-docker build -t asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest ./backend
+### 7.3 Secret Manager 登録（初回のみ）
+
+各シークレットを登録する。値は実際のものに置き換えること。
+
+```bash
+# API Key（Vercel → backend 間認証）
+echo -n "YOUR_API_KEY" | gcloud secrets create api-key --data-file=-
+
+# OpenAI API Key
+echo -n "sk-xxx" | gcloud secrets create openai-api-key --data-file=-
+
+# Resend API Key（メール送信）
+echo -n "re_xxx" | gcloud secrets create resend-api-key --data-file=-
+
+# Neon 接続文字列
+echo -n "postgresql://neondb_owner:PASSWORD@ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require" \
+  | gcloud secrets create database-url --data-file=-
+```
+
+シークレットの値を更新する場合:
+
+```bash
+echo -n "NEW_VALUE" | gcloud secrets versions add SECRET_NAME --data-file=-
+```
+
+### 7.4 backend デプロイ（毎回）
+
+backend を変更するたびに以下を実行する。
+
+**Step 1: Docker イメージをビルド & プッシュ**
+
+```bash
+docker build -t asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest ./backend && \
 docker push asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest
 ```
 
-### 8.5 Cloud Run デプロイ
+**Step 2: Cloud Run にデプロイ**
 
 ```bash
 gcloud run deploy backend \
@@ -473,80 +386,88 @@ EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>" \
   --allow-unauthenticated
 ```
 
-※ Neon はパブリックインターネット経由の TLS 接続のため `--add-cloudsql-instances` は不要。
+> Neon はパブリックインターネット経由の TLS 接続のため `--add-cloudsql-instances` は不要。
 
----
+**Step 3: デプロイ確認**
 
-## 9. CI/CD
-
-### 9.1 backend（GitHub Actions → Cloud Run）
-
-```yaml
-# .github/workflows/deploy-backend.yml
-name: Deploy Backend
-
-on:
-  push:
-    branches: [main]
-    paths: ['backend/**']
-
-env:
-  PROJECT_ID: PROJECT_ID
-  REGION: asia-northeast1
-  REGISTRY: asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
-          service_account: ${{ secrets.WIF_SA }}
-      - uses: google-github-actions/setup-gcloud@v2
-      - run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
-      - run: |
-          docker build -t ${REGISTRY}/backend:${{ github.sha }} ./backend
-          docker push ${REGISTRY}/backend:${{ github.sha }}
-      - run: |
-          gcloud run deploy backend \
-            --image=${REGISTRY}/backend:${{ github.sha }} \
-            --region=${REGION}
+```bash
+# ヘルスチェック
+curl https://backend-xxxxx-an.a.run.app/api/v1/health
 ```
 
-### 9.2 estimate（Vercel 自動デプロイ）
+---
 
-Vercel の GitHub 連携により、`main` ブランチへの push で自動デプロイされる。
-`estimate/` 配下の変更のみがトリガーとなるよう、Vercel の Root Directory 設定で制御する。
+## 8. 環境変数一覧
+
+### 8.1 backend（Cloud Run）
+
+| 変数名 | 供給元 | 説明 |
+|---|---|---|
+| `DATABASE_URL` | Secret Manager | Neon pooled endpoint 接続文字列 |
+| `API_KEY` | Secret Manager | Vercel → backend 間の認証キー |
+| `OPENAI_API_KEY` | Secret Manager | OpenAI API キー |
+| `RESEND_API_KEY` | Secret Manager | Resend メール送信 API キー |
+| `OPENAI_MODEL` | 環境変数 | `gpt-4o` |
+| `LLM_MAX_RETRIES` | 環境変数 | `3` |
+| `LLM_TIMEOUT` | 環境変数 | `30` |
+| `FRONTEND_URL` | 環境変数 | `https://estimate.cloudnature.co.jp` |
+| `CORS_ORIGINS` | 環境変数 | `https://estimate.cloudnature.co.jp` |
+| `DATA_TTL_DAYS` | 環境変数 | `31` |
+| `EMAIL_FROM` | 環境変数 | `CloudNature <noreply@cloudnature.co.jp>` |
+
+### 8.2 ローカル開発（backend/.env）
+
+ローカルでも Neon に直接接続する。`backend/.env` に設定:
+
+```bash
+# Database (Neon pooled endpoint)
+DATABASE_URL=postgresql://neondb_owner:<PASSWORD>@ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+
+# API Key（ローカルでは空でスキップ）
+API_KEY=
+
+# LLM
+OPENAI_API_KEY=<your-openai-api-key>
+OPENAI_MODEL=gpt-4o
+LLM_MAX_RETRIES=3
+LLM_TIMEOUT=30
+
+# Email
+RESEND_API_KEY=<your-resend-api-key>
+EMAIL_FROM=CloudNature <cloudnature@stage-site.net>
+NOTIFY_EMAIL=k.watanabe.sys.contact@gmail.com
+
+# App
+FRONTEND_URL=http://localhost:3001
+CORS_ORIGINS=http://localhost:3001
+DATA_TTL_DAYS=31
+```
 
 ---
 
-## 10. 運用設計
+## 9. 運用設計
 
-### 10.1 コールドスタート
+### 9.1 コールドスタート
 
 **Cloud Run**: `min-instances=0` の場合、アイドル後の初回リクエストでコールドスタート（数秒）。
 見積もりシステムはリアルタイム性が必須ではないため許容範囲。体感が問題になる場合は `min-instances=1` に変更（月額 +$5〜10）。
 
 **Neon**: アイドル後の初回接続で ~0.5s のウォームアップ。`pool_pre_ping=True` と組合せて自動リカバリする。
 
-### 10.2 定期クリーンアップタスク
+### 9.2 定期クリーンアップタスク
 
-現在の backend は `asyncio.create_task` で6時間ごとの TTL クリーンアップを実行している。
-Cloud Run はリクエストがない間インスタンスが停止するため、確実な実行が保証されない。
+現在の backend は起動時の `run_cleanup()` で TTL 超過データを削除している。
+Cloud Run はリクエストがない間インスタンスが停止するため、確実な定期実行が保証されない。
 
-**対策:** Cloud Scheduler から `/api/v1/cleanup` エンドポイントを定期呼び出しする方式に変更する。ただし初期段階では起動時の `run_cleanup()` で実用上は十分。
+**対策:** 初期段階では起動時の `run_cleanup()` で実用上は十分。
+将来的には Cloud Scheduler から `/api/v1/cleanup` エンドポイントを定期呼び出しする方式に変更する。
 
-### 10.3 レートリミッター
+### 9.3 レートリミッター
 
 インメモリ型レートリミッター（`RateLimitMiddleware`、60 req/min/IP）は Cloud Run インスタンスごとに独立。
 初期段階では `max-instances=3` のため問題にならないが、将来的には Redis（Memorystore）や Cloud Armor での制御を検討する。
 
-### 10.4 監視
+### 9.4 監視
 
 | 対象 | 方法 |
 |---|---|
@@ -555,7 +476,7 @@ Cloud Run はリクエストがない間インスタンスが停止するため�
 | Neon | 接続数、CU 使用時間、ストレージ使用量を Neon Console で確認 |
 | エラー通知 | Cloud Run のログベースアラート（5xx 頻発時に通知） |
 
-### 10.5 Neon のセキュリティ
+### 9.5 Neon のセキュリティ
 
 - TLS 必須（`sslmode=require`）で通信を暗号化
 - Neon の IP Allow List を設定し、Cloud Run の egress IP のみ許可（将来的に）
@@ -563,7 +484,7 @@ Cloud Run はリクエストがない間インスタンスが停止するため�
 
 ---
 
-## 11. 将来のスケールパス
+## 10. 将来のスケールパス
 
 | フェーズ | 変更内容 |
 |---|---|
@@ -572,7 +493,7 @@ Cloud Run はリクエストがない間インスタンスが停止するため�
 | 拡大期 | Cloud Armor（WAF/DDoS 対策）、Cloud Scheduler でクリーンアップ |
 | 大規模 | Cloud SQL（asia-northeast1）への移行を検討、Memorystore (Redis) でレートリミット・キャッシュ |
 
-### 11.1 Cloud SQL への移行パス
+### 10.1 Cloud SQL への移行パス
 
 Neon の制限を超えた場合の移行手順:
 

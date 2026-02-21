@@ -4,7 +4,11 @@ import { getBackendHeaders } from "@/lib/apiAuth";
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
 const TIMEOUT_MS = 120_000; // Estimate generation can take up to 2 minutes
-const CLOUDFLARE_TURNSTILE_SECRET_KEY = process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY ?? "";
+// ローカルはクラウドフレアのチェックをスキップ
+const IS_PRODUCTION = process.env.NEXT_PUBLIC_ENV === "production";
+const CLOUDFLARE_TURNSTILE_SECRET_KEY = IS_PRODUCTION
+  ? (process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY ?? "")
+  : "";
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 

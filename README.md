@@ -20,10 +20,7 @@ CloudNature コーポレートサイト & AI見積もりシステムのモノレ
 
 ### データベース
 
-- **ローカル開発**: SQLite (`backend/estimate.db`)
-- **本番**: Neon (Serverless PostgreSQL)
-
-`backend/app/db.py` が `DATABASE_URL` のスキーマに応じて SQLite / PostgreSQL を自動切替。
+- **ローカル・本番共通**: Neon (Serverless PostgreSQL, Singapore)
 
 ### 認証
 
@@ -37,18 +34,27 @@ Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護�
 ### Docker Compose（推奨）
 
 ```bash
-# 1. 環境変数を設定
+# 1. 環境変数を設定（初回のみ）
 cp backend/.env.sample backend/.env
-# backend/.env を編集して OPENAI_API_KEY を設定
+# backend/.env を編集して DATABASE_URL, OPENAI_API_KEY 等を設定
 
 # 2. 起動
-docker compose up --build
+docker compose up -d --build
 # → フロントエンド: http://localhost:3001
 # → バックエンド:   http://localhost:8000
 # → Swagger UI:     http://localhost:8000/docs
+
+# 3. ログ確認
+docker compose logs -f
 ```
 
 ソースコードの変更はホットリロードで即反映されます。
+
+**トラブルシューティング**: フロントエンドで SWC / Turbopack のエラーが出る場合は、`node_modules` ボリュームを削除して再ビルドしてください:
+
+```bash
+docker compose down -v && docker compose up -d --build
+```
 
 ### コーポレートサイト（別途起動）
 
@@ -91,8 +97,8 @@ npm run dev
 ### backend/.env
 
 ```bash
-# Database（ローカルは SQLite、本番は Neon PostgreSQL）
-DATABASE_URL=sqlite:///./estimate.db
+# Database (Neon pooled endpoint)
+DATABASE_URL=postgresql://neondb_owner:<PASSWORD>@ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
 
 # API Key（Vercel → backend 間認証、ローカルでは空でスキップ）
 API_KEY=
@@ -105,7 +111,8 @@ LLM_TIMEOUT=30
 
 # Email
 RESEND_API_KEY=<your-resend-api-key>
-EMAIL_FROM=CloudNature <noreply@cloudnature.jp>
+EMAIL_FROM=CloudNature <cloudnature@stage-site.net>
+NOTIFY_EMAIL=k.watanabe.sys.contact@gmail.com
 
 # App
 FRONTEND_URL=http://localhost:3001

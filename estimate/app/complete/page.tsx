@@ -85,19 +85,7 @@ export default function CompletePage() {
 
   return (
     <div className="min-h-[100dvh] bg-linen">
-      {/* Logo */}
-      <div className="center py-5">
-        <Image
-          src="/images/header_logo.png"
-          alt="CloudNature"
-          width={180}
-          height={40}
-          className="h-8 w-auto md:h-9"
-          priority
-        />
-      </div>
-
-      <div className="mx-auto max-w-lg px-4 pb-16">
+      <div className="mx-auto max-w-lg px-4 pt-20 pb-16">
         {/* ── Success header ── */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
