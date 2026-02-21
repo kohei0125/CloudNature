@@ -1,6 +1,8 @@
 """Email service using Resend API."""
 
+import html
 import logging
+import math
 from pathlib import Path
 
 import resend
@@ -19,6 +21,11 @@ def _load_template(name: str) -> str:
 
 async def send_estimate_email(
     email: str,
+    client_name: str = "",
+    project_name: str = "",
+    standard_cost: int = 0,
+    hybrid_cost: int = 0,
+    cost_message: str = "",
     pdf_data: bytes | None = None,
 ) -> bool:
     """Send estimate PDF to the customer via email.
@@ -35,15 +42,28 @@ async def send_estimate_email(
     attachments = []
     if pdf_data:
         attachments.append(
-            {"filename": "概算見積書.pdf", "content": list(pdf_data)}
+            {"filename": "概算お見積書.pdf", "content": list(pdf_data)}
         )
+
+    def _format_price(price: int) -> str:
+        return f"{math.ceil(price / 10000):,}万円"
+
+    template = _load_template("estimate_email.html")
+    name_display = f"{html.escape(client_name)} 様" if client_name else "お客様"
+    template = (
+        template.replace("{{client_name}} 様", name_display)
+        .replace("{{project_name}}", html.escape(project_name))
+        .replace("{{standard_cost}}", _format_price(standard_cost))
+        .replace("{{hybrid_cost}}", _format_price(hybrid_cost))
+        .replace("{{cost_message}}", html.escape(cost_message))
+    )
 
     try:
         params: resend.Emails.SendParams = {
             "from": settings.email_from,
             "to": [email],
-            "subject": "【CloudNature】AI概算見積もり結果のお届け",
-            "html": _load_template("estimate_email.html"),
+            "subject": "【CloudNature】概算お見積もりが完成しました",
+            "html": template,
             "attachments": attachments,
         }
         response = resend.Emails.send(params)
@@ -80,22 +100,22 @@ async def send_estimate_notification(
     attachments = []
     if pdf_data:
         attachments.append(
-            {"filename": "概算見積書.pdf", "content": list(pdf_data)}
+            {"filename": "概算お見積書.pdf", "content": list(pdf_data)}
         )
 
     try:
-        html = _load_template("estimate_notification.html")
-        html = (
-            html.replace("{{client_name}}", client_name)
-            .replace("{{client_company}}", client_company)
-            .replace("{{client_email}}", client_email)
+        template = _load_template("estimate_notification.html")
+        template = (
+            template.replace("{{client_name}}", html.escape(client_name))
+            .replace("{{client_company}}", html.escape(client_company) if client_company.strip() else "（未入力）")
+            .replace("{{client_email}}", html.escape(client_email))
         )
 
         params: resend.Emails.SendParams = {
             "from": settings.email_from,
             "to": [settings.notify_email],
             "subject": "【CloudNature】新しいお見積もり依頼がありました",
-            "html": html,
+            "html": template,
             "attachments": attachments,
         }
         response = resend.Emails.send(params)

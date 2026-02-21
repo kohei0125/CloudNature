@@ -62,8 +62,24 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
     if not pdf_data:
         logger.warning("PDF generation failed, sending emails without attachment")
 
+    # Extract estimate summary for the customer email
+    # LLM returns snake_case; pdf_service converts to camelCase — handle both
+    total_cost = estimate_data.get("total_cost", estimate_data.get("totalCost", {}))
+    standard_cost = total_cost.get("standard", 0)
+    hybrid_cost = total_cost.get("hybrid", 0)
+    cost_message = total_cost.get("message", "")
+    project_name = estimate_data.get("project_name", estimate_data.get("projectName", ""))
+
     # Send customer email
-    await send_estimate_email(customer_email, pdf_data=pdf_data)
+    await send_estimate_email(
+        customer_email,
+        client_name=contact["name"],
+        project_name=project_name,
+        standard_cost=standard_cost,
+        hybrid_cost=hybrid_cost,
+        cost_message=cost_message,
+        pdf_data=pdf_data,
+    )
 
     # Send operator notification
     await send_estimate_notification(

@@ -17,9 +17,6 @@ import { useStepNavigation } from "@/hooks/useStepNavigation";
 import { useSessionPersistence } from "@/hooks/useSessionPersistence";
 import { useEstimateApi } from "@/hooks/useEstimateApi";
 import { save } from "@/lib/sessionStorage";
-import { parseContact } from "@/lib/utils";
-import { sendEstimateEmail } from "@/lib/estimateApi";
-import { TOTAL_STEPS } from "@/lib/stepConfig";
 import ChatErrorBoundary from "@/components/chat/ChatErrorBoundary";
 import ProgressBar from "@/components/chat/ProgressBar";
 import QuestionBubble from "@/components/chat/QuestionBubble";
@@ -119,16 +116,6 @@ function ChatPageContent() {
     turnstileTokenRef.current = null;
     if (result?.estimate) {
       save("estimate_result", result.estimate);
-
-      // Fire-and-forget email send
-      const rawContact = stateRef.current.answers[TOTAL_STEPS];
-      if (typeof rawContact === "string") {
-        const contact = parseContact(rawContact);
-        if (contact.email) {
-          sendEstimateEmail(result.estimate, contact.name, contact.email, contact.company);
-        }
-      }
-
       router.push("/complete");
     }
   }, [triggerGenerate, router]);

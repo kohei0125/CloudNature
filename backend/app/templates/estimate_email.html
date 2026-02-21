@@ -1,25 +1,58 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head><meta charset="UTF-8"></head>
-<body style="background-color: #EDE8E5; font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; color: #19231B; line-height: 1.6; margin: 0; padding: 40px 20px;">
-  <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body
+  style="background-color: #EDE8E5; font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; color: #19231B; line-height: 1.6; margin: 0; padding: 40px 20px;">
+  <div
+    style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
     <div style="background-color: #19231B; padding: 24px; text-align: center;">
       <h1 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: bold; letter-spacing: 1px;">CloudNature</h1>
     </div>
     <div style="padding: 40px 32px;">
-      <h2 style="color: #19231B; font-size: 18px; margin-top: 0; margin-bottom: 24px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+      <h2
+        style="color: #19231B; font-size: 18px; margin-top: 0; margin-bottom: 24px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
         概算お見積もりが完成しました
       </h2>
-      <p style="margin-top: 0;">お客様</p>
+      <p style="margin-top: 0;">{{client_name}} 様</p>
       <p>
         この度は CloudNature の概算見積もりツールをご利用いただき、誠にありがとうございます。<br>
         お見積もりの結果をお送りいたします。
       </p>
 
-      <p>詳細は添付のPDFお見積書をご確認ください。</p>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 24px; margin-bottom: 24px;">
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; width: 30%; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">
+            プロジェクト名</td>
+          <td
+            style="padding: 12px; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">
+            {{project_name}}</td>
+        </tr>
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">
+            一般的な開発コスト</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">{{standard_cost}}</td>
+        </tr>
+        <tr>
+          <td
+            style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">
+            CloudNatureプラン</td>
+          <td
+            style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top; color: #8A9668; font-weight: bold;">
+            {{hybrid_cost}}</td>
+        </tr>
+      </table>
+
+      <p>{{cost_message}}</p>
 
       <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
-        <a href="https://cloudnature.jp/contact" style="display: inline-block; background-color: #DD9348; color: #ffffff; text-decoration: none; font-weight: bold; font-size: 15px; padding: 14px 32px; border-radius: 8px;">
+        <a href="https://cloudnature.jp/contact"
+          style="display: inline-block; background-color: #DD9348; color: #ffffff; text-decoration: none; font-weight: bold; font-size: 15px; padding: 14px 32px; border-radius: 8px;">
           無料相談を予約する
         </a>
       </div>
@@ -45,4 +78,5 @@
     </div>
   </div>
 </body>
+
 </html>

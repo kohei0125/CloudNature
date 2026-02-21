@@ -1,394 +1,80 @@
 # CloudNature AI見積もりシステム — TODO一覧
 
-最終更新: 2026-02-17
+最終更新: 2026-02-21
 
 ---
 
-## デプロイチェックリスト（本番公開）
+## 未対応
 
-本番URL: https://ai.cloudnature.jp
-
-### Phase 1: インフラ準備
-
-#### 1-1. Neon セットアップ
-- [ ] https://console.neon.tech でプロジェクト作成
-  - リージョンは Cloud Run（asia-northeast1）に最も近いものを選択（2026-02 時点では `Singapore (ap-southeast-1)` が最寄り。東京が追加されていればそちらを優先）
-- [ ] Database `estimate` を作成
-- [ ] Role `estimate_user` を作成（パスワード自動生成）
-- [ ] Pooled endpoint の接続文字列を控える
-  ```
-  postgresql://estimate_user:PASSWORD@ep-xxxx-pooler.REGION.aws.neon.tech/estimate?sslmode=require
-  ```
-
-##### スキーマ詳細
-
-テーブルは Backend 起動時に SQLModel の `metadata.create_all()` で自動作成される（`app/db.py`）。
-手動作成が必要な場合は以下の DDL を Neon Console の SQL Editor で実行する。
-
-```sql
--- 1. estimate_sessions: 見積もりウィザードのセッション管理
-CREATE TABLE IF NOT EXISTS estimate_sessions (
-    id          TEXT        PRIMARY KEY,            -- UUID v4
-    status      TEXT        NOT NULL DEFAULT 'in_progress',
-                                                    -- in_progress / generating / completed / error
-    email       TEXT,                               -- Step 13 で取得（メール送信用、現在は未使用）
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- 2. step_answers: 各ステップの回答を保存
-CREATE TABLE IF NOT EXISTS step_answers (
-    id            SERIAL      PRIMARY KEY,
-    session_id    TEXT        NOT NULL REFERENCES estimate_sessions(id),
-    step_number   INTEGER     NOT NULL,             -- 1〜13
-    answer_value  TEXT        NOT NULL,             -- 単一値はそのまま、配列は JSON 文字列
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT uq_session_step UNIQUE (session_id, step_number)
-);
-CREATE INDEX IF NOT EXISTS ix_step_answers_session_id  ON step_answers(session_id);
-CREATE INDEX IF NOT EXISTS ix_step_answers_step_number ON step_answers(step_number);
-
--- 3. generated_estimates: LLM が生成した見積もり結果
-CREATE TABLE IF NOT EXISTS generated_estimates (
-    id          SERIAL      PRIMARY KEY,
-    session_id  TEXT        NOT NULL REFERENCES estimate_sessions(id),
-    raw_json    TEXT        NOT NULL DEFAULT '',     -- LLM レスポンス全体の JSON
-    status      TEXT        NOT NULL DEFAULT 'processing',
-                                                    -- processing / completed / error
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS ix_generated_estimates_session_id ON generated_estimates(session_id);
-```
-
-**ER 図（簡易）**
-
-```
-estimate_sessions  1 ──< N  step_answers
-       │
-       1 ──< N  generated_estimates
-```
-
-| テーブル | 行数目安 | 備考 |
-|---|---|---|
-| `estimate_sessions` | 1 セッション / 見積もり | TTL: `DATA_TTL_DAYS`（デフォルト 31 日）で自動削除 |
-| `step_answers` | 最大 13 行 / セッション | Step 1〜13 の回答。`UNIQUE(session_id, step_number)` で UPSERT |
-| `generated_estimates` | 通常 1 行 / セッション | `raw_json` に LLM の全レスポンスを格納 |
-
-**step_number と回答の対応**
-
-| Step | 質問内容 | 型 | answer_value 例 |
-|------|---------|-----|----------------|
-| 1 | 事業形態 | select | `corporation` |
-| 2 | 業種 | select | `manufacturing` |
-| 3 | 従業員規模 | select | `21-50` |
-| 4 | 課題・要望 | text | `在庫管理の効率化…` |
-| 5 | 導入先 | select | `internal` |
-| 6 | システム種別 | select | `web_app` |
-| 7 | 新規/移行 | select | `new` |
-| 8 | 機能候補（AI生成） | multi-select | `["user_auth","dashboard"]` |
-| 9 | 導入時期 | select | `3months` |
-| 10 | 利用デバイス | select | `both` |
-| 11 | 予算 | select | `1m_3m` |
-| 12 | 追加要望（任意） | text | `（空文字可）` |
-| 13 | 連絡先 | contact(JSON) | `{"name":"…","company":"…","email":"…"}` |
-
-**接続プール設定（`app/db.py`）**
-
-| パラメータ | 値 | 説明 |
-|---|---|---|
-| `pool_size` | 2 | 常駐コネクション数 |
-| `max_overflow` | 3 | 一時的な追加コネクション上限 |
-| `pool_pre_ping` | true | 接続の死活チェック（Neon のスリープ復帰対策） |
-
-**TTL クリーンアップ**
-
-- `DATA_TTL_DAYS`（デフォルト 31）日を超えたセッションとその関連レコード（`step_answers`, `generated_estimates`）を一括削除
-- Backend 起動時に初回実行、以降 6 時間ごとにバックグラウンドタスクで自動実行（`app/main.py`）
-
-#### 1-2. GCP プロジェクト準備
-- [ ] GCP プロジェクトを選択 / 作成
-  ```bash
-  gcloud auth login
-  gcloud config set project PROJECT_ID
-  ```
-- [ ] 必要な API を有効化
-  ```bash
-  gcloud services enable \
-    run.googleapis.com \
-    artifactregistry.googleapis.com \
-    secretmanager.googleapis.com
-  ```
-
-#### 1-3. API Key 生成
-- [ ] backend ↔ estimate 間の API Key を生成
-  ```bash
-  openssl rand -hex 32
-  ```
-- [ ] 生成した値を控える（Secret Manager + Vercel の両方で使う）
-
-#### 1-4. Cloud Run 用サービスアカウント作成
-- [ ] 専用サービスアカウントを作成（デフォルト SA は権限過多のため避ける）
-  ```bash
-  gcloud iam service-accounts create cloudrun-backend \
-    --display-name="Cloud Run Backend"
-  ```
-
-#### 1-5. GCP Secret Manager にシークレット登録
-- [ ] `api-key`（上で生成した API Key）
-- [ ] `openai-api-key`
-- [ ] `resend-api-key`
-- [ ] `database-url`（Neon の pooled endpoint 接続文字列）
-  ```bash
-  echo -n "VALUE" | gcloud secrets create api-key --data-file=-
-  echo -n "sk-xxx" | gcloud secrets create openai-api-key --data-file=-
-  echo -n "re_xxx" | gcloud secrets create resend-api-key --data-file=-
-  echo -n "postgresql://..." | gcloud secrets create database-url --data-file=-
-  ```
-
-#### 1-6. Secret Manager の IAM 権限付与
-- [ ] Cloud Run サービスアカウントに `secretAccessor` ロールを付与
-  ```bash
-  PROJECT_ID=$(gcloud config get-value project)
-  SA_EMAIL=cloudrun-backend@${PROJECT_ID}.iam.gserviceaccount.com
-  for SECRET in api-key openai-api-key resend-api-key database-url; do
-    gcloud secrets add-iam-policy-binding $SECRET \
-      --member="serviceAccount:${SA_EMAIL}" \
-      --role="roles/secretmanager.secretAccessor"
-  done
-  ```
-  > **注意**: この手順を省略すると `--set-secrets` 指定時に Permission denied で Cloud Run が起動しません。
-
-#### 1-7. Artifact Registry 作成
-- [ ] Docker リポジトリを作成
-  ```bash
-  gcloud artifacts repositories create cloudnature \
-    --repository-format=docker \
-    --location=asia-northeast1
-  gcloud auth configure-docker asia-northeast1-docker.pkg.dev
-  ```
-
----
-
-### Phase 2: Backend デプロイ（Cloud Run）
-
-#### 2-1. Docker イメージ ビルド & プッシュ
-- [ ] backend イメージをビルド
-  ```bash
-  PROJECT_ID=$(gcloud config get-value project)
-  docker build --platform linux/amd64 \
-    -t asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest ./backend
-  docker push asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest
-  ```
-
-#### 2-2. Cloud Run デプロイ
-- [ ] デプロイ実行
-  ```bash
-  PROJECT_ID=$(gcloud config get-value project)
-  gcloud run deploy backend \
-    --image=asia-northeast1-docker.pkg.dev/${PROJECT_ID}/cloudnature/backend:latest \
-    --region=asia-northeast1 \
-    --platform=managed \
-    --port=8000 \
-    --memory=512Mi \
-    --cpu=1 \
-    --min-instances=0 \
-    --max-instances=3 \
-    --service-account=cloudrun-backend@${PROJECT_ID}.iam.gserviceaccount.com \
-    --set-secrets=API_KEY=api-key:latest,OPENAI_API_KEY=openai-api-key:latest,RESEND_API_KEY=resend-api-key:latest,DATABASE_URL=database-url:latest \
-    --set-env-vars=OPENAI_MODEL=gpt-4o,LLM_MAX_RETRIES=3,LLM_TIMEOUT=30,FRONTEND_URL=https://ai.cloudnature.jp,CORS_ORIGINS=https://ai.cloudnature.jp,DATA_TTL_DAYS=31,"EMAIL_FROM=CloudNature <noreply@cloudnature.jp>" \
-    --allow-unauthenticated
-  ```
-- [ ] デプロイ後の Cloud Run URL を控える（例: `https://backend-xxxxx-an.a.run.app`）
-
-#### 2-3. Backend 動作確認
-- [ ] ヘルスチェック（API Key 不要で通ること）
-  ```bash
-  curl https://CLOUD_RUN_URL/api/v1/health
-  # → {"status":"ok","timestamp":"2026-02-17T..."}
-  ```
-- [ ] API Key なしで 403 になること
-  ```bash
-  curl -X POST https://CLOUD_RUN_URL/api/v1/estimate/session \
-    -H "Content-Type: application/json" -d '{}'
-  # → {"detail":"Invalid API key"}
-  ```
-- [ ] API Key 付きでセッション作成できること
-  ```bash
-  curl -X POST https://CLOUD_RUN_URL/api/v1/estimate/session \
-    -H "Content-Type: application/json" \
-    -H "X-API-Key: YOUR_API_KEY" \
-    -d '{}'
-  # → {"session_id":"...","status":"in_progress"}
-  ```
-- [ ] Neon にテーブルが自動作成されていること（Neon Console の SQL Editor で確認）
-  ```sql
-  SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
-  ```
-
----
-
-### Phase 3: Frontend デプロイ（Vercel）
-
-#### 3-1. Vercel プロジェクト設定
-- [ ] Vercel に新規プロジェクト作成（GitHub リポジトリ連携）
-- [ ] Root Directory: `estimate`
-- [ ] Framework: Next.js（自動検出）
-- [ ] Node.js Version: 20.x
-
-#### 3-2. Vercel 環境変数設定
-- [ ] `BACKEND_URL` = `https://CLOUD_RUN_URL`（Phase 2 で控えた URL）
-- [ ] `BACKEND_API_KEY` = Phase 1-3 で生成した API Key
-- [ ] `NEXT_PUBLIC_ENV` = `production`
-
-#### 3-3. カスタムドメイン設定
-- [ ] Vercel ダッシュボードで `ai.cloudnature.jp` をカスタムドメインとして追加
-- [ ] DNS に CNAME レコードを追加
-  ```
-  ai.cloudnature.jp → cname.vercel-dns.com
-  ```
-- [ ] SSL 証明書の自動発行を確認（Vercel 側で自動）
-
-#### 3-4. デプロイ & ビルド確認
-- [ ] Vercel でデプロイが成功すること
-- [ ] ビルドログにエラーがないこと
-
----
-
-### Phase 4: E2E 動作確認
-
-#### 4-1. 基本フロー確認
-- [ ] https://ai.cloudnature.jp にアクセスしてランディングページが表示される
-- [ ] 「無料で見積もる」ボタンからチャット画面に遷移する
-- [ ] Step 1〜7 の質問に回答できる（各ステップでレスポンスが返る）
-- [ ] Step 7 回答後に AI 動的質問（Step 8 の選択肢）が生成される
-- [ ] Step 8〜13 まで回答できる
-- [ ] 見積もり生成が開始される（ローディング表示）
-- [ ] 完了ページに見積もり結果が表示される
-
-#### 4-2. レイテンシ確認
+### E2E・品質確認
 - [ ] `/step` API のレスポンスタイムが fire-and-forget により高速化されていること
   - Step 1〜6: ~100ms 以内を目安
   - Step 7: LLM 呼び出しがあるため数秒は許容
-
-#### 4-3. エラーケース確認
-- [ ] 不正なセッションIDで `/step` を叩くと 404 が返る
-- [ ] ブラウザをリロードしてもセッションが復元される
 - [ ] ネットワーク切断後のリトライが機能する
 
-#### 4-4. セキュリティ確認
-- [ ] ブラウザの DevTools で `X-API-Key` がクライアント側に露出していないこと
-  （API Key は Vercel Functions 内でのみ使用され、ブラウザには渡らない）
-- [ ] Cloud Run の URL に直接アクセスしても API Key なしでは操作できないこと
+### 技術的負債
+- [ ] APIキーの漏洩リスク対応（`backend/.env`）
+  - [ ] OpenAI / Resend のAPIキーをローテーション
+  - [ ] `.env` が git 履歴に含まれていないか確認（含まれていれば履歴削除）
+  - [ ] 本番では Secret Manager 運用を徹底
+- [ ] `estimate` アプリに `error.tsx` / `not-found.tsx` を追加
+- [ ] CI/CD パイプラインを整備
+  - [ ] `.github/workflows/deploy-backend.yml` を追加
+  - [ ] `estimate` は Vercel GitHub 連携で自動デプロイ
+- [ ] バックエンドテストを追加（`backend/tests/`）
+- [ ] `Session.email` 未使用を整理（Step 13 の連絡先から保存/利用）
+- [ ] `console.error` の本番残存（主に `estimate/app/api/pdf/route.ts` など）を整理
+- [ ] `backend` / `estimate` 配下の `.gitignore` 明示追加を検討
+
+### 低優先の検討事項
+- [ ] Turbopack の複数 lockfile 警告対応（`next.config.mjs` の `turbopack.root` など）
+- [ ] `CORS` デフォルト値が localhost 前提のため、本番値上書きを運用で担保
+- [ ] `/api/pdf` の無認証公開に対する認証またはレート制限を検討
 
 ---
 
-## 既存の技術的負債
+## 対応済み
 
-### P0: CRITICAL（リリースブロッカー）
+### デプロイ
+- [x] Neon プロジェクト作成 / DB・Role 作成 / pooled endpoint 設定
+- [x] GCP プロジェクト準備 / API有効化 / SA作成 / Secret Manager 設定 / IAM付与 / Artifact Registry 作成
+- [x] Cloud Run へ backend デプロイ、URL控え、ヘルスチェック・APIキー認証確認、Neonテーブル自動作成確認
+- [x] Vercel へ `estimate` デプロイ、環境変数設定、`ai.cloudnature.jp` ドメイン設定、SSL確認、ビルド成功確認
 
-#### 1. メール送信が未実装
-- **概要**: `backend/app/services/email_service.py` と `pdf_service.py` が存在するが、どこからも呼び出されていない。見積もり生成後にユーザーへメール送信されない。
-- **対象ファイル**:
-  - `backend/app/services/email_service.py` — 実装済みだが未使用
-  - `backend/app/services/pdf_service.py` — 実装済みだが未使用
-  - `backend/app/api/v1/estimate.py` — generate エンドポイントにメール送信処理を追加
-- **現状のフロー**: `generate_estimate()` → 結果をDBに保存 → 終了
-- **あるべきフロー**: `generate_estimate()` → PDF取得 → メール送信 → 結果をDBに保存
-- **影響**: `/complete` ページで「メールでお送りしました」と表示されるが、実際にはメールが届かない
+### 本番/E2E確認
+- [x] `https://ai.cloudnature.jp` にアクセスしてランディングページが表示される
+- [x] 「無料で見積もる」からチャット画面へ遷移
+- [x] Step 1〜7 回答
+- [x] Step 7 後に AI 動的質問（Step 8 選択肢）生成
+- [x] Step 8〜13 回答
+- [x] 見積もり生成開始（ローディング表示）
+- [x] 完了ページに見積もり結果表示
+- [x] 不正セッションIDで `/step` が 404 を返す
+- [x] リロード時のセッション復元
+- [x] `X-API-Key` がクライアントへ露出しない構成
+- [x] Cloud Run 直アクセス時に APIキーなし操作を拒否
 
-#### 2. APIキーの漏洩リスク
-- **概要**: `backend/.env` に本物の OpenAI API キーと Resend API キーが記載されている
-- **対象ファイル**: `backend/.env`
-- **対応**:
-  - [ ] APIキーをローテーション（OpenAI / Resend のダッシュボードで再発行）
-  - [ ] `.env` が git 履歴に含まれていないか確認。含まれている場合は `git filter-repo` で削除
-  - [ ] 本番環境ではシークレット管理サービス（GCP Secret Manager）を使用
+### 技術的負債の対応済み項目
+- [x] メール送信未実装の解消
+  - `backend/app/api/v1/estimate.py` で `background_tasks` による非同期送信
+  - `backend/app/services/email_service.py` / `backend/app/services/pdf_service.py` を実運用フローに接続
+- [x] Docker コンテナ root 実行の解消
+- [x] `/complete` ページの価格ハイライトカード空表示の解消
+- [x] PII サニタイザーのステップ番号不整合を修正
+- [x] `estimate` の ESLint 設定を追加（`estimate/eslint.config.mjs`）
+- [x] 未使用コンポーネント削除
+- [x] `estimate` の `.env.local.example` 追加
+- [x] メールバリデーション正規表現の重複解消
+- [x] OpenAI アダプターのエラーハンドリング改善
+- [x] `docker-compose` のフロントエンドヘルスチェック追加
+- [x] アクセシビリティ改善
 
-#### ~~3. Docker コンテナが root で実行されている~~ DONE
-
----
-
-### P1: HIGH（本番前に対応必須）
-
-#### ~~4. /complete ページの価格ハイライトカードが空~~ DONE
-
-#### 5. 本番用 docker-compose が存在しない
-- **概要**: 現在の `docker-compose.yml` は開発専用（`--reload`、volume mount、リソース制限なし）
-- **対応**: Cloud Run デプロイにより `docker-compose.prod.yml` は不要。開発用のみ維持。
-
-#### ~~6. PII サニタイザーのステップ番号が不整合~~ DONE
-
-#### 7. estimate アプリに error.tsx / not-found.tsx がない
-- **概要**: Next.js のエラーバウンダリと 404 ページが未定義
-- **対象ファイル**:
-  - `estimate/app/error.tsx` — 新規作成
-  - `estimate/app/not-found.tsx` — 新規作成
-
-#### 8. CI/CD パイプラインが未構築
-- **概要**: GitHub Actions 等の自動テスト・ビルド・デプロイ設定がない
-- **対応**:
-  - [ ] `.github/workflows/deploy-backend.yml` — backend 自動デプロイ
-  - [ ] estimate は Vercel の GitHub 連携で自動デプロイ
-
-#### 9. estimate ディレクトリの ESLint 設定がない
-- **対象ファイル**: `estimate/eslint.config.mjs` — 新規作成
-
-#### 10. バックエンドのテストファイルが存在しない
-- **対象ファイル**: `backend/tests/` — 新規作成
-
-#### ~~11. 未使用コンポーネントの削除~~ DONE
+### 対応不要判断
+- [x] `pdf/route.ts` の `eslint-disable` コメントは現時点で対応不要
 
 ---
 
-### P2: MEDIUM（品質向上）
+## 補足
 
-#### 12. Session.email フィールドが未使用
-- **対応**: メール送信実装時に、Step 13 の連絡先情報から email を抽出してセッションに保存する
-
-#### ~~13. estimate の .env.local.example がない~~ DONE
-
-#### ~~14. メールバリデーション正規表現が3箇所で重複~~ DONE
-
-#### 15. console.error が本番コードに残存（2箇所）
-- `estimate/app/api/pdf/route.ts` — サーバーサイドのため許容可
-- `estimate/components/chat/ChatErrorBoundary.tsx` — エラーバウンダリのため許容可
-
-#### 16. cleanup.py で print() を使用
-- CLI 実行時のため現状でも可
-
-#### ~~17. OpenAI アダプターのエラーハンドリングが不足~~ DONE
-
-#### 18. backend / estimate に .gitignore がない
-- ルートの .gitignore でカバーされているが、明示的に追加が望ましい
-
-#### ~~19. docker-compose にフロントエンドヘルスチェックがない~~ DONE
-
----
-
-### P3: LOW（改善推奨）
-
-#### ~~20. アクセシビリティ改善~~ DONE
-
-#### 21. pdf/route.ts の eslint-disable コメント — 対応不要
-
-#### 22. Turbopack の複数 lockfile 警告
-- `next.config.mjs` で `turbopack.root` を設定するか無視
-
-#### 23. CORS デフォルト値が localhost
-- 本番デプロイ時に環境変数で上書きすれば OK
-
-#### 24. /api/pdf が無認証で公開されている
-- `estimate/app/api/pdf/route.ts` — 重い PDF レンダリングを誰でも叩ける
-- Vercel の DDoS 保護があるため緊急度は低いが、将来的に認証またはレート制限を検討
-
----
-
-## 対応状況まとめ
-
-| 優先度 | 総数 | 完了 | 残り |
-|--------|------|------|------|
-| **デプロイ** | 4 Phase | 0 | 4 |
-| **P0: CRITICAL** | 3件 | 1件 | 2件 |
-| **P1: HIGH** | 8件 | 3件 | 5件 |
-| **P2: MEDIUM** | 8件 | 4件 | 4件 |
-| **P3: LOW** | 4件 | 1件 | 3件 |
+- 旧チェックリストの詳細コマンドは `docs/20260217_estimate_deploy_design.md` を参照。
+- 本ファイルは「現在の残課題を把握しやすいこと」を優先し、未対応を上段に集約。
