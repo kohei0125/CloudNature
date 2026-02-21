@@ -115,7 +115,7 @@ export default function CompletePage() {
         >
           <Mail className="mt-0.5 h-5 w-5 shrink-0 text-sage" />
           <p className="text-[0.8125rem] leading-relaxed text-forest/65">
-            概算お見積もりの結果は以下の通りです。
+            概算お見積もりの結果をメールに送信しました。
             <br className="sm:hidden" />
             正式なお見積もりは無料相談にてご案内いたします。
           </p>
