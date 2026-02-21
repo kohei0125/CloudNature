@@ -32,7 +32,7 @@ export default function EstimatePage() {
             name: "CloudNature AI見積もりシミュレーター",
             url: "https://ai.cloudnature.jp",
             description:
-              "AIエージェントがシステム開発の概算見積もりを自動生成。質問に答えるだけで、WBS・機能一覧・費用比較を最短1分でお届け。",
+              "AIエージェントがシステム開発の概算見積もりを自動生成。質問に答えるだけで、WBS・機能一覧・費用比較を最短3分でお届け。",
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web",
             offers: {

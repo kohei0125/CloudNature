@@ -153,7 +153,7 @@ function ChatPageContent() {
       {/* Header text */}
       <div className="pb-3 pt-1 text-center">
         <p className="text-sm font-medium text-gray-600">
-          欲しいシステムの見積が1分で！
+          欲しいシステムの見積が3分で！
         </p>
       </div>
 
