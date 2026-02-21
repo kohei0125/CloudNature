@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendHeaders } from "@/lib/apiAuth";
+import { logger } from "@/lib/logger";
 
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
@@ -31,7 +32,7 @@ async function verifyTurnstile(token: string): Promise<boolean> {
     const data = await res.json();
     return data.success === true;
   } catch (error) {
-    console.error("[turnstile] verification failed:", error);
+    logger.error("turnstile", "verification failed:", error);
     return false;
   }
 }
@@ -108,7 +109,7 @@ export async function POST(request: NextRequest) {
       estimate,
     });
   } catch (error) {
-    console.error("[estimate/generate]", error);
+    logger.error("estimate/generate", error);
     return NextResponse.json(
       { error: "Failed to generate estimate" },
       { status: 502 }

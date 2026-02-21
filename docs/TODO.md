@@ -17,14 +17,8 @@
   - [ ] OpenAI / Resend のAPIキーをローテーション
   - [ ] `.env` が git 履歴に含まれていないか確認（含まれていれば履歴削除）
   - [ ] 本番では Secret Manager 運用を徹底
-- [ ] `estimate` アプリに `error.tsx` / `not-found.tsx` を追加
-- [ ] CI/CD パイプラインを整備
-  - [ ] `.github/workflows/deploy-backend.yml` を追加
-  - [ ] `estimate` は Vercel GitHub 連携で自動デプロイ
 - [ ] バックエンドテストを追加（`backend/tests/`）
 - [ ] `Session.email` 未使用を整理（Step 13 の連絡先から保存/利用）
-- [ ] `console.error` の本番残存（主に `estimate/app/api/pdf/route.ts` など）を整理
-- [ ] `backend` / `estimate` 配下の `.gitignore` 明示追加を検討
 
 ### 低優先の検討事項
 - [ ] Turbopack の複数 lockfile 警告対応（`next.config.mjs` の `turbopack.root` など）
@@ -68,6 +62,11 @@
 - [x] OpenAI アダプターのエラーハンドリング改善
 - [x] `docker-compose` のフロントエンドヘルスチェック追加
 - [x] アクセシビリティ改善
+
+### 軽微対応の完了分
+- [x] `console.error` の本番残存を整理 — `estimate/lib/logger.ts` を導入し全箇所を置き換え
+- [x] `backend` / `estimate` 配下の `.gitignore` 明示追加
+- [x] `estimate` アプリに `error.tsx` / `not-found.tsx` を追加
 
 ### 対応不要判断
 - [x] `pdf/route.ts` の `eslint-disable` コメントは現時点で対応不要

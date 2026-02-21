@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendHeaders } from "@/lib/apiAuth";
+import { logger } from "@/lib/logger";
 
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
       aiOptions,
     });
   } catch (error) {
-    console.error("[estimate/step]", error);
+    logger.error("estimate/step", error);
     return NextResponse.json(
       { error: "Failed to submit step" },
       { status: 502 }

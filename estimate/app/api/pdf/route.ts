@@ -3,6 +3,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { createElement, type ReactElement } from "react";
 import EstimatePdf from "@/components/pdf/EstimatePdf";
 import type { GeneratedEstimate } from "@/types/estimate";
+import { logger } from "@/lib/logger";
 
 interface PdfRequestBody {
   estimate: GeneratedEstimate;
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("PDF generation error:", error);
+    logger.error("pdf", error);
     return NextResponse.json(
       { error: "Failed to generate PDF" },
       { status: 500 }

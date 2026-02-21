@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -101,8 +102,6 @@ function CostSimulator() {
   );
 }
 
-import Image from "next/image";
-
 export default function HeroSection() {
   return (
     <section className="relative flex min-h-svh md:min-h-[92vh] flex-col justify-center overflow-hidden pt-20 pb-16 md:pt-24 md:pb-0">
@@ -110,7 +109,8 @@ export default function HeroSection() {
       <div className="absolute inset-0 -z-10 h-full w-full">
         <Image
           src="/images/hero-bg.jpg"
-          alt="Hero background"
+          alt=""
+          role="presentation"
           fill
           className="object-cover"
           priority

@@ -67,12 +67,12 @@ export default function CompletePage() {
       <div className="center min-h-[60vh] px-4">
         <div className="text-center">
           <p className="text-forest/60">見積もりデータが見つかりません。</p>
-          <a
+          <Link
             href="/chat"
             className="btn-puffy mt-4 inline-block rounded-xl px-6 py-3 text-sm font-bold"
           >
             見積もりを始める
-          </a>
+          </Link>
         </div>
       </div>
     );

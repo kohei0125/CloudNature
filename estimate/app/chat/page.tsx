@@ -44,7 +44,7 @@ function ChatPageContent() {
   const turnstileTokenRef = useRef<string | null>(null);
   useEffect(() => {
     stateRef.current = state;
-  });
+  }, [state]);
 
   const {
     currentStep,

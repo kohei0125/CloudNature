@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getBackendHeaders } from "@/lib/apiAuth";
+import { logger } from "@/lib/logger";
 
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
@@ -92,7 +93,7 @@ export async function GET(request: NextRequest) {
       status: data.status,
     });
   } catch (error) {
-    console.error("[estimate/session]", error);
+    logger.error("estimate/session", error);
     return NextResponse.json(
       { error: "Failed to get session" },
       { status: 502 }

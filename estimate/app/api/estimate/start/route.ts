@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBackendHeaders } from "@/lib/apiAuth";
+import { logger } from "@/lib/logger";
 
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
@@ -30,7 +31,7 @@ export async function POST() {
       status: data.status,
     });
   } catch (error) {
-    console.error("[estimate/start]", error);
+    logger.error("estimate/start", error);
     return NextResponse.json(
       { error: "Failed to create session" },
       { status: 502 }

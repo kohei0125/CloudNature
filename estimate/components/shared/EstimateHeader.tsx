@@ -21,11 +21,10 @@ export default function EstimateHeader() {
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/90 py-2 shadow-sm backdrop-blur-md md:py-3"
-          : "bg-transparent py-3 md:py-5"
-      }`}
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-white/90 py-2 shadow-sm backdrop-blur-md md:py-3"
+        : "bg-transparent py-3 md:py-5"
+        }`}
     >
       <div className="container mx-auto flex items-center px-6">
         <a href="https://cloudnature.jp" rel="noopener noreferrer">
