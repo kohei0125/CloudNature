@@ -349,50 +349,66 @@ echo -n "NEW_VALUE" | gcloud secrets versions add SECRET_NAME --data-file=-
 
 ### 7.4 backend デプロイ（毎回）
 
-backend を変更するたびに以下を実行する。
-
-**Step 1: Docker イメージをビルド & プッシュ**
+backend を変更するたびに、プロジェクトルートからデプロイスクリプトを実行する。
 
 ```bash
-docker build -t asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest ./backend && \
-docker push asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest
+./deploy.sh
 ```
 
-**Step 2: Cloud Run にデプロイ**
+スクリプトは以下を自動実行する:
+
+1. **Cloud Build** で `backend/` の Docker イメージをビルド＆プッシュ
+2. **ダイジェスト指定**で Cloud Run にデプロイ（`:latest` タグの不整合を防止）
+3. **環境変数**（プレーンテキスト）と **Secret Manager 参照**を一括設定
+
+#### デプロイスクリプトの設定値
+
+環境変数で上書き可能（デフォルト値は `deploy.sh` に記載）:
+
+| 変数 | デフォルト値 | 用途 |
+|---|---|---|
+| `GCP_PROJECT` | `video-gen-demo` | GCP プロジェクト ID |
+| `GCP_REGION` | `asia-northeast1` | Cloud Run リージョン |
+| `SERVICE_NAME` | `backend` | Cloud Run サービス名 |
+| `IMAGE_TAG` | `backend/` の git short hash | イメージタグ |
+| `OPENAI_MODEL` | `gpt-4o` | LLM モデル |
+| `LLM_MAX_RETRIES` | `3` | LLM リトライ回数 |
+| `LLM_TIMEOUT` | `30` | LLM タイムアウト（秒） |
+| `FRONTEND_URL` | `https://ai.cloudnature.jp` | CORS 許可オリジン |
+| `CORS_ORIGINS` | `https://ai.cloudnature.jp` | CORS 許可オリジン |
+| `DATA_TTL_DAYS` | `31` | データ保持日数 |
+| `EMAIL_FROM` | `CloudNature <cloudnature@stage-site.net>` | メール送信元 |
+| `NOTIFY_EMAIL` | `k.watanabe.sys.contact@gmail.com` | 管理者通知先 |
+
+シークレット（Secret Manager 参照名）:
+
+| 変数 | デフォルト参照名 |
+|---|---|
+| `SECRET_API_KEY` | `api-key` |
+| `SECRET_OPENAI_API_KEY` | `openai-api-key` |
+| `SECRET_RESEND_API_KEY` | `resend-api-key` |
+| `SECRET_DATABASE_URL` | `database-url` |
+
+#### 使用例
 
 ```bash
-gcloud run deploy backend \
-  --image=asia-northeast1-docker.pkg.dev/PROJECT_ID/cloudnature/backend:latest \
-  --region=asia-northeast1 \
-  --platform=managed \
-  --port=8000 \
-  --memory=512Mi \
-  --cpu=1 \
-  --min-instances=0 \
-  --max-instances=3 \
-  --set-secrets="\
-API_KEY=api-key:latest,\
-OPENAI_API_KEY=openai-api-key:latest,\
-RESEND_API_KEY=resend-api-key:latest,\
-DATABASE_URL=database-url:latest" \
-  --set-env-vars="\
-OPENAI_MODEL=gpt-4o,\
-LLM_MAX_RETRIES=3,\
-LLM_TIMEOUT=30,\
-FRONTEND_URL=https://estimate.cloudnature.co.jp,\
-CORS_ORIGINS=https://estimate.cloudnature.co.jp,\
-DATA_TTL_DAYS=31,\
-EMAIL_FROM=CloudNature <noreply@cloudnature.co.jp>" \
-  --allow-unauthenticated
+# デフォルト設定でデプロイ
+./deploy.sh
+
+# イメージタグを指定してデプロイ
+IMAGE_TAG=v1.2.0 ./deploy.sh
+
+# 別のモデルを使用
+OPENAI_MODEL=gpt-4o-mini ./deploy.sh
 ```
 
 > Neon はパブリックインターネット経由の TLS 接続のため `--add-cloudsql-instances` は不要。
 
-**Step 3: デプロイ確認**
+#### デプロイ確認
 
 ```bash
 # ヘルスチェック
-curl https://backend-xxxxx-an.a.run.app/api/v1/health
+curl https://backend-638139893800.asia-northeast1.run.app/api/v1/health
 ```
 
 ---

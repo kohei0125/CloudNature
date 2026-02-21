@@ -148,12 +148,37 @@ DB 書き込みは `/generate` の最終送信時のみ。Step 1-12 の回答は
 
 ## 本番デプロイ
 
-| コンポーネント | デプロイ先 |
-|---|---|
-| コーポレートサイト | Vercel |
-| AI見積もりフロントエンド | Vercel (`estimate/` を Root Directory に指定) |
-| 見積もりバックエンド | GCP Cloud Run (asia-northeast1) |
-| データベース | Neon (Serverless PostgreSQL) |
+| コンポーネント | デプロイ先 | デプロイ方法 |
+|---|---|---|
+| コーポレートサイト | Vercel | `git push`（自動） |
+| AI見積もりフロントエンド | Vercel (`estimate/` を Root Directory に指定) | `git push`（自動） |
+| 見積もりバックエンド | GCP Cloud Run (asia-northeast1) | `./deploy.sh` |
+| データベース | Neon (Serverless PostgreSQL) | — |
+
+### バックエンドのデプロイ
+
+```bash
+# デフォルト設定でデプロイ（プロジェクトルートから実行）
+./deploy.sh
+
+# 環境変数で上書きも可能
+IMAGE_TAG=v1.2.0 ./deploy.sh
+```
+
+`deploy.sh` は以下を自動実行します:
+
+1. Cloud Build で `backend/` の Docker イメージをビルド＆プッシュ
+2. ダイジェスト指定で Cloud Run にデプロイ（タグの不整合を防止）
+3. 環境変数・Secret Manager 参照を一括設定
+
+| 環境変数 | デフォルト値 | 説明 |
+|---|---|---|
+| `GCP_PROJECT` | `video-gen-demo` | GCP プロジェクト ID |
+| `GCP_REGION` | `asia-northeast1` | Cloud Run リージョン |
+| `SERVICE_NAME` | `backend` | Cloud Run サービス名 |
+| `IMAGE_TAG` | git short hash | イメージタグ |
+
+シークレット（`API_KEY`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `DATABASE_URL`）は GCP Secret Manager から自動参照されます。
 
 詳細は [`docs/20260217_estimate_deploy_design.md`](docs/20260217_estimate_deploy_design.md) を参照。
 デプロイ手順のチェックリストは [`docs/TODO.md`](docs/TODO.md) を参照。
