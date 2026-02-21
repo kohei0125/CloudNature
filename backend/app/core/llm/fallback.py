@@ -22,7 +22,7 @@ class FallbackAdapter(LLMAdapter):
             "step8_features": [
                 {"value": "dashboard", "label": "ダッシュボード・データ可視化"},
                 {"value": "data_management", "label": "データ登録・編集・一覧管理"},
-                {"value": "data_export", "label": "データエクスポート（CSV/PDF）"},
+                {"value": "data_export", "label": "CSV/PDFエクスポート"},
                 {"value": "notification", "label": "通知機能（メール/プッシュ）"},
                 {"value": "search", "label": "検索・フィルタリング"},
                 {"value": "workflow", "label": "承認ワークフロー・申請管理"},

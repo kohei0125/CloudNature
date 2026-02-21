@@ -4,6 +4,12 @@ import re
 
 import jsonschema
 
+# Value must be lowercase English + underscores, 3-30 chars
+_VALUE_RE = re.compile(r"^[a-z][a-z0-9_]{2,29}$")
+
+# Max label length (in characters, not bytes)
+_MAX_LABEL_LENGTH = 20
+
 DYNAMIC_QUESTIONS_SCHEMA: dict = {
     "type": "object",
     "required": [
@@ -20,7 +26,8 @@ DYNAMIC_QUESTIONS_SCHEMA: dict = {
                     "label": {"type": "string"},
                 },
             },
-            "minItems": 3,
+            "minItems": 5,
+            "maxItems": 7,
         },
     },
 }
@@ -51,12 +58,14 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
                     "hybrid_price": {"type": "number"},
                 },
             },
-            "minItems": 1,
+            "minItems": 3,
+            "maxItems": 8,
         },
         "discussion_agenda": {
             "type": "array",
             "items": {"type": "string"},
-            "minItems": 1,
+            "minItems": 3,
+            "maxItems": 5,
         },
         "total_cost": {
             "type": "object",
@@ -85,28 +94,86 @@ _REFUSAL_RE = re.compile(
 def validate_dynamic_questions(data: dict) -> bool:
     """Validate LLM output for dynamic questions (Steps 8-10).
 
-    Rejects responses with placeholder-like labels.
+    Rejects responses with:
+    - Invalid schema structure
+    - Placeholder-like or refusal labels
+    - Invalid value format (must be lowercase snake_case, 3-30 chars)
+    - Overly long labels (max 20 chars)
     """
     try:
         jsonschema.validate(instance=data, schema=DYNAMIC_QUESTIONS_SCHEMA)
     except jsonschema.ValidationError:
         return False
 
-    # Reject placeholder or refusal labels
     for feature in data.get("step8_features", []):
         label = feature.get("label", "")
+        value = feature.get("value", "")
+
+        # Reject placeholder or refusal labels
         if _PLACEHOLDER_RE.search(label):
             return False
         if _REFUSAL_RE.search(label):
             return False
 
+        # Reject invalid value format
+        if not _VALUE_RE.match(value):
+            return False
+
+        # Reject overly long labels
+        if len(label) > _MAX_LABEL_LENGTH:
+            return False
+
     return True
 
 
+# Tolerance for hybrid_price ratio check (standard_price * 0.6 ± tolerance)
+_HYBRID_RATIO_TOLERANCE = 0.12  # Allow 48%~72% of standard_price
+
+
 def validate_estimate_output(data: dict) -> bool:
-    """Validate LLM output for estimate generation."""
+    """Validate LLM output for estimate generation.
+
+    Checks:
+    - JSON schema structure
+    - hybrid_price is approximately 60% of standard_price per feature
+    - total_cost matches sum of individual feature prices
+    """
     try:
         jsonschema.validate(instance=data, schema=ESTIMATE_GENERATION_SCHEMA)
-        return True
     except jsonschema.ValidationError:
         return False
+
+    features = data.get("features", [])
+    total_cost = data.get("total_cost", {})
+
+    expected_standard = 0
+    expected_hybrid = 0
+
+    for feature in features:
+        sp = feature.get("standard_price", 0)
+        hp = feature.get("hybrid_price", 0)
+
+        if not isinstance(sp, (int, float)) or not isinstance(hp, (int, float)):
+            return False
+
+        # Check hybrid_price is approximately 60% of standard_price
+        if sp > 0:
+            ratio = hp / sp
+            if not (0.6 - _HYBRID_RATIO_TOLERANCE <= ratio <= 0.6 + _HYBRID_RATIO_TOLERANCE):
+                return False
+
+        expected_standard += sp
+        expected_hybrid += hp
+
+    # Check total_cost consistency (allow 1% tolerance for rounding)
+    actual_standard = total_cost.get("standard", 0)
+    actual_hybrid = total_cost.get("hybrid", 0)
+
+    if expected_standard > 0:
+        if abs(actual_standard - expected_standard) / expected_standard > 0.01:
+            return False
+    if expected_hybrid > 0:
+        if abs(actual_hybrid - expected_hybrid) / expected_hybrid > 0.01:
+            return False
+
+    return True

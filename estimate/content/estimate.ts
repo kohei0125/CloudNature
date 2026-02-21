@@ -16,8 +16,8 @@ export const STEP_MESSAGES: Record<
     description: "業種の選択",
   },
   3: {
-    question: "従業員規模はどのくらいですか？",
-    description: "従業員規模の選択",
+    question: "システムを利用するユーザー数はどのくらいですか？",
+    description: "利用予定人数の選択",
   },
   4: {
     question:
@@ -84,7 +84,7 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
     { value: "logistics", label: "物流・運輸業" },
     { value: "other", label: "その他" },
   ],
-  employeeSize: [
+  userCount: [
     { value: "1-5", label: "1〜5名" },
     { value: "6-20", label: "6〜20名" },
     { value: "21-50", label: "21〜50名" },
@@ -125,7 +125,8 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
     { value: "500k_1m", label: "50万円〜100万円" },
     { value: "1m_3m", label: "100万円〜300万円" },
     { value: "3m_5m", label: "300万円〜500万円" },
-    { value: "5m_plus", label: "500万円以上" },
+    { value: "5m_10m", label: "500万円〜1,000万円" },
+    { value: "10m_plus", label: "1,000万円以上" },
     { value: "unknown", label: "わからない・未定" },
   ],
 };
@@ -235,7 +236,7 @@ export const LP_COPY = {
     items: [
       {
         q: "AI見積もりの精度はどの程度ですか？",
-        a: "本サービスのAI見積もりは概算です。プロジェクトの方向性や予算感を素早く把握するためにご活用ください。詳細な見積もりは無料相談にて、専門のエンジニアがヒアリングのうえ作成いたします。",
+        a: "本サービスのAI見積もりは概算です。プロジェクトの方向性や予算感を素早く把握するためにご活用ください。詳細な見積もりは無料相談にて、ヒアリングのうえ作成いたします。",
       },
       {
         q: "費用は本当にかかりませんか？",

@@ -74,7 +74,7 @@ async def generate_dynamic_questions(answers: dict) -> dict | None:
     context = {
         "business_type": sanitized.get("step_1", ""),
         "industry": sanitized.get("step_2", ""),
-        "employee_size": sanitized.get("step_3", ""),
+        "user_count": sanitized.get("step_3", ""),
         "challenges": sanitized.get("step_4", ""),
         "deployment_target": sanitized.get("step_5", ""),
         "system_type": sanitized.get("step_6", ""),

@@ -17,12 +17,12 @@ export const STEP_CONFIGS: StepConfig[] = [
     required: true,
     options: STEP_OPTIONS.industry,
   },
-  // Step 3: Employee size
+  // Step 3: User count
   {
     id: 3,
     type: "select",
     required: true,
-    options: STEP_OPTIONS.employeeSize,
+    options: STEP_OPTIONS.userCount,
   },
   // Step 4: Current challenges (free text)
   {
