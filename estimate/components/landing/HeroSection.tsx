@@ -144,7 +144,7 @@ export default function HeroSection() {
             <span className="text-[0.8em] font-bold">へ</span>
             <br />
             <span className="text-[0.8em] font-bold">まずは</span>
-            <span className="text-[1.3em] text-sunset">3分</span>
+            <span className="text-[1.3em] text-sunset">1分</span>
             <span className="text-[0.8em] font-bold">で</span>
             <span className="text-[1.3em] text-sunset">お見積</span>
             <span className="text-[0.8em] font-bold">から。</span>

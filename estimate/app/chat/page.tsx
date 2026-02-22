@@ -61,6 +61,11 @@ function ChatPageContent() {
   const isGenerating = state.status === "generating";
   const isError = state.status === "error";
 
+  // ステップ遷移時にスクロールをトップへリセット
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStep]);
+
   // Initialize session on mount
   useEffect(() => {
     async function initSession() {
@@ -153,7 +158,7 @@ function ChatPageContent() {
       {/* Header text */}
       <div className="pb-3 pt-1 text-center">
         <p className="text-sm font-medium text-gray-600">
-          欲しいシステムの見積が3分で！
+          欲しいシステムの見積が1分で！
         </p>
       </div>
 

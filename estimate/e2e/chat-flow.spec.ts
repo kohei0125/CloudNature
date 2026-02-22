@@ -294,7 +294,7 @@ test.describe("Chat flow (/chat)", () => {
     await page.goto("/chat");
 
     // Progress bar container should exist
-    await expect(page.getByText("欲しいシステムの見積が3分で！")).toBeVisible();
+    await expect(page.getByText("欲しいシステムの見積が1分で！")).toBeVisible();
   });
 
   test("exit button returns to landing page", async ({ page }) => {

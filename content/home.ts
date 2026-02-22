@@ -8,7 +8,7 @@ export const HERO_COPY = {
   description:
     "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、システム・AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
   primaryCta: "無料診断・相談",
-  secondaryCta: "3分でわかるサービス",
+  secondaryCta: "1分でわかるサービス",
   heroImageAlt: "Modern office collaboration"
 };
 
