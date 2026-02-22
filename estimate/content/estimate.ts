@@ -153,9 +153,9 @@ export const LP_COPY = {
   simulator: {
     appTypes: [
       { label: "Webアプリ", baseCost: 80 },
-      { label: "AIエージェント", baseCost: 100 },
-      { label: "業務自動化", baseCost: 40 },
-      { label: "モバイルアプリ", baseCost: 150 },
+      { label: "AIエージェント", baseCost: 110 },
+      { label: "業務自動化", baseCost: 45 },
+      { label: "モバイルアプリ", baseCost: 165 },
     ],
     scales: [
       { label: "小規模", sub: "〜50ユーザー", multiplier: 1 },
@@ -349,7 +349,7 @@ export const COMMON_LABELS = {
 export const AI_MESSAGES = {
   generatingQuestion: "AIがあなた専用の質問を作成中...",
   generatingOptions: "貴社に最適な選択肢を分析中...",
-  generatingFeatures: "準備中です。少々お待ちください...",
+  generatingFeatures: "機能候補を選定中です...",
   generatingEstimate: "お見積もりを作成中です。少々お待ちください...",
   estimateReady: "お見積もりが完成しました。",
   error: "エラーが発生しました。もう一度お試しください。",

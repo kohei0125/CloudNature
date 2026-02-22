@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
+  outputFileTracingIncludes: {
+    "/api/pdf": ["./public/fonts/**/*", "./public/images/**/*"],
+  },
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
