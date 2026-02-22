@@ -199,15 +199,15 @@ _INDUSTRY_MULTIPLIER: dict[str, float] = {
 }
 
 # ---------------------------------------------------------------------------
-# 工程按分比率
+# 工程別配分（開発費に対する比率）
 # ---------------------------------------------------------------------------
-_PHASE_ALLOCATION: dict[str, tuple[str, float]] = {
-    "requirements_design": ("要件定義・設計", 0.15),
-    "implementation":      ("実装", 0.50),
-    "testing_qa":          ("テスト・QA", 0.20),
-    "pm_management":       ("プロジェクト管理", 0.10),
-    "infrastructure":      ("インフラ構築", 0.05),
-}
+_PHASE_ALLOCATION: list[dict] = [
+    {"phase": "requirements",    "label": "要件定義",     "ratio": 0.10},
+    {"phase": "design",          "label": "設計",         "ratio": 0.10},
+    {"phase": "implementation",  "label": "開発・実装",   "ratio": 0.65},
+    {"phase": "testing",         "label": "テスト・検証", "ratio": 0.10},
+    {"phase": "deployment",      "label": "導入・移行",   "ratio": 0.05},
+]
 
 # ---------------------------------------------------------------------------
 # 4. 予算レンジ上限（円）
@@ -223,43 +223,38 @@ _BUDGET_UPPER: dict[str, int | None] = {
 }
 
 
-# ---------------------------------------------------------------------------
-# 工程按分・精度レンジ
-# ---------------------------------------------------------------------------
 
-def _calculate_phase_breakdown(implementation_total: int) -> dict:
-    """実装コストからプロジェクト全工程のコスト内訳を逆算する。
 
-    implementation_total は全体の50%に相当するため、
-    全体コスト = implementation_total / 0.50 として各工程を算出。
-    各工程を個別に丸めた後、合計と総額が一致するよう最大工程で調整する。
+def _calculate_phase_breakdown(implementation_cost: int) -> dict:
+    """開発費を基準に工程別の概算コストを計算する。
+
+    _PHASE_ALLOCATION の ratio は開発(implementation)を含む全工程合計=1.0。
+    implementation の ratio(0.65) を元に、プロジェクト総額を逆算する。
+
+    Returns:
+        {"phases": [{"phase", "label", "ratio", "cost"}], "project_total": int}
     """
-    impl_ratio = _PHASE_ALLOCATION["implementation"][1]  # 0.50
-    project_total = _round_to_1000(int(implementation_total / impl_ratio) if impl_ratio > 0 else implementation_total)
+    impl_ratio = next(
+        p["ratio"] for p in _PHASE_ALLOCATION if p["phase"] == "implementation"
+    )
+    project_total_raw = implementation_cost / impl_ratio
 
     phases = []
-    for key, (label, ratio) in _PHASE_ALLOCATION.items():
-        cost = _round_to_1000(project_total * ratio)
+    for p in _PHASE_ALLOCATION:
+        if p["phase"] == "implementation":
+            cost = implementation_cost
+        else:
+            cost = _round_to_1000(project_total_raw * p["ratio"])
         phases.append({
-            "phase": key,
-            "label": label,
-            "ratio": ratio,
+            "phase": p["phase"],
+            "label": p["label"],
+            "ratio": p["ratio"],
             "cost": cost,
         })
 
-    # 丸め誤差を最大工程（実装）で吸収して合計を一致させる
-    phase_sum = sum(p["cost"] for p in phases)
-    if phase_sum != project_total:
-        diff = project_total - phase_sum
-        # 実装フェーズ（最大比率）で吸収
-        impl_phase = next(p for p in phases if p["phase"] == "implementation")
-        impl_phase["cost"] += diff
+    project_total = sum(ph["cost"] for ph in phases)
 
-    return {
-        "phases": phases,
-        "project_total": project_total,
-    }
-
+    return {"phases": phases, "project_total": project_total}
 
 
 def _calculate_confidence(user_input: dict) -> dict:
@@ -484,13 +479,18 @@ def calculate_estimate(user_input: dict) -> dict:
     industry = user_input.get("step_2", "")
     industry_mult = _INDUSTRY_MULTIPLIER.get(industry, 1.0)
 
-    # 各機能の価格算出
+    # 各機能の開発費算出 → プロジェクト全体費用に拡大
+    # _PHASE_ALLOCATION の implementation ratio を使い、開発費→プロジェクト総額に変換
+    impl_ratio = next(
+        p["ratio"] for p in _PHASE_ALLOCATION if p["phase"] == "implementation"
+    )
     features: list[dict] = []
     for feat in resolved:
         category = feat["category"]
         base = _get_base_price(category)
-        standard = base * multiplier * industry_mult
-        standard = _round_to_1000(standard)
+        dev_cost = base * multiplier * industry_mult
+        # プロジェクト全工程込みの金額
+        standard = _round_to_1000(dev_cost / impl_ratio)
         hybrid = _round_to_1000(standard * 0.6)
         features.append({
             "category": category,
@@ -505,8 +505,7 @@ def calculate_estimate(user_input: dict) -> dict:
     budget = user_input.get("step_11", "unknown")
     budget_result = _check_budget(total_hybrid, budget)
 
-    # 工程按分・精度レンジ
-    phase_breakdown = _calculate_phase_breakdown(total_standard)
+    # 精度レンジ
     confidence = _calculate_confidence(user_input)
 
     # エッジケース
@@ -519,22 +518,14 @@ def calculate_estimate(user_input: dict) -> dict:
     if budget_result["budget_status"] in ("slightly_over", "significantly_over"):
         discussion_hints.append("予算超過のため、スコープ調整を推奨します")
 
-    # savings
-    if total_standard > 0:
-        savings_percent = round((1 - total_hybrid / total_standard) * 100)
-    else:
-        savings_percent = 0
-
     return {
         "features": features,
         "total_standard": total_standard,
         "total_hybrid": total_hybrid,
-        "savings_percent": savings_percent,
         "budget_status": budget_result["budget_status"],
         "budget_message": budget_result["budget_message"],
         "multiplier_summary": multiplier_summary,
         "discussion_hints": discussion_hints,
-        "phase_breakdown": phase_breakdown,
         "confidence": confidence,
         "user_input": user_input,
     }

@@ -70,10 +70,7 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
     cost_message = total_cost.get("message", "")
     project_name = estimate_data.get("project_name", estimate_data.get("projectName", ""))
 
-    # Phase breakdown for enriched emails
-    phase_breakdown = estimate_data.get("phase_breakdown", {})
     confidence = estimate_data.get("confidence", {})
-    project_total = phase_breakdown.get("project_total", 0)
 
     # Send customer email
     await send_estimate_email(
@@ -84,7 +81,6 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
         hybrid_cost=hybrid_cost,
         cost_message=cost_message,
         pdf_data=pdf_data,
-        project_total=project_total,
     )
 
     # Industry label for operator notification

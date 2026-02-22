@@ -27,7 +27,6 @@ async def send_estimate_email(
     hybrid_cost: int = 0,
     cost_message: str = "",
     pdf_data: bytes | None = None,
-    project_total: int = 0,
 ) -> bool:
     """Send estimate PDF to the customer via email.
 
@@ -52,24 +51,13 @@ async def send_estimate_email(
     template = _load_template("estimate_email.html")
     name_display = f"{html.escape(client_name)} 様" if client_name else "お客様"
 
-    # Build extra cost rows for project total
-    extra_rows = ""
-    if project_total > 0:
-        extra_rows += (
-            '<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
-            'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
-            "プロジェクト総額（参考）</td>"
-            '<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
-            f"{_format_price(project_total)}</td></tr>"
-        )
-
     template = (
         template.replace("{{client_name}} 様", name_display)
         .replace("{{project_name}}", html.escape(project_name))
         .replace("{{standard_cost}}", _format_price(standard_cost))
         .replace("{{hybrid_cost}}", _format_price(hybrid_cost))
         .replace("{{cost_message}}", html.escape(cost_message))
-        .replace("{{extra_cost_rows}}", extra_rows)
+        .replace("{{extra_cost_rows}}", "")
     )
 
     try:

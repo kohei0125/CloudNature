@@ -49,8 +49,7 @@ def _enforce_calculated_prices(llm_output: dict, calculated_data: dict) -> dict:
     llm_output["total_cost"]["standard"] = calculated_data["total_standard"]
     llm_output["total_cost"]["hybrid"] = calculated_data["total_hybrid"]
 
-    # 工程按分・精度データを保証
-    llm_output["phase_breakdown"] = calculated_data.get("phase_breakdown", {})
+    # 精度データを保証
     llm_output["confidence"] = calculated_data.get("confidence", {})
 
     # user_inputを保持（メール送信時の業種表示等に必要）

@@ -78,11 +78,6 @@ export default function CompletePage() {
     );
   }
 
-  const standard = estimate.totalCost?.standard ?? 0;
-  const hybrid = estimate.totalCost?.hybrid ?? 0;
-  const savings = standard - hybrid;
-  const savingsPercent = standard > 0 ? Math.round((savings / standard) * 100) : 0;
-
   return (
     <div className="min-h-[100dvh] bg-linen">
       <div className="mx-auto max-w-lg px-4 pt-20 pb-16">
@@ -144,7 +139,7 @@ export default function CompletePage() {
             />
             <AdvantageCard
               icon={<TrendingDown className="h-[18px] w-[18px] text-sunset" />}
-              title={`同品質で約${savingsPercent}%のコストダウン`}
+              title="同品質でコストダウン"
               description="品質を落とさず開発コストだけを削減。浮いた予算は、機能追加や運用改善に投資できます。"
               delay={0.63}
             />

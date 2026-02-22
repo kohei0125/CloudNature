@@ -180,9 +180,6 @@ class FallbackAdapter(LLMAdapter):
         calc_features = calculated_data.get("features", [])
         total_standard = calculated_data.get("total_standard", 0)
         total_hybrid = calculated_data.get("total_hybrid", 0)
-        savings_percent = calculated_data.get("savings_percent", 40)
-        phase_breakdown = calculated_data.get("phase_breakdown", {})
-
         confidence = calculated_data.get("confidence", {})
 
         # Generate feature names/details from fallback templates or category
@@ -230,16 +227,11 @@ class FallbackAdapter(LLMAdapter):
                 "standard": total_standard,
                 "hybrid": total_hybrid,
                 "message": (
-                    f"従来型開発では約{total_standard // 10000}万円のところ、"
-                    f"AIハイブリッド開発により約{total_hybrid // 10000}万円"
-                    f"（約{savings_percent}%削減）"
-                    "でのご提供が可能です。"
+                    f"従来型のスクラッチ開発では約{total_standard // 10000}万円の規模となりますが、"
+                    f"AIハイブリッド開発を活用することで、品質を保ちながら"
+                    f"約{total_hybrid // 10000}万円でのシステム構築が可能です。"
                 ),
             },
-            "phase_summary": (
-                f"要件定義から本番稼働まで、全工程をカバーしたプロジェクト総額は"
-                f"約{phase_breakdown.get('project_total', 0) // 10000}万円（ハイブリッド適用前）です。"
-            ),
             "confidence_note": (
                 f"本概算の精度は{confidence.get('range_label', '±30%')}です。"
                 "詳細ヒアリングにて精度を向上いたします。"

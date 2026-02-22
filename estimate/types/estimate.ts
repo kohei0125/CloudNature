@@ -64,20 +64,6 @@ export interface EstimateFeature {
   hybridPrice: number;
 }
 
-// Phase breakdown
-export interface PhaseItem {
-  phase: string;
-  label: string;
-  ratio: number;
-  cost: number;
-}
-
-export interface PhaseBreakdown {
-  phases: PhaseItem[];
-  projectTotal: number;
-}
-
-
 // Confidence level
 export interface ConfidenceLevel {
   rangeLabel: string;
@@ -96,9 +82,7 @@ export interface GeneratedEstimate {
     hybrid: number;
     message: string;
   };
-  phaseSummary?: string;
   confidenceNote?: string;
-  phaseBreakdown?: PhaseBreakdown;
   confidence?: ConfidenceLevel;
 }
 

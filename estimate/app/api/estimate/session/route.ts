@@ -62,21 +62,7 @@ export async function GET(request: NextRequest) {
                   message: data.estimate.total_cost.message,
                 }
               : undefined,
-            phaseSummary: data.estimate.phase_summary,
             confidenceNote: data.estimate.confidence_note,
-            phaseBreakdown: data.estimate.phase_breakdown
-              ? {
-                  phases: (data.estimate.phase_breakdown.phases ?? []).map(
-                    (p: Record<string, unknown>) => ({
-                      phase: p.phase,
-                      label: p.label,
-                      ratio: p.ratio,
-                      cost: p.cost,
-                    })
-                  ),
-                  projectTotal: data.estimate.phase_breakdown.project_total,
-                }
-              : undefined,
             confidence: data.estimate.confidence
               ? {
                   rangeLabel: data.estimate.confidence.range_label,

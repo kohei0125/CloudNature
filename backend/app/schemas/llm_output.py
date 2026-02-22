@@ -47,7 +47,6 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
         "features",
         "discussion_agenda",
         "total_cost",
-        "phase_summary",
         "confidence_note",
     ],
     "properties": {
@@ -84,7 +83,6 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
                 "message": {"type": "string"},
             },
         },
-        "phase_summary": {"type": "string"},
         "confidence_note": {"type": "string"},
     },
 }

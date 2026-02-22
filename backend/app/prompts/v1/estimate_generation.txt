@@ -10,12 +10,13 @@ step_1〜step_12: 事業形態、業種、ユーザー数、課題・要望（�
 
 ## calculated — Python計算エンジンの出力
 - features: [{{ category, standard_price, hybrid_price }}]
-- total_standard / total_hybrid / savings_percent
+- total_standard / total_hybrid
 - budget_status / budget_message
 - discussion_hints: [string]
 - multiplier_summary
-- phase_breakdown: {{ phases: [{{ phase, label, ratio, cost }}], project_total }}
 - confidence: {{ range_label, level }}
+
+※ features, total_standard, total_hybrid の金額はプロジェクト全工程（要件定義・設計・開発・テスト・導入）込みの総額です。
 
 # 文章生成ルール
 
@@ -41,12 +42,9 @@ calculated.discussion_hints を参考に、打ち合わせトピックとして�
 常に含める: 「セキュリティ要件のすり合わせ」
 
 ## total_cost.message
-calculated の total_standard, total_hybrid, savings_percent を用いて生成する。
-形式例: 「通常のスクラッチ開発では約XXX万円の規模となりますが、AIハイブリッド開発を活用することで、品質を保ちながら約YYY万円（約ZZ%削減）でのシステム構築が可能です。」
-
-## phase_summary（80文字以内）
-calculated.phase_breakdown を参照し、プロジェクト全体のコスト構造を要約する。
-形式例: 「要件定義から本番稼働まで、全工程をカバーしたプロジェクト総額は約ZZZ万円（ハイブリッド適用前）です。」
+calculated の total_standard, total_hybrid を用いて生成する。
+形式例: 「通常のスクラッチ開発では約XXX万円の規模となりますが、AIハイブリッド開発を活用することで、品質を保ちながら約YYY万円でのシステム構築が可能です。」
+※ 削減率（〇%削減）は記載しないこと。
 
 ## confidence_note（60文字以内）
 calculated.confidence を参照し、見積もり精度を説明する。
@@ -75,9 +73,8 @@ calculated.confidence を参照し、見積もり精度を説明する。
   "total_cost": {{
     "standard": 0,
     "hybrid": 0,
-    "message": "削減額と率を含む説明文"
+    "message": "金額比較を含む説明文"
   }},
-  "phase_summary": "プロジェクト全工程のコスト要約（80文字以内）",
   "confidence_note": "見積もり精度の説明（60文字以内）"
 }}
 
@@ -86,7 +83,6 @@ calculated.confidence を参照し、見積もり精度を説明する。
 - total_cost.standard / hybrid も calculated の値をそのまま使うこと
 - 金額を自分で計算・変更・丸めてはいけない。すべて calculated の値をそのまま転記すること
 - development_model_explanation はテンプレート文をそのまま使用すること
-- phase_summary には calculated.phase_breakdown.project_total の金額を含めること
 - confidence_note には calculated.confidence.range_label を含めること
 
 # セキュリティ注意

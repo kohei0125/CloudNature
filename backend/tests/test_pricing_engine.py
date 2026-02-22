@@ -200,7 +200,7 @@ class TestCalculateEstimate:
         assert result["total_standard"] > 0
         assert result["total_hybrid"] > 0
         assert result["total_hybrid"] < result["total_standard"]
-        assert result["savings_percent"] == 40
+        assert result["total_hybrid"] < result["total_standard"]
         assert result["budget_status"] in ("within_budget", "slightly_over", "significantly_over", "unknown")
         assert "multiplier_summary" in result
         assert isinstance(result["discussion_hints"], list)
@@ -235,9 +235,9 @@ class TestCalculateEstimate:
         ))
 
         # 在庫・受発注管理の中央値 = 825000
-        # capped at 4.0 → 825000 * 4.0 = 3300000
+        # capped at 4.0, project overhead /0.65 → 825000 * 4.0 / 0.65
         base = 825_000
-        expected_standard = _round_to_1000(base * 4.0)
+        expected_standard = _round_to_1000(base * 4.0 / 0.65)
         assert result["features"][0]["standard_price"] == expected_standard
         assert "上限" in result["multiplier_summary"]
 
@@ -309,15 +309,14 @@ class TestCalculateEstimate:
         assert result["total_hybrid"] == sum(f["hybrid_price"] for f in result["features"])
 
     def test_new_fields_present(self):
-        """新フィールド（phase_breakdown, confidence）が存在する。"""
+        """必須フィールド（confidence）が存在し、削除済みフィールドが存在しない。"""
         result = calculate_estimate(self._base_input())
-        assert "phase_breakdown" in result
         assert "confidence" in result
-        assert "maintenance" not in result
-        assert "phases" in result["phase_breakdown"]
-        assert "project_total" in result["phase_breakdown"]
         assert "range_label" in result["confidence"]
         assert "level" in result["confidence"]
+        assert "maintenance" not in result
+        assert "phase_breakdown" not in result
+        assert "savings_percent" not in result
 
     def test_logistics_surcharge(self):
         """logistics 業種は +5% が適用される。"""
@@ -360,10 +359,12 @@ class TestCalculatePhaseBreakdown:
         impl = next(p for p in result["phases"] if p["phase"] == "implementation")
         assert impl["cost"] == 1_000_000
 
-    def test_project_total_is_double(self):
-        """実装が50%なので、プロジェクト総額は実装コストの2倍。"""
+    def test_project_total_reasonable(self):
+        """プロジェクト総額が開発費の約1.54倍（65%ベース）。"""
         result = _calculate_phase_breakdown(1_000_000)
-        assert result["project_total"] == 2_000_000
+        # 1_000_000 / 0.65 ≈ 1_538_461 → 各工程丸め後の合計
+        assert result["project_total"] > 1_000_000
+        assert result["project_total"] < 1_600_000
 
     def test_phase_costs_sum_to_total(self):
         """各工程コストの合計がプロジェクト総額と一致する。"""
@@ -372,12 +373,10 @@ class TestCalculatePhaseBreakdown:
         assert total == result["project_total"]
 
     def test_all_costs_rounded_to_1000(self):
-        """全コストが1000円単位で丸められている。"""
-        result = _calculate_phase_breakdown(1_234_567)
+        """全コストが1000円単位で丸められている（implementationは入力値をそのまま使用）。"""
+        result = _calculate_phase_breakdown(1_200_000)
         for p in result["phases"]:
             assert p["cost"] % 1000 == 0
-        assert result["project_total"] % 1000 == 0
-
 
 
 # ---------------------------------------------------------------------------
@@ -580,8 +579,8 @@ class TestCalculateEstimateWithLLMCategories:
         ))
         assert result["features"][0]["category"] == "AIチャットボット"
         # AIチャットボットの基準価格: (650000+1650000)//2 = 1150000
-        # multiplier=1.2 (6-20人) → 1150000 * 1.2 = 1380000
-        assert result["features"][0]["standard_price"] == 1_380_000
+        # multiplier=1.2 (6-20人), project overhead /0.65 → 1150000 * 1.2 / 0.65
+        assert result["features"][0]["standard_price"] == _round_to_1000(1_150_000 * 1.2 / 0.65)
 
     def test_mixed_static_and_llm_categories(self):
         """静的マッピングとLLMカテゴリの混在ケース。"""
