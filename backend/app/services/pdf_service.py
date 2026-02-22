@@ -11,7 +11,10 @@ logger = logging.getLogger(__name__)
 
 def _to_camel_case_estimate(data: dict) -> dict:
     """Convert snake_case estimate dict to camelCase for the frontend PDF API."""
-    return {
+    phase_breakdown = data.get("phase_breakdown", {})
+    confidence = data.get("confidence", {})
+
+    result: dict = {
         "projectName": data.get("project_name", ""),
         "summary": data.get("summary", ""),
         "developmentModelExplanation": data.get(
@@ -32,7 +35,31 @@ def _to_camel_case_estimate(data: dict) -> dict:
             "hybrid": data.get("total_cost", {}).get("hybrid", 0),
             "message": data.get("total_cost", {}).get("message", ""),
         },
+        "phaseSummary": data.get("phase_summary", ""),
+        "confidenceNote": data.get("confidence_note", ""),
     }
+
+    if phase_breakdown:
+        result["phaseBreakdown"] = {
+            "phases": [
+                {
+                    "phase": p.get("phase", ""),
+                    "label": p.get("label", ""),
+                    "ratio": p.get("ratio", 0),
+                    "cost": p.get("cost", 0),
+                }
+                for p in phase_breakdown.get("phases", [])
+            ],
+            "projectTotal": phase_breakdown.get("project_total", 0),
+        }
+
+    if confidence:
+        result["confidence"] = {
+            "rangeLabel": confidence.get("range_label", ""),
+            "level": confidence.get("level", ""),
+        }
+
+    return result
 
 
 async def fetch_pdf_from_frontend(

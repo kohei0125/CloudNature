@@ -11,71 +11,71 @@ logger = logging.getLogger(__name__)
 # the industry recommendation lists in dynamic_questions.txt.
 _INDUSTRY_FEATURES: dict[str, list[dict[str, str]]] = {
     "manufacturing": [
-        {"value": "order_management", "label": "受発注管理・入力画面"},
-        {"value": "inventory_display", "label": "在庫リアルタイム表示"},
-        {"value": "production_schedule", "label": "生産スケジュール管理"},
-        {"value": "quality_record", "label": "品質検査記録"},
-        {"value": "cost_analysis", "label": "原価計算・コスト分析"},
-        {"value": "supplier_master", "label": "取引先マスタ管理"},
+        {"value": "order_management", "label": "受発注管理・入力画面", "category": "在庫・受発注管理"},
+        {"value": "inventory_display", "label": "在庫リアルタイム表示", "category": "在庫・受発注管理"},
+        {"value": "production_schedule", "label": "生産スケジュール管理", "category": "カレンダー・スケジュール"},
+        {"value": "quality_record", "label": "品質検査記録", "category": "シンプルなCRUD管理画面"},
+        {"value": "cost_analysis", "label": "原価計算・コスト分析", "category": "ダッシュボード・分析"},
+        {"value": "supplier_master", "label": "取引先マスタ管理", "category": "シンプルなCRUD管理画面"},
     ],
     "retail": [
-        {"value": "product_master", "label": "商品マスタ管理"},
-        {"value": "inventory_auto", "label": "在庫管理・自動発注"},
-        {"value": "sales_dashboard", "label": "売上分析ダッシュボード"},
-        {"value": "customer_history", "label": "顧客管理・購買履歴"},
-        {"value": "pos_integration", "label": "POS連携・売上取込"},
-        {"value": "invoice_output", "label": "帳票・請求書出力"},
+        {"value": "product_master", "label": "商品マスタ管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "inventory_auto", "label": "在庫管理・自動発注", "category": "在庫・受発注管理"},
+        {"value": "sales_dashboard", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"},
+        {"value": "customer_history", "label": "顧客管理・購買履歴", "category": "顧客管理(CRM)"},
+        {"value": "pos_integration", "label": "POS連携・売上取込", "category": "外部API連携(複雑)"},
+        {"value": "invoice_output", "label": "帳票・請求書出力", "category": "帳票・レポート出力"},
     ],
     "construction": [
-        {"value": "project_management", "label": "工事案件管理"},
-        {"value": "estimate_invoice", "label": "見積書・請求書作成"},
-        {"value": "schedule_management", "label": "工程スケジュール管理"},
-        {"value": "cost_tracking", "label": "原価管理・予実対比"},
-        {"value": "site_photo_report", "label": "現場写真・日報管理"},
-        {"value": "document_sharing", "label": "図面・ドキュメント共有"},
+        {"value": "project_management", "label": "工事案件管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "estimate_invoice", "label": "見積書・請求書作成", "category": "請求・売上管理"},
+        {"value": "schedule_management", "label": "工程スケジュール管理", "category": "カレンダー・スケジュール"},
+        {"value": "cost_tracking", "label": "原価管理・予実対比", "category": "ダッシュボード・分析"},
+        {"value": "site_photo_report", "label": "現場写真・日報管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "document_sharing", "label": "図面・ドキュメント共有", "category": "シンプルなCRUD管理画面"},
     ],
     "food_service": [
-        {"value": "reservation_calendar", "label": "予約カレンダー管理"},
-        {"value": "menu_editor", "label": "メニュー編集・公開"},
-        {"value": "sales_analytics", "label": "売上分析ダッシュボード"},
-        {"value": "shift_scheduler", "label": "シフト作成・共有"},
-        {"value": "customer_crm", "label": "顧客情報・来店履歴"},
-        {"value": "order_tablet", "label": "タブレット注文受付"},
+        {"value": "reservation_calendar", "label": "予約カレンダー管理", "category": "カレンダー・スケジュール"},
+        {"value": "menu_editor", "label": "メニュー編集・公開", "category": "シンプルなCRUD管理画面"},
+        {"value": "sales_analytics", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"},
+        {"value": "shift_scheduler", "label": "シフト作成・共有", "category": "カレンダー・スケジュール"},
+        {"value": "customer_crm", "label": "顧客情報・来店履歴", "category": "顧客管理(CRM)"},
+        {"value": "order_tablet", "label": "タブレット注文受付", "category": "シンプルなCRUD管理画面"},
     ],
     "healthcare": [
-        {"value": "patient_management", "label": "患者・利用者情報管理"},
-        {"value": "appointment_schedule", "label": "予約・スケジュール管理"},
-        {"value": "billing_receipt", "label": "請求・レセプト管理"},
-        {"value": "staff_shift", "label": "スタッフシフト管理"},
-        {"value": "care_record", "label": "服薬・ケア記録"},
-        {"value": "audit_compliance", "label": "監査ログ・法規制対応"},
+        {"value": "patient_management", "label": "患者・利用者情報管理", "category": "顧客管理(CRM)"},
+        {"value": "appointment_schedule", "label": "予約・スケジュール管理", "category": "カレンダー・スケジュール"},
+        {"value": "billing_receipt", "label": "請求・レセプト管理", "category": "請求・売上管理"},
+        {"value": "staff_shift", "label": "スタッフシフト管理", "category": "カレンダー・スケジュール"},
+        {"value": "care_record", "label": "服薬・ケア記録", "category": "シンプルなCRUD管理画面"},
+        {"value": "audit_compliance", "label": "監査ログ・法規制対応", "category": "承認ワークフロー"},
     ],
     "it_service": [
-        {"value": "project_management", "label": "プロジェクト管理"},
-        {"value": "task_ticket", "label": "タスク・チケット管理"},
-        {"value": "time_tracking", "label": "工数管理・レポート"},
-        {"value": "client_crm", "label": "顧客・案件管理(CRM)"},
-        {"value": "billing_revenue", "label": "請求・売上管理"},
-        {"value": "knowledge_base", "label": "ナレッジベース"},
+        {"value": "project_management", "label": "プロジェクト管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "task_ticket", "label": "タスク・チケット管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "time_tracking", "label": "工数管理・レポート", "category": "シンプルなCRUD管理画面"},
+        {"value": "client_crm", "label": "顧客・案件管理(CRM)", "category": "顧客管理(CRM)"},
+        {"value": "billing_revenue", "label": "請求・売上管理", "category": "請求・売上管理"},
+        {"value": "knowledge_base", "label": "ナレッジベース", "category": "シンプルなCRUD管理画面"},
     ],
     "logistics": [
-        {"value": "dispatch_route", "label": "配車・ルート管理"},
-        {"value": "delivery_tracking", "label": "荷物追跡・ステータス管理"},
-        {"value": "warehouse_inventory", "label": "倉庫在庫管理"},
-        {"value": "driver_attendance", "label": "ドライバー勤怠管理"},
-        {"value": "delivery_dashboard", "label": "配送実績ダッシュボード"},
-        {"value": "freight_billing", "label": "請求・運賃計算"},
+        {"value": "dispatch_route", "label": "配車・ルート管理", "category": "カレンダー・スケジュール"},
+        {"value": "delivery_tracking", "label": "荷物追跡・ステータス管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "warehouse_inventory", "label": "倉庫在庫管理", "category": "在庫・受発注管理"},
+        {"value": "driver_attendance", "label": "ドライバー勤怠管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "delivery_dashboard", "label": "配送実績ダッシュボード", "category": "ダッシュボード・分析"},
+        {"value": "freight_billing", "label": "請求・運賃計算", "category": "請求・売上管理"},
     ],
 }
 
 # Default features for unknown / "other" industry
 _DEFAULT_FEATURES: list[dict[str, str]] = [
-    {"value": "dashboard", "label": "ダッシュボード・データ可視化"},
-    {"value": "data_management", "label": "データ登録・編集・一覧管理"},
-    {"value": "data_export", "label": "CSV/PDFエクスポート"},
-    {"value": "notification", "label": "通知機能（メール/プッシュ）"},
-    {"value": "search", "label": "検索・フィルタリング"},
-    {"value": "workflow", "label": "承認ワークフロー・申請管理"},
+    {"value": "dashboard", "label": "ダッシュボード・データ可視化", "category": "ダッシュボード・分析"},
+    {"value": "data_management", "label": "データ登録・編集・一覧管理", "category": "シンプルなCRUD管理画面"},
+    {"value": "data_export", "label": "CSV/PDFエクスポート", "category": "帳票・レポート出力"},
+    {"value": "notification", "label": "通知機能（メール/プッシュ）", "category": "通知・アラート"},
+    {"value": "search", "label": "検索・フィルタリング", "category": "検索・フィルタリング"},
+    {"value": "workflow", "label": "承認ワークフロー・申請管理", "category": "承認ワークフロー"},
 ]
 
 # Industry-specific fallback features for estimate generation.
@@ -168,17 +168,40 @@ class FallbackAdapter(LLMAdapter):
 
         return {"step8_features": features}
 
-    async def generate_estimate(self, user_input_history: dict) -> dict:
-        """Return an industry-aware template-based estimate."""
+    async def generate_estimate(self, calculated_data: dict) -> dict:
+        """Return a template-based estimate using pre-calculated pricing data."""
         logger.warning("Using fallback adapter for estimate generation")
 
-        industry = user_input_history.get("step_2", "other")
-        features = _INDUSTRY_ESTIMATE_FEATURES.get(industry, _DEFAULT_ESTIMATE_FEATURES)
-
-        standard_total = sum(f["standard_price"] for f in features)
-        hybrid_total = sum(f["hybrid_price"] for f in features)
-
+        user_input = calculated_data.get("user_input", {})
+        industry = user_input.get("step_2", "other")
         industry_label = _INDUSTRY_LABELS.get(industry, "")
+
+        # Use pricing engine's calculated features
+        calc_features = calculated_data.get("features", [])
+        total_standard = calculated_data.get("total_standard", 0)
+        total_hybrid = calculated_data.get("total_hybrid", 0)
+        savings_percent = calculated_data.get("savings_percent", 40)
+        phase_breakdown = calculated_data.get("phase_breakdown", {})
+
+        confidence = calculated_data.get("confidence", {})
+
+        # Generate feature names/details from fallback templates or category
+        features: list[dict] = []
+        fallback_templates = _INDUSTRY_ESTIMATE_FEATURES.get(industry, _DEFAULT_ESTIMATE_FEATURES)
+        for i, cf in enumerate(calc_features):
+            if i < len(fallback_templates):
+                name = fallback_templates[i]["name"]
+                detail = fallback_templates[i]["detail"]
+            else:
+                name = cf.get("category", "機能")
+                detail = "業務効率化を支援する機能"
+            features.append({
+                "name": name,
+                "detail": detail,
+                "standard_price": cf["standard_price"],
+                "hybrid_price": cf["hybrid_price"],
+            })
+
         project_name = f"{industry_label}向け業務管理システム" if industry_label else "業務管理システム開発プロジェクト"
 
         return {
@@ -192,25 +215,33 @@ class FallbackAdapter(LLMAdapter):
                 "詳細ヒアリングにて、最適な構成へ調整いたします。"
             ),
             "development_model_explanation": (
-                "本プロジェクトは、AIが実装の8割を担当し、"
-                "残り2割の重要箇所を専門エンジニアが担当する"
-                "『ハイブリッド開発』で進行します。"
+                "本質的な課題解決とスピードを両立するため、AIが実装の8割を自動生成し、"
+                "残り2割のコア部分を専門エンジニアが磨き上げる"
+                "『ハイブリッド開発』にて進行いたします。"
             ),
             "features": features,
             "discussion_agenda": [
                 "現在の業務フローの詳細ヒアリング（手作業の頻度・関係者数）",
                 "最も優先して解決したい課題のTop3",
-                "セキュリティ要件と運用保守体制の確認",
+                "セキュリティ要件の確認",
                 "開発スケジュールとリリース計画の策定",
             ],
             "total_cost": {
-                "standard": standard_total,
-                "hybrid": hybrid_total,
+                "standard": total_standard,
+                "hybrid": total_hybrid,
                 "message": (
-                    f"従来型開発では約{standard_total // 10000}万円のところ、"
-                    f"AIハイブリッド開発により約{hybrid_total // 10000}万円"
-                    f"（約{round((1 - hybrid_total / standard_total) * 100)}%削減）"
+                    f"従来型開発では約{total_standard // 10000}万円のところ、"
+                    f"AIハイブリッド開発により約{total_hybrid // 10000}万円"
+                    f"（約{savings_percent}%削減）"
                     "でのご提供が可能です。"
                 ),
             },
+            "phase_summary": (
+                f"要件定義から本番稼働まで、全工程をカバーしたプロジェクト総額は"
+                f"約{phase_breakdown.get('project_total', 0) // 10000}万円（ハイブリッド適用前）です。"
+            ),
+            "confidence_note": (
+                f"本概算の精度は{confidence.get('range_label', '±30%')}です。"
+                "詳細ヒアリングにて精度を向上いたします。"
+            ),
         }

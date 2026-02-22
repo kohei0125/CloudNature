@@ -114,6 +114,59 @@ export default function EstimatePdf({
           </Text>
         </View>
 
+        {/* Phase breakdown */}
+        {estimate.phaseBreakdown?.phases && (
+          <>
+            <Text style={styles.sectionTitle}>プロジェクト工程別概算</Text>
+            {estimate.phaseSummary && (
+              <Text style={styles.bodyText}>{estimate.phaseSummary}</Text>
+            )}
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderText, { width: "10%" }]}>
+                No
+              </Text>
+              <Text style={[styles.tableHeaderText, { width: "35%" }]}>
+                工程
+              </Text>
+              <Text style={[styles.tableHeaderText, { width: "25%" }]}>
+                比率
+              </Text>
+              <Text style={[styles.tableHeaderText, { width: "30%" }]}>
+                概算費用
+              </Text>
+            </View>
+            {estimate.phaseBreakdown.phases.map((phase, i) => (
+              <View
+                key={phase.phase}
+                style={i % 2 === 0 ? styles.tableRow : styles.tableRowAlt}
+              >
+                <Text style={[styles.cellText, { width: "10%" }]}>
+                  {i + 1}
+                </Text>
+                <Text style={[styles.cellText, { width: "35%" }]}>
+                  {phase.label}
+                </Text>
+                <Text style={[styles.cellText, { width: "25%" }]}>
+                  {Math.round(phase.ratio * 100)}%
+                </Text>
+                <Text style={[styles.cellText, { width: "30%" }]}>
+                  {formatPrice(phase.cost)}
+                </Text>
+              </View>
+            ))}
+            <View style={styles.totalRow}>
+              <Text style={[styles.totalRowText, { width: "10%" }]} />
+              <Text style={[styles.totalRowText, { width: "35%" }]}>
+                プロジェクト総額
+              </Text>
+              <Text style={[styles.totalRowText, { width: "25%" }]} />
+              <Text style={[styles.totalRowText, { width: "30%" }]}>
+                {formatPrice(estimate.phaseBreakdown.projectTotal)}
+              </Text>
+            </View>
+          </>
+        )}
+
         {/* Discussion agenda */}
         <Text style={styles.sectionTitle}>
           詳細お見積もりに向けた確認事項
@@ -128,11 +181,14 @@ export default function EstimatePdf({
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
           <Text>
+            {estimate.confidenceNote &&
+              `※ 見積もり精度: ${estimate.confidenceNote}\n`}
             ※
             本見積書はAIによる概算であり、正式なお見積もり・機能要件ではありません。
             {"\n"}※ 正確な費用は、ヒアリング後に別途お見積もりいたします。{"\n"}※
             表示価格はすべて税別です。{"\n"}※
-            本見積書の有効期限は発行日より30日間です。
+            本見積書の有効期限は発行日より30日間です。{"\n"}※
+            お支払い条件は別途ご相談のうえ決定いたします。
           </Text>
         </View>
 

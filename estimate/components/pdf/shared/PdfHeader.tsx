@@ -16,7 +16,6 @@ export default function PdfHeader({ date, documentNumber }: PdfHeaderProps) {
         {/* eslint-disable-next-line jsx-a11y/alt-text -- @react-pdf Image has no alt prop */}
         <Image style={styles.headerLogo} src={logoPath} />
         <View>
-          <Text style={styles.brandName}>CloudNature</Text>
           <Text style={styles.brandSub}>株式会社クラウドネイチャー</Text>
           <Text style={styles.brandSub}>新潟県新潟市中央区</Text>
           <Text style={styles.brandSub}>cloudnature.jp</Text>

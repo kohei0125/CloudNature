@@ -27,6 +27,7 @@ async def send_estimate_email(
     hybrid_cost: int = 0,
     cost_message: str = "",
     pdf_data: bytes | None = None,
+    project_total: int = 0,
 ) -> bool:
     """Send estimate PDF to the customer via email.
 
@@ -50,12 +51,25 @@ async def send_estimate_email(
 
     template = _load_template("estimate_email.html")
     name_display = f"{html.escape(client_name)} 様" if client_name else "お客様"
+
+    # Build extra cost rows for project total
+    extra_rows = ""
+    if project_total > 0:
+        extra_rows += (
+            '<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
+            'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+            "プロジェクト総額（参考）</td>"
+            '<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+            f"{_format_price(project_total)}</td></tr>"
+        )
+
     template = (
         template.replace("{{client_name}} 様", name_display)
         .replace("{{project_name}}", html.escape(project_name))
         .replace("{{standard_cost}}", _format_price(standard_cost))
         .replace("{{hybrid_cost}}", _format_price(hybrid_cost))
         .replace("{{cost_message}}", html.escape(cost_message))
+        .replace("{{extra_cost_rows}}", extra_rows)
     )
 
     try:
@@ -82,6 +96,10 @@ async def send_estimate_notification(
     client_company: str,
     client_email: str,
     pdf_data: bytes | None = None,
+    project_name: str = "",
+    hybrid_cost: int = 0,
+    industry: str = "",
+    confidence_range: str = "",
 ) -> bool:
     """Send estimate notification to the site operator.
 
@@ -105,10 +123,56 @@ async def send_estimate_notification(
 
     try:
         template = _load_template("estimate_notification.html")
+
+        # Build estimate summary section for operators
+        summary_section = ""
+        summary_rows = []
+        if project_name:
+            summary_rows.append(
+                f'<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; width: 30%; '
+                f'border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">'
+                f"プロジェクト名</td>"
+                f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; '
+                f'vertical-align: top;">{html.escape(project_name)}</td></tr>'
+            )
+        if hybrid_cost > 0:
+            summary_rows.append(
+                f'<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
+                f'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+                f"概算金額（ハイブリッド）</td>"
+                f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top; '
+                f'color: #8A9668; font-weight: bold;">{_format_price(hybrid_cost)}</td></tr>'
+            )
+        if industry:
+            summary_rows.append(
+                f'<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
+                f'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+                f"業種</td>"
+                f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+                f"{html.escape(industry)}</td></tr>"
+            )
+        if confidence_range:
+            summary_rows.append(
+                f'<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
+                f'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+                f"精度レンジ</td>"
+                f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
+                f"{html.escape(confidence_range)}</td></tr>"
+            )
+        if summary_rows:
+            summary_section = (
+                '<h3 style="color: #19231B; font-size: 16px; margin-top: 24px; margin-bottom: 16px;">'
+                "■ 見積もり概要</h3>"
+                '<table style="width: 100%; border-collapse: collapse; margin-bottom: 32px;">'
+                + "".join(summary_rows)
+                + "</table>"
+            )
+
         template = (
             template.replace("{{client_name}}", html.escape(client_name))
             .replace("{{client_company}}", html.escape(client_company) if client_company.strip() else "（未入力）")
             .replace("{{client_email}}", html.escape(client_email))
+            .replace("{{estimate_summary_section}}", summary_section)
         )
 
         params: resend.Emails.SendParams = {

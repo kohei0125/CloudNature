@@ -17,6 +17,11 @@ class LLMAdapter(ABC):
         pass
 
     @abstractmethod
-    async def generate_estimate(self, user_input_history: dict) -> dict:
-        """Generate full estimate and requirements data."""
+    async def generate_estimate(self, calculated_data: dict) -> dict:
+        """Generate text content for an estimate using pre-calculated pricing data.
+
+        Args:
+            calculated_data: Output of pricing_engine.calculate_estimate(),
+                containing user_input, features (with prices), totals, etc.
+        """
         pass

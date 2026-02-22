@@ -95,6 +95,8 @@ export const STEP_CONFIGS: StepConfig[] = [
     type: "text",
     required: false,
     maxLength: 1000,
+    placeholder:
+      "例: 個人情報を扱うので安全面が気になる、24時間止まらないようにしたい、今使っている〇〇と連携したい、英語でも使えるようにしたい など",
   },
   // Step 13: Contact info (name + company + email in one page)
   {

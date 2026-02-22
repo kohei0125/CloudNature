@@ -4,11 +4,16 @@ import re
 
 import jsonschema
 
+from app.core.pricing_engine import _BASE_PRICES
+
 # Value must be lowercase English + underscores, 3-30 chars
 _VALUE_RE = re.compile(r"^[a-z][a-z0-9_]{2,29}$")
 
 # Max label length (in characters, not bytes)
 _MAX_LABEL_LENGTH = 20
+
+# Valid category names (must match _BASE_PRICES keys in pricing_engine)
+_VALID_CATEGORIES: set[str] = set(_BASE_PRICES.keys())
 
 DYNAMIC_QUESTIONS_SCHEMA: dict = {
     "type": "object",
@@ -20,10 +25,11 @@ DYNAMIC_QUESTIONS_SCHEMA: dict = {
             "type": "array",
             "items": {
                 "type": "object",
-                "required": ["value", "label"],
+                "required": ["value", "label", "category"],
                 "properties": {
                     "value": {"type": "string"},
                     "label": {"type": "string"},
+                    "category": {"type": "string"},
                 },
             },
             "minItems": 5,
@@ -41,6 +47,8 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
         "features",
         "discussion_agenda",
         "total_cost",
+        "phase_summary",
+        "confidence_note",
     ],
     "properties": {
         "project_name": {"type": "string"},
@@ -76,6 +84,8 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
                 "message": {"type": "string"},
             },
         },
+        "phase_summary": {"type": "string"},
+        "confidence_note": {"type": "string"},
     },
 }
 
@@ -108,6 +118,7 @@ def validate_dynamic_questions(data: dict) -> bool:
     for feature in data.get("step8_features", []):
         label = feature.get("label", "")
         value = feature.get("value", "")
+        category = feature.get("category", "")
 
         # Reject placeholder or refusal labels
         if _PLACEHOLDER_RE.search(label):
@@ -123,57 +134,29 @@ def validate_dynamic_questions(data: dict) -> bool:
         if len(label) > _MAX_LABEL_LENGTH:
             return False
 
+        # Reject invalid category
+        if category not in _VALID_CATEGORIES:
+            return False
+
     return True
-
-
-# Tolerance for hybrid_price ratio check (standard_price * 0.6 ± tolerance)
-_HYBRID_RATIO_TOLERANCE = 0.12  # Allow 48%~72% of standard_price
 
 
 def validate_estimate_output(data: dict) -> bool:
     """Validate LLM output for estimate generation.
 
-    Checks:
-    - JSON schema structure
-    - hybrid_price is approximately 60% of standard_price per feature
-    - total_cost matches sum of individual feature prices
+    Checks JSON schema structure only. Financial accuracy is guaranteed
+    by pricing_engine + _enforce_calculated_prices in the service layer.
     """
     try:
         jsonschema.validate(instance=data, schema=ESTIMATE_GENERATION_SCHEMA)
     except jsonschema.ValidationError:
         return False
 
-    features = data.get("features", [])
-    total_cost = data.get("total_cost", {})
-
-    expected_standard = 0
-    expected_hybrid = 0
-
-    for feature in features:
+    # Basic sanity: features must have numeric prices
+    for feature in data.get("features", []):
         sp = feature.get("standard_price", 0)
         hp = feature.get("hybrid_price", 0)
-
         if not isinstance(sp, (int, float)) or not isinstance(hp, (int, float)):
-            return False
-
-        # Check hybrid_price is approximately 60% of standard_price
-        if sp > 0:
-            ratio = hp / sp
-            if not (0.6 - _HYBRID_RATIO_TOLERANCE <= ratio <= 0.6 + _HYBRID_RATIO_TOLERANCE):
-                return False
-
-        expected_standard += sp
-        expected_hybrid += hp
-
-    # Check total_cost consistency (allow 1% tolerance for rounding)
-    actual_standard = total_cost.get("standard", 0)
-    actual_hybrid = total_cost.get("hybrid", 0)
-
-    if expected_standard > 0:
-        if abs(actual_standard - expected_standard) / expected_standard > 0.01:
-            return False
-    if expected_hybrid > 0:
-        if abs(actual_hybrid - expected_hybrid) / expected_hybrid > 0.01:
             return False
 
     return True

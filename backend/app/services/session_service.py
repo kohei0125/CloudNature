@@ -57,6 +57,18 @@ def save_session_answers(session_id: str, answers: dict) -> None:
             db.commit()
 
 
+def save_step8_categories(session_id: str, categories: dict[str, str]) -> None:
+    """step8の feature value → category マッピングをセッションに保存する。"""
+    with get_session() as db:
+        session = db.get(EstimateSession, session_id)
+        if session:
+            answers = session.answers or {}
+            answers["_step8_categories"] = categories
+            session.answers = answers
+            session.updated_at = datetime.now(timezone.utc)
+            db.commit()
+
+
 def update_session_status(session_id: str, status: str) -> None:
     """Update the status of a session."""
     with get_session() as db:

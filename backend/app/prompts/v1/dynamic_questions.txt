@@ -20,6 +20,12 @@
 - 優先度の高いものから順に並べる
 - labelは日本語で20文字以内にする。簡潔で具体的な機能名にすること
 - valueは英語のスネークケース（小文字英字とアンダースコアのみ、3〜30文字）にする
+- **category**: 以下の17カテゴリから、各機能に最も近いものを1つ選択すること（必須）
+  シンプルなCRUD管理画面 / ダッシュボード・分析 / カレンダー・スケジュール /
+  帳票・レポート出力 / 検索・フィルタリング / 承認ワークフロー /
+  在庫・受発注管理 / 請求・売上管理 / 顧客管理(CRM) / 通知・アラート /
+  外部API連携(単純) / 外部API連携(複雑) / 決済連携 /
+  CSV/データインポート / AIチャットボット / マルチテナント対応 / データ移行ツール
 
 ## 業種別推奨機能リスト
 
@@ -204,41 +210,41 @@ challengesに以下の抽象キーワードが含まれる場合、対応する�
 
 # 出力フォーマット (JSON)
 以下のJSON形式のみを出力してください。説明文やコードブロックは不要です。
-valueは英語のスネークケース（小文字英字とアンダースコアのみ）、labelは日本語20文字以内で記述してください。
+valueは英語のスネークケース（小文字英字とアンダースコアのみ）、labelは日本語20文字以内、categoryは上記17カテゴリから選択して記述してください。
 
 ## 例1: 製造業 × Webアプリ × 在庫管理の課題
 {{
   "step8_features": [
-    {{"value": "order_entry", "label": "受発注の一元管理"}},
-    {{"value": "inventory_dashboard", "label": "在庫リアルタイム表示"}},
-    {{"value": "auto_report", "label": "月次レポート自動生成"}},
-    {{"value": "stock_alert", "label": "在庫不足アラート通知"}},
-    {{"value": "supplier_master", "label": "取引先マスタ管理"}},
-    {{"value": "barcode_scan", "label": "バーコード読取・入力"}}
+    {{"value": "order_entry", "label": "受発注の一元管理", "category": "在庫・受発注管理"}},
+    {{"value": "inventory_dashboard", "label": "在庫リアルタイム表示", "category": "ダッシュボード・分析"}},
+    {{"value": "auto_report", "label": "月次レポート自動生成", "category": "帳票・レポート出力"}},
+    {{"value": "stock_alert", "label": "在庫不足アラート通知", "category": "通知・アラート"}},
+    {{"value": "supplier_master", "label": "取引先マスタ管理", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "barcode_scan", "label": "バーコード読取・入力", "category": "外部API連携(単純)"}}
   ]
 }}
 
 ## 例2: 飲食業 × Webアプリ × 予約・売上管理の課題
 {{
   "step8_features": [
-    {{"value": "reservation_mgmt", "label": "予約カレンダー管理"}},
-    {{"value": "menu_editor", "label": "メニュー編集・公開"}},
-    {{"value": "sales_analytics", "label": "売上分析ダッシュボード"}},
-    {{"value": "shift_scheduler", "label": "シフト作成・共有"}},
-    {{"value": "customer_crm", "label": "顧客情報・来店履歴"}},
-    {{"value": "order_tablet", "label": "タブレット注文受付"}}
+    {{"value": "reservation_mgmt", "label": "予約カレンダー管理", "category": "カレンダー・スケジュール"}},
+    {{"value": "menu_editor", "label": "メニュー編集・公開", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "sales_analytics", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"}},
+    {{"value": "shift_scheduler", "label": "シフト作成・共有", "category": "カレンダー・スケジュール"}},
+    {{"value": "customer_crm", "label": "顧客情報・来店履歴", "category": "顧客管理(CRM)"}},
+    {{"value": "order_tablet", "label": "タブレット注文受付", "category": "シンプルなCRUD管理画面"}}
   ]
 }}
 
 ## 例3: 物流業 × モバイルアプリ × 配送管理の課題 × migration
 {{
   "step8_features": [
-    {{"value": "delivery_tracking", "label": "配送追跡・状況表示"}},
-    {{"value": "route_optimizer", "label": "配車・ルート最適化"}},
-    {{"value": "driver_schedule", "label": "ドライバー勤怠管理"}},
-    {{"value": "push_notification", "label": "配送通知プッシュ"}},
-    {{"value": "data_migration", "label": "データ移行ツール"}},
-    {{"value": "delivery_report", "label": "配送実績レポート"}}
+    {{"value": "delivery_tracking", "label": "配送追跡・状況表示", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "route_optimizer", "label": "配車・ルート最適化", "category": "外部API連携(複雑)"}},
+    {{"value": "driver_schedule", "label": "ドライバー勤怠管理", "category": "カレンダー・スケジュール"}},
+    {{"value": "push_notification", "label": "配送通知プッシュ", "category": "通知・アラート"}},
+    {{"value": "data_migration", "label": "データ移行ツール", "category": "データ移行ツール"}},
+    {{"value": "delivery_report", "label": "配送実績レポート", "category": "帳票・レポート出力"}}
   ]
 }}
 

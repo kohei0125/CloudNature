@@ -55,7 +55,7 @@ export const STEP_MESSAGES: Record<
   },
   12: {
     question:
-      "その他ご要望やご質問があればご記入ください。（任意）",
+      "その他、気になっていることやご要望があればお聞かせください。（任意）",
     description: "追加要望の入力",
   },
   13: {
@@ -92,8 +92,9 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
     { value: "101+", label: "101名以上" },
   ],
   deploymentTarget: [
-    { value: "internal", label: "自社利用" },
-    { value: "client", label: "お客様提供用" },
+    { value: "internal", label: "自社利用（社員向け）" },
+    { value: "client_b2b", label: "お客様提供用（B2B）" },
+    { value: "client_b2c", label: "一般ユーザー向け（B2C）" },
     { value: "undecided", label: "未定" },
   ],
   systemType: [

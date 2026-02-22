@@ -64,9 +64,17 @@ class OpenAIAdapter(LLMAdapter):
             logger.error("Failed to parse dynamic questions response: %s", content[:200])
             raise
 
-    async def generate_estimate(self, user_input_history: dict) -> dict:
-        """Generate full estimate and requirements data."""
+    async def generate_estimate(self, calculated_data: dict) -> dict:
+        """Generate text content for an estimate using pre-calculated pricing data."""
         system_prompt = _load_prompt("estimate_generation.txt")
+
+        # Separate user_input and calculated data as the prompt expects
+        user_message = {
+            "user_input": calculated_data.get("user_input", {}),
+            "calculated": {
+                k: v for k, v in calculated_data.items() if k != "user_input"
+            },
+        }
 
         # Structured message separation to mitigate prompt injection
         response = await self.client.chat.completions.create(
@@ -76,7 +84,7 @@ class OpenAIAdapter(LLMAdapter):
                 {
                     "role": "user",
                     "content": json.dumps(
-                        user_input_history, ensure_ascii=False
+                        user_message, ensure_ascii=False
                     ),
                 },
             ],

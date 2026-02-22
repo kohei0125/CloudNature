@@ -70,6 +70,11 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
     cost_message = total_cost.get("message", "")
     project_name = estimate_data.get("project_name", estimate_data.get("projectName", ""))
 
+    # Phase breakdown for enriched emails
+    phase_breakdown = estimate_data.get("phase_breakdown", {})
+    confidence = estimate_data.get("confidence", {})
+    project_total = phase_breakdown.get("project_total", 0)
+
     # Send customer email
     await send_estimate_email(
         customer_email,
@@ -79,7 +84,22 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
         hybrid_cost=hybrid_cost,
         cost_message=cost_message,
         pdf_data=pdf_data,
+        project_total=project_total,
     )
+
+    # Industry label for operator notification
+    industry_labels = {
+        "manufacturing": "製造業",
+        "retail": "小売・卸売業",
+        "construction": "建設・不動産業",
+        "food_service": "飲食・宿泊業",
+        "healthcare": "医療・福祉",
+        "it_service": "IT・情報サービス業",
+        "logistics": "物流・運輸業",
+    }
+    user_input = estimate_data.get("user_input", {})
+    industry_key = user_input.get("step_2", "")
+    industry_label = industry_labels.get(industry_key, industry_key)
 
     # Send operator notification
     await send_estimate_notification(
@@ -87,6 +107,10 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
         client_company=contact["company"],
         client_email=customer_email,
         pdf_data=pdf_data,
+        project_name=project_name,
+        hybrid_cost=hybrid_cost,
+        industry=industry_label,
+        confidence_range=confidence.get("range_label", ""),
     )
 
 
@@ -127,7 +151,7 @@ async def submit_step(
     if request.step_number == 7 and request.answers:
         try:
             ai_options = await estimate_service.generate_dynamic_questions(
-                request.answers
+                request.session_id, request.answers
             )
         except Exception:
             logger.exception("Failed to generate dynamic questions")
