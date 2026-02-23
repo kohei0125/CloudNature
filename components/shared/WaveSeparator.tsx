@@ -7,6 +7,7 @@ interface WaveSeparatorProps {
   bgColor?: string; // Color of the section adjacent
   gradientStops?: { offset: string; color: string; opacity?: number }[];
   className?: string;
+  withTexture?: boolean;
 }
 
 const WaveSeparator: React.FC<WaveSeparatorProps> = ({
@@ -14,14 +15,15 @@ const WaveSeparator: React.FC<WaveSeparatorProps> = ({
   color = '#ffffff',
   bgColor = 'transparent',
   gradientStops,
-  className
+  className,
+  withTexture = true
 }) => {
   const gradientId = React.useId();
   const shouldUseGradient = !!gradientStops && gradientStops.length > 0;
 
   return (
     <div
-      className={cn("w-full overflow-hidden leading-[0] relative texture-grain", position === 'top' && "rotate-180", className)}
+      className={cn("w-full overflow-hidden leading-[0] relative", withTexture && "texture-grain", position === 'top' && "rotate-180", className)}
       style={{ backgroundColor: bgColor }}
     >
       <svg
