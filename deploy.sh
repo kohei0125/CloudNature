@@ -27,6 +27,7 @@ CORS_ORIGINS="${CORS_ORIGINS:-https://ai.cloudnature.jp}"
 DATA_TTL_DAYS="${DATA_TTL_DAYS:-31}"
 EMAIL_FROM="${EMAIL_FROM:-CloudNature <cloudnature@stage-site.net>}"
 NOTIFY_EMAIL="${NOTIFY_EMAIL:-k.watanabe.sys.contact@gmail.com}"
+NOTION_DATABASE_ID="${NOTION_DATABASE_ID:-}"
 
 # ---------------------------------------------------------------------------
 # シークレット（Secret Manager 参照名）
@@ -35,6 +36,7 @@ SECRET_API_KEY="${SECRET_API_KEY:-api-key}"
 SECRET_OPENAI_API_KEY="${SECRET_OPENAI_API_KEY:-openai-api-key}"
 SECRET_RESEND_API_KEY="${SECRET_RESEND_API_KEY:-resend-api-key}"
 SECRET_DATABASE_URL="${SECRET_DATABASE_URL:-database-url}"
+SECRET_NOTION_API_KEY="${SECRET_NOTION_API_KEY:-notion-api-key}"
 
 # ---------------------------------------------------------------------------
 # 事前チェック
@@ -96,13 +98,15 @@ LLM_TIMEOUT=${LLM_TIMEOUT},\
 FRONTEND_URL=${FRONTEND_URL},\
 CORS_ORIGINS=${CORS_ORIGINS},\
 DATA_TTL_DAYS=${DATA_TTL_DAYS},\
-NOTIFY_EMAIL=${NOTIFY_EMAIL}" \
+NOTIFY_EMAIL=${NOTIFY_EMAIL},\
+NOTION_DATABASE_ID=${NOTION_DATABASE_ID}" \
   --set-env-vars "EMAIL_FROM=${EMAIL_FROM}" \
   --set-secrets "\
 API_KEY=${SECRET_API_KEY}:latest,\
 OPENAI_API_KEY=${SECRET_OPENAI_API_KEY}:latest,\
 RESEND_API_KEY=${SECRET_RESEND_API_KEY}:latest,\
-DATABASE_URL=${SECRET_DATABASE_URL}:latest" \
+DATABASE_URL=${SECRET_DATABASE_URL}:latest,\
+NOTION_API_KEY=${SECRET_NOTION_API_KEY}:latest" \
   --quiet
 
 echo ""
