@@ -42,14 +42,22 @@ def _parse_contact(answers: dict) -> dict:
 
 
 async def _send_emails(estimate_data: dict, answers: dict) -> None:
-    """Background task: generate PDF and send emails to customer and operator."""
+    """Background task: generate PDF, send emails, and save to Notion."""
     from app.services.email_service import (
         send_estimate_email,
         send_estimate_notification,
     )
+    from app.services.notion_service import save_estimate_to_notion
     from app.services.pdf_service import fetch_pdf_from_frontend
 
     contact = _parse_contact(answers)
+
+    # Notion保存（失敗してもメール送信に影響しない）
+    try:
+        save_estimate_to_notion(answers, estimate_data, contact)
+    except Exception:
+        logger.exception("Failed to save estimate to Notion")
+
     customer_email = contact["email"]
     if not customer_email:
         logger.warning("No customer email found in answers, skipping email send")

@@ -60,5 +60,9 @@ export const PAGE_META = {
   security: {
     title: "情報セキュリティ方針 | 株式会社クラウドネイチャー",
     description: "情報資産の保護と安全管理に関する取り組みを記載しています。"
+  },
+  terms: {
+    title: "利用規約 | 株式会社クラウドネイチャー",
+    description: "サービスのご利用にあたっての規約・条件についてご案内します。"
   }
 };

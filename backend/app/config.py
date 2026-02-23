@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:3001"
     data_ttl_days: int = 31
     api_key: str = ""
+    notion_api_key: str = ""
+    notion_database_id: str = ""
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
@@ -31,3 +33,5 @@ if not settings.openai_api_key:
     logger.warning("OPENAI_API_KEY is not set — LLM will use fallback adapter")
 if not settings.resend_api_key:
     logger.warning("RESEND_API_KEY is not set — email sending is disabled")
+if not settings.notion_api_key:
+    logger.warning("NOTION_API_KEY is not set — Notion integration is disabled")

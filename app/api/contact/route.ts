@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { ContactRequestBody, buildEmailHtml, buildConfirmationEmailHtml } from "./emailTemplates";
 import { CONTACT_SUBJECTS } from "@/content/contact";
+import { saveContactToNotion } from "./notionService";
 
 // ローカルはクラウドフレアのチェックをスキップ
 const IS_PRODUCTION = process.env.NEXT_PUBLIC_ENV === "production";
@@ -167,6 +168,17 @@ export async function POST(request: NextRequest) {
     if (confirmResult.status === "rejected") {
       console.error("[contact] confirmation email failed:", confirmResult.reason);
     }
+
+    // Notion保存（非同期・失敗してもレスポンスに影響しない）
+    saveContactToNotion({
+      name: body.name,
+      email: body.email,
+      company: body.company,
+      subject: body.subject,
+      message: body.message,
+    }).catch((err) => {
+      console.error("[notion] Failed to save contact:", err);
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
