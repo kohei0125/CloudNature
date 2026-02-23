@@ -30,6 +30,28 @@ export const metadata: Metadata = (() => {
     title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
     description:
       "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+    openGraph: {
+      title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
+      description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+      url: "https://cloudnature.jp",
+      siteName: "株式会社クラウドネイチャー",
+      images: [
+        {
+          url: "/images/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: "株式会社クラウドネイチャー",
+        },
+      ],
+      locale: "ja_JP",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
+      description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+      images: ["/images/og-image.png"],
+    },
 
     robots: isProd
       ? undefined
