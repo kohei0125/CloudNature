@@ -62,12 +62,12 @@ const NewsArticlePage = async ({ params }: PageProps) => {
 
   return (
     <div className="bg-cream min-h-screen">
-      <article className="pt-32 pb-16">
-        <div className="max-w-3xl mx-auto px-6">
+      <article className="pt-24 md:pt-32 pb-12 md:pb-16">
+        <div className="max-w-3xl mx-auto px-4 md:px-6">
           {/* 戻るリンク */}
           <Link
             href={NEWS_DETAIL.backHref}
-            className="inline-flex items-center gap-2 text-sage hover:text-forest transition-colors text-sm font-medium mb-8"
+            className="inline-flex items-center gap-2 text-sage hover:text-forest transition-colors text-xs md:text-sm font-medium mb-6 md:mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             {NEWS_DETAIL.backLabel}
@@ -84,13 +84,13 @@ const NewsArticlePage = async ({ params }: PageProps) => {
           </div>
 
           {/* タイトル */}
-          <h1 className="text-[clamp(1.5rem,4vw,2.5rem)] font-serif font-bold text-forest leading-tight mb-8">
+          <h1 className="text-[clamp(1.25rem,4vw,2.5rem)] font-serif font-bold text-forest leading-tight mb-6 md:mb-8">
             {article.title}
           </h1>
 
           {/* アイキャッチ */}
           {article.image && (
-            <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden mb-10">
+            <div className="relative w-full aspect-[16/9] rounded-lg overflow-hidden mb-8 md:mb-10">
               <Image
                 src={article.image.url}
                 alt={article.title}

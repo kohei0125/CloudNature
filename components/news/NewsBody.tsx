@@ -26,7 +26,7 @@ const NewsBody = ({ html }: NewsBodyProps) => {
 
   return (
     <div
-      className="prose prose-lg max-w-none prose-headings:text-forest prose-headings:font-serif prose-a:text-sage hover:prose-a:text-sage/80 prose-img:rounded-lg prose-strong:text-forest"
+      className="prose prose-sm md:prose-lg max-w-none prose-headings:text-forest prose-headings:font-serif prose-a:text-sage hover:prose-a:text-sage/80 prose-img:rounded-lg prose-strong:text-forest prose-p:text-[14px] md:prose-p:text-base prose-li:text-[14px] md:prose-li:text-base"
       dangerouslySetInnerHTML={{ __html: clean }}
     />
   );
