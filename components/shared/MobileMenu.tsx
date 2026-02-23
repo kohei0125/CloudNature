@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
@@ -108,6 +108,17 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
           />
         </div>
       )}
+
+      {/* Close Button */}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="メニューを閉じる"
+        className="absolute top-5 right-6 z-20 flex items-center gap-2 p-2 text-forest hover:text-sunset transition-colors duration-200"
+      >
+        <span className="text-xs font-bold tracking-widest uppercase">閉じる</span>
+        <X className="w-7 h-7" strokeWidth={2.5} />
+      </button>
 
       <nav className="v-stack justify-center flex-grow px-8 pb-32 pt-24 gap-6 z-10" aria-label="モバイルナビゲーション">
         {NAV_ITEMS.map((item) => (

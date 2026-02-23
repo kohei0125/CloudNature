@@ -79,7 +79,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className={cn("md:hidden p-2", isHeroOverlay ? "text-white" : "text-forest")}
+          className={cn("md:hidden p-2", isMobileMenuOpen ? "text-forest" : isHeroOverlay ? "text-white" : "text-forest")}
           onClick={isMobileMenuOpen ? onCloseMobileMenu : onOpenMobileMenu}
           aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isMobileMenuOpen}
