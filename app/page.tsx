@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { HERO_COPY } from "@/content/home";
+import { HERO_COPY, NEWS_ITEMS } from "@/content/home";
+import { getNewsList } from "@/lib/microcms";
+import { toNewsItem } from "@/types/microcms";
+import type { NewsItem } from "@/types";
 import WaveSeparator from "@/components/shared/WaveSeparator";
 import HeroSection from "@/components/home/HeroSection";
 import MissionSection from "@/components/home/MissionSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import CasesSection from "@/components/home/CasesSection";
 import CtaSection from "@/components/home/CtaSection";
+import NewsSection from "@/components/home/NewsSection";
 
 export const metadata: Metadata = {
   title: PAGE_META.home.title,
@@ -28,16 +32,37 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://cloudnature.jp/" }
 };
 
-const Home = () => (
-  <div className="w-full bg-cream">
-    <HeroSection />
-    <MissionSection />
-    <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
-    <ServicesSection />
-    <CasesSection />
-    <WaveSeparator position="top" color="#EDE8E5" bgColor="#19231B" />
-    <CtaSection />
-  </div>
-);
+const FALLBACK_NEWS = NEWS_ITEMS;
+
+const Home = async () => {
+  let newsItems: NewsItem[];
+  let isFallback = false;
+  try {
+    const res = await getNewsList({ limit: 6 });
+    if (res.contents.length > 0) {
+      newsItems = res.contents.map(toNewsItem);
+    } else {
+      newsItems = FALLBACK_NEWS;
+      isFallback = true;
+    }
+  } catch {
+    newsItems = FALLBACK_NEWS;
+    isFallback = true;
+  }
+
+  return (
+    <div className="w-full bg-cream">
+      <HeroSection />
+      <MissionSection />
+      <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
+      <ServicesSection />
+      <CasesSection />
+      <WaveSeparator position="top" color="#ffffff" bgColor="#19231B" />
+      <NewsSection items={newsItems} disableLink={isFallback} />
+      <WaveSeparator position="top" color="#EDE8E5" bgColor="#ffffff" />
+      <CtaSection />
+    </div>
+  );
+};
 
 export default Home;

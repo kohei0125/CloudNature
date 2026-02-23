@@ -1,4 +1,4 @@
-import { ServiceItem, CaseStudy, ValueProp } from "@/types";
+import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/types";
 
 export const HERO_COPY = {
   imageSrc: "/images/niigata_city.jpg",
@@ -132,6 +132,77 @@ export const CASE_STUDIES: CaseStudy[] = [
     after: "AWSを活用したWeb受発注システムを構築。顧客が直接注文する仕組みにより入力工数をゼロにし、誤配送も完全に解消。",
     image: "/images/office_room.jpg"
   }
+];
+
+export const NEWS_SECTION = {
+  eyebrow: "Discover us",
+  title: "ニュース",
+  cta: { label: "他の記事を見る", href: "/news" }
+};
+
+export const NEWS_CATEGORY_COLORS: Record<NewsCategory, string> = {
+  "ニュース": "bg-sage/20 text-sage",
+  "事例紹介": "bg-sunset/20 text-sunset",
+  "イベント": "bg-sea/20 text-sea",
+  "メディア": "bg-cloud/20 text-forest",
+  "ブログ": "bg-stone/20 text-forest",
+};
+
+export const NEWS_ITEMS: NewsItem[] = [
+  {
+    id: "company-established",
+    publishedAt: "2025-11-01",
+    category: "ニュース",
+    title: "株式会社クラウドネイチャーを設立しました",
+    excerpt: "新潟の中小企業のDX・AI活用を支援するため、株式会社クラウドネイチャーを設立いたしました。",
+    url: "/news/company-established",
+    image: "https://picsum.photos/seed/cloudnature-1/600/400"
+  },
+  {
+    id: "ai-estimate-release",
+    publishedAt: "2026-01-15",
+    category: "ニュース",
+    title: "AI見積もりシステムをリリースしました",
+    excerpt: "チャット形式で要件を伝えるだけで、AIが最適なシステム構成と概算費用を自動算出するサービスを公開しました。",
+    url: "/news/ai-estimate-release",
+    image: "https://picsum.photos/seed/cloudnature-2/600/400"
+  },
+  {
+    id: "case-marketing-automation",
+    publishedAt: "2026-02-01",
+    category: "事例紹介",
+    title: "コンテンツマーケティング自動化の導入事例を公開",
+    excerpt: "n8nとDifyを活用し、記事執筆工数を80%削減した事例をご紹介します。",
+    url: "/news/case-marketing-automation",
+    image: "https://picsum.photos/seed/cloudnature-3/600/400"
+  },
+  {
+    id: "seminar-ai-intro",
+    publishedAt: "2026-02-10",
+    category: "イベント",
+    title: "中小企業向けAI活用セミナーを開催します",
+    excerpt: "「AIって何から始めればいい？」を解決する、未経験者向けの無料セミナーを新潟市で開催します。",
+    url: "/news/seminar-ai-intro",
+    image: "https://picsum.photos/seed/cloudnature-4/600/400"
+  },
+  {
+    id: "media-nikkei",
+    publishedAt: "2026-02-15",
+    category: "メディア",
+    title: "日経クロステックにAI見積もりシステムが掲載されました",
+    excerpt: "当社のAI見積もりシステムが、日経クロステックの「注目スタートアップ」特集に掲載されました。",
+    url: "/news/media-nikkei",
+    image: "https://picsum.photos/seed/cloudnature-5/600/400"
+  },
+  {
+    id: "blog-dify-tips",
+    publishedAt: "2026-02-20",
+    category: "ブログ",
+    title: "Difyで業務AIチャットボットを作る5つのコツ",
+    excerpt: "ノーコードAI開発ツール「Dify」を使って、社内FAQボットを構築するためのベストプラクティスを紹介します。",
+    url: "/news/blog-dify-tips",
+    image: "https://picsum.photos/seed/cloudnature-6/600/400"
+  },
 ];
 
 export const CTA_BANNER = {
