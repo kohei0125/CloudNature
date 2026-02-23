@@ -20,7 +20,7 @@ export const COMPANY_OVERVIEW: CompanyInfo[] = [
   },
   {
     label: "主要技術",
-    value: "Next.js / React / TypeScript / Python / Dify / n8n / AWS",
+    value: "Next.js / React / TypeScript / Python / AI・自動化 / AWS",
   },
   { label: "取引銀行", value: "○○銀行 ○○支店" },
 ];

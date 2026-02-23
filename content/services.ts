@@ -26,7 +26,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     id: "ai",
     title: "AIエージェント開発",
     subtitle: "AI Agent Development",
-    description: "導入最短2週間。Difyで作る「社内の物知りAI」。問い合わせ対応、マニュアル検索、見積もり作成など、今まで人がやっていた単純作業を24時間365日、AIが代行します。",
+    description: "導入最短2週間。最新AIで作る「社内の物知りAI」。問い合わせ対応、マニュアル検索、見積もり作成など、今まで人がやっていた単純作業を24時間365日、AIが代行します。",
     features: [
       { title: "社内ナレッジAIチャット", description: "社内マニュアルやFAQをAIに学習させ、社員からの質問に即座に回答。新人教育コストを大幅に削減します。" },
       { title: "予約・問い合わせ自動応答", description: "LINE・Webチャットからの問い合わせにAIが24時間対応。予約受付から確認メール送信まで全自動化。" },

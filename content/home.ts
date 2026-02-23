@@ -18,9 +18,8 @@ export const HERO_BENTO = {
   caseDesc: "トップ営業のノウハウをAI化し、商談後の付帯業務を80%削減。",
   metricLabel: "IMPACT",
   aiCard: {
-    title: "AI業務自動化\n成果物",
-    description: "24時間稼働の「デジタル社員」。\nDify × n8n 等と連携し\n単純作業から高度な判断業務まで\nAIがあなたに代行",
-    tags: ["Dify", "LINE", "Notion", "Gmail", "Slack"]
+    description: "24時間稼働の「デジタル社員」。\nAIや各種ツールと連携し\n単純作業から高度な判断業務まで\nAIがあなたに代行",
+    tags: ["AI", "LINE", "Notion", "Gmail", "Slack"]
   },
   metricCard: {
     value: "2.5",
@@ -79,7 +78,7 @@ export const SERVICES: ServiceItem[] = [
     title: "AIエージェント開発",
     description: "自律的に思考し、複数ツールを連携して業務を完遂する「優秀なデジタル社員」を開発します。見積作成から顧客対応、システムへのデータ入力まで、24時間365日ミスなく働く頼もしい右腕が、御社の人手不足を根本から解決します。",
     features: ["自律思考型AIエージェントの開発", "複数SaaSを横断した業務の完全自動化", "社内独自データの学習・専用AI構築"],
-    techStack: ["Dify（AIチャット構築）", "n8n（業務自動化）", "OpenAI", "Gemini"]
+    techStack: ["AIエージェント構築", "業務自動化プラットフォーム", "OpenAI", "Gemini"]
   },
   {
     id: "ai-training",
@@ -111,17 +110,17 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "marketing-automation",
     title: "コンテンツマーケティングの自律的運営",
-    category: "マーケティング × n8n / Dify",
+    category: "マーケティング × AI自動化",
     before: "トレンドのリサーチから記事執筆まで全て手動で行い、更新頻度が低く内容も薄くなっていた。",
-    after: "n8nでSNSや競合のトレンドを自律監視し、Difyで高品質な記事案を自動生成する仕組みを構築。執筆・投稿の工数を80%削減し、公開頻度が1.5倍、リーチ数も大幅に向上 。",
+    after: "自動化ツールでSNSや競合のトレンドを自律監視し、AIで高品質な記事案を自動生成する仕組みを構築。執筆・投稿の工数を80%削減し、公開頻度が1.5倍、リーチ数も大幅に向上 。",
     image: "/images/marketing.jpg"
   },
   {
     id: "hr-recruitment",
     title: "人事・採用業務の完全自動化",
-    category: "人事・採用 × n8n / Dify",
+    category: "人事・採用 × AI自動化",
     before: "月数百件の履歴書を手作業で確認。初期対応の遅れから、優秀な候補者を他社に逃す機会損失が発生していた。",
-    after: "AIエージェントが要件に基づき候補者を自動スコアリング。n8nで面接日程調整からリマインド送信まで完結。スクリーニング工数を90%削減し、採用リードタイムを平均2週間から5日に短縮することに成功 。",
+    after: "AIエージェントが要件に基づき候補者を自動スコアリング。自動化ツールで面接日程調整からリマインド送信まで完結。スクリーニング工数を90%削減し、採用リードタイムを平均2週間から5日に短縮することに成功 。",
     image: "/images/meeting.jpg"
   },
   {
@@ -172,7 +171,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     publishedAt: "2026-02-01",
     category: "事例紹介",
     title: "コンテンツマーケティング自動化の導入事例を公開",
-    excerpt: "n8nとDifyを活用し、記事執筆工数を80%削減した事例をご紹介します。",
+    excerpt: "AIと自動化ツールを活用し、記事執筆工数を80%削減した事例をご紹介します。",
     url: "/news/case-marketing-automation",
     image: "https://picsum.photos/seed/cloudnature-3/600/400"
   },
@@ -198,8 +197,8 @@ export const NEWS_ITEMS: NewsItem[] = [
     id: "blog-dify-tips",
     publishedAt: "2026-02-20",
     category: "ブログ",
-    title: "Difyで業務AIチャットボットを作る5つのコツ",
-    excerpt: "ノーコードAI開発ツール「Dify」を使って、社内FAQボットを構築するためのベストプラクティスを紹介します。",
+    title: "最新AIツールで業務AIチャットボットを作る5つのコツ",
+    excerpt: "ノーコードAI開発ツールを使って、社内FAQボットを構築するためのベストプラクティスを紹介します。",
     url: "/news/blog-dify-tips",
     image: "https://picsum.photos/seed/cloudnature-6/600/400"
   },
