@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Download, CheckCircle2 } from "lucide-react";
 import { CTA_BANNER } from "@/content/home";
-import { ESTIMATE_URL } from "@/content/common";
 
 const CtaSection = () => {
   return (
@@ -59,10 +58,10 @@ const CtaSection = () => {
 
             {/* Action Buttons */}
             <div className="v-stack sm:h-stack gap-4 pt-2">
-              <a href={ESTIMATE_URL} target="_blank" rel="noopener noreferrer" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
+              <Link href="/contact" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
                 {CTA_BANNER.primaryCta}
                 <ArrowRight className="w-5 h-5" />
-              </a>
+              </Link>
               <Link href="/downloads/ai-agent-guide-2026.pdf" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg center gap-2">
                 <Download className="w-4 h-4" />
                 {CTA_BANNER.secondaryCta}
