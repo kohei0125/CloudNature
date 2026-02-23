@@ -3,7 +3,7 @@ import { ESTIMATE_URL } from "@/content/common";
 
 export const SERVICES_HERO = {
   eyebrow: "SOLUTIONS",
-  title: "御社に最適なテクノロジーを、適正価格で",
+  title: "最適なテクノロジーを、適正価格で",
   description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。新潟の中小企業の現場を知るからこそ、実用本位のソリューションを提供します。"
 };
 

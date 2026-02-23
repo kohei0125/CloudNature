@@ -1,18 +1,10 @@
-import { CaseStudyDetail, KpiHighlight, FaqItem } from "@/types";
+import { CaseStudyDetail, FaqItem } from "@/types";
 
 export const CASES_HERO = {
   eyebrow: "CASE STUDIES",
   title: "導入事例と数字で見る成果",
   description: "システム・AIエージェント導入事例。具体的な数値で成果をご紹介します。"
 };
-
-export const KPI_HIGHLIGHTS: KpiHighlight[] = [
-  { value: "80", unit: "%", label: "業務工数削減" },
-  { value: "2.5", unit: "x", label: "生産性向上" },
-  { value: "2", unit: "週間", label: "最短導入期間" }
-];
-
-export const KPI_NOTE = "※ 導入企業の実績に基づく数値です";
 
 export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
   {

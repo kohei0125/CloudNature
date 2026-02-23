@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
 import { CASES_HERO, CASE_STUDY_DETAILS, CASES_CTA, CASES_INLINE_CTA } from "@/content/cases";
 import PageHero from "@/components/shared/PageHero";
-import KpiHighlights from "@/components/cases/KpiHighlights";
 import CaseStudyDetailCard from "@/components/cases/CaseStudyDetailCard";
 import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
@@ -34,9 +33,6 @@ export default function CasesPage() {
         title={CASES_HERO.title}
         description={CASES_HERO.description}
       />
-      <ScrollReveal>
-        <KpiHighlights />
-      </ScrollReveal>
       <section className="py-16 md:py-24 bg-mist">
         <div className="container mx-auto px-6 space-y-16 md:space-y-20">
           {CASE_STUDY_DETAILS.map((study, index) => (

@@ -18,9 +18,3 @@ export interface CaseStudyDetail {
   quote?: { text: string; author: string; role: string };
   image: string;
 }
-
-export interface KpiHighlight {
-  value: string;
-  unit: string;
-  label: string;
-}
