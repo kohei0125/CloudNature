@@ -2,8 +2,8 @@ import { CaseStudyDetail, KpiHighlight, FaqItem } from "@/types";
 
 export const CASES_HERO = {
   eyebrow: "CASE STUDIES",
-  title: "「仕組み」が変われば、未来が変わる。",
-  description: "新潟の製造業・サービス業でのAIエージェント導入事例。具体的な数値で成果をご紹介します。"
+  title: "導入事例と数字で見る成果",
+  description: "システム・AIエージェント導入事例。具体的な数値で成果をご紹介します。"
 };
 
 export const KPI_HIGHLIGHTS: KpiHighlight[] = [

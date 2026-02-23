@@ -99,7 +99,7 @@ export const SERVICES: ServiceItem[] = [
 
 export const CASES_SECTION = {
   eyebrow: "CASE STUDIES",
-  title: "「仕組み」が変われば、未来が変わる。",
+  title: "導入事例と数字で見る成果",
   cta: "事例をもっと見る",
   labels: {
     before: "Before:",
