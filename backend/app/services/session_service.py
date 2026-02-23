@@ -52,6 +52,12 @@ def save_session_answers(session_id: str, answers: dict) -> None:
     with get_session() as db:
         session = db.get(EstimateSession, session_id)
         if session:
+            # Maintain _step8_categories which is dynamically stored before final submission
+            existing_answers = session.answers or {}
+            step8_cats = existing_answers.get("_step8_categories")
+            if step8_cats is not None:
+                answers["_step8_categories"] = step8_cats
+                
             session.answers = answers
             session.updated_at = datetime.now(timezone.utc)
             db.commit()
