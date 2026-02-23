@@ -7,8 +7,8 @@ export const HERO_COPY = {
   headingLine2: "人手に代わる仕組みを。",
   description:
     "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、システム・AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
-  primaryCta: "無料診断・相談",
-  secondaryCta: "1分でわかるサービス",
+  primaryCta: "最短1分でAIお見積り",
+  secondaryCta: "お問い合わせ",
   heroImageAlt: "Modern office collaboration"
 };
 
@@ -223,6 +223,6 @@ export const CTA_BANNER = {
   ],
   downloadTitle: "2026年版 中小企業のためのAIエージェント導入実践ガイド",
   downloadMeta: "PDF / 全24ページ / 最終更新 2026.02",
-  primaryCta: "無料診断を予約する",
+  primaryCta: "お問い合わせ",
   secondaryCta: "資料をダウンロード",
 };

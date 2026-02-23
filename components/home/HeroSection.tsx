@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, PlayCircle } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import { HERO_COPY, HERO_BENTO } from "@/content/home";
 import { ESTIMATE_URL } from "@/content/common";
 
@@ -64,8 +64,8 @@ const HeroSection = () => {
               </div>
             </a>
 
-            <Link href="/services" className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-full font-bold hover:bg-white/20 transition-colors center gap-2 group">
-              <PlayCircle className="w-5 h-5 text-white/70 group-hover:scale-110 transition-transform" />
+            <Link href="/contact" className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-full font-bold hover:bg-white/20 transition-colors center gap-2 group">
+              <Mail className="w-5 h-5 text-white/70 group-hover:scale-110 transition-transform" />
               <span>{HERO_COPY.secondaryCta}</span>
             </Link>
           </div>
