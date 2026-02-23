@@ -195,9 +195,12 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                   )}
                 </div>
                 <div className="flex flex-col justify-between flex-1 py-1 min-w-0">
-                  <h3 className="text-forest font-bold text-[13px] leading-snug mb-2 line-clamp-3 group-hover:text-sage transition-colors">
+                  <h3 className="text-forest font-bold text-[13px] leading-snug mb-1 line-clamp-2 group-hover:text-sage transition-colors">
                     {item.title}
                   </h3>
+                  <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2 mb-2">
+                    {item.excerpt}
+                  </p>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-[11px] font-bold text-forest/60 tracking-wider uppercase">
                       {getSourceText(item.category)}
