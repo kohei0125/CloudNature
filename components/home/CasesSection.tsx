@@ -7,7 +7,6 @@ import SectionHeader from "@/components/shared/SectionHeader";
 const CasesSection = () => {
   return (
     <section className="py-16 md:py-24 bg-forest text-white relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_30%,#C8E8FF,transparent_20%),radial-gradient(circle_at_50%_80%,#DD9348,transparent_25%)]"></div>
       <div className="container mx-auto px-6 relative z-10">
         <SectionHeader
           eyebrow={CASES_SECTION.eyebrow}

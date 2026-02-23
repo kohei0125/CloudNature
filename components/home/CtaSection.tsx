@@ -58,14 +58,15 @@ const CtaSection = () => {
 
             {/* Action Buttons */}
             <div className="v-stack sm:h-stack gap-4 pt-2">
-              <Link href="/contact" className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
+              <Link href="/contact" className="btn-puffy btn-puffy-accent px-14 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
                 {CTA_BANNER.primaryCta}
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link href="/downloads/ai-agent-guide-2026.pdf" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg center gap-2">
+              {/* 資料ができるまでコメントアウト */}
+              {/* <Link href="/downloads/ai-agent-guide-2026.pdf" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg center gap-2">
                 <Download className="w-4 h-4" />
                 {CTA_BANNER.secondaryCta}
-              </Link>
+              </Link> */}
             </div>
           </div>
 
