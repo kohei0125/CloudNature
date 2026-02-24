@@ -19,6 +19,11 @@ def _load_template(name: str) -> str:
     return (TEMPLATE_DIR / name).read_text(encoding="utf-8")
 
 
+def _format_price(price: int) -> str:
+    """金額を万円単位にフォーマットする。"""
+    return f"{math.ceil(price / 10000):,}万円"
+
+
 async def send_estimate_email(
     email: str,
     client_name: str = "",
@@ -44,9 +49,6 @@ async def send_estimate_email(
         attachments.append(
             {"filename": "概算お見積書.pdf", "content": list(pdf_data)}
         )
-
-    def _format_price(price: int) -> str:
-        return f"{math.ceil(price / 10000):,}万円"
 
     template = _load_template("estimate_email.html")
     name_display = f"{html.escape(client_name)} 様" if client_name else "お客様"

@@ -1,6 +1,6 @@
 # AI見積もりシステム ロジック仕様書
 
-> 最終更新: 2026-02-24
+> 最終更新: 2026-02-25
 
 ---
 
@@ -669,7 +669,25 @@ _send_emails(estimate_data, answers)
 | 内容 | 顧客名、会社名、メール、プロジェクト名、概算金額、業種、精度レンジ |
 | 条件 | `RESEND_API_KEY` + `NOTIFY_EMAIL` 設定済み |
 
-### 9.4 金額フォーマット
+### 9.4 Notion保存
+
+見積もり完了時、Notion Databaseにレコードを追加する。
+
+| プロパティ | 値 |
+|-----------|-----|
+| 名前 | 顧客名 |
+| 会社名 | 会社名 |
+| メールアドレス | メールアドレス |
+| 種別 | 「お見積もり」 |
+| ステータス | 「未対応」 |
+
+**条件:** `NOTION_API_KEY` と `NOTION_DATABASE_ID` の両方が設定済みであること。どちらかが空の場合は早期リターンし、ログに記録する。
+
+> **注意:** コーポレートサイト（`app/api/contact/`）のお問い合わせフォームからも同じNotionデータベースにレコードが追加される（種別=「お問い合わせ」）。こちらはVercel側の環境変数で管理する。
+
+### 9.5 金額フォーマット
+
+`_format_price` はモジュールレベルで定義されたユーティリティ関数。顧客メール・運営者通知メールの両方から参照される。
 
 ```python
 _format_price(1_200_000) → "120万円"   # math.ceil(price / 10000)
@@ -697,6 +715,29 @@ _format_price(1_200_000) → "120万円"   # math.ceil(price / 10000)
 | `API_KEY` | `""` | X-API-Key認証。未設定時スキップ |
 | `NOTION_API_KEY` | `""` | Notion APIキー |
 | `NOTION_DATABASE_ID` | `""` | NotionデータベースID |
+
+### 10.1 デプロイ時の環境変数読み込み
+
+`deploy.sh` は起動時に `backend/.env` を読み込み、**既存の環境変数を上書きしない**形でデフォルト値として設定する。
+
+```
+deploy.sh 起動
+  ├─ backend/.env を読み込み（未設定の変数のみ export）
+  ├─ プレーンテキスト環境変数 → Cloud Run --set-env-vars
+  └─ シークレット → Cloud Run --set-secrets (Secret Manager参照)
+```
+
+| 変数 | 管理方法 | 設定場所 |
+|------|---------|---------|
+| `OPENAI_API_KEY` | Secret Manager | `--set-secrets` |
+| `RESEND_API_KEY` | Secret Manager | `--set-secrets` |
+| `DATABASE_URL` | Secret Manager | `--set-secrets` |
+| `NOTION_API_KEY` | Secret Manager | `--set-secrets` |
+| `API_KEY` | Secret Manager | `--set-secrets` |
+| `NOTION_DATABASE_ID` | プレーンテキスト | `--set-env-vars`（`.env` から読み込み） |
+| `OPENAI_MODEL`, `LLM_*` | プレーンテキスト | `--set-env-vars` |
+
+> **注意:** Secret Manager のシークレット値が正しく設定されていないと、Cloud Run上で機能が動作しない（例: Notion APIキーがプレースホルダーのままだとNotion保存が無効になる）。
 
 ---
 
