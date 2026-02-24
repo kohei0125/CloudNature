@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useMemo, useRef } from "react";
+import { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -24,7 +24,11 @@ import StepRenderer from "@/components/chat/StepRenderer";
 import NavigationControls from "@/components/chat/NavigationControls";
 import TypingIndicator from "@/components/chat/TypingIndicator";
 import ErrorRetry from "@/components/chat/ErrorRetry";
-import { STEP_MESSAGES, AI_MESSAGES } from "@/content/estimate";
+import {
+  STEP_MESSAGES,
+  AI_MESSAGES,
+  GENERATING_ESTIMATE_STAGES,
+} from "@/content/estimate";
 import type { StepOption } from "@/types/estimate";
 
 // ローカルはクラウドフレアのチェックをスキップ
@@ -42,6 +46,7 @@ function ChatPageContent() {
   const stateRef = useRef(state);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
+  const [generatingElapsedSec, setGeneratingElapsedSec] = useState(0);
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
@@ -60,11 +65,28 @@ function ChatPageContent() {
   const currentAnswer = state.answers[currentStep] ?? (stepConfig?.type === "multi-select" ? [] : "");
   const isGenerating = state.status === "generating";
   const isError = state.status === "error";
+  const isEstimateGenerating = isGenerating && !(stepConfig?.aiGenerated || currentStep === 7);
 
   // ステップ遷移時にスクロールをトップへリセット
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentStep]);
+
+  // 見積生成中のみ経過秒数をカウントして表示メッセージを切り替える
+  useEffect(() => {
+    if (!isEstimateGenerating) return;
+
+    const startMs = Date.now();
+    const intervalId = window.setInterval(() => {
+      const elapsedSec = Math.floor((Date.now() - startMs) / 1000);
+      setGeneratingElapsedSec(elapsedSec);
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+      setGeneratingElapsedSec(0);
+    };
+  }, [isEstimateGenerating]);
 
   // Initialize session on mount
   useEffect(() => {
@@ -86,12 +108,20 @@ function ChatPageContent() {
     return undefined;
   }, [stepConfig?.aiGenerated, state.aiOptions.step8Features]);
 
+  const generatingEstimateMessage = useMemo(() => {
+    if (generatingElapsedSec < 5) return GENERATING_ESTIMATE_STAGES[0];
+    if (generatingElapsedSec < 10) return GENERATING_ESTIMATE_STAGES[1];
+    if (generatingElapsedSec < 15) return GENERATING_ESTIMATE_STAGES[2];
+    if (generatingElapsedSec < 20) return GENERATING_ESTIMATE_STAGES[3];
+    return GENERATING_ESTIMATE_STAGES[4];
+  }, [generatingElapsedSec]);
+
   // Typing message for AI steps
   const typingMessage = !isGenerating
     ? undefined
     : (stepConfig?.aiGenerated || currentStep === 7)
       ? AI_MESSAGES.generatingFeatures
-      : AI_MESSAGES.generatingEstimate;
+      : generatingEstimateMessage;
 
   // Handle advancing to next step (used by select auto-advance and next button)
   // Uses dispatch directly instead of goNext() to avoid stale canGoNextRef

@@ -352,7 +352,15 @@ export const AI_MESSAGES = {
   generatingQuestion: "AIがあなた専用の質問を作成中...",
   generatingOptions: "貴社に最適な選択肢を分析中...",
   generatingFeatures: "機能候補を選定中です...",
-  generatingEstimate: "お見積もりを作成中です。少々お待ちください...",
+  generatingEstimate: "お見積もりを作成中です。20秒程度お待ちください...",
   estimateReady: "お見積もりが完成しました。",
   error: "エラーが発生しました。もう一度お試しください。",
 };
+
+export const GENERATING_ESTIMATE_STAGES = [
+  "お見積もりの要件を整理しています...",
+  "実装プランを確認しています...",
+  "工数と費用の内訳を計算しています...",
+  "アサインメンバーを確認しています...",
+  "最終チェックと出力データを準備しています...",
+] as const;
