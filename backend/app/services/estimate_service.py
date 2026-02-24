@@ -244,11 +244,13 @@ async def generate_estimate(session_id: str, answers: dict) -> dict | None:
     normalized = _normalize_answers(answers)
     sanitized = sanitize_for_llm(normalized)
 
-    # セッションから保存済みカテゴリを取得してマージ
+    # セッションから保存済みカテゴリ・ラベルを取得してマージ
     session = get_estimate_session(session_id)
     if session and session.answers:
         step8_cats = session.answers.get("_step8_categories", {})
         sanitized["step_8_categories"] = step8_cats
+        step8_labels = session.answers.get("_step8_labels", {})
+        sanitized["step_8_labels"] = step8_labels
 
     # Step 1: Deterministic pricing calculation
     calculated_data = calculate_pricing(sanitized)

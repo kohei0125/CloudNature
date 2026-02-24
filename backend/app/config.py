@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.5-flash"
     llm_provider: str = "gemini"  # "gemini" | "openai" | "fallback"
-    llm_max_retries: int = 3
+    llm_max_retries: int = 2
     llm_timeout: int = 45
     resend_api_key: str = ""
     email_from: str = "CloudNature <cloudnature@stage-site.net>"
