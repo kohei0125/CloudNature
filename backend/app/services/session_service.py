@@ -52,11 +52,14 @@ def save_session_answers(session_id: str, answers: dict) -> None:
     with get_session() as db:
         session = db.get(EstimateSession, session_id)
         if session:
-            # Maintain _step8_categories which is dynamically stored before final submission
+            # Maintain _step8_categories and _step8_labels which are dynamically stored before final submission
             existing_answers = session.answers or {}
             step8_cats = existing_answers.get("_step8_categories")
             if step8_cats is not None:
                 answers["_step8_categories"] = step8_cats
+            step8_labels = existing_answers.get("_step8_labels")
+            if step8_labels is not None:
+                answers["_step8_labels"] = step8_labels
                 
             session.answers = answers
             session.updated_at = datetime.now(timezone.utc)
@@ -70,6 +73,18 @@ def save_step8_categories(session_id: str, categories: dict[str, str]) -> None:
         if session:
             answers = session.answers or {}
             answers["_step8_categories"] = categories
+            session.answers = answers
+            session.updated_at = datetime.now(timezone.utc)
+            db.commit()
+
+
+def save_step8_labels(session_id: str, labels: dict[str, str]) -> None:
+    """step8の feature value → label（日本語）マッピングをセッションに保存する。"""
+    with get_session() as db:
+        session = db.get(EstimateSession, session_id)
+        if session:
+            answers = session.answers or {}
+            answers["_step8_labels"] = labels
             session.answers = answers
             session.updated_at = datetime.now(timezone.utc)
             db.commit()

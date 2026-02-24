@@ -234,14 +234,16 @@ def save_estimate_to_notion(
         for name in feature_names:
             children.append(_bulleted(name))
 
-    # 選択した機能（step 8）
+    # 選択した機能（step 8）— value を日本語ラベルに変換
     selected_features = get_answer(8)
+    step8_labels = answers.get("_step8_labels", {})
     if selected_features:
         children.append(_divider())
         children.append(_heading2("選択した機能"))
         for feat in selected_features.split(", "):
-            if feat.strip():
-                children.append(_bulleted(feat.strip()))
+            feat = feat.strip()
+            if feat:
+                children.append(_bulleted(step8_labels.get(feat, feat)))
 
     # 補足事項
     additional = get_answer(12)
@@ -276,6 +278,7 @@ def save_estimate_to_notion(
         5: DEPLOYMENT_LABELS,
         6: SYSTEM_TYPE_LABELS,
         7: DEV_TYPE_LABELS,
+        8: step8_labels, 
         9: TIMELINE_LABELS,
         10: DEVICE_LABELS,
         11: BUDGET_LABELS,

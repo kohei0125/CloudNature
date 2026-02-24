@@ -15,6 +15,7 @@ from app.services.session_service import (
     get_estimate_session,
     save_session_answers,
     save_step8_categories,
+    save_step8_labels,
     update_session_status,
 )
 
@@ -176,6 +177,13 @@ async def generate_dynamic_questions(
                     for f in result.get("step8_features", [])
                 }
                 save_step8_categories(session_id, categories)
+                # value → label マッピングもセッションに保存（Notion表示用）
+                labels = {
+                    f["value"]: f["label"]
+                    for f in result.get("step8_features", [])
+                    if f.get("label")
+                }
+                save_step8_labels(session_id, labels)
                 return result
             logger.warning(
                 "Dynamic questions validation failed (attempt %d/%d)",
@@ -204,6 +212,12 @@ async def generate_dynamic_questions(
             for f in result.get("step8_features", [])
         }
         save_step8_categories(session_id, categories)
+        labels = {
+            f["value"]: f["label"]
+            for f in result.get("step8_features", [])
+            if f.get("label")
+        }
+        save_step8_labels(session_id, labels)
     return result
 
 
