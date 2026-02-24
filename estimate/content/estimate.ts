@@ -138,7 +138,7 @@ export const STEP_OPTIONS: Record<string, StepOption[]> = {
 export const LP_COPY = {
   // ヒーロー
   hero: {
-    eyebrow: "Next-Gen AI Estimate Platform",
+    eyebrow: "AI Estimate Platform",
     headingLine1: "相場の1/2でシステム開発",
     // headingLine2: "不確実なシステム開発コストを、",
     headingLine3: "最新AI活用で1分で見積",
