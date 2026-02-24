@@ -78,8 +78,6 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
     cost_message = total_cost.get("message", "")
     project_name = estimate_data.get("project_name", estimate_data.get("projectName", ""))
 
-    confidence = estimate_data.get("confidence", {})
-
     # Send customer email
     await send_estimate_email(
         customer_email,
@@ -114,7 +112,6 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
         project_name=project_name,
         hybrid_cost=hybrid_cost,
         industry=industry_label,
-        confidence_range=confidence.get("range_label", ""),
     )
 
 

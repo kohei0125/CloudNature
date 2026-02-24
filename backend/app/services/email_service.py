@@ -89,7 +89,6 @@ async def send_estimate_notification(
     project_name: str = "",
     hybrid_cost: int = 0,
     industry: str = "",
-    confidence_range: str = "",
 ) -> bool:
     """Send estimate notification to the site operator.
 
@@ -140,14 +139,6 @@ async def send_estimate_notification(
                 f"業種</td>"
                 f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
                 f"{html.escape(industry)}</td></tr>"
-            )
-        if confidence_range:
-            summary_rows.append(
-                f'<tr><td style="padding: 12px; background: #F4F2F0; font-weight: bold; '
-                f'border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
-                f"精度レンジ</td>"
-                f'<td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">'
-                f"{html.escape(confidence_range)}</td></tr>"
             )
         if summary_rows:
             summary_section = (

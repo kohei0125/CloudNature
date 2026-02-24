@@ -666,7 +666,7 @@ _send_emails(estimate_data, answers)
 |------|-----|
 | 件名 | 【CloudNature】新しいお見積もり依頼がありました |
 | 宛先 | `settings.notify_email` |
-| 内容 | 顧客名、会社名、メール、プロジェクト名、概算金額、業種、精度レンジ |
+| 内容 | 顧客名、会社名、メール、プロジェクト名、概算金額、業種 |
 | 条件 | `RESEND_API_KEY` + `NOTIFY_EMAIL` 設定済み |
 
 ### 9.4 Notion保存
