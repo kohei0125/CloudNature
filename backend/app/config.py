@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     openai_api_key: str = ""
-    openai_model: str = "gpt-4.1-mini"
+    openai_model: str = "gpt-4.1-nano"
     llm_max_retries: int = 3
     llm_timeout: int = 45
     resend_api_key: str = ""

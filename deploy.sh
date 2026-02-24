@@ -21,7 +21,7 @@ BACKEND_DIR="${BACKEND_DIR:-backend}"
 # ※ 本番デプロイ用のデフォルト値。ローカル .env の値が混入しないよう直接定義する。
 #    環境変数で上書き可能（例: FRONTEND_URL=... ./deploy.sh）
 # ---------------------------------------------------------------------------
-OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o}"
+OPENAI_MODEL="${OPENAI_MODEL:-gpt-4.1-nano}"
 LLM_MAX_RETRIES="${LLM_MAX_RETRIES:-3}"
 LLM_TIMEOUT="${LLM_TIMEOUT:-30}"
 FRONTEND_URL="${FRONTEND_URL:-https://ai.cloudnature.jp}"
