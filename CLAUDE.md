@@ -53,6 +53,11 @@ CloudNature — コーポレートサイト & AI見積もりシステムのモ�
 3. **結果の記録**
    - 検証結果・対応状況を同じドキュメントに追記する
 
+## AI見積もりシステムの改修
+
+- 見積もりバックエンド（`backend/`）や見積もりフロントエンド（`estimate/`）を改修・変更する際は、**最初に** `backend/docs/estimate_logic.md` を読んで全体のロジック・フローを把握すること
+- 改修後は `backend/docs/estimate_logic.md` の該当箇所を必ず更新し、実装とドキュメントの乖離を防ぐこと
+
 ## 認証
 
 Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護。

@@ -26,6 +26,7 @@ class OpenAIAdapter(LLMAdapter):
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)
         self.model = settings.openai_model
         self.timeout = settings.llm_timeout
+        self.audit_temperature = settings.audit_temperature
 
     async def generate_dynamic_questions(
         self,
@@ -98,4 +99,41 @@ class OpenAIAdapter(LLMAdapter):
             return json.loads(content)
         except json.JSONDecodeError:
             logger.error("Failed to parse estimate response: %s", content[:200])
+            raise
+
+    async def audit_estimate(
+        self, estimate_data: dict, calculated_data: dict
+    ) -> dict:
+        """第3回AIチェック: 見積もり出力の品質監査と修正。"""
+        system_prompt = _load_prompt("audit_check.txt")
+
+        user_message = {
+            "estimate": estimate_data,
+            "user_input": calculated_data.get("user_input", {}),
+            "calculated_features": {
+                k: v for k, v in calculated_data.items() if k != "user_input"
+            },
+        }
+
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {
+                    "role": "user",
+                    "content": json.dumps(
+                        user_message, ensure_ascii=False
+                    ),
+                },
+            ],
+            temperature=self.audit_temperature,
+            response_format={"type": "json_object"},
+            timeout=self.timeout,
+        )
+
+        content = response.choices[0].message.content or "{}"
+        try:
+            return json.loads(content)
+        except json.JSONDecodeError:
+            logger.error("Failed to parse audit response: %s", content[:200])
             raise

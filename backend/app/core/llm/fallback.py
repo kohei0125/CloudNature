@@ -168,6 +168,13 @@ class FallbackAdapter(LLMAdapter):
 
         return {"step8_features": features}
 
+    async def audit_estimate(
+        self, estimate_data: dict, calculated_data: dict
+    ) -> dict:
+        """フォールバック: 入力をそのまま返す。"""
+        logger.warning("Using fallback adapter for audit — passthrough")
+        return estimate_data
+
     async def generate_estimate(self, calculated_data: dict) -> dict:
         """Return a template-based estimate using pre-calculated pricing data."""
         logger.warning("Using fallback adapter for estimate generation")

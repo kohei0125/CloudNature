@@ -157,4 +157,17 @@ def validate_estimate_output(data: dict) -> bool:
         if not isinstance(sp, (int, float)) or not isinstance(hp, (int, float)):
             return False
 
+    # 重複feature名の検出
+    names = [f.get("name", "") for f in data.get("features", [])]
+    if len(names) != len(set(names)):
+        return False
+
+    # 合計と内訳の整合性チェック
+    features = data.get("features", [])
+    total_cost = data.get("total_cost", {})
+    sum_standard = sum(f.get("standard_price", 0) for f in features)
+    sum_hybrid = sum(f.get("hybrid_price", 0) for f in features)
+    if total_cost.get("standard") != sum_standard or total_cost.get("hybrid") != sum_hybrid:
+        return False
+
     return True
