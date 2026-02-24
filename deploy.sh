@@ -21,7 +21,9 @@ BACKEND_DIR="${BACKEND_DIR:-backend}"
 # ※ 本番デプロイ用のデフォルト値。ローカル .env の値が混入しないよう直接定義する。
 #    環境変数で上書き可能（例: FRONTEND_URL=... ./deploy.sh）
 # ---------------------------------------------------------------------------
+LLM_PROVIDER="${LLM_PROVIDER:-gemini}"
 OPENAI_MODEL="${OPENAI_MODEL:-gpt-4.1-nano}"
+GEMINI_MODEL="${GEMINI_MODEL:-gemini-2.5-flash}"
 LLM_MAX_RETRIES="${LLM_MAX_RETRIES:-3}"
 LLM_TIMEOUT="${LLM_TIMEOUT:-30}"
 FRONTEND_URL="${FRONTEND_URL:-https://ai.cloudnature.jp}"
@@ -39,6 +41,7 @@ SECRET_OPENAI_API_KEY="${SECRET_OPENAI_API_KEY:-openai-api-key}"
 SECRET_RESEND_API_KEY="${SECRET_RESEND_API_KEY:-resend-api-key}"
 SECRET_DATABASE_URL="${SECRET_DATABASE_URL:-database-url}"
 SECRET_NOTION_API_KEY="${SECRET_NOTION_API_KEY:-notion-api-key}"
+SECRET_GEMINI_API_KEY="${SECRET_GEMINI_API_KEY:-gemini-api-key}"
 
 # ---------------------------------------------------------------------------
 # 事前チェック
@@ -94,7 +97,9 @@ gcloud run deploy "${SERVICE_NAME}" \
   --project "${GCP_PROJECT}" \
   --region "${GCP_REGION}" \
   --set-env-vars "\
+LLM_PROVIDER=${LLM_PROVIDER},\
 OPENAI_MODEL=${OPENAI_MODEL},\
+GEMINI_MODEL=${GEMINI_MODEL},\
 LLM_MAX_RETRIES=${LLM_MAX_RETRIES},\
 LLM_TIMEOUT=${LLM_TIMEOUT},\
 FRONTEND_URL=${FRONTEND_URL},\
@@ -108,7 +113,8 @@ API_KEY=${SECRET_API_KEY}:latest,\
 OPENAI_API_KEY=${SECRET_OPENAI_API_KEY}:latest,\
 RESEND_API_KEY=${SECRET_RESEND_API_KEY}:latest,\
 DATABASE_URL=${SECRET_DATABASE_URL}:latest,\
-NOTION_API_KEY=${SECRET_NOTION_API_KEY}:latest" \
+NOTION_API_KEY=${SECRET_NOTION_API_KEY}:latest,\
+GEMINI_API_KEY=${SECRET_GEMINI_API_KEY}:latest" \
   --quiet
 
 echo ""

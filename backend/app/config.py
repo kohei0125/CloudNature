@@ -10,6 +10,9 @@ class Settings(BaseSettings):
 
     openai_api_key: str = ""
     openai_model: str = "gpt-4.1-nano"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash"
+    llm_provider: str = "gemini"  # "gemini" | "openai" | "fallback"
     llm_max_retries: int = 3
     llm_timeout: int = 45
     resend_api_key: str = ""
@@ -31,7 +34,9 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # Startup warnings for missing configuration
-if not settings.openai_api_key:
+if settings.llm_provider == "gemini" and not settings.gemini_api_key:
+    logger.warning("GEMINI_API_KEY is not set — LLM will use fallback adapter")
+if settings.llm_provider == "openai" and not settings.openai_api_key:
     logger.warning("OPENAI_API_KEY is not set — LLM will use fallback adapter")
 if not settings.resend_api_key:
     logger.warning("RESEND_API_KEY is not set — email sending is disabled")

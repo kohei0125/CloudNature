@@ -33,7 +33,7 @@ FastAPI (Cloud Run / asia-northeast1)
   └── /health              ← ヘルスチェック
   │
   ├── Pricing Engine (決定的価格計算)
-  ├── OpenAI API (gpt-4.1-mini)
+  ├── Google Gemini API (gemini-2.5-flash) / OpenAI API (切替可能)
   ├── Neon PostgreSQL (セッション・見積もり保存)
   ├── Resend API (メール送信)
   └── Notion API (案件記録)
@@ -422,11 +422,13 @@ step_4 + step_12 のフリーテキストからNFRキーワードを検出し、
 
 ```
 LLMAdapter (抽象基底)
-  ├── OpenAIAdapter  ← OPENAI_API_KEY設定時
-  └── FallbackAdapter ← API Key未設定時
+  ├── GeminiAdapter   ← LLM_PROVIDER=gemini (デフォルト)
+  ├── OpenAIAdapter   ← LLM_PROVIDER=openai
+  └── FallbackAdapter ← API Key未設定時 / LLM_PROVIDER=fallback
 ```
 
-`create_llm_adapter(settings)` で自動選択。
+`create_llm_adapter(settings)` で `LLM_PROVIDER` に基づき自動選択。
+APIキーが未設定の場合は自動的に FallbackAdapter にフォールバックする。
 
 ### 6.2 3回のAI呼び出し
 
@@ -465,6 +467,16 @@ LLMAdapter (抽象基底)
 - バリデーション: `validate_dynamic_questions()`
 - フォールバック: 業種別デフォルト機能リスト
 - 副作用: `step_8_categories` をセッションに保存
+
+#### challenges解析の優先ロジック
+
+プロンプト（`dynamic_questions.txt`）はchallengesフィールドを最初に解析し、以下の優先度で機能候補を導出する:
+
+1. **challenges明確**（具体的なシステム名・キーワードを含む場合）: 業種別推奨機能リストは使用せず、challengesから直接機能を導出する
+2. **challengesに業務課題あり**: challengesを優先し、業種リストは補完として参照
+3. **challenges曖昧**: 抽象キーワード対応表 → 業種別推奨機能リストの順で参照
+
+**challengesとindustryの矛盾時の動作:** challengesに明確なシステム意図がある場合、industryの値に関わらずchallengesを優先する。例: industry=logistics + challenges="人材管理システムを作りたい" → 物流機能ではなくHR機能を提案する。短文であっても具体的なシステム名を含む場合は「曖昧」と判定しない。
 
 ### 6.4 第2回: テキスト生成
 
@@ -699,8 +711,11 @@ _format_price(1_200_000) → "120万円"   # math.ceil(price / 10000)
 
 | 変数名 | デフォルト | 説明 |
 |--------|----------|------|
-| `OPENAI_API_KEY` | `""` | OpenAI APIキー。未設定時はFallbackAdapter |
-| `OPENAI_MODEL` | `"gpt-4.1-mini"` | 使用するOpenAIモデル |
+| `LLM_PROVIDER` | `"gemini"` | LLMプロバイダ選択 (`"gemini"` / `"openai"` / `"fallback"`) |
+| `GEMINI_API_KEY` | `""` | Google Gemini APIキー。`LLM_PROVIDER=gemini` 時に必須 |
+| `GEMINI_MODEL` | `"gemini-2.5-flash"` | 使用するGeminiモデル |
+| `OPENAI_API_KEY` | `""` | OpenAI APIキー。`LLM_PROVIDER=openai` 時に必須 |
+| `OPENAI_MODEL` | `"gpt-4.1-nano"` | 使用するOpenAIモデル |
 | `LLM_MAX_RETRIES` | `3` | LLMリトライ回数 |
 | `LLM_TIMEOUT` | `45` | LLMリクエストタイムアウト（秒） |
 | `AUDIT_ENABLED` | `True` | 品質監査の有効/無効 |
@@ -729,13 +744,14 @@ deploy.sh 起動
 
 | 変数 | 管理方法 | 設定場所 |
 |------|---------|---------|
+| `GEMINI_API_KEY` | Secret Manager | `--set-secrets` |
 | `OPENAI_API_KEY` | Secret Manager | `--set-secrets` |
 | `RESEND_API_KEY` | Secret Manager | `--set-secrets` |
 | `DATABASE_URL` | Secret Manager | `--set-secrets` |
 | `NOTION_API_KEY` | Secret Manager | `--set-secrets` |
 | `API_KEY` | Secret Manager | `--set-secrets` |
 | `NOTION_DATABASE_ID` | プレーンテキスト | `--set-env-vars`（`.env` から読み込み） |
-| `OPENAI_MODEL`, `LLM_*` | プレーンテキスト | `--set-env-vars` |
+| `LLM_PROVIDER`, `GEMINI_MODEL`, `OPENAI_MODEL`, `LLM_*` | プレーンテキスト | `--set-env-vars` |
 
 > **注意:** Secret Manager のシークレット値が正しく設定されていないと、Cloud Run上で機能が動作しない（例: Notion APIキーがプレースホルダーのままだとNotion保存が無効になる）。
 
