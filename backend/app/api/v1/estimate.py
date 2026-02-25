@@ -178,7 +178,13 @@ async def generate_estimate(
         request.session_id, request.answers
     )
     if result:
-        background_tasks.add_task(_send_emails, result, request.answers)
+        # セッションからstep8ラベル情報を取得してanswersにマージ（Notion表示用）
+        session_data = session_service.get_estimate_session(request.session_id)
+        enriched_answers = dict(request.answers)
+        if session_data and session_data.answers:
+            if "_step8_labels" in session_data.answers:
+                enriched_answers["_step8_labels"] = session_data.answers["_step8_labels"]
+        background_tasks.add_task(_send_emails, result, enriched_answers)
         return EstimateResultResponse(status="completed", estimate=result)
 
     return EstimateResultResponse(status="processing")

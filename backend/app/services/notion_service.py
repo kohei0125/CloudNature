@@ -227,16 +227,16 @@ def save_estimate_to_notion(
         children.append(_heading2("課題・要望"))
         children.append(_paragraph(challenges))
 
-    # 機能一覧
-    if feature_names:
+    # 提案機能（Step 8でユーザーに提示した全候補）
+    step8_labels = answers.get("_step8_labels", {})
+    if step8_labels:
         children.append(_divider())
         children.append(_heading2("提案機能"))
-        for name in feature_names:
-            children.append(_bulleted(name))
+        for label in step8_labels.values():
+            children.append(_bulleted(label))
 
     # 選択した機能（step 8）— value を日本語ラベルに変換
     selected_features = get_answer(8)
-    step8_labels = answers.get("_step8_labels", {})
     if selected_features:
         children.append(_divider())
         children.append(_heading2("選択した機能"))
