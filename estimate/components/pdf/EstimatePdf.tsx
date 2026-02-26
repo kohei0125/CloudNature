@@ -122,14 +122,10 @@ export default function EstimatePdf({
         {/* Disclaimer */}
         <View style={styles.disclaimer}>
           <Text>
-            {estimate.confidenceNote &&
-              `※ 見積もり精度: ${estimate.confidenceNote}\n`}
             ※
             本見積書はAIによる概算であり、正式なお見積もり・機能要件ではありません。
             {"\n"}※ 正確な費用は、無料相談にて別途お見積もりいたします。{"\n"}※
-            表示価格はすべて税別です。{"\n"}※
-            本見積書の有効期限は発行日より30日間です。{"\n"}※
-            お支払い条件は別途ご相談のうえ決定いたします。
+            表示価格はすべて税別です。
           </Text>
         </View>
 

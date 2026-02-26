@@ -33,7 +33,7 @@ step_1〜step_12: 事業形態、業種、ユーザー数、課題・要望（�
 ## features[].name / detail
 calculated.features の各要素に対して生成する:
 - name（20文字以内）: categoryを自然な日本語の機能名に変換
-- detail（50文字以内）: 「誰のどんな手間を省くのか」など利用メリットを含める
+- detail（30文字以内）: 機能詳細
 - standard_price / hybrid_price: calculated の値をそのまま転記（変更禁止）
 
 ## discussion_agenda（3〜5個）
@@ -65,7 +65,7 @@ calculated.confidence を参照し、見積もり精度を説明する。
   "features": [
     {{
       "name": "機能名（20文字以内）",
-      "detail": "利用メリット含む説明（50文字以内）",
+      "detail": "利用メリット（30文字以内）",
       "standard_price": 0,
       "hybrid_price": 0
     }}

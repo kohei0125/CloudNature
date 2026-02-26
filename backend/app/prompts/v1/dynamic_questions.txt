@@ -62,7 +62,7 @@ challengesの解析結果に応じて、以下の優先度で機能を導出す�
 - labelは日本語で20文字以内にする。簡潔で具体的な機能名にすること
 - valueは英語のスネークケース（小文字英字とアンダースコアのみ、3〜30文字）にする
 - **category**: 以下の17カテゴリから、各機能に最も近いものを1つ選択すること（必須）
-  シンプルなCRUD管理画面 / ダッシュボード・分析 / カレンダー・スケジュール /
+  基本データ管理 / ダッシュボード・分析 / カレンダー・スケジュール /
   帳票・レポート出力 / 検索・フィルタリング / 承認ワークフロー /
   在庫・受発注管理 / 請求・売上管理 / 顧客管理(CRM) / 通知・アラート /
   外部API連携(単純) / 外部API連携(複雑) / 決済連携 /
@@ -173,11 +173,11 @@ valueは英語のスネークケース（小文字英字とアンダースコア
 industry=logistics だが challenges="人材管理システムを作りたい" → 物流機能ではなくHR機能を提案
 {{
   "step8_features": [
-    {{"value": "employee_master", "label": "社員情報マスタ管理", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "employee_master", "label": "社員情報マスタ管理", "category": "基本データ管理"}},
     {{"value": "attendance_mgmt", "label": "出退勤・勤怠管理", "category": "カレンダー・スケジュール"}},
     {{"value": "evaluation_workflow", "label": "人事評価ワークフロー", "category": "承認ワークフロー"}},
     {{"value": "onboarding_mgmt", "label": "入退社手続き管理", "category": "承認ワークフロー"}},
-    {{"value": "org_chart", "label": "組織図・部署管理", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "org_chart", "label": "組織図・部署管理", "category": "基本データ管理"}},
     {{"value": "hr_report", "label": "人事レポート出力", "category": "帳票・レポート出力"}}
   ]
 }}
@@ -189,7 +189,7 @@ industry=logistics だが challenges="人材管理システムを作りたい" �
     {{"value": "inventory_dashboard", "label": "在庫リアルタイム表示", "category": "ダッシュボード・分析"}},
     {{"value": "auto_report", "label": "月次レポート自動生成", "category": "帳票・レポート出力"}},
     {{"value": "stock_alert", "label": "在庫不足アラート通知", "category": "通知・アラート"}},
-    {{"value": "supplier_master", "label": "取引先マスタ管理", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "supplier_master", "label": "取引先マスタ管理", "category": "基本データ管理"}},
     {{"value": "barcode_scan", "label": "バーコード読取・入力", "category": "外部API連携(単純)"}}
   ]
 }}
@@ -198,8 +198,8 @@ industry=logistics だが challenges="人材管理システムを作りたい" �
 industry=healthcare だが challenges="プロジェクト進捗管理がしたい" → 医療機能ではなくPM機能を提案
 {{
   "step8_features": [
-    {{"value": "project_board", "label": "プロジェクト一覧管理", "category": "シンプルなCRUD管理画面"}},
-    {{"value": "task_tracker", "label": "タスク進捗トラッキング", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "project_board", "label": "プロジェクト一覧管理", "category": "基本データ管理"}},
+    {{"value": "task_tracker", "label": "タスク進捗トラッキング", "category": "基本データ管理"}},
     {{"value": "gantt_schedule", "label": "ガントチャート工程表", "category": "カレンダー・スケジュール"}},
     {{"value": "progress_dashboard", "label": "進捗ダッシュボード", "category": "ダッシュボード・分析"}},
     {{"value": "workload_report", "label": "工数集計レポート", "category": "帳票・レポート出力"}},
@@ -211,9 +211,9 @@ industry=healthcare だが challenges="プロジェクト進捗管理がした�
 {{
   "step8_features": [
     {{"value": "reservation_mgmt", "label": "予約カレンダー管理", "category": "カレンダー・スケジュール"}},
-    {{"value": "table_status", "label": "テーブル空席管理", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "table_status", "label": "テーブル空席管理", "category": "基本データ管理"}},
     {{"value": "customer_history", "label": "顧客情報・来店履歴", "category": "顧客管理(CRM)"}},
-    {{"value": "menu_editor", "label": "メニュー編集・公開", "category": "シンプルなCRUD管理画面"}},
+    {{"value": "menu_editor", "label": "メニュー編集・公開", "category": "基本データ管理"}},
     {{"value": "sales_analytics", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"}},
     {{"value": "reminder_notify", "label": "予約リマインド通知", "category": "通知・アラート"}}
   ]

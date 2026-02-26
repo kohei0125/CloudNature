@@ -12,7 +12,7 @@ import math
 # 1. ベース価格テーブル（17カテゴリ, min/max 万円 → 円）
 # ---------------------------------------------------------------------------
 _BASE_PRICES: dict[str, tuple[int, int]] = {
-    "シンプルなCRUD管理画面":   (350_000, 650_000),
+    "基本データ管理":   (350_000, 650_000),
     "ダッシュボード・分析":     (350_000, 750_000),
     "カレンダー・スケジュール": (350_000, 650_000),
     "帳票・レポート出力":       (250_000, 550_000),
@@ -32,7 +32,7 @@ _BASE_PRICES: dict[str, tuple[int, int]] = {
 }
 
 # デフォルトカテゴリ（マッピング不一致時のフォールバック）
-_DEFAULT_CATEGORY = "シンプルなCRUD管理画面"
+_DEFAULT_CATEGORY = "基本データ管理"
 
 # ---------------------------------------------------------------------------
 # 2. 機能 value → ベース価格カテゴリ マッピング
@@ -43,9 +43,9 @@ _FEATURE_TO_CATEGORY: dict[str, str] = {
     "order_management":     "在庫・受発注管理",
     "inventory_display":    "在庫・受発注管理",
     "production_schedule":  "カレンダー・スケジュール",
-    "quality_record":       "シンプルなCRUD管理画面",
+    "quality_record":       "基本データ管理",
     "cost_analysis":        "ダッシュボード・分析",
-    "supplier_master":      "シンプルなCRUD管理画面",
+    "supplier_master":      "基本データ管理",
     "order_entry":          "在庫・受発注管理",
     "inventory_dashboard":  "ダッシュボード・分析",
     "auto_report":          "帳票・レポート出力",
@@ -53,38 +53,38 @@ _FEATURE_TO_CATEGORY: dict[str, str] = {
     "barcode_scan":         "外部API連携(単純)",
     "barcode_qr":           "外部API連携(単純)",
     "monthly_report":       "帳票・レポート出力",
-    "equipment_maintenance":"シンプルなCRUD管理画面",
+    "equipment_maintenance":"基本データ管理",
     "shipping_delivery":    "在庫・受発注管理",
     # 小売
-    "product_master":       "シンプルなCRUD管理画面",
+    "product_master":       "基本データ管理",
     "inventory_auto":       "在庫・受発注管理",
     "sales_dashboard":      "ダッシュボード・分析",
     "customer_history":     "顧客管理(CRM)",
     "pos_integration":      "外部API連携(複雑)",
     "invoice_output":       "帳票・レポート出力",
-    "campaign_management":  "シンプルなCRUD管理画面",
+    "campaign_management":  "基本データ管理",
     "ec_integration":       "外部API連携(複雑)",
     "stocktaking":          "在庫・受発注管理",
-    "coupon_point":         "シンプルなCRUD管理画面",
-    "review_management":    "シンプルなCRUD管理画面",
+    "coupon_point":         "基本データ管理",
+    "review_management":    "基本データ管理",
     # 建設
-    "project_management":   "シンプルなCRUD管理画面",
+    "project_management":   "基本データ管理",
     "estimate_invoice":     "請求・売上管理",
     "schedule_management":  "カレンダー・スケジュール",
     "cost_tracking":        "ダッシュボード・分析",
-    "site_photo_report":    "シンプルなCRUD管理画面",
-    "document_sharing":     "シンプルなCRUD管理画面",
-    "safety_checklist":     "シンプルなCRUD管理画面",
-    "property_management":  "シンプルなCRUD管理画面",
-    "tenant_contract":      "シンプルなCRUD管理画面",
+    "site_photo_report":    "基本データ管理",
+    "document_sharing":     "基本データ管理",
+    "safety_checklist":     "基本データ管理",
+    "property_management":  "基本データ管理",
+    "tenant_contract":      "基本データ管理",
     # 飲食
     "reservation_calendar": "カレンダー・スケジュール",
     "reservation_mgmt":     "カレンダー・スケジュール",
-    "menu_editor":          "シンプルなCRUD管理画面",
+    "menu_editor":          "基本データ管理",
     "sales_analytics":      "ダッシュボード・分析",
     "shift_scheduler":      "カレンダー・スケジュール",
     "customer_crm":         "顧客管理(CRM)",
-    "order_tablet":         "シンプルなCRUD管理画面",
+    "order_tablet":         "基本データ管理",
     "food_inventory":       "在庫・受発注管理",
     "table_management":     "カレンダー・スケジュール",
     # 医療
@@ -92,47 +92,48 @@ _FEATURE_TO_CATEGORY: dict[str, str] = {
     "appointment_schedule": "カレンダー・スケジュール",
     "billing_receipt":      "請求・売上管理",
     "staff_shift":          "カレンダー・スケジュール",
-    "care_record":          "シンプルなCRUD管理画面",
+    "care_record":          "基本データ管理",
     "audit_compliance":     "承認ワークフロー",
     "medical_record":       "外部API連携(複雑)",
-    "prescription_record":  "シンプルなCRUD管理画面",
+    "prescription_record":  "基本データ管理",
     "lab_results":          "ダッシュボード・分析",
-    "family_portal":        "シンプルなCRUD管理画面",
+    "family_portal":        "基本データ管理",
     # IT
-    "task_ticket":          "シンプルなCRUD管理画面",
-    "time_tracking":        "シンプルなCRUD管理画面",
+    "task_ticket":          "基本データ管理",
+    "time_tracking":        "基本データ管理",
     "client_crm":           "顧客管理(CRM)",
     "billing_revenue":      "請求・売上管理",
-    "knowledge_base":       "シンプルなCRUD管理画面",
+    "knowledge_base":       "基本データ管理",
     "sla_dashboard":        "ダッシュボード・分析",
-    "contract_management":  "シンプルなCRUD管理画面",
+    "contract_management":  "基本データ管理",
     "resource_allocation":  "カレンダー・スケジュール",
     "api_hub":              "外部API連携(複雑)",
     # 物流
     "dispatch_route":       "カレンダー・スケジュール",
-    "delivery_tracking":    "シンプルなCRUD管理画面",
+    "delivery_tracking":    "基本データ管理",
     "warehouse_inventory":  "在庫・受発注管理",
-    "driver_attendance":    "シンプルなCRUD管理画面",
+    "driver_attendance":    "基本データ管理",
     "delivery_dashboard":   "ダッシュボード・分析",
     "freight_billing":      "請求・売上管理",
     "route_optimizer":      "外部API連携(複雑)",
     "driver_schedule":      "カレンダー・スケジュール",
     "push_notification":    "通知・アラート",
     "delivery_report":      "帳票・レポート出力",
-    "vehicle_maintenance":  "シンプルなCRUD管理画面",
+    "vehicle_maintenance":  "基本データ管理",
     "picking_support":      "在庫・受発注管理",
     "warehouse_io":         "在庫・受発注管理",
     "gps_tracking":         "外部API連携(複雑)",
     # 汎用
     "dashboard":            "ダッシュボード・分析",
-    "data_management":      "シンプルなCRUD管理画面",
+    "data_management":      "基本データ管理",
     "data_export":          "帳票・レポート出力",
     "notification":         "通知・アラート",
     "search":               "検索・フィルタリング",
     "workflow":             "承認ワークフロー",
     "data_migration":       "データ移行ツール",
-    "camera_upload":        "シンプルなCRUD管理画面",
+    "camera_upload":        "基本データ管理",
     "offline_support":      "外部API連携(複雑)",
+    "other":                "基本データ管理",
 }
 
 # ---------------------------------------------------------------------------
@@ -442,6 +443,7 @@ def _resolve_features(user_input: dict) -> list[dict]:
         step_8 = [f.strip() for f in step_8.split(",") if f.strip()]
 
     step_8_categories = user_input.get("step_8_categories", {})
+    step_8_labels = user_input.get("step_8_labels", {})
 
     resolved = []
     for value in step_8:
@@ -450,7 +452,11 @@ def _resolve_features(user_input: dict) -> list[dict]:
             or step_8_categories.get(value)
             or _DEFAULT_CATEGORY
         )
-        resolved.append({"value": value, "category": category})
+        entry: dict = {"value": value, "category": category}
+        label = step_8_labels.get(value)
+        if label:
+            entry["label"] = label
+        resolved.append(entry)
     return resolved
 
 
@@ -467,7 +473,7 @@ def calculate_estimate(user_input: dict) -> dict:
     resolved = _resolve_features(user_input)
     if not resolved:
         resolved = [
-            {"value": "data_management", "category": "シンプルなCRUD管理画面"},
+            {"value": "data_management", "category": "基本データ管理"},
             {"value": "dashboard", "category": "ダッシュボード・分析"},
             {"value": "data_export", "category": "帳票・レポート出力"},
         ]
@@ -492,11 +498,14 @@ def calculate_estimate(user_input: dict) -> dict:
         # プロジェクト全工程込みの金額
         standard = _round_to_1000(dev_cost / impl_ratio)
         hybrid = _round_to_1000(standard * 0.6)
-        features.append({
+        feature_entry: dict = {
             "category": category,
             "standard_price": standard,
             "hybrid_price": hybrid,
-        })
+        }
+        if feat.get("label"):
+            feature_entry["label"] = feat["label"]
+        features.append(feature_entry)
 
     total_standard = sum(f["standard_price"] for f in features)
     total_hybrid = sum(f["hybrid_price"] for f in features)

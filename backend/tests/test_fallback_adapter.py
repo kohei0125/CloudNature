@@ -131,7 +131,7 @@ class TestFallbackGenerateEstimate:
                 },
             },
             "features": [
-                {"category": "シンプルなCRUD管理画面", "standard_price": 500000, "hybrid_price": 300000},
+                {"category": "基本データ管理", "standard_price": 500000, "hybrid_price": 300000},
                 {"category": "カレンダー・スケジュール", "standard_price": 400000, "hybrid_price": 240000},
             ],
             "total_standard": 900000,
@@ -158,7 +158,7 @@ class TestFallbackGenerateEstimate:
                 },
             },
             "features": [
-                {"category": "シンプルなCRUD管理画面", "standard_price": 500000, "hybrid_price": 300000},
+                {"category": "基本データ管理", "standard_price": 500000, "hybrid_price": 300000},
                 {"category": "カレンダー・スケジュール", "standard_price": 400000, "hybrid_price": 240000},
             ],
             "total_standard": 900000,
@@ -184,7 +184,7 @@ class TestFallbackGenerateEstimate:
                 "step_8": [],
             },
             "features": [
-                {"category": "シンプルなCRUD管理画面", "standard_price": 500000, "hybrid_price": 300000},
+                {"category": "基本データ管理", "standard_price": 500000, "hybrid_price": 300000},
             ],
             "total_standard": 500000,
             "total_hybrid": 300000,

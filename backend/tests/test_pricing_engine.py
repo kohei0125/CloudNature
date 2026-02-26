@@ -48,12 +48,12 @@ class TestGetBasePrice:
 
     def test_unknown_category_falls_back(self):
         price = _get_base_price("存在しないカテゴリ")
-        default = _get_base_price("シンプルなCRUD管理画面")
+        default = _get_base_price("基本データ管理")
         assert price == default
 
     def test_crud_midpoint(self):
         # (350000 + 650000) // 2 = 500000
-        assert _get_base_price("シンプルなCRUD管理画面") == 500_000
+        assert _get_base_price("基本データ管理") == 500_000
 
 
 # ---------------------------------------------------------------------------
@@ -293,7 +293,7 @@ class TestCalculateEstimate:
         result = calculate_estimate(self._base_input(
             step_8=["completely_unknown_feature"],
         ))
-        assert result["features"][0]["category"] == "シンプルなCRUD管理画面"
+        assert result["features"][0]["category"] == "基本データ管理"
 
     def test_hybrid_is_60_percent(self):
         """全機能で hybrid = standard * 0.6 (1000円丸め)。"""
@@ -468,7 +468,7 @@ class TestResolveFeatures:
         """静的マッピングが最優先で使用される。"""
         result = _resolve_features({
             "step_8": ["order_management"],
-            "step_8_categories": {"order_management": "シンプルなCRUD管理画面"},
+            "step_8_categories": {"order_management": "基本データ管理"},
         })
         assert len(result) == 1
         # 静的マッピングでは「在庫・受発注管理」なので、LLMカテゴリは無視される
@@ -490,7 +490,7 @@ class TestResolveFeatures:
             "step_8": ["totally_unknown"],
         })
         assert len(result) == 1
-        assert result[0]["category"] == "シンプルなCRUD管理画面"
+        assert result[0]["category"] == "基本データ管理"
 
     def test_priority_order(self):
         """静的 → LLMカテゴリ → デフォルト の優先順位を検証。"""
@@ -507,7 +507,7 @@ class TestResolveFeatures:
         # custom_llm_feature: LLMカテゴリ使用
         assert result[1]["category"] == "AIチャットボット"
         # unknown_feature: デフォルト
-        assert result[2]["category"] == "シンプルなCRUD管理画面"
+        assert result[2]["category"] == "基本データ管理"
 
     def test_empty_step8_categories(self):
         """step_8_categories が空でも既存動作が壊れない。"""
@@ -517,7 +517,7 @@ class TestResolveFeatures:
         })
         assert len(result) == 2
         assert result[0]["category"] == "ダッシュボード・分析"
-        assert result[1]["category"] == "シンプルなCRUD管理画面"
+        assert result[1]["category"] == "基本データ管理"
 
     def test_no_step8_categories_key(self):
         """step_8_categories キーが存在しなくても動作する。"""

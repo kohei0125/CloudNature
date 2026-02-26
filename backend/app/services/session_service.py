@@ -4,6 +4,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 from time import time
 
+from sqlalchemy.orm.attributes import flag_modified
 from sqlmodel import select
 
 from app.config import settings
@@ -62,8 +63,11 @@ def save_session_answers(session_id: str, answers: dict) -> None:
                 answers["_step8_labels"] = step8_labels
                 
             session.answers = answers
+            flag_modified(session, "answers")
             session.updated_at = datetime.now(timezone.utc)
             db.commit()
+            logger.debug("save_session_answers: saved for session %s (has _step8_labels=%s)",
+                         session_id, "_step8_labels" in answers)
 
 
 def save_step8_categories(session_id: str, categories: dict[str, str]) -> None:
@@ -74,8 +78,11 @@ def save_step8_categories(session_id: str, categories: dict[str, str]) -> None:
             answers = session.answers or {}
             answers["_step8_categories"] = categories
             session.answers = answers
+            flag_modified(session, "answers")
             session.updated_at = datetime.now(timezone.utc)
             db.commit()
+            logger.debug("save_step8_categories: saved %d categories for session %s",
+                         len(categories), session_id)
 
 
 def save_step8_labels(session_id: str, labels: dict[str, str]) -> None:
@@ -86,8 +93,11 @@ def save_step8_labels(session_id: str, labels: dict[str, str]) -> None:
             answers = session.answers or {}
             answers["_step8_labels"] = labels
             session.answers = answers
+            flag_modified(session, "answers")
             session.updated_at = datetime.now(timezone.utc)
             db.commit()
+            logger.debug("save_step8_labels: saved %d labels for session %s",
+                         len(labels), session_id)
 
 
 def update_session_status(session_id: str, status: str) -> None:

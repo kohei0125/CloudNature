@@ -65,7 +65,7 @@ async def test_generate_estimate_uses_fallback_with_step4_and_step8_labels(monke
 
     session_answers = {
         "_step8_categories": {
-            "employee_master": "シンプルなCRUD管理画面",
+            "employee_master": "基本データ管理",
             "attendance_mgmt": "カレンダー・スケジュール",
         },
         "_step8_labels": {
@@ -81,7 +81,7 @@ async def test_generate_estimate_uses_fallback_with_step4_and_step8_labels(monke
         captured["user_input"] = user_input
         return {
             "features": [
-                {"category": "シンプルなCRUD管理画面", "standard_price": 500000, "hybrid_price": 300000},
+                {"category": "基本データ管理", "standard_price": 500000, "hybrid_price": 300000},
                 {"category": "カレンダー・スケジュール", "standard_price": 400000, "hybrid_price": 240000},
             ],
             "total_standard": 900000,

@@ -44,6 +44,9 @@ def _enforce_calculated_prices(llm_output: dict, calculated_data: dict) -> dict:
                 "name": cf.get("category", "機能"),
                 "detail": "業務効率化を支援する機能",
             }
+        # ユーザーが選択時に見たlabelがあればLLMのnameより優先
+        if cf.get("label"):
+            f["name"] = cf["label"]
         f["standard_price"] = cf["standard_price"]
         f["hybrid_price"] = cf["hybrid_price"]
         enforced_features.append(f)

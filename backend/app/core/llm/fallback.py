@@ -15,11 +15,11 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
     (
         re.compile(r"人材管理|人事管理|HR", re.IGNORECASE),
         [
-            {"value": "employee_master", "label": "社員情報マスタ管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "employee_master", "label": "社員情報マスタ管理", "category": "基本データ管理"},
             {"value": "attendance_mgmt", "label": "出退勤・勤怠管理", "category": "カレンダー・スケジュール"},
             {"value": "evaluation_workflow", "label": "人事評価ワークフロー", "category": "承認ワークフロー"},
             {"value": "onboarding_mgmt", "label": "入退社手続き管理", "category": "承認ワークフロー"},
-            {"value": "org_chart", "label": "組織図・部署管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "org_chart", "label": "組織図・部署管理", "category": "基本データ管理"},
             {"value": "hr_report", "label": "人事レポート出力", "category": "帳票・レポート出力"},
         ],
     ),
@@ -30,15 +30,15 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
             {"value": "shift_scheduler", "label": "シフト作成・共有", "category": "カレンダー・スケジュール"},
             {"value": "overtime_report", "label": "残業集計レポート", "category": "帳票・レポート出力"},
             {"value": "leave_workflow", "label": "休暇申請ワークフロー", "category": "承認ワークフロー"},
-            {"value": "employee_master", "label": "社員情報マスタ管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "employee_master", "label": "社員情報マスタ管理", "category": "基本データ管理"},
             {"value": "attendance_alert", "label": "勤怠アラート通知", "category": "通知・アラート"},
         ],
     ),
     (
         re.compile(r"プロジェクト管理|進捗管理|タスク管理"),
         [
-            {"value": "project_board", "label": "プロジェクト一覧管理", "category": "シンプルなCRUD管理画面"},
-            {"value": "task_tracker", "label": "タスク進捗トラッキング", "category": "シンプルなCRUD管理画面"},
+            {"value": "project_board", "label": "プロジェクト一覧管理", "category": "基本データ管理"},
+            {"value": "task_tracker", "label": "タスク進捗トラッキング", "category": "基本データ管理"},
             {"value": "gantt_schedule", "label": "ガントチャート工程表", "category": "カレンダー・スケジュール"},
             {"value": "progress_dashboard", "label": "進捗ダッシュボード", "category": "ダッシュボード・分析"},
             {"value": "workload_report", "label": "工数集計レポート", "category": "帳票・レポート出力"},
@@ -49,7 +49,7 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
         re.compile(r"会計|経理|財務|請求書"),
         [
             {"value": "invoice_mgmt", "label": "請求書作成・管理", "category": "請求・売上管理"},
-            {"value": "expense_record", "label": "経費精算・記録", "category": "シンプルなCRUD管理画面"},
+            {"value": "expense_record", "label": "経費精算・記録", "category": "基本データ管理"},
             {"value": "payment_tracking", "label": "入金消込管理", "category": "請求・売上管理"},
             {"value": "financial_report", "label": "財務レポート出力", "category": "帳票・レポート出力"},
             {"value": "approval_workflow", "label": "承認ワークフロー", "category": "承認ワークフロー"},
@@ -81,33 +81,33 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
     (
         re.compile(r"EC|ネットショップ|通販|オンラインショップ"),
         [
-            {"value": "product_catalog", "label": "商品カタログ管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "product_catalog", "label": "商品カタログ管理", "category": "基本データ管理"},
             {"value": "cart_checkout", "label": "カート・決済処理", "category": "決済連携"},
-            {"value": "order_tracking", "label": "注文ステータス管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "order_tracking", "label": "注文ステータス管理", "category": "基本データ管理"},
             {"value": "inventory_auto", "label": "在庫管理・自動発注", "category": "在庫・受発注管理"},
             {"value": "sales_analytics", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"},
-            {"value": "review_management", "label": "レビュー・評価管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "review_management", "label": "レビュー・評価管理", "category": "基本データ管理"},
         ],
     ),
     (
         re.compile(r"ワークフロー|稟議|承認"),
         [
             {"value": "approval_flow", "label": "多段階承認ワークフロー", "category": "承認ワークフロー"},
-            {"value": "request_form", "label": "申請フォーム作成", "category": "シンプルなCRUD管理画面"},
+            {"value": "request_form", "label": "申請フォーム作成", "category": "基本データ管理"},
             {"value": "status_dashboard", "label": "申請状況ダッシュボード", "category": "ダッシュボード・分析"},
             {"value": "approval_notify", "label": "承認通知・リマインド", "category": "通知・アラート"},
             {"value": "approval_report", "label": "承認履歴レポート", "category": "帳票・レポート出力"},
-            {"value": "document_attach", "label": "添付書類管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "document_attach", "label": "添付書類管理", "category": "基本データ管理"},
         ],
     ),
     (
         re.compile(r"文書管理|ドキュメント管理"),
         [
-            {"value": "doc_repository", "label": "文書リポジトリ管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "doc_repository", "label": "文書リポジトリ管理", "category": "基本データ管理"},
             {"value": "doc_search", "label": "文書検索・フィルタ", "category": "検索・フィルタリング"},
-            {"value": "version_control", "label": "バージョン管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "version_control", "label": "バージョン管理", "category": "基本データ管理"},
             {"value": "doc_workflow", "label": "文書承認ワークフロー", "category": "承認ワークフロー"},
-            {"value": "doc_share", "label": "共有・アクセス制御", "category": "シンプルなCRUD管理画面"},
+            {"value": "doc_share", "label": "共有・アクセス制御", "category": "基本データ管理"},
             {"value": "doc_export", "label": "文書エクスポート", "category": "帳票・レポート出力"},
         ],
     ),
@@ -127,7 +127,7 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
         [
             {"value": "order_entry", "label": "受発注の一元管理", "category": "在庫・受発注管理"},
             {"value": "inventory_display", "label": "在庫リアルタイム表示", "category": "在庫・受発注管理"},
-            {"value": "supplier_master", "label": "取引先マスタ管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "supplier_master", "label": "取引先マスタ管理", "category": "基本データ管理"},
             {"value": "auto_report", "label": "月次レポート自動生成", "category": "帳票・レポート出力"},
             {"value": "stock_alert", "label": "在庫不足アラート通知", "category": "通知・アラート"},
             {"value": "order_dashboard", "label": "受注ダッシュボード", "category": "ダッシュボード・分析"},
@@ -141,7 +141,7 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
             {"value": "shift_notify", "label": "シフト通知・リマインド", "category": "通知・アラート"},
             {"value": "attendance_mgmt", "label": "出退勤記録管理", "category": "カレンダー・スケジュール"},
             {"value": "shift_report", "label": "勤務実績レポート", "category": "帳票・レポート出力"},
-            {"value": "staff_master", "label": "スタッフ情報管理", "category": "シンプルなCRUD管理画面"},
+            {"value": "staff_master", "label": "スタッフ情報管理", "category": "基本データ管理"},
         ],
     ),
     (
@@ -159,8 +159,8 @@ _CHALLENGE_KEYWORD_FEATURES: list[tuple[re.Pattern[str], list[dict[str, str]]]] 
         re.compile(r"生産管理|工程管理"),
         [
             {"value": "production_schedule", "label": "生産スケジュール管理", "category": "カレンダー・スケジュール"},
-            {"value": "process_tracking", "label": "工程進捗トラッキング", "category": "シンプルなCRUD管理画面"},
-            {"value": "quality_record", "label": "品質検査記録", "category": "シンプルなCRUD管理画面"},
+            {"value": "process_tracking", "label": "工程進捗トラッキング", "category": "基本データ管理"},
+            {"value": "quality_record", "label": "品質検査記録", "category": "基本データ管理"},
             {"value": "cost_analysis", "label": "原価計算・コスト分析", "category": "ダッシュボード・分析"},
             {"value": "production_report", "label": "生産実績レポート", "category": "帳票・レポート出力"},
             {"value": "material_mgmt", "label": "資材・部品管理", "category": "在庫・受発注管理"},
@@ -214,12 +214,12 @@ _INDUSTRY_FEATURES: dict[str, list[dict[str, str]]] = {
         {"value": "order_management", "label": "受発注管理・入力画面", "category": "在庫・受発注管理"},
         {"value": "inventory_display", "label": "在庫リアルタイム表示", "category": "在庫・受発注管理"},
         {"value": "production_schedule", "label": "生産スケジュール管理", "category": "カレンダー・スケジュール"},
-        {"value": "quality_record", "label": "品質検査記録", "category": "シンプルなCRUD管理画面"},
+        {"value": "quality_record", "label": "品質検査記録", "category": "基本データ管理"},
         {"value": "cost_analysis", "label": "原価計算・コスト分析", "category": "ダッシュボード・分析"},
-        {"value": "supplier_master", "label": "取引先マスタ管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "supplier_master", "label": "取引先マスタ管理", "category": "基本データ管理"},
     ],
     "retail": [
-        {"value": "product_master", "label": "商品マスタ管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "product_master", "label": "商品マスタ管理", "category": "基本データ管理"},
         {"value": "inventory_auto", "label": "在庫管理・自動発注", "category": "在庫・受発注管理"},
         {"value": "sales_dashboard", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"},
         {"value": "customer_history", "label": "顧客管理・購買履歴", "category": "顧客管理(CRM)"},
@@ -227,42 +227,42 @@ _INDUSTRY_FEATURES: dict[str, list[dict[str, str]]] = {
         {"value": "invoice_output", "label": "帳票・請求書出力", "category": "帳票・レポート出力"},
     ],
     "construction": [
-        {"value": "project_management", "label": "工事案件管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "project_management", "label": "工事案件管理", "category": "基本データ管理"},
         {"value": "estimate_invoice", "label": "見積書・請求書作成", "category": "請求・売上管理"},
         {"value": "schedule_management", "label": "工程スケジュール管理", "category": "カレンダー・スケジュール"},
         {"value": "cost_tracking", "label": "原価管理・予実対比", "category": "ダッシュボード・分析"},
-        {"value": "site_photo_report", "label": "現場写真・日報管理", "category": "シンプルなCRUD管理画面"},
-        {"value": "document_sharing", "label": "図面・ドキュメント共有", "category": "シンプルなCRUD管理画面"},
+        {"value": "site_photo_report", "label": "現場写真・日報管理", "category": "基本データ管理"},
+        {"value": "document_sharing", "label": "図面・ドキュメント共有", "category": "基本データ管理"},
     ],
     "food_service": [
         {"value": "reservation_calendar", "label": "予約カレンダー管理", "category": "カレンダー・スケジュール"},
-        {"value": "menu_editor", "label": "メニュー編集・公開", "category": "シンプルなCRUD管理画面"},
+        {"value": "menu_editor", "label": "メニュー編集・公開", "category": "基本データ管理"},
         {"value": "sales_analytics", "label": "売上分析ダッシュボード", "category": "ダッシュボード・分析"},
         {"value": "shift_scheduler", "label": "シフト作成・共有", "category": "カレンダー・スケジュール"},
         {"value": "customer_crm", "label": "顧客情報・来店履歴", "category": "顧客管理(CRM)"},
-        {"value": "order_tablet", "label": "タブレット注文受付", "category": "シンプルなCRUD管理画面"},
+        {"value": "order_tablet", "label": "タブレット注文受付", "category": "基本データ管理"},
     ],
     "healthcare": [
         {"value": "patient_management", "label": "患者・利用者情報管理", "category": "顧客管理(CRM)"},
         {"value": "appointment_schedule", "label": "予約・スケジュール管理", "category": "カレンダー・スケジュール"},
         {"value": "billing_receipt", "label": "請求・レセプト管理", "category": "請求・売上管理"},
         {"value": "staff_shift", "label": "スタッフシフト管理", "category": "カレンダー・スケジュール"},
-        {"value": "care_record", "label": "服薬・ケア記録", "category": "シンプルなCRUD管理画面"},
+        {"value": "care_record", "label": "服薬・ケア記録", "category": "基本データ管理"},
         {"value": "audit_compliance", "label": "監査ログ・法規制対応", "category": "承認ワークフロー"},
     ],
     "it_service": [
-        {"value": "project_management", "label": "プロジェクト管理", "category": "シンプルなCRUD管理画面"},
-        {"value": "task_ticket", "label": "タスク・チケット管理", "category": "シンプルなCRUD管理画面"},
-        {"value": "time_tracking", "label": "工数管理・レポート", "category": "シンプルなCRUD管理画面"},
+        {"value": "project_management", "label": "プロジェクト管理", "category": "基本データ管理"},
+        {"value": "task_ticket", "label": "タスク・チケット管理", "category": "基本データ管理"},
+        {"value": "time_tracking", "label": "工数管理・レポート", "category": "基本データ管理"},
         {"value": "client_crm", "label": "顧客・案件管理(CRM)", "category": "顧客管理(CRM)"},
         {"value": "billing_revenue", "label": "請求・売上管理", "category": "請求・売上管理"},
-        {"value": "knowledge_base", "label": "ナレッジベース", "category": "シンプルなCRUD管理画面"},
+        {"value": "knowledge_base", "label": "ナレッジベース", "category": "基本データ管理"},
     ],
     "logistics": [
         {"value": "dispatch_route", "label": "配車・ルート管理", "category": "カレンダー・スケジュール"},
-        {"value": "delivery_tracking", "label": "荷物追跡・ステータス管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "delivery_tracking", "label": "荷物追跡・ステータス管理", "category": "基本データ管理"},
         {"value": "warehouse_inventory", "label": "倉庫在庫管理", "category": "在庫・受発注管理"},
-        {"value": "driver_attendance", "label": "ドライバー勤怠管理", "category": "シンプルなCRUD管理画面"},
+        {"value": "driver_attendance", "label": "ドライバー勤怠管理", "category": "基本データ管理"},
         {"value": "delivery_dashboard", "label": "配送実績ダッシュボード", "category": "ダッシュボード・分析"},
         {"value": "freight_billing", "label": "請求・運賃計算", "category": "請求・売上管理"},
     ],
@@ -271,7 +271,7 @@ _INDUSTRY_FEATURES: dict[str, list[dict[str, str]]] = {
 # Default features for unknown / "other" industry
 _DEFAULT_FEATURES: list[dict[str, str]] = [
     {"value": "dashboard", "label": "ダッシュボード・データ可視化", "category": "ダッシュボード・分析"},
-    {"value": "data_management", "label": "データ登録・編集・一覧管理", "category": "シンプルなCRUD管理画面"},
+    {"value": "data_management", "label": "データ登録・編集・一覧管理", "category": "基本データ管理"},
     {"value": "data_export", "label": "CSV/PDFエクスポート", "category": "帳票・レポート出力"},
     {"value": "notification", "label": "通知機能（メール/プッシュ）", "category": "通知・アラート"},
     {"value": "search", "label": "検索・フィルタリング", "category": "検索・フィルタリング"},
@@ -445,7 +445,7 @@ class FallbackAdapter(LLMAdapter):
             # 優先3: category から名前を推測
             if not name:
                 category = cf.get("category", "")
-                if category and category != "シンプルなCRUD管理画面":
+                if category and category != "基本データ管理":
                     name = category
                 elif step8_val:
                     # snake_case を日本語に変換する簡易処理は困難なので
@@ -460,12 +460,15 @@ class FallbackAdapter(LLMAdapter):
             if not name:
                 name = cf.get("category", "機能")
 
-            # detail 生成: step_4 の意図があればそれを反映
+            # detail 生成: step_4 の意図があればそれを反映（30文字以内）
             if not detail:
                 if intent_label:
-                    detail = f"{intent_label}における{name}の効率化を支援"
+                    detail = f"{intent_label}の{name}を効率化"
                 else:
                     detail = f"{name}による業務効率化を支援"
+
+            if len(detail) > 30:
+                detail = detail[:29] + "…"
 
             features.append({
                 "name": name,

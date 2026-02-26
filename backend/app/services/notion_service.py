@@ -229,6 +229,8 @@ def save_estimate_to_notion(
 
     # 提案機能（Step 8でユーザーに提示した全候補）
     step8_labels = answers.get("_step8_labels", {})
+    logger.debug("save_estimate_to_notion: step8_labels=%s (count=%d)",
+                 bool(step8_labels), len(step8_labels))
     if step8_labels:
         children.append(_divider())
         children.append(_heading2("提案機能"))

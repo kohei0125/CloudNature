@@ -184,6 +184,14 @@ async def generate_estimate(
         if session_data and session_data.answers:
             if "_step8_labels" in session_data.answers:
                 enriched_answers["_step8_labels"] = session_data.answers["_step8_labels"]
+                logger.debug("generate_estimate: merged _step8_labels (%d entries) into enriched_answers",
+                             len(session_data.answers["_step8_labels"]))
+            else:
+                logger.warning("generate_estimate: _step8_labels not found in session answers for session %s",
+                               request.session_id)
+        else:
+            logger.warning("generate_estimate: session_data or session_data.answers is empty for session %s",
+                           request.session_id)
         background_tasks.add_task(_send_emails, result, enriched_answers)
         return EstimateResultResponse(status="completed", estimate=result)
 
