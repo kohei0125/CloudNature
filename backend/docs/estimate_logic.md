@@ -104,7 +104,7 @@ POST /generate
 │ 3. Pricing Engine (決定的計算)                            │
 │    ├─ feature解決 (value → カテゴリ)                      │
 │    ├─ ベース価格参照 (min/max中央値)                      │
-│    ├─ 複合乗数計算 (7要因 × 上限4.0倍)                   │
+│    ├─ 複合乗数計算 (7要因 × 上限2.5倍)                   │
 │    ├─ 業種補正 (healthcare +15%, logistics +5%)          │
 │    ├─ 工程配分逆算 (実装65% → 総額)                      │
 │    ├─ ハイブリッド係数 (×0.6)                             │
@@ -289,14 +289,14 @@ Step 8でユーザーが選択した機能値（value）をカテゴリにマッ
 
 ### 5.4 複合乗数計算
 
-7つのビジネス要因を乗算し、最終乗数を算出する。**上限: 4.0倍**
+7つのビジネス要因を乗算し、最終乗数を算出する。**上限: 2.5倍**
 
 | 要因 | ステップ | 値 → 乗数 |
 |------|---------|-----------|
-| ユーザー規模 | step_3 | 1-5人→1.0, 6-20人→1.2, 21-50人→1.5, 51-100人→2.0, 101+人→2.5 |
+| ユーザー規模 | step_3 | 1-5人→1.0, 6-20人→1.05, 21-50人→1.15, 51-100人→1.3, 101+人→1.5 |
 | システム種別 | step_6 | web_app→1.0, mobile_app→1.5, undecided_other→1.1 |
-| デバイス | step_10 | pc→1.0, mobile→1.0, both→1.3, tablet→1.4 |
-| 導入先 | step_5 | internal→1.0, client→1.3, client_b2b→1.3, client_b2c→1.5, undecided→1.1 |
+| デバイス | step_10 | pc→1.0, mobile→1.0, both→1.15, tablet→1.2 |
+| 導入先 | step_5 | internal→1.0, client→1.15(レガシー互換), client_b2b→1.15, client_b2c→1.3, undecided→1.05 |
 | 開発種別 | step_7 | new→1.0, migration→1.2, enhancement→0.7, undecided→1.0 |
 | 納期 | step_9 | asap→1.15, 3months→1.05, 6months→1.0, 1year→0.95, undecided→1.0 |
 | 事業形態 | step_1 | corporation→1.0, sole_proprietor→0.85, other→1.0 |
@@ -304,7 +304,7 @@ Step 8でユーザーが選択した機能値（value）をカテゴリにマッ
 ```
 計算式:
   raw = ユーザー規模 × システム種別 × デバイス × 導入先 × 開発種別 × 納期 × 事業形態
-  final_multiplier = min(raw, 4.0)
+  final_multiplier = min(raw, 2.5)
 ```
 
 ### 5.5 業種別補正
@@ -320,11 +320,26 @@ Step 8でユーザーが選択した機能値（value）をカテゴリにマッ
 各機能について以下の計算を行う:
 
 ```
-base_price     = カテゴリの (min + max) / 2   ← 中央値
-dev_cost       = base_price × multiplier × industry_mult
-standard_price = dev_cost / 0.65              ← 工程配分逆算（実装=65%）
-hybrid_price   = standard_price × 0.6        ← ハイブリッド係数
+base_price      = カテゴリの (min + max) / 2   ← 中央値
+feature_discount = 機能数ディスカウント（下表参照）
+dev_cost        = base_price × multiplier × industry_mult × feature_discount
+standard_price  = dev_cost / 0.65              ← 工程配分逆算（実装=65%）
+hybrid_price    = standard_price × 0.6        ← ハイブリッド係数
 ```
+
+#### 機能数ディスカウント（共通基盤按分）
+
+認証基盤・DB設計・管理画面・デプロイ環境等の共通インフラコストを、機能数に応じて按分する。
+
+| 機能数 | ディスカウント |
+|--------|-------------|
+| 1〜2 | 1.0（なし） |
+| 3〜4 | 0.95 |
+| 5〜6 | 0.90 |
+| 7以上 | 0.85 |
+
+**複雑カテゴリ抑制:** 以下のカテゴリに該当する機能が2つ以上含まれる場合、ディスカウントは最低0.90に抑制される（0.85にはならない）:
+- 外部API連携(複雑)、決済連携、AIチャットボット、マルチテナント対応、データ移行ツール、承認ワークフロー
 
 **工程配分:**
 

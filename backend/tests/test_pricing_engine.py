@@ -2,7 +2,9 @@
 
 from app.core.pricing_engine import (
     _BASE_PRICES,
+    _COMPLEX_CATEGORIES,
     _FEATURE_TO_CATEGORY,
+    _feature_count_discount,
     _get_base_price,
     _calculate_multiplier,
     _calculate_phase_breakdown,
@@ -76,18 +78,18 @@ class TestCalculateMultiplier:
         assert "デフォルト" in summary
 
     def test_large_multiplier_capped(self):
-        """101+ × mobile_app × client × asap → 4.0倍キャップ。"""
+        """101+ × mobile_app × asap → 2.5倍キャップ。"""
         mult, summary = _calculate_multiplier({
             "step_1": "corporation",
             "step_3": "101+",
-            "step_5": "client",
+            "step_5": "internal",
             "step_6": "mobile_app",
             "step_7": "new",
             "step_9": "asap",
             "step_10": "pc",
         })
-        # 2.5 * 1.5 * 1.3 * 1.15 = 5.60625 → capped to 4.0
-        assert mult == 4.0
+        # 1.5 * 1.5 * 1.15 = 2.5875 → capped to 2.5
+        assert mult == 2.5
         assert "上限" in summary
 
     def test_sole_proprietor_discount(self):
@@ -225,19 +227,20 @@ class TestCalculateEstimate:
         assert result["budget_status"] in ("slightly_over", "significantly_over", "within_budget")
 
     def test_multiplier_cap(self):
-        """101+ × mobile_app × client × asap → 4.0倍キャップ。"""
+        """101+ × mobile_app × asap → 2.5倍キャップ。"""
         result = calculate_estimate(self._base_input(
             step_3="101+",
-            step_5="client",
+            step_5="internal",
             step_6="mobile_app",
             step_9="asap",
             step_8=["order_management"],
         ))
 
         # 在庫・受発注管理の中央値 = 825000
-        # capped at 4.0, project overhead /0.65 → 825000 * 4.0 / 0.65
+        # capped at 2.5, 1機能なのでfeature_discount=1.0
+        # project overhead /0.65 → 825000 * 2.5 / 0.65
         base = 825_000
-        expected_standard = _round_to_1000(base * 4.0 / 0.65)
+        expected_standard = _round_to_1000(base * 2.5 / 0.65)
         assert result["features"][0]["standard_price"] == expected_standard
         assert "上限" in result["multiplier_summary"]
 
@@ -335,7 +338,7 @@ class TestCalculateEstimate:
         )
 
     def test_client_b2c_multiplier(self):
-        """client_b2c は 1.5 倍の乗数が適用される。"""
+        """client_b2c は 1.3 倍の乗数が適用される。"""
         result_b2c = calculate_estimate(self._base_input(step_5="client_b2c"))
         result_internal = calculate_estimate(self._base_input(step_5="internal"))
         # B2C has 1.5x multiplier vs internal 1.0x
@@ -542,6 +545,73 @@ class TestResolveFeatures:
         assert result == []
 
 
+# ---------------------------------------------------------------------------
+# _feature_count_discount
+# ---------------------------------------------------------------------------
+
+class TestFeatureCountDiscount:
+    def test_no_discount(self):
+        """n=1,2 → ディスカウントなし (1.0)。"""
+        assert _feature_count_discount(1, ["基本データ管理"]) == 1.0
+        assert _feature_count_discount(2, ["基本データ管理", "検索・フィルタリング"]) == 1.0
+
+    def test_small(self):
+        """n=3,4 → 0.95。"""
+        cats = ["基本データ管理"] * 3
+        assert _feature_count_discount(3, cats) == 0.95
+        assert _feature_count_discount(4, cats + ["検索・フィルタリング"]) == 0.95
+
+    def test_medium(self):
+        """n=5,6 → 0.90。"""
+        cats = ["基本データ管理"] * 5
+        assert _feature_count_discount(5, cats) == 0.90
+        assert _feature_count_discount(6, cats + ["検索・フィルタリング"]) == 0.90
+
+    def test_large(self):
+        """n=7+ → 0.85。"""
+        cats = ["基本データ管理"] * 7
+        assert _feature_count_discount(7, cats) == 0.85
+        assert _feature_count_discount(10, cats + ["検索・フィルタリング"] * 3) == 0.85
+
+    def test_complex_override(self):
+        """n=7 + complex>=2 → max(0.85, 0.90) = 0.90。"""
+        cats = ["基本データ管理"] * 5 + ["外部API連携(複雑)", "決済連携"]
+        assert _feature_count_discount(7, cats) == 0.90
+
+    def test_complex_with_small_n(self):
+        """n=3 + complex>=2 → max(0.95, 0.90) = 0.95（overrideされない）。"""
+        cats = ["外部API連携(複雑)", "決済連携", "基本データ管理"]
+        assert _feature_count_discount(3, cats) == 0.95
+
+    def test_estimate_with_discount_applied(self):
+        """統合テスト: 6機能でディスカウント(0.90)が反映される。"""
+        user_input = {
+            "step_1": "corporation",
+            "step_2": "manufacturing",
+            "step_3": "1-5",
+            "step_4": "受発注の手作業が多く、ミスが頻発している。在庫管理もExcelで限界を感じている。",
+            "step_5": "internal",
+            "step_6": "web_app",
+            "step_7": "new",
+            "step_8": [
+                "order_management", "inventory_display", "cost_analysis",
+                "invoice_output", "stock_alert", "monthly_report",
+            ],
+            "step_9": "6months",
+            "step_10": "pc",
+            "step_11": "3m_5m",
+            "step_12": "",
+        }
+        result = calculate_estimate(user_input)
+        assert len(result["features"]) == 6
+
+        # 全乗数デフォルト(1.0)、6機能でdiscount=0.90
+        # order_management → 在庫・受発注管理 中央値825000
+        base = 825_000
+        expected = _round_to_1000(base * 1.0 * 1.0 * 0.90 / 0.65)
+        assert result["features"][0]["standard_price"] == expected
+
+
 class TestFeatureToCategoryConsistency:
     def test_all_categories_exist_in_base_prices(self):
         """全ての _FEATURE_TO_CATEGORY のカテゴリが _BASE_PRICES に存在する。"""
@@ -579,8 +649,9 @@ class TestCalculateEstimateWithLLMCategories:
         ))
         assert result["features"][0]["category"] == "AIチャットボット"
         # AIチャットボットの基準価格: (650000+1650000)//2 = 1150000
-        # multiplier=1.2 (6-20人), project overhead /0.65 → 1150000 * 1.2 / 0.65
-        assert result["features"][0]["standard_price"] == _round_to_1000(1_150_000 * 1.2 / 0.65)
+        # multiplier=1.05 (6-20人), 1機能なのでfeature_discount=1.0
+        # project overhead /0.65 → 1150000 * 1.05 / 0.65
+        assert result["features"][0]["standard_price"] == _round_to_1000(1_150_000 * 1.05 / 0.65)
 
     def test_mixed_static_and_llm_categories(self):
         """静的マッピングとLLMカテゴリの混在ケース。"""

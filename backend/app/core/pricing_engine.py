@@ -34,6 +34,12 @@ _BASE_PRICES: dict[str, tuple[int, int]] = {
 # デフォルトカテゴリ（マッピング不一致時のフォールバック）
 _DEFAULT_CATEGORY = "基本データ管理"
 
+# 複雑カテゴリ（機能数ディスカウントの抑制対象）
+_COMPLEX_CATEGORIES: set[str] = {
+    "外部API連携(複雑)", "決済連携", "AIチャットボット",
+    "マルチテナント対応", "データ移行ツール", "承認ワークフロー",
+}
+
 # ---------------------------------------------------------------------------
 # 2. 機能 value → ベース価格カテゴリ マッピング
 #    dynamic_questions で生成される value をカテゴリに対応付ける
@@ -141,10 +147,10 @@ _FEATURE_TO_CATEGORY: dict[str, str] = {
 # ---------------------------------------------------------------------------
 _USER_SCALE: dict[str, float] = {
     "1-5": 1.0,
-    "6-20": 1.2,
-    "21-50": 1.5,
-    "51-100": 2.0,
-    "101+": 2.5,
+    "6-20": 1.05,
+    "21-50": 1.15,
+    "51-100": 1.3,
+    "101+": 1.5,
 }
 
 _SYSTEM_TYPE: dict[str, float] = {
@@ -156,16 +162,16 @@ _SYSTEM_TYPE: dict[str, float] = {
 _DEVICE: dict[str, float] = {
     "pc": 1.0,
     "mobile": 1.0,
-    "both": 1.3,
-    "tablet": 1.4,
+    "both": 1.15,
+    "tablet": 1.2,
 }
 
 _TARGET: dict[str, float] = {
     "internal": 1.0,
-    "client": 1.3,
-    "client_b2b": 1.3,
-    "client_b2c": 1.5,
-    "undecided": 1.1,
+    "client": 1.15,       # レガシー互換（バックエンドstep_options.py）
+    "client_b2b": 1.15,
+    "client_b2c": 1.3,
+    "undecided": 1.05,
 }
 
 _DEV_TYPE: dict[str, float] = {
@@ -189,7 +195,7 @@ _ENTITY_TYPE: dict[str, float] = {
     "other": 1.0,
 }
 
-_MAX_MULTIPLIER = 4.0
+_MAX_MULTIPLIER = 2.5
 
 # ---------------------------------------------------------------------------
 # 業種別乗数テーブル
@@ -299,6 +305,35 @@ def _detect_nfr_keywords(user_input: dict) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+# helper: 機能数ディスカウント（共通基盤按分）
+# ---------------------------------------------------------------------------
+
+def _feature_count_discount(n: int, categories: list[str]) -> float:
+    """機能数に応じた共通基盤ディスカウント。
+
+    認証基盤・DB設計・管理画面・デプロイ環境等の共通インフラを按分する。
+    ただし複雑カテゴリが多い案件は下げ過ぎない。
+
+    カテゴリの重複カウントは意図的: 同一複雑カテゴリの機能が複数ある案件は
+    実際に複雑度が高いため、ディスカウント抑制の対象とする。
+    """
+    if n <= 2:
+        d = 1.0
+    elif n <= 4:
+        d = 0.95
+    elif n <= 6:
+        d = 0.90
+    else:
+        d = 0.85
+
+    complex_count = sum(1 for c in categories if c in _COMPLEX_CATEGORIES)
+    if complex_count >= 2:
+        d = max(d, 0.90)
+
+    return d
+
+
+# ---------------------------------------------------------------------------
 # helper: 1000円単位で丸める
 # ---------------------------------------------------------------------------
 def _round_to_1000(value: float) -> int:
@@ -357,7 +392,7 @@ def _calculate_multiplier(user_input: dict) -> tuple[float, str]:
         summary = " × ".join(f"{label}{v}" for label, v in non_default)
         summary += f" = 複合{round(raw, 2)}"
         if capped < raw:
-            summary += f"（4.0倍上限適用）"
+            summary += f"（2.5倍上限適用）"
     else:
         summary = "補正なし（全項目デフォルト）"
 
@@ -485,6 +520,10 @@ def calculate_estimate(user_input: dict) -> dict:
     industry = user_input.get("step_2", "")
     industry_mult = _INDUSTRY_MULTIPLIER.get(industry, 1.0)
 
+    # 機能数ディスカウント（共通基盤按分）
+    categories = [f["category"] for f in resolved]
+    feature_discount = _feature_count_discount(len(resolved), categories)
+
     # 各機能の開発費算出 → プロジェクト全体費用に拡大
     # _PHASE_ALLOCATION の implementation ratio を使い、開発費→プロジェクト総額に変換
     impl_ratio = next(
@@ -494,7 +533,7 @@ def calculate_estimate(user_input: dict) -> dict:
     for feat in resolved:
         category = feat["category"]
         base = _get_base_price(category)
-        dev_cost = base * multiplier * industry_mult
+        dev_cost = base * multiplier * industry_mult * feature_discount
         # プロジェクト全工程込みの金額
         standard = _round_to_1000(dev_cost / impl_ratio)
         hybrid = _round_to_1000(standard * 0.6)
