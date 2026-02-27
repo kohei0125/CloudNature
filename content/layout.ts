@@ -7,7 +7,7 @@ export const HEADER_COPY = {
 
 export const FOOTER_COPY = {
   taglineLines: [
-    "新潟の中小企業に、人手に代わる仕組みを。",
+    "中小企業に、人手に代わる仕組みを。",
     "AIと業務自動化で、現場を変える。",
     "開発から定着支援まで、伴走型でサポートします。"
   ],
