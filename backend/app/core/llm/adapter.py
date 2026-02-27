@@ -26,14 +26,3 @@ class LLMAdapter(ABC):
         """
         pass
 
-    @abstractmethod
-    async def audit_estimate(
-        self, estimate_data: dict, calculated_data: dict
-    ) -> dict:
-        """第3回AIチェック: 見積もり出力の品質監査と修正。
-
-        Args:
-            estimate_data: 第2回AI出力（enforce済み）
-            calculated_data: Pricing Engine出力
-        """
-        pass

@@ -25,8 +25,6 @@ class Settings(BaseSettings):
     api_key: str = ""
     notion_api_key: str = ""
     notion_database_id: str = ""
-    audit_enabled: bool = True
-    audit_temperature: float = 0.3
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 

@@ -2,7 +2,6 @@
 
 import json
 import logging
-import time
 
 from app.config import settings
 from app.core.llm.factory import create_llm_adapter
@@ -62,73 +61,6 @@ def _enforce_calculated_prices(llm_output: dict, calculated_data: dict) -> dict:
     llm_output["user_input"] = calculated_data.get("user_input", {})
 
     return llm_output
-
-
-def _log_audit_diff(original: dict, audited: dict) -> None:
-    """監査前後の差分をログに記録する。"""
-    diffs: list[str] = []
-    for key in ("project_name", "summary", "confidence_note"):
-        if original.get(key) != audited.get(key):
-            diffs.append(f"{key}: changed")
-
-    orig_features = original.get("features", [])
-    audit_features = audited.get("features", [])
-    for i, (of, af) in enumerate(zip(orig_features, audit_features)):
-        for field in ("name", "detail"):
-            if of.get(field) != af.get(field):
-                diffs.append(f"features[{i}].{field}: changed")
-
-    orig_agenda = original.get("discussion_agenda", [])
-    audit_agenda = audited.get("discussion_agenda", [])
-    if orig_agenda != audit_agenda:
-        diffs.append("discussion_agenda: changed")
-
-    orig_msg = original.get("total_cost", {}).get("message")
-    audit_msg = audited.get("total_cost", {}).get("message")
-    if orig_msg != audit_msg:
-        diffs.append("total_cost.message: changed")
-
-    if diffs:
-        logger.info("Audit diff: %s", ", ".join(diffs))
-    else:
-        logger.info("Audit: no text changes")
-
-
-async def _audit_estimate(
-    estimate_data: dict,
-    calculated_data: dict,
-    start_time: float,
-) -> dict:
-    """第3回AIチェック: 品質監査と修正。失敗時は元データをそのまま返す。"""
-    if not settings.audit_enabled:
-        return estimate_data
-
-    # 経過80秒超で監査をスキップ（120秒タイムアウト内の安全策）
-    elapsed = time.time() - start_time
-    if elapsed > 80:
-        logger.warning("Skipping audit: elapsed %.1fs > 80s", elapsed)
-        return estimate_data
-
-    try:
-        audited = await _llm.audit_estimate(estimate_data, calculated_data)
-
-        if not validate_estimate_output(audited):
-            logger.warning("Audit output validation failed, using original")
-            return estimate_data
-
-        # 金額を再度上書きして安全性を二重保証
-        audited = _enforce_calculated_prices(audited, calculated_data)
-
-        # audit_warnings をログに記録（お客様には返さない）
-        warnings = audited.pop("audit_warnings", [])
-        if warnings:
-            logger.info("Audit warnings: %s", warnings)
-
-        _log_audit_diff(estimate_data, audited)
-        return audited
-    except Exception:
-        logger.exception("Audit failed, using original")
-        return estimate_data
 
 
 def _normalize_answers(answers: dict) -> dict:
@@ -231,8 +163,6 @@ async def generate_estimate(session_id: str, answers: dict) -> dict | None:
     2. Pass calculated data to LLM for text generation only
     3. Enforce calculated prices on LLM output for accuracy
     """
-    start_time = time.time()
-
     # Save answers to session
     save_session_answers(session_id, answers)
 
@@ -288,9 +218,6 @@ async def generate_estimate(session_id: str, answers: dict) -> dict | None:
 
         fallback = FallbackAdapter()
         result = await fallback.generate_estimate(calculated_data=calculated_data)
-
-    # Step 4: 第3回AIチェック（品質監査）
-    result = await _audit_estimate(result, calculated_data, start_time)
 
     # Save result
     with get_session() as db:

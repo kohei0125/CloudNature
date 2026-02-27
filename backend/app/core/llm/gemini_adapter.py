@@ -28,7 +28,6 @@ class GeminiAdapter(LLMAdapter):
         self.client = genai.Client(api_key=settings.gemini_api_key)
         self.model = settings.gemini_model
         self.timeout = settings.llm_timeout
-        self.audit_temperature = settings.audit_temperature
 
     def _check_safety_block(self, response: types.GenerateContentResponse) -> None:
         """Safety filter でブロックされた場合に ValueError を送出する。"""
@@ -108,37 +107,3 @@ class GeminiAdapter(LLMAdapter):
             logger.error("Failed to parse estimate response: %s", content[:200])
             raise
 
-    async def audit_estimate(
-        self, estimate_data: dict, calculated_data: dict
-    ) -> dict:
-        """第3回AIチェック: 見積もり出力の品質監査と修正。"""
-        system_prompt = _load_prompt("audit_check.txt")
-
-        user_message = {
-            "estimate": estimate_data,
-            "user_input": calculated_data.get("user_input", {}),
-            "calculated_features": {
-                k: v for k, v in calculated_data.items() if k != "user_input"
-            },
-        }
-
-        response = await asyncio.wait_for(
-            self.client.aio.models.generate_content(
-                model=self.model,
-                contents=json.dumps(user_message, ensure_ascii=False),
-                config=types.GenerateContentConfig(
-                    system_instruction=system_prompt,
-                    temperature=self.audit_temperature,
-                    response_mime_type="application/json",
-                ),
-            ),
-            timeout=self.timeout,
-        )
-
-        self._check_safety_block(response)
-        content = response.text or "{}"
-        try:
-            return json.loads(content)
-        except json.JSONDecodeError:
-            logger.error("Failed to parse audit response: %s", content[:200])
-            raise

@@ -14,7 +14,6 @@ def _make_settings(**overrides) -> Settings:
         "gemini_api_key": "test-key",
         "gemini_model": "gemini-2.5-flash",
         "llm_timeout": 45,
-        "audit_temperature": 0.3,
     }
     defaults.update(overrides)
     return Settings(**defaults)
@@ -168,69 +167,6 @@ class TestGenerateEstimate:
             adapter = GeminiAdapter(_make_settings())
             with pytest.raises(ValueError, match="safety filter"):
                 await adapter.generate_estimate({"user_input": {}})
-
-
-# ---------------------------------------------------------------------------
-# audit_estimate
-# ---------------------------------------------------------------------------
-
-
-class TestAuditEstimate:
-    @pytest.mark.asyncio
-    async def test_success(self):
-        expected = {"project_name": "監査済み", "audit_warnings": []}
-        mock_response = _make_response(json.dumps(expected))
-
-        with patch("app.core.llm.gemini_adapter.genai") as mock_genai:
-            mock_client = MagicMock()
-            mock_client.aio.models.generate_content = AsyncMock(return_value=mock_response)
-            mock_genai.Client.return_value = mock_client
-
-            from app.core.llm.gemini_adapter import GeminiAdapter
-
-            adapter = GeminiAdapter(_make_settings())
-            result = await adapter.audit_estimate(
-                {"project_name": "元データ"}, {"user_input": {}}
-            )
-
-        assert result == expected
-
-    @pytest.mark.asyncio
-    async def test_uses_audit_temperature(self):
-        mock_response = _make_response("{}")
-
-        with patch("app.core.llm.gemini_adapter.genai") as mock_genai:
-            mock_client = MagicMock()
-            mock_client.aio.models.generate_content = AsyncMock(return_value=mock_response)
-            mock_genai.Client.return_value = mock_client
-
-            from app.core.llm.gemini_adapter import GeminiAdapter
-
-            adapter = GeminiAdapter(_make_settings(audit_temperature=0.2))
-            await adapter.audit_estimate({"project_name": "test"}, {"user_input": {}})
-
-            call_kwargs = mock_client.aio.models.generate_content.call_args
-            config = call_kwargs.kwargs["config"]
-            assert config.temperature == 0.2
-
-    @pytest.mark.asyncio
-    async def test_empty_text_returns_empty_dict(self):
-        mock_response = _make_response(None, finish_reason="STOP")
-        mock_response.text = None
-
-        with patch("app.core.llm.gemini_adapter.genai") as mock_genai:
-            mock_client = MagicMock()
-            mock_client.aio.models.generate_content = AsyncMock(return_value=mock_response)
-            mock_genai.Client.return_value = mock_client
-
-            from app.core.llm.gemini_adapter import GeminiAdapter
-
-            adapter = GeminiAdapter(_make_settings())
-            result = await adapter.audit_estimate(
-                {"project_name": "test"}, {"user_input": {}}
-            )
-
-        assert result == {}
 
 
 # ---------------------------------------------------------------------------

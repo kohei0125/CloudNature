@@ -90,9 +90,6 @@ async def test_generate_estimate_uses_fallback_with_step4_and_step8_labels(monke
             "user_input": user_input,
         }
 
-    async def passthrough_audit(estimate_data: dict, calculated_data: dict, start_time: float) -> dict:
-        return estimate_data
-
     original_fallback_generate = FallbackAdapter.generate_estimate
 
     async def wrapped_fallback_generate(self, calculated_data: dict) -> dict:
@@ -104,7 +101,6 @@ async def test_generate_estimate_uses_fallback_with_step4_and_step8_labels(monke
     monkeypatch.setattr(estimate_service, "get_estimate_session", fake_get_estimate_session)
     monkeypatch.setattr(estimate_service, "update_session_status", lambda _sid, _status: None)
     monkeypatch.setattr(estimate_service, "calculate_pricing", fake_calculate_pricing)
-    monkeypatch.setattr(estimate_service, "_audit_estimate", passthrough_audit)
     monkeypatch.setattr(estimate_service, "_llm", _FailingLLM())
     monkeypatch.setattr(estimate_service.settings, "llm_max_retries", 1)
     monkeypatch.setattr(FallbackAdapter, "generate_estimate", wrapped_fallback_generate)

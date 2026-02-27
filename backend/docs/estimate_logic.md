@@ -1,6 +1,6 @@
 # AI見積もりシステム ロジック仕様書
 
-> 最終更新: 2026-02-26
+> 最終更新: 2026-02-27
 
 ---
 
@@ -133,7 +133,7 @@ POST /generate
 └────────────────────┬────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────┐
-│ 5. 金額上書き (_enforce_calculated_prices)  【1回目】     │
+│ 5. 金額上書き (_enforce_calculated_prices)               │
 │    ├─ features[].standard_price → 計算値で強制上書き      │
 │    ├─ features[].hybrid_price   → 計算値で強制上書き      │
 │    ├─ total_cost.standard/hybrid → 計算値で強制上書き     │
@@ -142,40 +142,12 @@ POST /generate
 └────────────────────┬────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────┐
-│ 6. 第2回AI呼び出し: 品質監査 (_audit_estimate)           │
-│                                                          │
-│    ┌─ 経過80秒超? ─── Yes ──→ スキップ (元データ返却) ──┐ │
-│    │       No                                           │ │
-│    ▼                                                    │ │
-│    ┌─ audit_enabled? ── No ──→ スキップ ────────────────┤ │
-│    │       Yes                                          │ │
-│    ▼                                                    │ │
-│    LLM呼び出し (temperature=0.3)                        │ │
-│    ├─ プロンプト: audit_check.txt                       │ │
-│    ├─ チェック観点:                                      │ │
-│    │   A. 重複・類似機能の検出                            │ │
-│    │   B. 金額妥当性 → audit_warnings (修正しない)       │ │
-│    │   C. 文章品質改善                                   │ │
-│    │                                                    │ │
-│    ├─ validate_estimate_output()                        │ │
-│    │   ├─ OK → 金額再上書き (二重保証) → 監査済み出力    │ │
-│    │   └─ NG → 元データ返却 ─────────────────────────┤ │
-│    │                                                    │ │
-│    ├─ audit_warnings → ログ記録 (客には返さない)         │ │
-│    ├─ _log_audit_diff() → 差分ログ記録                  │ │
-│    │                                                    │ │
-│    └─ 例外発生 → 元データ返却 ──────────────────────────┤ │
-│                                                       │ │
-│    ◄──────────────────────────────────────────────────┘ │
-└────────────────────┬────────────────────────────────────┘
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│ 7. DB保存 (status=completed, raw_json=結果JSON)          │
+│ 6. DB保存 (status=completed, raw_json=結果JSON)          │
 │    + セッション状態更新 (status=completed)                │
 └────────────────────┬────────────────────────────────────┘
                      ▼
 ┌─────────────────────────────────────────────────────────┐
-│ 8. レスポンス返却 (status=completed, estimate=結果)       │
+│ 7. レスポンス返却 (status=completed, estimate=結果)       │
 │    + バックグラウンドタスク起動:                           │
 │      ├─ PDF生成                                          │
 │      ├─ Notion保存                                       │
@@ -430,13 +402,12 @@ LLMAdapter (抽象基底)
 `create_llm_adapter(settings)` で `LLM_PROVIDER` に基づき自動選択。
 APIキーが未設定の場合は自動的に FallbackAdapter にフォールバックする。
 
-### 6.2 3回のAI呼び出し
+### 6.2 2回のAI呼び出し
 
 | 回 | メソッド | タイミング | temperature | プロンプト | 目的 |
 |----|---------|----------|------------|----------|------|
 | 第1回 | `generate_dynamic_questions` | Step 7完了時 | 0.7 | dynamic_questions.txt | 機能候補の提案 |
 | 第2回 | `generate_estimate` | 見積もり生成時 | 0.5 | estimate_generation.txt | 提案文書のテキスト生成 |
-| 第3回 | `audit_estimate` | enforce後 | 0.3 | audit_check.txt | 品質監査・文章修正 |
 
 ### 6.3 第1回: 動的質問生成
 
@@ -514,38 +485,7 @@ APIキーが未設定の場合は自動的に FallbackAdapter にフォールバ
 - バリデーション: `validate_estimate_output()`
 - フォールバック: 業種別テンプレート見積もり
 
-### 6.5 第3回: 品質監査
-
-**入力:**
-```json
-{
-  "estimate": { ... (第2回出力・enforce済み) },
-  "user_input": { ... },
-  "calculated_features": { ... (Pricing Engine出力) }
-}
-```
-
-**チェック観点:**
-
-| 分類 | 内容 | 対応 |
-|------|------|------|
-| A. 重複・類似 | 名前は異なるが説明が同じ機能 | detailを差別化して書き分け |
-| B. 金額妥当性 | total_cost.messageの金額テキスト不一致 | テキスト修正 |
-| B. 金額妥当性 | 各機能の規模と金額の釣り合い | **audit_warningsに警告のみ（修正しない）** |
-| C. 文章品質 | 日本語の自然さ・敬語一貫性 | テキスト修正 |
-| C. 文章品質 | summaryの課題共感・定型文排除 | テキスト修正 |
-| C. 文章品質 | features[].nameがカテゴリ名流用 | 自然な機能名に修正 |
-| C. 文章品質 | discussion_agendaにセキュリティ項目 | 追加 |
-| C. 文章品質 | 不適切表現（誇張、根拠なき数値） | 削除 |
-
-**出力:** 修正済みの完全なJSON + `audit_warnings` フィールド
-
-- リトライ: なし（1回のみ）
-- 失敗時: 元データをそのまま使用
-- タイムアウト安全策: 経過80秒超でスキップ
-- `audit_warnings`: ログに記録し、お客様には返さない
-
-### 6.6 FallbackAdapter
+### 6.5 FallbackAdapter
 
 OpenAI APIが使えない場合のテンプレート応答:
 
@@ -553,7 +493,6 @@ OpenAI APIが使えない場合のテンプレート応答:
 |---------|------|
 | `generate_dynamic_questions` | 業種別デフォルト機能リスト（7業種 + 汎用）を返却 |
 | `generate_estimate` | 業種別テンプレート文 + Pricing Engineの計算値で構成 |
-| `audit_estimate` | 入力をそのまま返す（パススルー） |
 
 ---
 
@@ -604,48 +543,6 @@ result.total_cost.hybrid   = calculated_data.total_hybrid    ← 強制上書き
 result.confidence          = calculated_data.confidence      ← 上書き
 result.user_input          = calculated_data.user_input      ← 保持
 ```
-
-**この関数は2回呼ばれる** — 第2回AI出力後と第3回AI(監査)出力後。
-
-### 8.2 品質監査 (`_audit_estimate`)
-
-```python
-async def _audit_estimate(estimate_data, calculated_data, start_time):
-    # 無効化チェック
-    if not settings.audit_enabled:
-        return estimate_data
-
-    # タイムアウト安全策
-    elapsed = time.time() - start_time
-    if elapsed > 80:  # 120秒全体制限の安全域
-        return estimate_data
-
-    try:
-        audited = await _llm.audit_estimate(estimate_data, calculated_data)
-
-        if not validate_estimate_output(audited):
-            return estimate_data  # バリデーション失敗 → 元データ
-
-        audited = _enforce_calculated_prices(audited, calculated_data)  # 金額二重保証
-
-        warnings = audited.pop("audit_warnings", [])  # 客には返さない
-        if warnings:
-            logger.info("Audit warnings: %s", warnings)
-
-        _log_audit_diff(estimate_data, audited)  # 差分ログ
-        return audited
-    except Exception:
-        return estimate_data  # 例外 → 元データ
-```
-
-### 8.3 差分ログ (`_log_audit_diff`)
-
-監査前後で以下のフィールドの変更を検出し、ログに記録する:
-
-- `project_name`, `summary`, `confidence_note`
-- `features[i].name`, `features[i].detail`
-- `discussion_agenda`
-- `total_cost.message`
 
 ---
 
@@ -718,8 +615,6 @@ _format_price(1_200_000) → "120万円"   # math.ceil(price / 10000)
 | `OPENAI_MODEL` | `"gpt-4.1-nano"` | 使用するOpenAIモデル |
 | `LLM_MAX_RETRIES` | `3` | LLMリトライ回数 |
 | `LLM_TIMEOUT` | `45` | LLMリクエストタイムアウト（秒） |
-| `AUDIT_ENABLED` | `True` | 品質監査の有効/無効 |
-| `AUDIT_TEMPERATURE` | `0.3` | 監査LLMのtemperature |
 | `RESEND_API_KEY` | `""` | Resend APIキー。未設定時メール無効 |
 | `EMAIL_FROM` | `"CloudNature <cloudnature@...>"` | メール送信元 |
 | `NOTIFY_EMAIL` | `""` | 運営者通知先 |
@@ -767,10 +662,6 @@ deploy.sh 起動
 ├──────────────────────────────────┼──────────────────────────────┤
 │ 動的質問生成 (3回リトライ失敗)     │ 業種別デフォルト機能リスト     │
 │ テキスト生成 (3回リトライ失敗)     │ 業種別テンプレート見積もり     │
-│ 品質監査 (バリデーション失敗)      │ 第2回の出力をそのまま使用     │
-│ 品質監査 (例外発生)               │ 第2回の出力をそのまま使用     │
-│ 品質監査 (80秒超過)              │ 監査スキップ                  │
-│ 品質監査 (audit_enabled=False)   │ 監査スキップ                  │
 │ メール送信失敗                    │ ログ記録のみ（見積もりには影響なし）│
 │ Notion保存失敗                   │ ログ記録のみ（見積もりには影響なし）│
 │ PDF生成失敗                      │ メールをPDF添付なしで送信      │
@@ -782,11 +673,8 @@ deploy.sh 起動
 | リスク | 対策 |
 |--------|------|
 | LLMが金額を勝手に変更 | `_enforce_calculated_prices()` で計算値に上書き |
-| 監査AIが金額を変更 | 監査後に再度 `_enforce_calculated_prices()` を適用（二重保証） |
 | 内訳と合計が不一致 | `validate_estimate_output()` で `Σ features == total` を検証 |
 | 重複機能で水増し | `validate_estimate_output()` で重複feature名を検出 |
-| 監査後に品質劣化 | `_log_audit_diff()` で差分をログ記録 + `AUDIT_ENABLED=false` で即無効化 |
-| 相場に合わない金額 | `audit_warnings` でログ記録（修正はしない） |
 
 ### 11.3 HTTPエラー
 
@@ -807,6 +695,6 @@ deploy.sh 起動
 | 通信 | X-API-Key ヘッダ認証 (Vercel → Cloud Run) |
 | 入力 | PII削除、プロンプトインジェクション検出 |
 | LLM | 構造化メッセージ分離 (System/User role)、出力バリデーション |
-| 金額 | Pricing Engine決定的計算 + 2回の強制上書き |
+| 金額 | Pricing Engine決定的計算 + 強制上書き |
 | データ | TTL 31日で自動削除、step_13はLLMに送信しない |
 | API | Rate Limit 60req/min、CORS制限 |
