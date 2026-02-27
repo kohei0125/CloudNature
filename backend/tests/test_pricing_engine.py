@@ -556,32 +556,32 @@ class TestFeatureCountDiscount:
         assert _feature_count_discount(2, ["基本データ管理", "検索・フィルタリング"]) == 1.0
 
     def test_small(self):
-        """n=3,4 → 0.95。"""
+        """n=3,4 → 0.93。"""
         cats = ["基本データ管理"] * 3
-        assert _feature_count_discount(3, cats) == 0.95
-        assert _feature_count_discount(4, cats + ["検索・フィルタリング"]) == 0.95
+        assert _feature_count_discount(3, cats) == 0.93
+        assert _feature_count_discount(4, cats + ["検索・フィルタリング"]) == 0.93
 
     def test_medium(self):
-        """n=5,6 → 0.90。"""
+        """n=5,6 → 0.85。"""
         cats = ["基本データ管理"] * 5
-        assert _feature_count_discount(5, cats) == 0.90
-        assert _feature_count_discount(6, cats + ["検索・フィルタリング"]) == 0.90
+        assert _feature_count_discount(5, cats) == 0.85
+        assert _feature_count_discount(6, cats + ["検索・フィルタリング"]) == 0.85
 
     def test_large(self):
-        """n=7+ → 0.85。"""
+        """n=7+ → 0.78。"""
         cats = ["基本データ管理"] * 7
-        assert _feature_count_discount(7, cats) == 0.85
-        assert _feature_count_discount(10, cats + ["検索・フィルタリング"] * 3) == 0.85
+        assert _feature_count_discount(7, cats) == 0.78
+        assert _feature_count_discount(10, cats + ["検索・フィルタリング"] * 3) == 0.78
 
     def test_complex_override(self):
-        """n=7 + complex>=2 → max(0.85, 0.90) = 0.90。"""
+        """n=7 + complex>=2 → max(0.78, 0.90) = 0.90。"""
         cats = ["基本データ管理"] * 5 + ["外部API連携(複雑)", "決済連携"]
         assert _feature_count_discount(7, cats) == 0.90
 
     def test_complex_with_small_n(self):
-        """n=3 + complex>=2 → max(0.95, 0.90) = 0.95（overrideされない）。"""
+        """n=3 + complex>=2 → max(0.93, 0.90) = 0.93（overrideされない）。"""
         cats = ["外部API連携(複雑)", "決済連携", "基本データ管理"]
-        assert _feature_count_discount(3, cats) == 0.95
+        assert _feature_count_discount(3, cats) == 0.93
 
     def test_estimate_with_discount_applied(self):
         """統合テスト: 6機能でディスカウント(0.90)が反映される。"""
@@ -605,10 +605,10 @@ class TestFeatureCountDiscount:
         result = calculate_estimate(user_input)
         assert len(result["features"]) == 6
 
-        # 全乗数デフォルト(1.0)、6機能でdiscount=0.90
+        # 全乗数デフォルト(1.0)、6機能でdiscount=0.85
         # order_management → 在庫・受発注管理 中央値825000
         base = 825_000
-        expected = _round_to_1000(base * 1.0 * 1.0 * 0.90 / 0.65)
+        expected = _round_to_1000(base * 1.0 * 1.0 * 0.85 / 0.65)
         assert result["features"][0]["standard_price"] == expected
 
 

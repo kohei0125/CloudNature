@@ -320,11 +320,11 @@ def _feature_count_discount(n: int, categories: list[str]) -> float:
     if n <= 2:
         d = 1.0
     elif n <= 4:
-        d = 0.95
+        d = 0.93
     elif n <= 6:
-        d = 0.90
-    else:
         d = 0.85
+    else:
+        d = 0.78
 
     complex_count = sum(1 for c in categories if c in _COMPLEX_CATEGORIES)
     if complex_count >= 2:
