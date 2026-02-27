@@ -16,5 +16,6 @@ export interface CaseStudyDetail {
   solution: string;
   results: string[];
   quote?: { text: string; author: string; role: string };
+  link?: { label: string; href: string };
   image: string;
 }
