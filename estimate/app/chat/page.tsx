@@ -112,8 +112,7 @@ function ChatPageContent() {
     if (generatingElapsedSec < 5) return GENERATING_ESTIMATE_STAGES[0];
     if (generatingElapsedSec < 10) return GENERATING_ESTIMATE_STAGES[1];
     if (generatingElapsedSec < 15) return GENERATING_ESTIMATE_STAGES[2];
-    if (generatingElapsedSec < 20) return GENERATING_ESTIMATE_STAGES[3];
-    return GENERATING_ESTIMATE_STAGES[4];
+    return GENERATING_ESTIMATE_STAGES[3];
   }, [generatingElapsedSec]);
 
   // Typing message for AI steps
