@@ -121,6 +121,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     category: "自社プロダクト × AI",
     before: "従来のシステム開発見積もりは、要件ヒアリングから概算提示まで数日〜数週間かかるのが業界の常識だった。",
     after: "チャット形式で13の質問に回答するだけで、AIが最適なシステム構成・概算費用を1分以内に自動算出。見積もり業務の工数を95%削減し、顧客体験を大幅に向上。",
+    link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/chat" },
     image: "/images/meeting.jpg"
   },
   {

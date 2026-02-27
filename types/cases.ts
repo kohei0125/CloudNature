@@ -5,6 +5,7 @@ export interface CaseStudy {
   before: string;
   after: string;
   image: string;
+  link?: { label: string; href: string };
 }
 
 export interface CaseStudyDetail {

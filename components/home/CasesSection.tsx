@@ -54,6 +54,11 @@ const CasesSection = () => {
                     <p className="text-xs text-white leading-relaxed">
                       {study.after}
                     </p>
+                    {study.link && (
+                      <Link href={study.link.href} className="inline-flex items-center gap-1 mt-2 text-xs text-sunset font-bold hover:gap-2 transition-all">
+                        {study.link.label} <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
