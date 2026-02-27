@@ -35,7 +35,7 @@
 - [導入事例](https://cloudnature.jp/cases): KPIハイライト付きの詳細な導入事例
 - [企業情報](https://cloudnature.jp/company): 会社概要、代表メッセージ、アクセス
 - [お問い合わせ](https://cloudnature.jp/contact): 無料相談・お問い合わせフォーム
-- [AI見積もり](https://ai.cloudnature.jp/): AIによる無料の概算見積もりツール
+- [AI見積もり](https://ai.cloudnature.jp/chat): AIによる無料の概算見積もりツール
 - [プライバシーポリシー](https://cloudnature.jp/privacy): 個人情報の取り扱い方針
 - [情報セキュリティ方針](https://cloudnature.jp/security): 情報資産の保護と安全管理
 
@@ -43,4 +43,4 @@
 
 - 相談無料・秘密厳守・営業電話なし
 - [お問い合わせフォーム](https://cloudnature.jp/contact)
-- [無料AI見積もり](https://ai.cloudnature.jp/)
+- [無料AI見積もり](https://ai.cloudnature.jp/chat)

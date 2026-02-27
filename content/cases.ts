@@ -45,7 +45,7 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
       author: "利用企業 経営者",
       role: "IT企業"
     },
-    link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp" },
+    link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/chat" },
     image: "/images/meeting.jpg"
   },
   {
@@ -80,6 +80,6 @@ export const CASES_CTA = {
   eyebrow: "NEXT STEP",
   title: "平均80%の工数削減を、御社でも",
   description: "事例でご紹介したような成果を、御社でも実現できるか——AIが概算費用を即時算出します。",
-  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp" },
+  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/chat" },
   secondaryCta: { label: "お問い合わせ・ご相談", href: "/contact" }
 };

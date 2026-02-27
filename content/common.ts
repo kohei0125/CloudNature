@@ -1,9 +1,9 @@
 import { NavItem } from "@/types";
 
-export const ESTIMATE_URL = "https://ai.cloudnature.jp";
+export const ESTIMATE_URL = "https://ai.cloudnature.jp/chat";
 
 export const SITE_CTA = {
-  primary: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp" },
+  primary: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/chat" },
   secondary: { label: "お問い合わせ・ご相談", href: "/contact" },
 };
 

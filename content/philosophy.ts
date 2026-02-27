@@ -85,6 +85,6 @@ export const PHILOSOPHY_CTA = {
   eyebrow: "GET STARTED",
   title: "御社の自動化余地を、無料で診断します",
   description: "AIが概算費用を即時算出。または30分の無料ヒアリングで、御社の課題に最適な解決策をご提案します。",
-  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp" },
+  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/chat" },
   secondaryCta: { label: "お問い合わせ・ご相談", href: "/contact" }
 };
