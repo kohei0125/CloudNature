@@ -43,7 +43,7 @@ const CasesSection = () => {
                   {/* Before Block */}
                   <div className="pl-3 border-l-2 border-white/20">
                     <p className="text-[10px] text-gray-500 font-bold uppercase mb-1 tracking-wider">BEFORE</p>
-                    <p className="text-xs text-gray-400 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
                       {study.before}
                     </p>
                   </div>
@@ -51,7 +51,7 @@ const CasesSection = () => {
                   {/* After Block */}
                   <div className="pl-3 border-l-2 border-sunset">
                     <p className="text-[10px] text-sunset font-bold uppercase mb-1 tracking-wider">AFTER</p>
-                    <p className="text-xs text-white leading-relaxed">
+                    <p className="text-xs sm:text-sm text-white leading-relaxed">
                       {study.after}
                     </p>
                     {study.link && (

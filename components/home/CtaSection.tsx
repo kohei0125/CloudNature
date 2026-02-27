@@ -38,7 +38,7 @@ const CtaSection = () => {
               </div>
 
               <div className="space-y-6">
-                <p className="text-gray-600 leading-relaxed text-lg">
+                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
                   {CTA_BANNER.description}
                 </p>
 
@@ -46,8 +46,8 @@ const CtaSection = () => {
                 {CTA_BANNER.appealPoints && (
                   <ul className="space-y-3">
                     {CTA_BANNER.appealPoints.map((point, index) => (
-                      <li key={index} className="flex items-start gap-3 text-forest font-medium">
-                        <CheckCircle2 className="w-6 h-6 text-sage flex-shrink-0" />
+                      <li key={index} className="flex items-start gap-3 text-forest font-medium text-sm sm:text-base">
+                        <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-sage flex-shrink-0" />
                         <span>{point}</span>
                       </li>
                     ))}
