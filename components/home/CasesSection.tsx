@@ -37,7 +37,7 @@ const CasesSection = () => {
 
               {/* Content Area */}
               <div className="v-stack gap-4">
-                <h4 className="text-lg font-bold text-white leading-tight">{study.title}</h4>
+                <h3 className="text-lg font-bold text-white leading-tight">{study.title}</h3>
 
                 <div className="v-stack gap-3">
                   {/* Before Block */}

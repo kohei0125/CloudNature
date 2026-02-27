@@ -6,6 +6,7 @@ import CaseStudyDetailCard from "@/components/cases/CaseStudyDetailCard";
 import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.cases.title,
@@ -26,8 +27,14 @@ export const metadata: Metadata = {
 };
 
 export default function CasesPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "導入事例", path: "/cases" }]);
+
   return (
     <div className="w-full bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={CASES_HERO.eyebrow}
         title={CASES_HERO.title}

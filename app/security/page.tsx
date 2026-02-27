@@ -3,6 +3,7 @@ import { PAGE_META } from "@/content/common";
 import { SECURITY_HERO, SECURITY_SECTIONS } from "@/content/legal";
 import PageHero from "@/components/shared/PageHero";
 import LegalDocument from "@/components/legal/LegalDocument";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.security.title,
@@ -22,8 +23,14 @@ export const metadata: Metadata = {
 };
 
 export default function SecurityPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "情報セキュリティ方針", path: "/security" }]);
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={SECURITY_HERO.eyebrow}
         title={SECURITY_HERO.title}

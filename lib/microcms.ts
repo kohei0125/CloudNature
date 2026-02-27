@@ -87,3 +87,24 @@ export async function getAllNewsIds(): Promise<string[]> {
 
   return ids;
 }
+
+/** sitemap用: 全記事の id と updatedAt を取得 */
+export async function getAllNewsForSitemap(): Promise<{ id: string; updatedAt: string }[]> {
+  const items: { id: string; updatedAt: string }[] = [];
+  const PER_PAGE = 100;
+  let offset = 0;
+
+  for (;;) {
+    const res = await fetchAPI<MicroCMSListResponse<MicroCMSNewsArticle>>(
+      "/news",
+      { fields: "id,updatedAt", limit: String(PER_PAGE), offset: String(offset), orders: "-publishedAt" },
+      60,
+    );
+    if (!res || res.contents.length === 0) break;
+    items.push(...res.contents.map((a) => ({ id: a.id, updatedAt: a.updatedAt })));
+    if (items.length >= res.totalCount) break;
+    offset += PER_PAGE;
+  }
+
+  return items;
+}

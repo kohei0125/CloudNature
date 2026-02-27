@@ -7,6 +7,7 @@ import StepFlow from "@/components/contact/StepFlow";
 import AlternativeContact from "@/components/contact/AlternativeContact";
 import ContactFaq from "@/components/contact/ContactFaq";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.contact.title,
@@ -27,8 +28,14 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "お問い合わせ", path: "/contact" }]);
+
   return (
     <div className="w-full bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={CONTACT_HERO.eyebrow}
         title={CONTACT_HERO.title}

@@ -43,9 +43,9 @@ const ServicesSection = () => {
                   </span>
                 </div>
 
-                <h4 className="text-xl font-bold text-forest mb-4 leading-snug tracking-tight">
+                <h3 className="text-xl font-bold text-forest mb-4 leading-snug tracking-tight">
                   {service.title}
-                </h4>
+                </h3>
 
                 <p className="text-gray-600 mb-8 text-sm leading-relaxed max-w-sm">
                   {service.description}

@@ -9,6 +9,7 @@ import DevApproach from "@/components/philosophy/DevApproach";
 import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.philosophy.title,
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.jp/philosophy",
+    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: "クラウドネイチャーの想い" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -29,8 +31,14 @@ export const metadata: Metadata = {
 };
 
 export default function PhilosophyPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "想い", path: "/philosophy" }]);
+
   return (
     <div className="w-full bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={PHILOSOPHY_HERO.eyebrow}
         title={PHILOSOPHY_HERO.title}

@@ -8,6 +8,7 @@ import AccessSection from "@/components/company/AccessSection";
 import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.company.title,
@@ -28,8 +29,14 @@ export const metadata: Metadata = {
 };
 
 export default function CompanyPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "企業情報", path: "/company" }]);
+
   return (
     <div className="w-full bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={COMPANY_HERO.eyebrow}
         title={COMPANY_HERO.title}

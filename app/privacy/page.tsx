@@ -3,6 +3,7 @@ import { PAGE_META } from "@/content/common";
 import { PRIVACY_HERO, PRIVACY_SECTIONS } from "@/content/legal";
 import PageHero from "@/components/shared/PageHero";
 import LegalDocument from "@/components/legal/LegalDocument";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.privacy.title,
@@ -22,8 +23,14 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
+  const breadcrumb = breadcrumbJsonLd([{ name: "プライバシーポリシー", path: "/privacy" }]);
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={PRIVACY_HERO.eyebrow}
         title={PRIVACY_HERO.title}

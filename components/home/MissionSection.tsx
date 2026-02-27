@@ -58,7 +58,7 @@ const MissionSection = () => {
                     </div>
 
                     <div className="relative z-10">
-                      <h4 className="text-lg font-bold text-forest mb-1">{value.displayTitle}</h4>
+                      <h3 className="text-lg font-bold text-forest mb-1">{value.displayTitle}</h3>
                       <p className={`text-xs font-bold mb-2 tracking-wider ${textColor}`}>{value.subtitle}</p>
                       <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                         {value.description}
@@ -83,7 +83,7 @@ const MissionSection = () => {
           <ul>
             {VALUES.map((value, index) => (
               <li key={index}>
-                <h3>{value.title}</h3>
+                <h4>{value.title}</h4>
                 <p>{value.description}</p>
               </li>
             ))}

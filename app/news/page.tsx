@@ -7,10 +7,25 @@ import { toNewsItem } from "@/types/microcms";
 import PageHero from "@/components/shared/PageHero";
 import NewsCard from "@/components/news/NewsCard";
 import type { NewsItem } from "@/types";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.news.title,
   description: PAGE_META.news.description,
+  openGraph: {
+    title: PAGE_META.news.title,
+    description: PAGE_META.news.description,
+    type: "website",
+    locale: "ja_JP",
+    url: "https://cloudnature.jp/news",
+    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: "クラウドネイチャーのニュース" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_META.news.title,
+    description: PAGE_META.news.description,
+    images: ["/images/og-image.png"],
+  },
   alternates: { canonical: "https://cloudnature.jp/news" },
 };
 
@@ -30,8 +45,14 @@ const NewsPage = async () => {
     isFallback = true;
   }
 
+  const breadcrumb = breadcrumbJsonLd([{ name: "ニュース", path: "/news" }]);
+
   return (
     <div className="bg-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <PageHero
         eyebrow={NEWS_PAGE.eyebrow}
         title={NEWS_PAGE.title}

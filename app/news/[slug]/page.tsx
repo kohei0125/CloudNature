@@ -8,6 +8,7 @@ import { NEWS_DETAIL } from "@/content/news";
 import { NEWS_CATEGORY_COLORS } from "@/content/home";
 import NewsBody from "@/components/news/NewsBody";
 import type { NewsCategory } from "@/types";
+import { breadcrumbJsonLd } from "@/lib/structured-data";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -43,6 +44,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         ? [{ url: article.image.url, width: article.image.width, height: article.image.height }]
         : undefined,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt ?? "",
+      images: article.image ? [article.image.url] : undefined,
+    },
     alternates: { canonical: `https://cloudnature.jp/news/${article.id}` },
   };
 }
@@ -60,8 +67,28 @@ const NewsArticlePage = async ({ params }: PageProps) => {
   const category = (article.category?.name ?? "ニュース") as NewsCategory;
   const colorClass = NEWS_CATEGORY_COLORS[category] ?? "bg-stone/20 text-forest";
 
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "ニュース", path: "/news" },
+    { name: article.title, path: `/news/${article.id}` },
+  ]);
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt ?? article.publishedAt,
+    author: { "@type": "Organization", name: "株式会社クラウドネイチャー", url: "https://cloudnature.jp" },
+    publisher: { "@id": "https://cloudnature.jp/#organization" },
+    ...(article.image ? { image: article.image.url } : {}),
+  };
+
   return (
     <div className="bg-cream min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, articleSchema]) }}
+      />
       <article className="pt-24 md:pt-32 pb-12 md:pb-16">
         <div className="max-w-3xl mx-auto px-4 md:px-6">
           {/* 戻るリンク */}
