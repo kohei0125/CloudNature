@@ -10,7 +10,6 @@ export const CONTACT_FORM_LABELS: ContactFormLabels = {
   name: "お名前",
   email: "メールアドレス",
   company: "会社名",
-  phone: "電話番号",
   subject: "お問い合わせ種別",
   message: "お問い合わせ内容",
   submit: "無料で相談する（営業電話なし）",
@@ -33,7 +32,7 @@ export const CONTACT_SUBJECTS = [
 export const STEP_FLOW_TITLE = "ご相談の流れ";
 
 export const STEP_FLOW: StepFlowItem[] = [
-  { step: 1, title: "お問い合わせ", description: "フォームまたはお電話でご連絡ください。" },
+  { step: 1, title: "お問い合わせ", description: "フォームよりご連絡ください。" },
   { step: 2, title: "無料ヒアリング", description: "御社の課題やご要望をお伺いします（約30分）。" },
   { step: 3, title: "ご提案・お見積り", description: "最適な解決策と明確な費用をご提示します。" },
   { step: 4, title: "開発スタート", description: "ご納得いただけたら、伴走型で開発を進めます。" }
@@ -41,7 +40,6 @@ export const STEP_FLOW: StepFlowItem[] = [
 
 export const ALTERNATIVE_CONTACT = {
   title: "その他のお問い合わせ方法",
-  phone: { label: "お電話", value: "025-XXX-XXXX", note: "平日 9:00〜18:00" },
   email: { label: "メール", value: "info@cloudnature.jp" }
 };
 

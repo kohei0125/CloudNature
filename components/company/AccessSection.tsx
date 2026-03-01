@@ -38,6 +38,20 @@ const AccessSection = () => {
                 </p>
               </div>
             </div>
+
+            <div className="overflow-hidden rounded-xl border border-forest/10">
+              <iframe
+                src={COMPANY_ACCESS.mapEmbedUrl}
+                width="600"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-[320px] w-full md:h-[380px]"
+                title="株式会社クラウドネイチャーの所在地マップ"
+              />
+            </div>
           </div>
         </div>
       </div>

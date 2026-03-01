@@ -17,7 +17,7 @@ export default function PdfHeader({ date, documentNumber }: PdfHeaderProps) {
         <Image style={styles.headerLogo} src={logoPath} />
         <View>
           <Text style={styles.brandSub}>株式会社クラウドネイチャー</Text>
-          <Text style={styles.brandSub}>新潟県新潟市中央区</Text>
+          <Text style={styles.brandSub}>〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F</Text>
           <Text style={styles.brandSub}>cloudnature.jp</Text>
         </View>
       </View>

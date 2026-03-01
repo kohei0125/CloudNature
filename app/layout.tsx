@@ -88,6 +88,9 @@ export default function RootLayout({
           "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
         address: {
           "@type": "PostalAddress",
+          postalCode: "951-8068",
+          addressLocality: "新潟市中央区",
+          streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
           addressRegion: "新潟県",
           addressCountry: "JP",
         },
@@ -101,6 +104,9 @@ export default function RootLayout({
         image: "https://cloudnature.jp/images/logo.png",
         address: {
           "@type": "PostalAddress",
+          postalCode: "951-8068",
+          addressLocality: "新潟市中央区",
+          streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
           addressRegion: "新潟県",
           addressCountry: "JP",
         },

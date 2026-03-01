@@ -9,9 +9,8 @@ export const COMPANY_HERO = {
 
 export const COMPANY_OVERVIEW: CompanyInfo[] = [
   { label: "会社名", value: "株式会社クラウドネイチャー" },
-  { label: "代表者", value: "代表取締役 ○○ ○○" },
-  { label: "所在地", value: "〒950-0000 新潟県新潟市中央区○○○ ○-○-○" },
-  { label: "設立", value: "2024年○月" },
+  { label: "代表者", value: "代表取締役 渡邉 浩平" },
+  { label: "所在地", value: "〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F" },
   { label: "資本金", value: "○○○万円" },
   {
     label: "事業内容",
@@ -28,7 +27,7 @@ export const COMPANY_OVERVIEW: CompanyInfo[] = [
 export const REPRESENTATIVE_MESSAGE = {
   eyebrow: "MESSAGE",
   title: "代表メッセージ",
-  name: "○○ ○○",
+  name: "渡邉 浩平",
   role: "代表取締役",
   paragraphs: [
     "「技術は、使われてこそ価値がある。」",
@@ -42,9 +41,11 @@ export const REPRESENTATIVE_MESSAGE = {
 export const COMPANY_ACCESS = {
   eyebrow: "ACCESS",
   title: "アクセス",
-  postalCode: "〒950-0000",
-  address: "新潟県新潟市中央区○○○ ○-○-○",
-  description: "新潟駅万代口より徒歩○分",
+  postalCode: "〒951-8068",
+  address: "新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F",
+  description: "新潟駅万代口より徒歩20分",
+  mapEmbedUrl:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3147.378727701607!2d139.04604607589036!3d37.92158187194876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5ff4c9f21b684e13%3A0x1ab254c8d8886f9f!2z44CSOTUxLTgwNjgg5paw5r2f55yM5paw5r2f5biC5Lit5aSu5Yy65LiK5aSn5bed5YmN6YCa77yX55Wq55S677yR77yS77yT77yQ4oiS77yX!5e0!3m2!1sja!2sjp!4v1772406451398!5m2!1sja!2sjp",
 };
 
 export const COMPANY_MID_CTA = {

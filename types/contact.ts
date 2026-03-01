@@ -13,7 +13,6 @@ export interface ContactFormLabels {
   name: string;
   email: string;
   company: string;
-  phone: string;
   subject: string;
   message: string;
   submit: string;
