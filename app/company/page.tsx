@@ -43,10 +43,10 @@ export default function CompanyPage() {
         description={COMPANY_HERO.description}
       />
       <ScrollReveal>
-        <CompanyOverview />
+        <RepresentativeMessage />
       </ScrollReveal>
       <ScrollReveal>
-        <RepresentativeMessage />
+        <CompanyOverview />
       </ScrollReveal>
 
       <section className="pb-8 bg-white">
