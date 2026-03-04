@@ -108,14 +108,6 @@ export const CASES_SECTION = {
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
-    id: "marketing-automation",
-    title: "コンテンツマーケティングの自律的運営",
-    category: "マーケティング × AI自動化",
-    before: "トレンドのリサーチから記事執筆まで全て手動で行い、更新頻度が低く内容も薄くなっていた。",
-    after: "自動化ツールでSNSや競合のトレンドを自律監視し、AIで高品質な記事案を自動生成する仕組みを構築。執筆・投稿の工数を80%削減し、公開頻度が1.5倍、リーチ数も大幅に向上 。",
-    image: "/images/marketing.jpg"
-  },
-  {
     id: "ai-estimate",
     title: "AI見積もりシステムの自社開発",
     category: "自社プロダクト × AI",
@@ -125,12 +117,20 @@ export const CASE_STUDIES: CaseStudy[] = [
     image: "/images/meeting.jpg"
   },
   {
-    id: "wholesale",
-    title: "卸売業の受発注DX",
-    category: "卸売業 × AWS",
-    before: "FAXと電話による受注対応で、聞き間違いや入力ミスが多発。事務員の残業が常態化していた。",
-    after: "AWSを活用したWeb受発注システムを構築。顧客が直接注文する仕組みにより入力工数をゼロにし、誤配送も完全に解消。",
-    image: "/images/office_room.jpg"
+    id: "ai-lms",
+    title: "AI学習管理システム",
+    category: "教育 × AI",
+    before: "社員研修の進捗管理をExcelで行い、受講状況の把握に毎月丸1日かかっていた。教材の更新も属人化し、内容の陳腐化が課題だった。",
+    after: "AIが受講者の理解度を分析し、一人ひとりに最適な学習コースを自動提案。進捗レポートも自動生成され、管理工数を90%削減。研修完了率が2倍に向上。",
+    image: "/images/lms_banner.jpg"
+  },
+  {
+    id: "marketing-automation",
+    title: "コンテンツマーケティングの自律的運営",
+    category: "マーケティング × AI自動化",
+    before: "トレンドのリサーチから記事執筆まで全て手動で行い、更新頻度が低く内容も薄くなっていた。",
+    after: "自動化ツールでSNSや競合のトレンドを自律監視し、AIで高品質な記事案を自動生成する仕組みを構築。執筆・投稿の工数を80%削減し、公開頻度が1.5倍、リーチ数も大幅に向上 。",
+    image: "/images/marketing.jpg"
   }
 ];
 
