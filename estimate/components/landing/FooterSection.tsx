@@ -28,8 +28,6 @@ export default function FooterSection() {
               {footer.taglineLines[1]}
               <br />
               {footer.taglineLines[2]}
-              <br />
-              {footer.taglineLines[3]}
             </p>
           </div>
 

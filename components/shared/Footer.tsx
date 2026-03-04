@@ -30,8 +30,6 @@ const Footer = () => {
               {FOOTER_COPY.taglineLines[1]}
               <br />
               {FOOTER_COPY.taglineLines[2]}
-              <br />
-              {FOOTER_COPY.taglineLines[3]}
             </p>
           </div>
 
