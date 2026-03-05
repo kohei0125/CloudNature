@@ -122,7 +122,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     category: "教育 × AI",
     before: "研修や学習管理は外部の教材サービスに頼りきりで、自社に合った内容にカスタマイズできず、受講状況の把握も困難だった。",
     after: "動画講座の視聴・演習問題・理解度テストをワンストップで提供するAI学習管理システムを構築。AIが正答率や学習履歴から弱点を分析し、最適な復習コースを自動提案。管理工数を大幅に削減し、受講者の学習定着率も向上。",
-    image: "/images/lms_banner.jpg"
+    image: "/images/top_lms_banner.jpg"
   },
   {
     id: "marketing-automation",

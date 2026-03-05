@@ -15,7 +15,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
   return (
     <div className="group grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
       {/* Image */}
-      <div className={cn("relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden", !isEven && "md:order-2")}>
+      <div className={cn("relative h-48 md:h-full min-h-[190px] rounded-2xl overflow-hidden", !isEven && "md:order-2")}>
         <Image
           src={study.image}
           alt={study.title}
