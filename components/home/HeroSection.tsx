@@ -37,7 +37,7 @@ const HeroSection = () => {
             {HERO_COPY.badge}
           </p>
 
-          <h1 className="text-[clamp(1.5rem,7vw,3.5rem)] font-sans font-bold leading-[1.05] text-white tracking-tight mb-8">
+          <h1 className="text-[clamp(1.5rem,7vw,3rem)] font-sans font-bold leading-[1.05] text-white tracking-tight mb-8">
             {HERO_COPY.headingLine1}
             <br />
             <span className="relative inline-block">

@@ -2,7 +2,7 @@ import { StepFlowItem, FaqItem, ContactFormLabels } from "@/types";
 
 export const CONTACT_HERO = {
   eyebrow: "CONTACT",
-  title: "システム開発や業務自動化について、お気軽にご相談ください",
+  title: "お気軽にお相談ください",
   description: "「こんなシステムは作れる？」「まずは費用感だけ知りたい」など、30分のオンライン相談で専門家がお答えします。"
 };
 

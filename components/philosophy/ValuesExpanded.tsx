@@ -25,7 +25,7 @@ const ValuesExpanded = () => {
       <div className="container mx-auto px-6 max-w-4xl">
         <div className="text-center mb-16">
           <p className="text-sm font-bold tracking-widest text-sage mb-3 uppercase">VALUES</p>
-          <h2 className="text-[clamp(1.375rem,5vw,2.5rem)] font-serif font-bold text-forest">
+          <h2 className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold text-forest">
             私たちの3つの価値観
           </h2>
         </div>

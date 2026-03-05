@@ -12,7 +12,7 @@ const CtaSection = () => {
           {/* Left Column: Content */}
           <div className="p-8 md:p-16 space-y-8 v-stack justify-center">
             <div>
-              <h2 className="text-[clamp(1.25rem,5vw,2rem)] font-serif font-bold text-forest leading-tight mb-4">
+              <h2 className="text-[clamp(1.25rem,5vw,1.75rem)] font-serif font-bold text-forest leading-tight mb-4">
                 {CTA_BANNER.titleLines[0]}
                 <br />
                 {CTA_BANNER.titleLines[1]}
