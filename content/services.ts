@@ -3,8 +3,8 @@ import { ESTIMATE_URL } from "@/content/common";
 
 export const SERVICES_HERO = {
   eyebrow: "SOLUTIONS",
-  title: "最適なテクノロジーを、適正価格で",
-  description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。新潟の中小企業の現場を知るからこそ、実用本位のソリューションを提供します。"
+  title: "必要な分だけ、確かな技術を",
+  description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。中小企業の現場にマッチした、実用本位のソリューションを提供します。"
 };
 
 export const SERVICE_DETAILS: ServiceDetail[] = [
@@ -70,7 +70,7 @@ export const IMPLEMENTATION_FLOW: FlowStep[] = [
   { step: 1, title: "無料ヒアリング", description: "御社の課題・要望を丁寧にお伺いし、自動化の余地を診断します。" },
   { step: 2, title: "ご提案・お見積り", description: "最適な解決策と明確な費用・スケジュールをご提示します。" },
   { step: 3, title: "設計・プロトタイプ", description: "画面設計と動くプロトタイプで、完成イメージを具体的にお見せします。" },
-  { step: 4, title: "開発・テスト", description: "2週間ごとの進捗報告で安心。品質を確保しながら着実に開発します。" },
+  { step: 4, title: "開発・テスト", description: "定期的な進捗共有で安心。品質を確保しながら着実に開発します。" },
   { step: 5, title: "導入・研修", description: "本番環境への導入と、現場向けの操作研修を実施します。" },
   { step: 6, title: "運用・定着支援", description: "導入後の運用サポートも万全。トラブル対応もお任せください。" }
 ];
@@ -106,7 +106,7 @@ export const SERVICES_FAQ: FaqItem[] = [
   },
   {
     question: "開発中に仕様変更は可能ですか？",
-    answer: "はい、2週間ごとの進捗報告の際にフィードバックをいただき、柔軟に対応します。ただし、大幅な仕様変更の場合は追加費用・期間についてご相談させていただきます。"
+    answer: "はい、定期的な進捗共有の際にフィードバックをいただき、柔軟に対応します。ただし、大幅な仕様変更の場合は追加費用・期間についてご相談させていただきます。"
   },
   {
     question: "保守・運用のサポートはありますか？",
