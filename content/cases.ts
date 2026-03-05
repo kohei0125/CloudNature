@@ -46,7 +46,8 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
       author: "人事部 部長",
       role: "研修サービス企業"
     },
-    image: "/images/lms_banner.jpg"
+    image: "/images/lms_banner.jpg",
+    imageMobile: "/images/top_lms_banner.jpg"
   },
   {
     id: "marketing-automation",

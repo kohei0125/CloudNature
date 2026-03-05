@@ -19,4 +19,5 @@ export interface CaseStudyDetail {
   quote?: { text: string; author: string; role: string };
   link?: { label: string; href: string };
   image: string;
+  imageMobile?: string;
 }

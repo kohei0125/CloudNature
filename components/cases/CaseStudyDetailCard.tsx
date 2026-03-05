@@ -16,12 +16,24 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
     <div className="group grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
       {/* Image */}
       <div className={cn("relative h-48 md:h-full min-h-[190px] rounded-2xl overflow-hidden", !isEven && "md:order-2")}>
+        {study.imageMobile && (
+          <Image
+            src={study.imageMobile}
+            alt={study.title}
+            fill
+            sizes="100vw"
+            className="md:hidden object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        )}
         <Image
           src={study.image}
           alt={study.title}
           fill
           sizes="(min-width: 768px) 50vw, 100vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className={cn(
+            "object-cover transition-transform duration-700 group-hover:scale-110",
+            study.imageMobile ? "hidden md:block" : "block"
+          )}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-forest/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
       </div>
