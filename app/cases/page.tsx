@@ -17,6 +17,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.jp/cases",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: PAGE_META.cases.title,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",

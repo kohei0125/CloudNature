@@ -101,7 +101,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       {isOpen && (
         <div className="absolute bottom-10 right-0 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
           <Image
-            src="/images/logo.png"
+            src="/images/logo.webp"
             alt=""
             fill
             className="object-contain grayscale"

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
 import Footer from "@/components/shared/Footer";
+import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
@@ -129,6 +130,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={cn(sans.variable, serif.variable)}>
+        <GoogleAnalytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

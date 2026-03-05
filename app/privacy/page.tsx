@@ -13,6 +13,14 @@ export const metadata: Metadata = {
     description: PAGE_META.privacy.description,
     type: "website",
     locale: "ja_JP",
+    images: [
+      {
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: PAGE_META.privacy.title,
+      },
+    ],
   },
   twitter: {
     card: "summary",

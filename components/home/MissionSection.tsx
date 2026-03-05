@@ -31,7 +31,7 @@ const MissionSection = () => {
             <div className="relative space-y-4 md:space-y-6">
               {VALUES.map((value, index) => {
                 const textColors = ["text-sage", "text-sunset", "text-sea"] as const;
-                const icons = ["/images/logo_green.png", "/images/logo_orange.png", "/images/logo_blue.png"];
+                const icons = ["/images/logo_green.webp", "/images/logo_orange.webp", "/images/logo_blue.webp"];
                 const textColor = textColors[index];
                 const iconSrc = icons[index];
 

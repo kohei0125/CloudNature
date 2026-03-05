@@ -7,7 +7,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.microcms-assets.io" },
-      { protocol: "https", hostname: "picsum.photos" },
     ],
   },
   async headers() {
