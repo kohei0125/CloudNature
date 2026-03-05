@@ -17,7 +17,7 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
         <p className="text-sm font-bold tracking-widest mb-3 uppercase text-sage">
           {eyebrow}
         </p>
-        <h2 className={cn("text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
+        <h2 className={cn("text-[clamp(1.375rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>
@@ -28,7 +28,7 @@ const SectionHeader = ({ eyebrow, title, cta, centered = false, darkMode = false
     <div className="v-stack md:h-stack justify-between items-end mb-12 md:mb-16 gap-6">
       <div className="mx-auto md:mx-0">
         <p className="text-sm font-bold tracking-widest text-sage mb-3">{eyebrow}</p>
-        <h2 className={cn("text-[clamp(1.75rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
+        <h2 className={cn("text-[clamp(1.375rem,5vw,2.5rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>

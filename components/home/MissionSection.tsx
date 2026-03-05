@@ -11,7 +11,7 @@ const MissionSection = () => {
           {/* Left Column: Text */}
           <div className="text-center md:text-left z-10 relative">
             <p className="text-sm font-bold tracking-widest text-sage mb-4">{MISSION_COPY.eyebrow}</p>
-            <h2 className="text-[clamp(1.75rem,4vw,2.5rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
+            <h2 className="text-[clamp(1.375rem,4vw,2.5rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
               {MISSION_COPY.title}
             </h2>
             <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">

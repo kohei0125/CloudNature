@@ -70,7 +70,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
         {/* ヘッダー部分 */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-8 lg:mb-12 gap-6 border-b border-stone/40 pb-8">
           <div>
-            <h2 className="text-[clamp(1.75rem,5vw,2.5rem)] font-bold text-forest mb-2 font-serif tracking-tight">
+            <h2 className="text-[clamp(1.375rem,5vw,2.5rem)] font-bold text-forest mb-2 font-serif tracking-tight">
               {NEWS_SECTION.title}
             </h2>
             <p className="text-sage font-medium tracking-wide">
