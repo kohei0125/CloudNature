@@ -131,9 +131,12 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
             href={service.externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 btn-puffy btn-puffy-accent px-6 py-3 rounded-full font-bold text-sm text-white inline-flex items-center gap-2 w-fit"
+            className={cn(
+              "mt-8 inline-flex items-center gap-2 text-sm font-bold transition-all hover:underline hover:underline-offset-4",
+              accentText[service.accentColor]
+            )}
           >
-            詳しくはこちら
+            新潟AIアカデミーを詳しく見る
             <ArrowRight className="w-4 h-4" />
           </a>
         )}
