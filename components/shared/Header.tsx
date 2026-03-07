@@ -40,11 +40,11 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 group">
           <Image
-            src="/images/cloudnature.png"
+            src={isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png"}
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className={cn("object-contain h-10 md:h-12 w-auto transition-all duration-300", isHeroOverlay && "brightness-0 invert")}
+            className="object-contain h-10 md:h-12 w-auto transition-all duration-300"
             priority
           />
         </Link>
