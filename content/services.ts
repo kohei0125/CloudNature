@@ -32,7 +32,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "予約・問い合わせ自動応答", description: "LINE・Webチャットからの問い合わせにAIが24時間対応。予約受付から確認メール送信まで全自動化。" },
       { title: "SaaS間のデータ自動連携", description: "n8nを活用し、Slack・Gmail・Notion・kintoneなど各種SaaSを自動連携。データの手動転記を完全に撲滅します。" }
     ],
-    techStack: ["Dify", "n8n", "OpenAI", "Gemini"],
+    techStack: ["Google ADK", "Mastra", "Dify", "n8n", "OpenAI", "Claude"],
     accentColor: "sunset",
     image: "/images/services/ai_agent.png"
   },
@@ -59,7 +59,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
           "スキルを身につけて終わりにしません。受講後も継続的なサポートと、AIスキルを活かせる仕事の紹介で、学びを確実に成果につなげます。"
       }
     ],
-    techStack: ["セミナー", "個別スクール", "法人研修", "オンライン対応"],
+    techStack: ["セミナー", "個別スクール", "法人研修"],
     accentColor: "sea",
     image: "/images/services/dx_support.png",
     externalUrl: "https://niigata-ai-academy.com"

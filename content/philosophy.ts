@@ -8,7 +8,7 @@ export const PHILOSOPHY_HERO = {
 
 export const FOUNDING_STORY = {
   eyebrow: "OUR STORY",
-  title: "なぜ、新潟で創業したのか",
+  title: "なぜ、創業したのか",
   paragraphs: [
     "「まだやれることがたくさんある。」",
     "東京・大阪で様々なシステムの開発に携わる中で、テクノロジーが多くの人に影響を与える瞬間を見てきました。新潟に戻り、地元の経営者たちと話すたびに確信したのは、同じことがここでも必ずできるということです。",
