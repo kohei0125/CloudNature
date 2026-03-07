@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Download, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 import { CTA_BANNER } from "@/content/home";
 
 const CtaSection = () => {
@@ -18,7 +18,6 @@ const CtaSection = () => {
                 {CTA_BANNER.titleLines[1]}
               </h2>
 
-              {/* Mobile Resource Card */}
               <div className="block md:hidden mb-6">
                 <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex items-start gap-4">
                   <div className="flex-shrink-0">
@@ -31,8 +30,10 @@ const CtaSection = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="font-bold text-forest text-sm mb-1">{CTA_BANNER.downloadTitle}</h4>
-                    <p className="text-xs text-gray-500 font-medium">{CTA_BANNER.downloadMeta}</p>
+                    <h4 className="font-bold text-forest text-sm mb-1">業務自動化マニュアル</h4>
+                    <p className="mt-2 text-xs leading-relaxed text-sage">
+                      無料相談にご参加いただいた方へお渡ししています。
+                    </p>
                   </div>
                 </div>
               </div>
@@ -62,22 +63,15 @@ const CtaSection = () => {
                 {CTA_BANNER.primaryCta}
                 <ArrowRight className="w-5 h-5" />
               </Link>
-              {/* 資料ができるまでコメントアウト */}
-              {/* <Link href="/downloads/ai-agent-guide-2026.pdf" className="px-8 py-4 bg-forest text-white rounded-full font-bold hover:bg-earth transition-colors shadow-lg center gap-2">
-                <Download className="w-4 h-4" />
-                {CTA_BANNER.secondaryCta}
-              </Link> */}
             </div>
           </div>
 
-          {/* Right Column: Manual Image & Highlights */}
+          {/* Right Column: Consultation Summary */}
           <div className="hidden md:flex bg-gradient-to-br from-forest to-earth p-10 lg:p-12 items-center justify-center border-t md:border-t-0 relative overflow-hidden group">
-            {/* Decorative blurs */}
             <div className="absolute top-10 right-10 w-32 h-32 bg-sage/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-10 left-10 w-24 h-24 bg-sunset/15 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 max-w-lg mx-auto">
-              {/* Image */}
+            <div className="relative z-10 flex w-full max-w-lg mx-auto flex-col lg:flex-row items-center gap-8">
               <div className="transform group-hover:scale-105 transition-transform duration-500 ease-out flex-shrink-0">
                 <Image
                   src="/images/manual.png"
@@ -87,23 +81,31 @@ const CtaSection = () => {
                   className="w-[150px] lg:w-[200px] h-auto object-contain drop-shadow-2xl rounded-sm"
                 />
               </div>
-
-              {/* Highlights Text */}
-              {CTA_BANNER.bookHighlights && (
-                <div className="text-white space-y-4">
-                  <h4 className="font-serif font-bold text-lg text-sage/90 border-b border-sage/30 pb-2 mb-3">
-                    本書の内容
-                  </h4>
-                  <ul className="space-y-3">
-                    {CTA_BANNER.bookHighlights.map((highlight, index) => (
-                      <li key={index} className="flex items-start gap-2 text-sm text-gray-200">
-                        <CheckCircle2 className="w-4 h-4 text-sage flex-shrink-0 mt-0.5" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
+              <div className="flex-1 space-y-4 text-white">
+                <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-[0.18em] text-sage">
+                  CONSULTATION BONUS
                 </div>
-              )}
+                <h3 className="font-serif text-xl font-bold leading-tight">
+                  無料相談後に、
+                  <br />
+                  実践ガイドをお渡しします。
+                </h3>
+                {CTA_BANNER.bookHighlights && (
+                  <div className="text-white space-y-4">
+                    <h4 className="font-serif font-bold text-lg text-sage/90 border-b border-sage/30 pb-2 mb-3">
+                      本書の内容
+                    </h4>
+                    <ul className="space-y-3">
+                      {CTA_BANNER.bookHighlights.map((highlight, index) => (
+                        <li key={index} className="flex items-start gap-2 text-sm text-gray-200">
+                          <CheckCircle2 className="w-4 h-4 text-sage flex-shrink-0 mt-0.5" />
+                          <span>{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

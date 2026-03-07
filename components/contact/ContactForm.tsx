@@ -127,44 +127,51 @@ const ContactForm = () => {
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 space-y-5" noValidate>
       {/* Name */}
       <div>
-        <label className="block text-sm font-bold text-forest mb-1.5">
+        <label htmlFor="contact-name" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.name}
           <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
         </label>
         <input
+          id="contact-name"
           type="text"
           required
           value={formData.name}
           onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
           onBlur={() => handleBlur("name")}
+          aria-invalid={Boolean(getError("name"))}
+          aria-describedby={getError("name") ? "contact-name-error" : undefined}
           className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("name") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
-        {getError("name") && <p className="text-red-500 text-xs mt-1">{getError("name")}</p>}
+        {getError("name") && <p id="contact-name-error" className="text-red-500 text-xs mt-1">{getError("name")}</p>}
       </div>
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-bold text-forest mb-1.5">
+        <label htmlFor="contact-email" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.email}
           <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
         </label>
         <input
+          id="contact-email"
           type="email"
           required
           value={formData.email}
           onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
           onBlur={() => handleBlur("email")}
+          aria-invalid={Boolean(getError("email"))}
+          aria-describedby={getError("email") ? "contact-email-error" : undefined}
           className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("email") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
-        {getError("email") && <p className="text-red-500 text-xs mt-1">{getError("email")}</p>}
+        {getError("email") && <p id="contact-email-error" className="text-red-500 text-xs mt-1">{getError("email")}</p>}
       </div>
 
       {/* Company */}
       <div>
-        <label className="block text-sm font-bold text-forest mb-1.5">
+        <label htmlFor="contact-company" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.company}
         </label>
         <input
+          id="contact-company"
           type="text"
           value={formData.company}
           onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
@@ -174,10 +181,11 @@ const ContactForm = () => {
 
       {/* Subject */}
       <div>
-        <label className="block text-sm font-bold text-forest mb-1.5">
+        <label htmlFor="contact-subject" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.subject}
         </label>
         <select
+          id="contact-subject"
           value={formData.subject}
           onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
           className="w-full border border-gray-200 rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors bg-white"
@@ -192,20 +200,23 @@ const ContactForm = () => {
 
       {/* Message */}
       <div>
-        <label className="block text-sm font-bold text-forest mb-1.5">
+        <label htmlFor="contact-message" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.message}
           <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
         </label>
         <textarea
+          id="contact-message"
           required
           rows={3}
           value={formData.message}
           onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
           onBlur={() => handleBlur("message")}
           placeholder="例：社員10名の事務所で、請求書処理を自動化したい"
+          aria-invalid={Boolean(getError("message"))}
+          aria-describedby={getError("message") ? "contact-message-error" : undefined}
           className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors resize-vertical ${getError("message") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
-        {getError("message") && <p className="text-red-500 text-xs mt-1">{getError("message")}</p>}
+        {getError("message") && <p id="contact-message-error" className="text-red-500 text-xs mt-1">{getError("message")}</p>}
       </div>
 
       {/* Error message */}

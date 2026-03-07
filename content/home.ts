@@ -222,7 +222,6 @@ export const CTA_BANNER = {
     "2026年最新導入事例"
   ],
   downloadTitle: "2026年版 中小企業のためのAIエージェント導入実践ガイド",
-  downloadMeta: "PDF / 全24ページ / 最終更新 2026.02",
   primaryCta: "お問い合わせ",
   secondaryCta: "資料をダウンロード",
 };

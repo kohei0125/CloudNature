@@ -5,10 +5,11 @@ import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
 import { getNewsArticle, getAllNewsIds } from "@/lib/microcms";
 import { NEWS_DETAIL } from "@/content/news";
-import { NEWS_CATEGORY_COLORS } from "@/content/home";
+import { NEWS_CATEGORY_COLORS, NEWS_ITEMS } from "@/content/home";
 import NewsBody from "@/components/news/NewsBody";
 import type { NewsCategory } from "@/types";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import type { MicroCMSNewsArticle } from "@/types/microcms";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -20,15 +21,49 @@ interface PageProps {
 export async function generateStaticParams() {
   try {
     const ids = await getAllNewsIds();
-    return ids.filter(Boolean).map((slug) => ({ slug }));
+    return Array.from(new Set([...ids, ...NEWS_ITEMS.map((item) => item.id)])).map((slug) => ({ slug }));
   } catch {
-    return [];
+    return NEWS_ITEMS.map((item) => ({ slug: item.id }));
   }
+}
+
+function buildFallbackArticle(slug: string): MicroCMSNewsArticle | null {
+  const item = NEWS_ITEMS.find((newsItem) => newsItem.id === slug);
+  if (!item) return null;
+
+  const paragraph = item.excerpt.trim();
+  const content = paragraph
+    ? `<p>${paragraph}</p><p>詳細はお問い合わせよりご連絡ください。</p>`
+    : "<p>詳細はお問い合わせよりご連絡ください。</p>";
+
+  return {
+    id: item.id,
+    title: item.title,
+    excerpt: item.excerpt,
+    publishedAt: item.publishedAt,
+    updatedAt: item.publishedAt,
+    createdAt: item.publishedAt,
+    revisedAt: item.publishedAt,
+    category: { id: item.category, name: item.category },
+    content,
+    image: item.image
+      ? {
+        url: item.image,
+        width: 1200,
+        height: 630,
+      }
+      : undefined,
+  };
+}
+
+async function getArticleWithFallback(slug: string): Promise<MicroCMSNewsArticle | null> {
+  const article = await getNewsArticle(slug);
+  return article ?? buildFallbackArticle(slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getNewsArticle(slug);
+  const article = await getArticleWithFallback(slug);
   if (!article) return {};
 
   return {
@@ -61,7 +96,7 @@ const formatDate = (iso: string) => {
 
 const NewsArticlePage = async ({ params }: PageProps) => {
   const { slug } = await params;
-  const article = await getNewsArticle(slug);
+  const article = await getArticleWithFallback(slug);
   if (!article) notFound();
 
   const category = (article.category?.name ?? "ニュース") as NewsCategory;

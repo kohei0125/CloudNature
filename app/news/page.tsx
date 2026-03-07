@@ -31,18 +31,15 @@ export const metadata: Metadata = {
 
 const NewsPage = async () => {
   let items: NewsItem[];
-  let isFallback = false;
   try {
     const res = await getNewsList({ limit: 50 });
     if (res.contents.length > 0) {
       items = res.contents.map(toNewsItem);
     } else {
       items = NEWS_ITEMS;
-      isFallback = true;
     }
   } catch {
     items = NEWS_ITEMS;
-    isFallback = true;
   }
 
   const breadcrumb = breadcrumbJsonLd([{ name: "ニュース", path: "/news" }]);
@@ -63,7 +60,7 @@ const NewsPage = async () => {
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((item) => (
-              <NewsCard key={item.id} item={item} disableLink={isFallback} />
+              <NewsCard key={item.id} item={item} />
             ))}
           </div>
 

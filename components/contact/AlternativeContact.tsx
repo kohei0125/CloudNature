@@ -10,7 +10,12 @@ const AlternativeContact = () => {
           <Mail className="w-5 h-5 text-sage mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-bold text-forest text-sm">{ALTERNATIVE_CONTACT.email.label}</p>
-            <p className="text-forest">{ALTERNATIVE_CONTACT.email.value}</p>
+            <a
+              href={`mailto:${ALTERNATIVE_CONTACT.email.value}`}
+              className="text-forest underline decoration-forest/20 underline-offset-4 transition-colors hover:text-sage"
+            >
+              {ALTERNATIVE_CONTACT.email.value}
+            </a>
           </div>
         </div>
       </div>

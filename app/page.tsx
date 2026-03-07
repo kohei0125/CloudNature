@@ -36,18 +36,15 @@ const FALLBACK_NEWS = NEWS_ITEMS;
 
 const Home = async () => {
   let newsItems: NewsItem[];
-  let isFallback = false;
   try {
     const res = await getNewsList({ limit: 6 });
     if (res.contents.length > 0) {
       newsItems = res.contents.map(toNewsItem);
     } else {
       newsItems = FALLBACK_NEWS;
-      isFallback = true;
     }
   } catch {
     newsItems = FALLBACK_NEWS;
-    isFallback = true;
   }
 
   return (
@@ -58,7 +55,7 @@ const Home = async () => {
       <ServicesSection />
       <CasesSection />
       <WaveSeparator position="top" color="#ffffff" bgColor="#19231b" withTexture={false} />
-      <NewsSection items={newsItems} disableLink={isFallback} />
+      <NewsSection items={newsItems} />
       <WaveSeparator position="top" color="#EDE8E5" bgColor="#ffffff" />
       <CtaSection />
     </div>
