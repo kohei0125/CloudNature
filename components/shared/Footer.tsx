@@ -16,11 +16,11 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="mb-6">
               <Image
-                src="/images/footer_logo.png"
+                src="/images/cloudnature.png"
                 alt={HEADER_COPY.brand}
-                width={200}
-                height={60}
-                className="object-contain h-10 md:h-12 w-auto"
+                width={215}
+                height={50}
+                className="object-contain h-10 md:h-12 w-auto brightness-0 invert"
                 priority={false}
               />
             </div>

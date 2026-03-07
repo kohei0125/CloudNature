@@ -15,11 +15,11 @@ export default function FooterSection() {
           <div className="md:col-span-2">
             <div className="mb-6">
               <Image
-                src="/images/footer_logo.png"
+                src="/images/cloudnature.png"
                 alt="CloudNature"
-                width={200}
-                height={60}
-                className="h-10 w-auto object-contain md:h-12"
+                width={215}
+                height={50}
+                className="h-10 w-auto object-contain brightness-0 invert md:h-12"
               />
             </div>
             <p className="max-w-md pl-1 leading-loose text-gray-400">

@@ -40,7 +40,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 group">
           <Image
-            src="/images/header_logo.png"
+            src="/images/cloudnature.png"
             alt={HEADER_COPY.brand}
             width={180}
             height={50}

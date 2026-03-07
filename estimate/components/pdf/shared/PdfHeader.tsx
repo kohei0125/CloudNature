@@ -7,7 +7,7 @@ interface PdfHeaderProps {
   documentNumber: string;
 }
 
-const logoPath = path.join(process.cwd(), "public/images/header_logo.png");
+const logoPath = path.join(process.cwd(), "public/images/cloudnature.png");
 
 export default function PdfHeader({ date, documentNumber }: PdfHeaderProps) {
   return (

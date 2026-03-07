@@ -29,9 +29,9 @@ export default function EstimateHeader() {
       <div className="container mx-auto flex items-center px-6">
         <a href="https://cloudnature.jp" rel="noopener noreferrer">
           <Image
-            src="/images/header_logo.png"
+            src="/images/cloudnature.png"
             alt="CloudNature"
-            width={180}
+            width={215}
             height={50}
             className="h-10 w-auto object-contain transition-all duration-300 md:h-12"
             priority
