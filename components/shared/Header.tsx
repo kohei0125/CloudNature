@@ -21,6 +21,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
 
   const isHome = pathname === "/";
   const isHeroOverlay = isHome && !isScrolled;
+  const logoSrc = isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png";
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -38,29 +39,13 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
       )}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group relative">
-          {/* 通常ロゴ（スクロール後に表示） */}
+        <Link href="/" className="flex items-center gap-2 group">
           <Image
-            src="/images/cloudnature.png"
+            src={logoSrc}
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className={cn(
-              "object-contain h-10 md:h-12 w-auto transition-opacity duration-300",
-              isHeroOverlay ? "opacity-0" : "opacity-100"
-            )}
-            priority
-          />
-          {/* 白ロゴ（ヒーロー上で表示） */}
-          <Image
-            src="/images/cloudnature_white.png"
-            alt={HEADER_COPY.brand}
-            width={180}
-            height={50}
-            className={cn(
-              "object-contain h-10 md:h-12 w-auto transition-opacity duration-300 absolute inset-0",
-              isHeroOverlay ? "opacity-100" : "opacity-0"
-            )}
+            className="h-10 w-auto object-contain md:h-12"
             priority
           />
         </Link>

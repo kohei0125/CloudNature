@@ -247,7 +247,7 @@ function ChatPageContent() {
                             siteKey={TURNSTILE_SITE_KEY}
                             onSuccess={(token) => { turnstileTokenRef.current = token; }}
                             onExpire={() => { turnstileTokenRef.current = null; }}
-                            options={{ size: "compact", theme: "light" }}
+                            options={{ size: "normal", theme: "light" }}
                           />
                         )}
                         <button
