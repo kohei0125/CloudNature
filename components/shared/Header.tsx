@@ -34,7 +34,7 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         isMobileMenuOpen
           ? "bg-transparent"
           : isScrolled
-            ? "bg-white/90 backdrop-blur-md shadow-sm py-2 md:py-3"
+            ? "bg-transparent py-2 md:bg-white/90 md:py-3 md:backdrop-blur-md md:shadow-sm"
             : "bg-transparent py-3 md:py-5"
       )}
     >
@@ -80,13 +80,21 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         {/* Mobile Menu Toggle */}
         <button
           type="button"
-          className={cn("md:hidden p-2", isMobileMenuOpen ? "text-forest" : isHeroOverlay ? "text-white" : "text-forest")}
+          className={cn(
+            "absolute right-0 top-0 flex h-12 w-12 flex-col items-center justify-center gap-0.5 shadow-lg transition-colors md:hidden",
+            isMobileMenuOpen
+              ? "text-forest"
+              : isHeroOverlay
+                ? "bg-white text-sunset"
+                : "bg-sunset text-white"
+          )}
           onClick={isMobileMenuOpen ? onCloseMobileMenu : onOpenMobileMenu}
           aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-navigation"
         >
-          {isMobileMenuOpen ? <X /> : <Menu />}
+          {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          <span className="text-[8px] font-semibold leading-none tracking-[0.18em]">MENU</span>
         </button>
       </div>
     </header>
