@@ -186,13 +186,6 @@ def save_estimate_to_notion(
     # Build page body
     children: list[dict] = []
 
-    # 見積もり金額
-    children.append(_heading2("見積もり金額"))
-    children.append(_bulleted(f"標準プラン: {_format_cost(standard_cost)}"))
-    children.append(_bulleted(f"ハイブリッドプラン: {_format_cost(hybrid_cost)}"))
-
-    children.append(_divider())
-
     # プロジェクト概要
     if project_name or summary:
         children.append(_heading2("プロジェクト概要"))
@@ -201,6 +194,12 @@ def save_estimate_to_notion(
         if summary:
             children.append(_paragraph(summary))
         children.append(_divider())
+
+    # 提案金額
+    children.append(_heading2("提案金額"))
+    children.append(_bulleted(f"従来の開発費: {_format_cost(standard_cost)}"))
+    children.append(_bulleted(f"CloudNature: {_format_cost(hybrid_cost)}"))
+    children.append(_divider())
 
     # ヒアリング内容
     children.append(_heading2("ヒアリング内容"))

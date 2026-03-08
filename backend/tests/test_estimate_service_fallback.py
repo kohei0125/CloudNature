@@ -27,6 +27,10 @@ class _DummyDB:
     def refresh(self, obj: object) -> None:
         return
 
+    def exec(self, _statement: object):
+        """Mock exec that returns no results (no completed estimates)."""
+        return SimpleNamespace(first=lambda: None)
+
     def get(self, _model: object, record_id: int) -> object | None:
         return self._records.get(record_id)
 

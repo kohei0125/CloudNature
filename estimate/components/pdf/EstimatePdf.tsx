@@ -22,7 +22,7 @@ export default function EstimatePdf({
 }: EstimatePdfProps) {
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} wrap>
         <PdfHeader date={date} documentNumber={documentNumber} />
 
         {/* Title bar */}
@@ -52,7 +52,7 @@ export default function EstimatePdf({
 
         {/* Feature table */}
         <Text style={styles.sectionTitle}>機能別費用明細</Text>
-        <View style={styles.tableHeader}>
+        <View style={styles.tableHeader} fixed>
           <Text style={[styles.tableHeaderText, styles.colNo]}>No</Text>
           <Text style={[styles.tableHeaderText, styles.colFeature]}>
             機能名
@@ -69,6 +69,7 @@ export default function EstimatePdf({
           <View
             key={feature.name}
             style={i % 2 === 0 ? styles.tableRow : styles.tableRowAlt}
+            wrap={false}
           >
             <Text style={[styles.cellText, styles.colNo]}>{i + 1}</Text>
             <Text style={[styles.cellText, styles.colFeature]}>
@@ -85,7 +86,7 @@ export default function EstimatePdf({
             </Text>
           </View>
         ))}
-        <View style={styles.totalRow}>
+        <View style={styles.totalRow} wrap={false}>
           <Text style={[styles.totalRowText, styles.colNo]} />
           <Text style={[styles.totalRowText, styles.colFeature]}>
             概算合計（税別）
@@ -101,7 +102,7 @@ export default function EstimatePdf({
 
         {/* Cost message */}
         {estimate.totalCost.message && (
-          <View style={styles.savingsBox}>
+          <View style={styles.savingsBox} wrap={false}>
             <Text style={styles.savingsDetail}>
               {estimate.totalCost.message}
             </Text>
@@ -109,18 +110,27 @@ export default function EstimatePdf({
         )}
 
         {/* Discussion agenda */}
-        <Text style={styles.sectionTitle}>
-          詳細お見積もりに向けた確認事項
-        </Text>
-        {estimate.discussionAgenda.map((item, i) => (
-          <View key={i} style={styles.listItem}>
-            <Text style={styles.listBullet}>{i + 1}.</Text>
-            <Text style={styles.listContent}>{item}</Text>
-          </View>
-        ))}
+        {estimate.discussionAgenda.map((item, i) =>
+          i === 0 ? (
+            <View key={i} wrap={false}>
+              <Text style={styles.sectionTitle}>
+                詳細お見積もりに向けた確認事項
+              </Text>
+              <View style={styles.listItem}>
+                <Text style={styles.listBullet}>1.</Text>
+                <Text style={styles.listContent}>{item}</Text>
+              </View>
+            </View>
+          ) : (
+            <View key={i} style={styles.listItem} wrap={false}>
+              <Text style={styles.listBullet}>{i + 1}.</Text>
+              <Text style={styles.listContent}>{item}</Text>
+            </View>
+          )
+        )}
 
         {/* Disclaimer */}
-        <View style={styles.disclaimer}>
+        <View style={styles.disclaimer} wrap={false}>
           <Text>
             ※
             本見積書はAIによる概算であり、正式なお見積もり・機能要件ではありません。

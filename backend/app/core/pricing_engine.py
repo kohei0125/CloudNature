@@ -6,7 +6,10 @@ so that LLM output can be validated and pre-seeded with accurate numbers.
 
 from __future__ import annotations
 
+import logging
 import math
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # 1. ベース価格テーブル（17カテゴリ, min/max 万円 → 円）
@@ -482,11 +485,15 @@ def _resolve_features(user_input: dict) -> list[dict]:
 
     resolved = []
     for value in step_8:
-        category = (
-            _FEATURE_TO_CATEGORY.get(value)
-            or step_8_categories.get(value)
-            or _DEFAULT_CATEGORY
-        )
+        static_cat = _FEATURE_TO_CATEGORY.get(value)
+        llm_cat = step_8_categories.get(value)
+        category = static_cat or llm_cat or _DEFAULT_CATEGORY
+        if not static_cat and not llm_cat:
+            logger.warning(
+                "Unknown feature '%s' fell back to default category '%s'",
+                value,
+                _DEFAULT_CATEGORY,
+            )
         entry: dict = {"value": value, "category": category}
         label = step_8_labels.get(value)
         if label:

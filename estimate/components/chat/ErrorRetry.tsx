@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, MessageCircle } from "lucide-react";
 import { ERROR_MESSAGES } from "@/content/estimate";
 
 interface ErrorRetryProps {
@@ -28,6 +29,15 @@ export default function ErrorRetry({
         <RefreshCw className="h-3.5 w-3.5" />
         もう一度試す
       </button>
+      <Link
+        href="https://cloudnature.jp/contact"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-xs text-forest/60 underline-offset-2 hover:text-forest hover:underline"
+      >
+        <MessageCircle className="h-3 w-3" />
+        解決しない場合はお問い合わせください
+      </Link>
     </motion.div>
   );
 }

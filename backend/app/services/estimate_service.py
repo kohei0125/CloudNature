@@ -7,6 +7,8 @@ from app.config import settings
 from app.core.llm.factory import create_llm_adapter
 from app.core.pricing_engine import calculate_estimate as calculate_pricing
 from app.core.sanitizer import sanitize_for_llm
+from sqlmodel import select
+
 from app.db import get_session
 from app.models.generated import GeneratedEstimate
 from app.schemas.llm_output import validate_dynamic_questions, validate_estimate_output
@@ -163,16 +165,25 @@ async def generate_estimate(session_id: str, answers: dict) -> dict | None:
     2. Pass calculated data to LLM for text generation only
     3. Enforce calculated prices on LLM output for accuracy
     """
-    # Save answers to session
-    save_session_answers(session_id, answers)
-
-    # Create a processing record
+    # Idempotencyチェック + processingレコード作成を同一トランザクションで実行
     with get_session() as db:
+        existing = db.exec(
+            select(GeneratedEstimate)
+            .where(GeneratedEstimate.session_id == session_id)
+            .where(GeneratedEstimate.status == "completed")
+        ).first()
+        if existing and existing.raw_json:
+            logger.info("Estimate already completed for session %s, returning cached result", session_id)
+            return json.loads(existing.raw_json)
+
         record = GeneratedEstimate(session_id=session_id, status="processing")
         db.add(record)
         db.commit()
         db.refresh(record)
         record_id = record.id
+
+    # Save answers to session
+    save_session_answers(session_id, answers)
 
     normalized = _normalize_answers(answers)
     sanitized = sanitize_for_llm(normalized)
@@ -236,8 +247,6 @@ def get_estimate_result(session_id: str) -> tuple[str, dict | None]:
 
     Returns (status, estimate_dict_or_none).
     """
-    from sqlmodel import select
-
     with get_session() as db:
         statement = (
             select(GeneratedEstimate)

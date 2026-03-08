@@ -1,6 +1,6 @@
 # CloudNature AI見積もりシステム — TODO一覧
 
-最終更新: 2026-02-21
+最終更新: 2026-03-08
 
 ---
 
@@ -17,7 +17,6 @@
   - [ ] OpenAI / Resend のAPIキーをローテーション
   - [ ] `.env` が git 履歴に含まれていないか確認（含まれていれば履歴削除）
   - [ ] 本番では Secret Manager 運用を徹底
-- [ ] バックエンドテストを追加（`backend/tests/`）
 - [ ] `Session.email` 未使用を整理（Step 13 の連絡先から保存/利用）
 
 ### 低優先の検討事項
@@ -62,6 +61,14 @@
 - [x] OpenAI アダプターのエラーハンドリング改善
 - [x] `docker-compose` のフロントエンドヘルスチェック追加
 - [x] アクセシビリティ改善
+
+### Codexレビュー対応（2026-03-08）
+- [x] E2Eテスト修正 — Step 13 会社名必須に合わせてテストを修正
+- [x] メールidempotency — `generate_estimate()` で completed 済みレコードの存在チェックを追加し重複防止
+- [x] PDF自動ページ分割 — `react-pdf` の `wrap` / `wrap={false}` / `fixed` で自動ページ跨ぎ対応
+- [x] ErrorRetry問い合わせ導線 — エラー画面に `cloudnature.jp/contact` へのリンクを追加
+- [x] 未知featureログ記録 — `_resolve_features()` でデフォルトカテゴリにフォールバック時にWARNINGログ出力
+- [x] バックエンドテスト — 94テスト（pricing_engine 65 + fallback 14 + gemini 12 + service_fallback 1 + idempotency 2）
 
 ### 軽微対応の完了分
 - [x] `console.error` の本番残存を整理 — `estimate/lib/logger.ts` を導入し全箇所を置き換え

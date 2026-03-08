@@ -16,7 +16,10 @@ export const colors = {
 
 export const styles = StyleSheet.create({
   page: {
-    padding: 40,
+    paddingTop: 40,
+    paddingLeft: 40,
+    paddingRight: 40,
+    paddingBottom: 60,
     fontFamily: FONT,
     fontSize: 10,
     color: colors.forest,

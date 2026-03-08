@@ -233,12 +233,16 @@ test.describe("Chat flow (/chat)", () => {
     const submitButton = page.getByRole("button", { name: "送信する" });
     await expect(submitButton).toBeDisabled();
 
-    // Fill only name - still disabled (email required)
+    // Fill only name - still disabled (company & email required)
     await nameInput.fill("テスト太郎");
     await expect(submitButton).toBeDisabled();
 
-    // Fill valid email - should become enabled
+    // Fill email but no company - still disabled
     await emailInput.fill("test@example.com");
+    await expect(submitButton).toBeDisabled();
+
+    // Fill company - should become enabled (all required fields filled)
+    await companyInput.fill("テスト株式会社");
     await expect(submitButton).toBeEnabled();
   });
 
