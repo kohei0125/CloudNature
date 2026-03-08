@@ -14,13 +14,15 @@ export default function FooterSection() {
           {/* Logo + tagline */}
           <div className="md:col-span-2">
             <div className="mb-6">
-              <Image
-                src="/images/cloudnature_white.png"
-                alt="CloudNature"
-                width={215}
-                height={50}
-                className="h-10 w-auto object-contain md:h-12"
-              />
+              <a href="https://cloudnature.jp" rel="noopener noreferrer">
+                <Image
+                  src="/images/cloudnature.png"
+                  alt="CloudNature"
+                  width={215}
+                  height={50}
+                  className="h-10 w-auto object-contain brightness-0 invert md:h-12"
+                />
+              </a>
             </div>
             <p className="max-w-md pl-1 leading-loose text-gray-400">
               {footer.taglineLines[0]}

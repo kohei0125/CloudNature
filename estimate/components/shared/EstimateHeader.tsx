@@ -9,6 +9,7 @@ export default function EstimateHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const shouldUseWhiteLogo = pathname === "/" && !isScrolled;
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -50,7 +51,7 @@ export default function EstimateHeader() {
             alt="CloudNature"
             width={215}
             height={50}
-            className="h-10 w-auto object-contain transition-all duration-300 md:h-12"
+            className={`h-10 w-auto object-contain transition-all duration-300 md:h-12 ${shouldUseWhiteLogo ? "brightness-0 invert" : ""}`}
             priority
           />
         </a>

@@ -38,13 +38,29 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
       )}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group relative">
+          {/* 通常ロゴ（スクロール後に表示） */}
           <Image
-            src={isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png"}
+            src="/images/cloudnature.png"
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className="object-contain h-10 md:h-12 w-auto transition-all duration-300"
+            className={cn(
+              "object-contain h-10 md:h-12 w-auto transition-opacity duration-300",
+              isHeroOverlay ? "opacity-0" : "opacity-100"
+            )}
+            priority
+          />
+          {/* 白ロゴ（ヒーロー上で表示） */}
+          <Image
+            src="/images/cloudnature_white.png"
+            alt={HEADER_COPY.brand}
+            width={180}
+            height={50}
+            className={cn(
+              "object-contain h-10 md:h-12 w-auto transition-opacity duration-300 absolute inset-0",
+              isHeroOverlay ? "opacity-100" : "opacity-0"
+            )}
             priority
           />
         </Link>
