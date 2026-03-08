@@ -378,7 +378,7 @@ backend を変更するたびに、プロジェクトルートからデプロイ
 | `CORS_ORIGINS` | `https://ai.cloudnature.jp` | CORS 許可オリジン |
 | `DATA_TTL_DAYS` | `31` | データ保持日数 |
 | `EMAIL_FROM` | `CloudNature <cloudnature@stage-site.net>` | メール送信元 |
-| `NOTIFY_EMAIL` | `k.watanabe.sys.contact@gmail.com` | 管理者通知先 |
+| `NOTIFY_EMAIL` | `info@cloudnature.jp` | 管理者通知先 |
 
 シークレット（Secret Manager 参照名）:
 
@@ -451,7 +451,7 @@ LLM_TIMEOUT=30
 # Email
 RESEND_API_KEY=<your-resend-api-key>
 EMAIL_FROM=CloudNature <cloudnature@stage-site.net>
-NOTIFY_EMAIL=k.watanabe.sys.contact@gmail.com
+NOTIFY_EMAIL=info@cloudnature.jp
 
 # App
 FRONTEND_URL=http://localhost:3001

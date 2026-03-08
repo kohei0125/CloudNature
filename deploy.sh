@@ -30,7 +30,7 @@ FRONTEND_URL="${FRONTEND_URL:-https://ai.cloudnature.jp}"
 CORS_ORIGINS="${CORS_ORIGINS:-https://ai.cloudnature.jp}"
 DATA_TTL_DAYS="${DATA_TTL_DAYS:-31}"
 EMAIL_FROM="${EMAIL_FROM:-CloudNature <cloudnature@stage-site.net>}"
-NOTIFY_EMAIL="${NOTIFY_EMAIL:-k.watanabe.sys.contact@gmail.com}"
+NOTIFY_EMAIL="${NOTIFY_EMAIL:-info@cloudnature.jp}"
 NOTION_DATABASE_ID="${NOTION_DATABASE_ID:-310f32ffde8d8087a5d5e9e2cee4cb3f}"
 
 # ---------------------------------------------------------------------------
