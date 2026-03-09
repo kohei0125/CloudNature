@@ -65,6 +65,9 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     let pendingSettleRaf: number | null = null;
     let cancelled = false;
     let boundaryObserver: MutationObserver | null = null;
+    let resizeObserver: ResizeObserver | null = null;
+    let observedHero: HTMLElement | null = null;
+    let observedHeader: HTMLElement | null = null;
     let stableFrames = 0;
     let lastObservedBoundaryTop = 0;
     let lastObservedHeaderHeight = 0;
@@ -75,11 +78,42 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       boundaryObserver = null;
     };
 
+    const disconnectResizeObserver = () => {
+      resizeObserver?.disconnect();
+      resizeObserver = null;
+      observedHero = null;
+      observedHeader = null;
+    };
+
+    const ensureResizeObserver = (hero: HTMLElement, header: HTMLElement | null) => {
+      if (typeof ResizeObserver === "undefined") return;
+
+      if (resizeObserver && observedHero === hero && observedHeader === header) {
+        return;
+      }
+
+      disconnectResizeObserver();
+      resizeObserver = new ResizeObserver(() => {
+        if (!cancelled) {
+          scheduleStableHeroSync();
+        }
+      });
+      resizeObserver.observe(hero);
+      observedHero = hero;
+
+      if (header) {
+        resizeObserver.observe(header);
+        observedHeader = header;
+      }
+    };
+
     const readHeroOverlay = () => {
+      const hero = document.querySelector<HTMLElement>("[data-home-hero]");
       const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-      if (!boundary) return null;
+      if (!hero || !boundary) return null;
 
       const header = document.querySelector<HTMLElement>("[data-site-header]");
+      ensureResizeObserver(hero, header);
       const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
       const boundaryTop = boundary.getBoundingClientRect().top;
 
@@ -165,6 +199,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       syncHeroOverlayRef.current = null;
       if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
       disconnectBoundaryObserver();
+      disconnectResizeObserver();
       window.removeEventListener("load", scheduleStableHeroSync);
       window.removeEventListener("pageshow", scheduleStableHeroSync);
       window.removeEventListener("resize", scheduleStableHeroSync);
