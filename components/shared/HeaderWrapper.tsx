@@ -10,6 +10,9 @@ const getFallbackHeaderHeight = () => (window.innerWidth < 768 ? 48 : 72);
 const HeaderWrapper = () => {
   const pathname = usePathname();
 
+  // 診断: pathname 変化を検出
+  console.log(`[HeaderWrapper] render pathname="${pathname}"`);
+
   return <HeaderWrapperInner key={pathname} pathname={pathname} />;
 };
 
@@ -21,9 +24,29 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const isHome = pathname === "/";
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHeroOverlay, setIsHeroOverlay] = useState(isHome);
+  const [isHeroOverlay, _setIsHeroOverlay] = useState(isHome);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  const mountId = useRef(Math.random().toString(36).slice(2, 6));
+
+  // 診断: setIsHeroOverlay のラッパー（全呼び出しをトレース）
+  const setIsHeroOverlay = useCallback((val: boolean | ((prev: boolean) => boolean)) => {
+    _setIsHeroOverlay((prev) => {
+      const next = typeof val === "function" ? val(prev) : val;
+      if (next !== prev) {
+        console.log(`[HeaderOverlay:${mountId.current}] STATE CHANGE: ${prev} → ${next}`, new Error().stack?.split("\n").slice(1, 4).join(" | "));
+      }
+      return next;
+    });
+  }, []);
+
+  // 診断: マウント/アンマウント検出
+  useEffect(() => {
+    console.log(`[HeaderOverlay:${mountId.current}] MOUNT pathname="${pathname}" isHome=${isHome}`);
+    return () => {
+      console.log(`[HeaderOverlay:${mountId.current}] UNMOUNT`);
+    };
+  }, [pathname, isHome]);
 
   // スクロール: 表示/非表示 + スクロール状態
   useEffect(() => {
@@ -68,14 +91,22 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
       intersectionObs = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            // 境界要素がヘッダー下端より下 → ヒーロー暗部がヘッダーを覆っている → 白ロゴ
-            setIsHeroOverlay(true);
-          } else {
-            // 非交差: 上に抜けた(top < headerH) → 黒、下にある(top > headerH) → 白
-            const freshHeaderH = document.querySelector<HTMLElement>("[data-site-header]")?.offsetHeight ?? headerH;
-            setIsHeroOverlay(entry.boundingClientRect.top > freshHeaderH);
-          }
+          const freshHeaderH = document.querySelector<HTMLElement>("[data-site-header]")?.offsetHeight ?? headerH;
+          const result = entry.isIntersecting || entry.boundingClientRect.top > freshHeaderH;
+
+          // 診断ログ（原因特定後に削除）
+          console.log("[HeaderOverlay]", {
+            isIntersecting: entry.isIntersecting,
+            boundaryTop: Math.round(entry.boundingClientRect.top),
+            headerH,
+            freshHeaderH,
+            rootMargin: `-${headerH}px 0px 0px 0px`,
+            scrollY: Math.round(window.scrollY),
+            viewportH: window.innerHeight,
+            result,
+          });
+
+          setIsHeroOverlay(result);
         },
         {
           // ビューポート上端をヘッダー高さ分縮小し、ヘッダー下端を基準にする
@@ -95,7 +126,9 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
         headerResizeObs?.disconnect();
         const headerEl = document.querySelector<HTMLElement>("[data-site-header]");
         if (headerEl) {
-          headerResizeObs = new ResizeObserver(() => {
+          headerResizeObs = new ResizeObserver((entries) => {
+            const h = entries[0]?.contentRect.height ?? 0;
+            console.log(`[HeaderOverlay:${mountId.current}] ResizeObserver headerH=${Math.round(h)}`);
             if (currentBoundary) createIntersectionObserver(currentBoundary);
           });
           headerResizeObs.observe(headerEl);
