@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import type { StepOption } from "@/types/estimate";
-import { Check } from "lucide-react";
+import { Check, ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MultiSelectInputProps {
@@ -32,7 +32,10 @@ export default function MultiSelectInput({
       aria-label={ariaLabel}
       className="v-stack gap-3"
     >
-      <p className="text-xs font-medium text-gray-400">複数選択できます</p>
+      <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-sage/30 bg-sage/10 px-3 py-1 text-xs font-medium text-sage">
+        <ListChecks className="h-3.5 w-3.5" />
+        複数選択可
+      </span>
       {options.map((option, i) => {
         const selected = value.includes(option.value);
         return (

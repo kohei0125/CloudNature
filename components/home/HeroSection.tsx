@@ -6,7 +6,7 @@ import { ESTIMATE_URL } from "@/content/common";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen v-stack justify-end overflow-hidden">
+    <section data-home-hero className="relative min-h-screen v-stack justify-end overflow-hidden">
       {/* Full-bleed background image */}
       <Image
         src={HERO_COPY.imageSrc}

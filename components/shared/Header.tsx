@@ -10,17 +10,15 @@ import { HEADER_COPY } from "@/content/layout";
 
 interface HeaderProps {
   isScrolled: boolean;
+  isHeroOverlay: boolean;
   isVisible: boolean;
   isMobileMenuOpen: boolean;
   onOpenMobileMenu: () => void;
   onCloseMobileMenu: () => void;
 }
 
-const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
+const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
-
-  const isHome = pathname === "/";
-  const isHeroOverlay = isHome && !isScrolled;
   const logoSrc = isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png";
 
   const isActive = (path: string) =>
@@ -34,7 +32,9 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
         isMobileMenuOpen
           ? "bg-transparent"
           : isScrolled
-            ? "bg-transparent py-2 md:bg-white/90 md:py-3 md:backdrop-blur-md md:shadow-sm"
+            ? isHeroOverlay
+              ? "bg-transparent py-2 md:py-3"
+              : "bg-transparent py-2 md:bg-white/90 md:py-3 md:backdrop-blur-md md:shadow-sm"
             : "bg-transparent py-3 md:py-5"
       )}
     >
