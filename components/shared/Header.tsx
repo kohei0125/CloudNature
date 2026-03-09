@@ -19,6 +19,8 @@ interface HeaderProps {
 
 const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
+  const logoSrc = isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png";
+
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
@@ -37,28 +39,13 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
       )}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group relative">
+        <Link href="/" className="flex items-center gap-2 group">
           <Image
-            src="/images/cloudnature_white.png"
+            src={logoSrc}
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className={cn(
-              "h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
-              isHeroOverlay ? "opacity-100" : "opacity-0"
-            )}
-            priority
-          />
-          <Image
-            src="/images/cloudnature.png"
-            alt=""
-            width={180}
-            height={50}
-            aria-hidden
-            className={cn(
-              "absolute inset-0 h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
-              isHeroOverlay ? "opacity-0" : "opacity-100"
-            )}
+            className="h-10 w-auto object-contain md:h-12"
             priority
           />
         </Link>
