@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 import MobileMenu from "./MobileMenu";
 
-const getHeroObserverMargin = () =>
-  window.innerWidth < 768 ? "-48px 0px 0px 0px" : "-72px 0px 0px 0px";
+const getFallbackHeaderHeight = () => (window.innerWidth < 768 ? 48 : 72);
 
 const HeaderWrapper = () => {
   const pathname = usePathname();
@@ -25,6 +24,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const [isHeroOverlay, setIsHeroOverlay] = useState(isHome);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  const heroThresholdRef = useRef(0);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -39,6 +39,11 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       }
 
       setIsScrolled(currentScrollY > 50);
+
+      if (isHome && heroThresholdRef.current > 0) {
+        setIsHeroOverlay(currentScrollY < heroThresholdRef.current);
+      }
+
       lastScrollY.current = currentScrollY;
     };
 
@@ -49,68 +54,51 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [isHome]);
 
   useEffect(() => {
     if (!isHome) return;
 
-    // ホームページでは初期状態を強制的に true に保ち、
-    // ページ描画が安定してから Observer に制御を委譲する
-    setIsHeroOverlay(true);
-
-    let observer: IntersectionObserver | null = null;
+    let syncFrameId: number | null = null;
+    let retryFrameId: number | null = null;
     let cancelled = false;
-    let observerReady = false;
 
-    const timerId = window.setTimeout(() => {
+    const syncHeroOverlay = () => {
       if (cancelled) return;
-      observerReady = true;
 
-      const target = document.querySelector<HTMLElement>("[data-home-hero]");
-      if (!target) return;
+      const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
+      if (!boundary) {
+        retryFrameId = window.requestAnimationFrame(syncHeroOverlay);
+        return;
+      }
 
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          setIsHeroOverlay(entry.isIntersecting);
-        },
-        {
-          rootMargin: getHeroObserverMargin(),
-          threshold: 0,
-        }
-      );
-
-      observer.observe(target);
-    }, 300);
-
-    const handleResize = () => {
-      if (!observerReady) return;
-      observer?.disconnect();
-
-      const target = document.querySelector<HTMLElement>("[data-home-hero]");
-      if (!target) return;
-
-      observer = new IntersectionObserver(
-        ([entry]) => {
-          setIsHeroOverlay(entry.isIntersecting);
-        },
-        {
-          rootMargin: getHeroObserverMargin(),
-          threshold: 0,
-        }
-      );
-
-      observer.observe(target);
+      const header = document.querySelector<HTMLElement>("[data-site-header]");
+      const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
+      heroThresholdRef.current = boundary.getBoundingClientRect().top + window.scrollY - headerHeight;
+      setIsHeroOverlay(window.scrollY < heroThresholdRef.current);
     };
 
-    window.addEventListener("resize", handleResize);
-    window.visualViewport?.addEventListener("resize", handleResize);
+    syncFrameId = window.requestAnimationFrame(() => {
+      syncFrameId = window.requestAnimationFrame(syncHeroOverlay);
+    });
+
+    window.addEventListener("load", syncHeroOverlay);
+    window.addEventListener("pageshow", syncHeroOverlay);
+    window.addEventListener("resize", syncHeroOverlay);
+    window.visualViewport?.addEventListener("resize", syncHeroOverlay);
 
     return () => {
       cancelled = true;
-      window.clearTimeout(timerId);
-      observer?.disconnect();
-      window.removeEventListener("resize", handleResize);
-      window.visualViewport?.removeEventListener("resize", handleResize);
+      if (syncFrameId !== null) {
+        window.cancelAnimationFrame(syncFrameId);
+      }
+      if (retryFrameId !== null) {
+        window.cancelAnimationFrame(retryFrameId);
+      }
+      window.removeEventListener("load", syncHeroOverlay);
+      window.removeEventListener("pageshow", syncHeroOverlay);
+      window.removeEventListener("resize", syncHeroOverlay);
+      window.visualViewport?.removeEventListener("resize", syncHeroOverlay);
     };
   }, [isHome]);
 

@@ -26,6 +26,7 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
 
   return (
     <header
+      data-site-header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform",
         isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",

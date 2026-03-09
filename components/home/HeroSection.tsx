@@ -30,6 +30,13 @@ const HeroSection = () => {
         </span>
       </div>
 
+      {/* ヘッダーロゴ色切り替えの境界線 */}
+      <div
+        data-hero-dark-end
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-64 h-px"
+      />
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 pb-64 pt-48 md:pt-56">
         <div className="max-w-3xl">
