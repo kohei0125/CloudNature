@@ -25,6 +25,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
   const heroThresholdRef = useRef(0);
+  const applyHeroOverlayRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -40,8 +41,8 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
       setIsScrolled(currentScrollY > 50);
 
-      if (isHome && heroThresholdRef.current > 0) {
-        setIsHeroOverlay(currentScrollY < heroThresholdRef.current);
+      if (isHome) {
+        applyHeroOverlayRef.current?.();
       }
 
       lastScrollY.current = currentScrollY;
@@ -57,72 +58,115 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   }, [isHome]);
 
   useEffect(() => {
-    if (!isHome) return;
+    if (!isHome) {
+      heroThresholdRef.current = 0;
+      applyHeroOverlayRef.current = null;
+      return;
+    }
 
-    let pendingRaf: number | null = null;
+    let pendingSettleRaf: number | null = null;
     let cancelled = false;
     let boundaryObserver: MutationObserver | null = null;
+    let stableFrames = 0;
+    let lastObservedScrollY = 0;
+    let settleStartTime = 0;
 
-    const measure = () => {
-      pendingRaf = null;
-      if (cancelled) return;
+    const disconnectBoundaryObserver = () => {
+      boundaryObserver?.disconnect();
+      boundaryObserver = null;
+    };
 
+    const measureBoundary = () => {
       const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-      if (!boundary) {
-        waitForBoundary();
-        return;
-      }
+      if (!boundary) return false;
 
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
       heroThresholdRef.current = boundary.getBoundingClientRect().top + window.scrollY - headerHeight;
+      disconnectBoundaryObserver();
 
-      if (window.scrollY <= 5) {
+      return true;
+    };
+
+    const applyHeroOverlay = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 5) {
         setIsHeroOverlay(true);
-      } else {
-        setIsHeroOverlay(window.scrollY < heroThresholdRef.current);
+        return;
+      }
+
+      if (heroThresholdRef.current > 0) {
+        setIsHeroOverlay(currentScrollY < heroThresholdRef.current);
       }
     };
 
-    const scheduleSync = () => {
-      if (pendingRaf !== null) cancelAnimationFrame(pendingRaf);
-      pendingRaf = requestAnimationFrame(measure);
+    const runStableHeroSync = () => {
+      pendingSettleRaf = null;
+      if (cancelled) return;
+
+      if (!measureBoundary()) {
+        waitForBoundary();
+        return;
+      }
+
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastObservedScrollY) <= 1) {
+        stableFrames += 1;
+      } else {
+        stableFrames = 0;
+      }
+      lastObservedScrollY = currentScrollY;
+
+      if (stableFrames >= 2 || performance.now() - settleStartTime >= 500) {
+        applyHeroOverlay();
+        return;
+      }
+
+      pendingSettleRaf = requestAnimationFrame(runStableHeroSync);
+    };
+
+    const scheduleStableHeroSync = () => {
+      if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
+      stableFrames = 0;
+      lastObservedScrollY = window.scrollY;
+      settleStartTime = performance.now();
+      pendingSettleRaf = requestAnimationFrame(runStableHeroSync);
     };
 
     const waitForBoundary = () => {
       if (boundaryObserver) return;
       boundaryObserver = new MutationObserver(() => {
         if (document.querySelector("[data-hero-dark-end]")) {
-          boundaryObserver!.disconnect();
-          boundaryObserver = null;
-          scheduleSync();
+          disconnectBoundaryObserver();
+          scheduleStableHeroSync();
         }
       });
       boundaryObserver.observe(document.body, { childList: true, subtree: true });
     };
 
-    // Phase 1: 即時計測（boundary 未発見なら MutationObserver で待機）
-    scheduleSync();
+    applyHeroOverlayRef.current = applyHeroOverlay;
 
-    // Phase 2: フォント読み込み後に再計測
-    document.fonts.ready.then(() => {
-      if (!cancelled) scheduleSync();
+    scheduleStableHeroSync();
+
+    document.fonts?.ready.then(() => {
+      if (!cancelled) scheduleStableHeroSync();
     });
 
-    // Phase 3: load / pageshow / resize で再計測
-    window.addEventListener("load", scheduleSync);
-    window.addEventListener("pageshow", scheduleSync);
-    window.addEventListener("resize", scheduleSync);
-    window.visualViewport?.addEventListener("resize", scheduleSync);
+    window.addEventListener("load", scheduleStableHeroSync);
+    window.addEventListener("pageshow", scheduleStableHeroSync);
+    window.addEventListener("resize", scheduleStableHeroSync);
+    window.visualViewport?.addEventListener("resize", scheduleStableHeroSync);
 
     return () => {
       cancelled = true;
-      if (pendingRaf !== null) cancelAnimationFrame(pendingRaf);
-      boundaryObserver?.disconnect();
-      window.removeEventListener("load", scheduleSync);
-      window.removeEventListener("pageshow", scheduleSync);
-      window.removeEventListener("resize", scheduleSync);
-      window.visualViewport?.removeEventListener("resize", scheduleSync);
+      applyHeroOverlayRef.current = null;
+      if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
+      disconnectBoundaryObserver();
+      window.removeEventListener("load", scheduleStableHeroSync);
+      window.removeEventListener("pageshow", scheduleStableHeroSync);
+      window.removeEventListener("resize", scheduleStableHeroSync);
+      window.visualViewport?.removeEventListener("resize", scheduleStableHeroSync);
     };
   }, [isHome]);
 
