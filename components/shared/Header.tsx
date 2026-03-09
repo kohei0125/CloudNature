@@ -21,6 +21,9 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
   const pathname = usePathname();
   const logoSrc = isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png";
 
+  // 診断ログ（原因特定後に削除）
+  console.log(`[Header] render isHeroOverlay=${isHeroOverlay} logoSrc=${logoSrc} isScrolled=${isScrolled}`);
+
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 

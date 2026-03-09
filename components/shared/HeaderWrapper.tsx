@@ -174,11 +174,15 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     setMobileMenuOpen(false);
   }, []);
 
+  // 診断: render パスで isHeroOverlay の値を確認
+  const heroOverlayProp = isHome && isHeroOverlay;
+  console.log(`[HeaderWrapperInner:${mountId.current}] render isHome=${isHome} isHeroOverlay=${isHeroOverlay} prop=${heroOverlayProp}`);
+
   return (
     <>
       <Header
         isScrolled={isScrolled}
-        isHeroOverlay={isHome && isHeroOverlay}
+        isHeroOverlay={heroOverlayProp}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
         onOpenMobileMenu={handleOpenMobileMenu}
