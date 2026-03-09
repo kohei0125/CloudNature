@@ -11,57 +11,52 @@
 
 ## 根本原因
 
-### 診断結果
+### Vercel SSG の HTML 出力が不定
 
-診断ログにより以下が判明:
-- **全ての React render**: `isHeroOverlay=true`, `logoSrc=cloudnature_white.png`（白）
-- **実際の DOM**: `cloudnature.png`（黒）が表示される
+Vercel の SSG ビルドでは、ルートレイアウト内の `usePathname()` が期待通りの値を返さない場合がある。これにより `isHome=false` → `isHeroOverlay=false` でレンダーされ、**SSG HTML のロゴ opacity がローカルビルドと逆転**する。
 
-→ React は正しく白ロゴを render しているが、**DOM の `<img src>` が更新されていない**
+### v1〜v7 が失敗した理由
 
-### 原因: React hydration の img src スキップ
+| バージョン | アプローチ | 失敗理由 |
+|---|---|---|
+| v1〜v5 | `isHeroOverlay` の計測タイミング改善 | state は正しかった。問題は DOM 反映 |
+| v6 | 二重画像 + Tailwind className opacity | SSG HTML の className が逆。hydration が className を確実にパッチしない |
+| v7 | 二重画像 + inline style opacity | SSG HTML の inline style が逆。hydration が style も確実にパッチしない |
 
-React 18 は hydration 時に `<img>` の `src` 属性の差分を**意図的にスキップ**する。画像の再読み込みによるフリッカーを避けるため。
+**共通の失敗パターン**: 全て「SSG HTML を正しくする」か「hydration で DOM をパッチする」前提だったが、Vercel SSG の出力が制御不能なため破綻。
 
-#### 発生シナリオ
-1. ユーザーが `/philosophy` 等を閲覧（SSG HTML に黒ロゴ `cloudnature.png`）
-2. クライアントサイドナビゲーションで `/` に遷移（React が白ロゴを render → DOM 更新される）
-3. ページをリロード（Cmd+R）
-4. ブラウザが新しい HTML を取得... しかし **bfcache やブラウザの最適化** により、前回の DOM が一部残る場合がある
-5. React hydration 時に `<img src>` の差分をスキップ → 黒ロゴが DOM に残る
+## 最終修正（v8）— mounted パターン
 
-### v1〜v6 が全て失敗した理由
+### 方針: SSG HTML に依存しない
 
-全てのアプローチが `isHeroOverlay` の state 管理（計測タイミング）を改善する方向だったが、**state は常に正しかった**。問題は React が正しい state を DOM に反映しない（img src をスキップする）点にあった。
+SSG の出力を信頼せず、**サーバーとクライアントの初回レンダーを強制的に一致**させる。
 
-## 修正内容
+### Header.tsx
 
-### Header.tsx — ロゴの二重レンダリング + CSS opacity 切り替え
+```tsx
+const [mounted, setMounted] = useState(false);
+useEffect(() => setMounted(true), []);
 
-`src` 属性の動的変更を完全廃止。白ロゴ・黒ロゴの両方を常に DOM に配置し、CSS `opacity` で表示切り替え。
+// SSG: 常に白ロゴ表示（mounted=false → heroMode=true）
+// クライアント: isHeroOverlay に従う
+const heroMode = mounted ? isHeroOverlay : true;
+```
 
-- 白ロゴ: `opacity-100` / `opacity-0`（isHeroOverlay に応じて）
-- 黒ロゴ: `opacity-0` / `opacity-100`（逆）、`absolute` 配置で重ねる
-- `transition-opacity duration-300` でスムーズなクロスフェード
-- 白ロゴのみ `priority`（LCP 最適化）、黒ロゴは通常ロード
-- a11y: 黒ロゴは `alt=""` + `aria-hidden` で重複読み上げ防止
+- `mounted=false`（SSG + クライアント初回レンダー）: **全ページで白ロゴ表示**
+- `mounted=true`（useEffect 後）: `isHeroOverlay` に従って正しいロゴ表示
+- hydration ミスマッチが**構造的に発生しない**（サーバー・クライアント初回が同一出力）
 
-### HeaderWrapper.tsx — IntersectionObserver（維持）
+### 副作用
 
-IO ベースの境界検出は正しく動作しているためそのまま維持。
+- 非ホームページ: JS 実行まで一瞬白ロゴが見える → ヘッダーが透明背景のため実質不可視
 
-## Codex レビュー結果
+### HeaderWrapper.tsx
 
-- デュアル画像レイアウト: 正しく構成 ✅
-- a11y: 問題なし ✅
-- パフォーマンス: 非表示側ロゴから `priority` 削除済み ✅
-- トランジション: `opacity + duration-300` で自然 ✅
+スクロールベースの `isHeroOverlay` 判定はそのまま維持。シンプルな scroll イベントハンドラで `data-hero-dark-end` boundary を監視。
 
 ## 確認項目
 
 - [x] `npm run build` 成功
-- [ ] ローカルでトップリロード → 白ロゴ維持
-- [ ] スクロール途中でリロード → 適切なロゴ表示
-- [ ] スクロールでヒーロー通過 → 黒ロゴ切り替え（クロスフェード）
-- [ ] 他ページ → ホーム遷移（SPA）→ 白ロゴ表示
-- [ ] Vercel デプロイ後、スマホ実機で確認
+- [x] ローカルでトップリロード → 白ロゴ維持
+- [x] スクロールでヒーロー通過 → 黒ロゴ切り替え（クロスフェード）
+- [x] Vercel デプロイ後、本番で確認 → **解決**

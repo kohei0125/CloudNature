@@ -50,7 +50,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    window.addEventListener("resize", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
