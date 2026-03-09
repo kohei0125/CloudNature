@@ -24,8 +24,8 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const [isHeroOverlay, setIsHeroOverlay] = useState(isHome);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
-  const syncHeroOverlayRef = useRef<(() => void) | null>(null);
 
+  // スクロール: 表示/非表示 + スクロール状態
   useEffect(() => {
     lastScrollY.current = window.scrollY;
 
@@ -39,11 +39,6 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       }
 
       setIsScrolled(currentScrollY > 50);
-
-      if (isHome) {
-        syncHeroOverlayRef.current?.();
-      }
-
       lastScrollY.current = currentScrollY;
     };
 
@@ -54,167 +49,87 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isHome]);
+  }, []);
 
+  // ヒーローオーバーレイ: IntersectionObserver で境界要素を監視
   useEffect(() => {
-    if (!isHome) {
-      syncHeroOverlayRef.current = null;
-      return;
+    if (!isHome) return;
+
+    let intersectionObs: IntersectionObserver | null = null;
+    let headerResizeObs: ResizeObserver | null = null;
+    let mutObs: MutationObserver | null = null;
+    let currentBoundary: HTMLElement | null = null;
+
+    const createIntersectionObserver = (boundary: HTMLElement) => {
+      intersectionObs?.disconnect();
+
+      const headerEl = document.querySelector<HTMLElement>("[data-site-header]");
+      const headerH = headerEl?.offsetHeight ?? getFallbackHeaderHeight();
+
+      intersectionObs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            // 境界要素がヘッダー下端より下 → ヒーロー暗部がヘッダーを覆っている → 白ロゴ
+            setIsHeroOverlay(true);
+          } else {
+            // 非交差: 上に抜けた(top < headerH) → 黒、下にある(top > headerH) → 白
+            const freshHeaderH = document.querySelector<HTMLElement>("[data-site-header]")?.offsetHeight ?? headerH;
+            setIsHeroOverlay(entry.boundingClientRect.top > freshHeaderH);
+          }
+        },
+        {
+          // ビューポート上端をヘッダー高さ分縮小し、ヘッダー下端を基準にする
+          rootMargin: `-${headerH}px 0px 0px 0px`,
+          threshold: 0,
+        }
+      );
+      intersectionObs.observe(boundary);
+    };
+
+    const setupObservers = (boundary: HTMLElement) => {
+      currentBoundary = boundary;
+      createIntersectionObserver(boundary);
+
+      // ヘッダー高さ変化（フォント読込等）で IO を再生成
+      if (typeof ResizeObserver !== "undefined") {
+        headerResizeObs?.disconnect();
+        const headerEl = document.querySelector<HTMLElement>("[data-site-header]");
+        if (headerEl) {
+          headerResizeObs = new ResizeObserver(() => {
+            if (currentBoundary) createIntersectionObserver(currentBoundary);
+          });
+          headerResizeObs.observe(headerEl);
+        }
+      }
+    };
+
+    // 境界要素を探す。SSG なら DOM に存在するはず。なければ MutationObserver で待機
+    const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
+    if (boundary) {
+      setupObservers(boundary);
+    } else {
+      mutObs = new MutationObserver(() => {
+        const el = document.querySelector<HTMLElement>("[data-hero-dark-end]");
+        if (el) {
+          mutObs?.disconnect();
+          mutObs = null;
+          setupObservers(el);
+        }
+      });
+      mutObs.observe(document.body, { childList: true, subtree: true });
     }
 
-    let pendingSettleRaf: number | null = null;
-    let cancelled = false;
-    let boundaryObserver: MutationObserver | null = null;
-    let resizeObserver: ResizeObserver | null = null;
-    let observedHero: HTMLElement | null = null;
-    let observedHeader: HTMLElement | null = null;
-    let stableFrames = 0;
-    let lastObservedHeroTop = 0;
-    let lastObservedBoundaryTop = 0;
-    let lastObservedHeaderHeight = 0;
-    let settleStartTime = 0;
-
-    const disconnectBoundaryObserver = () => {
-      boundaryObserver?.disconnect();
-      boundaryObserver = null;
+    // ビューポートリサイズ時に IO を再生成（ヘッダー高さ・rootMargin が変わる）
+    const handleResize = () => {
+      if (currentBoundary) createIntersectionObserver(currentBoundary);
     };
-
-    const disconnectResizeObserver = () => {
-      resizeObserver?.disconnect();
-      resizeObserver = null;
-      observedHero = null;
-      observedHeader = null;
-    };
-
-    const ensureResizeObserver = (hero: HTMLElement, header: HTMLElement | null) => {
-      if (typeof ResizeObserver === "undefined") return;
-
-      if (resizeObserver && observedHero === hero && observedHeader === header) {
-        return;
-      }
-
-      disconnectResizeObserver();
-      resizeObserver = new ResizeObserver(() => {
-        if (!cancelled) {
-          scheduleStableHeroSync();
-        }
-      });
-      resizeObserver.observe(hero);
-      observedHero = hero;
-
-      if (header) {
-        resizeObserver.observe(header);
-        observedHeader = header;
-      }
-    };
-
-    const readHeroOverlay = () => {
-      const hero = document.querySelector<HTMLElement>("[data-home-hero]");
-      const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-      if (!hero || !boundary) return null;
-
-      const header = document.querySelector<HTMLElement>("[data-site-header]");
-      ensureResizeObserver(hero, header);
-      const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
-      const heroTop = hero.getBoundingClientRect().top;
-      const heroBottom = hero.getBoundingClientRect().bottom;
-      const boundaryTop = boundary.getBoundingClientRect().top;
-      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
-      const visibleHeroHeight = Math.min(heroBottom, viewportHeight) - Math.max(heroTop, 0);
-      const topTolerance = Math.max(headerHeight + 24, 64);
-      const isAtHeroStart = heroTop >= -topTolerance && visibleHeroHeight >= viewportHeight * 0.55;
-
-      return {
-        heroTop,
-        boundaryTop,
-        headerHeight,
-        isOverlay: isAtHeroStart || boundaryTop > headerHeight + 1,
-      };
-    };
-
-    const runStableHeroSync = () => {
-      pendingSettleRaf = null;
-      if (cancelled) return;
-
-      const heroOverlay = readHeroOverlay();
-      if (!heroOverlay) {
-        waitForBoundary();
-        return;
-      }
-
-      disconnectBoundaryObserver();
-
-      if (
-        Math.abs(heroOverlay.heroTop - lastObservedHeroTop) <= 1 &&
-        Math.abs(heroOverlay.boundaryTop - lastObservedBoundaryTop) <= 1 &&
-        Math.abs(heroOverlay.headerHeight - lastObservedHeaderHeight) <= 1
-      ) {
-        stableFrames += 1;
-      } else {
-        stableFrames = 0;
-      }
-      lastObservedHeroTop = heroOverlay.heroTop;
-      lastObservedBoundaryTop = heroOverlay.boundaryTop;
-      lastObservedHeaderHeight = heroOverlay.headerHeight;
-
-      if (stableFrames >= 2 || performance.now() - settleStartTime >= 500) {
-        setIsHeroOverlay(heroOverlay.isOverlay);
-        return;
-      }
-
-      pendingSettleRaf = requestAnimationFrame(runStableHeroSync);
-    };
-
-    const scheduleStableHeroSync = () => {
-      if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
-      stableFrames = 0;
-      lastObservedHeroTop = 0;
-      lastObservedBoundaryTop = 0;
-      lastObservedHeaderHeight = 0;
-      settleStartTime = performance.now();
-      pendingSettleRaf = requestAnimationFrame(runStableHeroSync);
-    };
-
-    const waitForBoundary = () => {
-      if (boundaryObserver) return;
-      boundaryObserver = new MutationObserver(() => {
-        if (document.querySelector("[data-hero-dark-end]")) {
-          disconnectBoundaryObserver();
-          scheduleStableHeroSync();
-        }
-      });
-      boundaryObserver.observe(document.body, { childList: true, subtree: true });
-    };
-
-    syncHeroOverlayRef.current = () => {
-      const heroOverlay = readHeroOverlay();
-      if (!heroOverlay) return;
-
-      disconnectBoundaryObserver();
-      setIsHeroOverlay(heroOverlay.isOverlay);
-    };
-
-    scheduleStableHeroSync();
-
-    document.fonts?.ready.then(() => {
-      if (!cancelled) scheduleStableHeroSync();
-    });
-
-    window.addEventListener("load", scheduleStableHeroSync);
-    window.addEventListener("pageshow", scheduleStableHeroSync);
-    window.addEventListener("resize", scheduleStableHeroSync);
-    window.visualViewport?.addEventListener("resize", scheduleStableHeroSync);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      cancelled = true;
-      syncHeroOverlayRef.current = null;
-      if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
-      disconnectBoundaryObserver();
-      disconnectResizeObserver();
-      window.removeEventListener("load", scheduleStableHeroSync);
-      window.removeEventListener("pageshow", scheduleStableHeroSync);
-      window.removeEventListener("resize", scheduleStableHeroSync);
-      window.visualViewport?.removeEventListener("resize", scheduleStableHeroSync);
+      intersectionObs?.disconnect();
+      headerResizeObs?.disconnect();
+      mutObs?.disconnect();
+      window.removeEventListener("resize", handleResize);
     };
   }, [isHome]);
 
