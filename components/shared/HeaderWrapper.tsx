@@ -68,6 +68,11 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
         return;
       }
 
+      // getBoundingClientRect で即時判定し、Observer の初回コールバック遅延を回避
+      const headerHeight = window.innerWidth < 768 ? 48 : 72;
+      const rect = target.getBoundingClientRect();
+      setIsHeroOverlay(rect.bottom > headerHeight && rect.top < window.innerHeight);
+
       observer?.disconnect();
       observer = new IntersectionObserver(
         ([entry]) => {
