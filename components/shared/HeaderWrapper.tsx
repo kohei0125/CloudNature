@@ -54,34 +54,43 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   useEffect(() => {
     if (!isHome) return;
 
-    let observer: IntersectionObserver | null = null;
-    let frameId: number | null = null;
-    let cancelled = false;
+    // ホームページでは初期状態を強制的に true に保ち、
+    // ページ描画が安定してから Observer に制御を委譲する
+    setIsHeroOverlay(true);
 
-    const connectObserver = () => {
+    let observer: IntersectionObserver | null = null;
+    let cancelled = false;
+    let observerReady = false;
+
+    const timerId = window.setTimeout(() => {
       if (cancelled) return;
+      observerReady = true;
 
       const target = document.querySelector<HTMLElement>("[data-home-hero]");
+      if (!target) return;
 
-      if (!target) {
-        frameId = window.requestAnimationFrame(connectObserver);
-        return;
-      }
-
-      // getBoundingClientRect で即時判定（Observer の初回コールバックは不安定なため）
-      const headerHeight = window.innerWidth < 768 ? 48 : 72;
-      const rect = target.getBoundingClientRect();
-      setIsHeroOverlay(rect.bottom > headerHeight && rect.top < window.innerHeight);
-
-      observer?.disconnect();
-      let initialFired = false;
       observer = new IntersectionObserver(
         ([entry]) => {
-          // 初回コールバックはスキップ（getBoundingClientRect の判定を優先）
-          if (!initialFired) {
-            initialFired = true;
-            return;
-          }
+          setIsHeroOverlay(entry.isIntersecting);
+        },
+        {
+          rootMargin: getHeroObserverMargin(),
+          threshold: 0,
+        }
+      );
+
+      observer.observe(target);
+    }, 300);
+
+    const handleResize = () => {
+      if (!observerReady) return;
+      observer?.disconnect();
+
+      const target = document.querySelector<HTMLElement>("[data-home-hero]");
+      if (!target) return;
+
+      observer = new IntersectionObserver(
+        ([entry]) => {
           setIsHeroOverlay(entry.isIntersecting);
         },
         {
@@ -93,21 +102,12 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       observer.observe(target);
     };
 
-    const handleResize = () => {
-      observer?.disconnect();
-      connectObserver();
-    };
-
-    connectObserver();
-
     window.addEventListener("resize", handleResize);
     window.visualViewport?.addEventListener("resize", handleResize);
 
     return () => {
       cancelled = true;
-      if (frameId !== null) {
-        window.cancelAnimationFrame(frameId);
-      }
+      window.clearTimeout(timerId);
       observer?.disconnect();
       window.removeEventListener("resize", handleResize);
       window.visualViewport?.removeEventListener("resize", handleResize);
