@@ -46,10 +46,8 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className={cn(
-              "h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
-              isHeroOverlay ? "opacity-100" : "opacity-0"
-            )}
+            style={{ opacity: isHeroOverlay ? 1 : 0, transition: "opacity 300ms" }}
+            className="h-10 w-auto object-contain md:h-12"
             priority
           />
           {/* 黒ロゴ（通常時） */}
@@ -58,10 +56,8 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
             alt=""
             width={180}
             height={50}
-            className={cn(
-              "absolute inset-y-0 left-0 my-auto h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
-              isHeroOverlay ? "opacity-0" : "opacity-100"
-            )}
+            style={{ opacity: isHeroOverlay ? 0 : 1, transition: "opacity 300ms" }}
+            className="absolute inset-y-0 left-0 my-auto h-10 w-auto object-contain md:h-12"
             aria-hidden
           />
         </Link>

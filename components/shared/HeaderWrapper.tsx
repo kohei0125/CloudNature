@@ -25,14 +25,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
-
-    const checkHeroOverlay = () => {
-      if (!isHome) return;
-      const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-      const header = document.querySelector<HTMLElement>("[data-site-header]");
-      if (!boundary || !header) return;
-      setIsHeroOverlay(boundary.getBoundingClientRect().top > header.offsetHeight);
-    };
+    setIsScrolled(window.scrollY > 50);
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -46,20 +39,18 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       setIsScrolled(currentScrollY > 50);
       lastScrollY.current = currentScrollY;
 
-      checkHeroOverlay();
+      // ヒーローオーバーレイ判定はスクロール時のみ
+      if (isHome) {
+        const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
+        const header = document.querySelector<HTMLElement>("[data-site-header]");
+        if (boundary && header) {
+          setIsHeroOverlay(boundary.getBoundingClientRect().top > header.offsetHeight);
+        }
+      }
     };
-
-    handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleScroll);
-
-    // リロード時のスクロール復元対応: レイアウト安定後に1回チェック
-    document.fonts.ready.then(() => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(checkHeroOverlay);
-      });
-    });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
