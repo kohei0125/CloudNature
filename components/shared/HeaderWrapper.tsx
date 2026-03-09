@@ -59,46 +59,70 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   useEffect(() => {
     if (!isHome) return;
 
-    let syncFrameId: number | null = null;
-    let retryFrameId: number | null = null;
+    let pendingRaf: number | null = null;
     let cancelled = false;
+    let boundaryObserver: MutationObserver | null = null;
 
-    const syncHeroOverlay = () => {
+    const measure = () => {
+      pendingRaf = null;
       if (cancelled) return;
 
       const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
       if (!boundary) {
-        retryFrameId = window.requestAnimationFrame(syncHeroOverlay);
+        waitForBoundary();
         return;
       }
 
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
       heroThresholdRef.current = boundary.getBoundingClientRect().top + window.scrollY - headerHeight;
-      setIsHeroOverlay(window.scrollY < heroThresholdRef.current);
+
+      if (window.scrollY <= 5) {
+        setIsHeroOverlay(true);
+      } else {
+        setIsHeroOverlay(window.scrollY < heroThresholdRef.current);
+      }
     };
 
-    syncFrameId = window.requestAnimationFrame(() => {
-      syncFrameId = window.requestAnimationFrame(syncHeroOverlay);
+    const scheduleSync = () => {
+      if (pendingRaf !== null) cancelAnimationFrame(pendingRaf);
+      pendingRaf = requestAnimationFrame(measure);
+    };
+
+    const waitForBoundary = () => {
+      if (boundaryObserver) return;
+      boundaryObserver = new MutationObserver(() => {
+        if (document.querySelector("[data-hero-dark-end]")) {
+          boundaryObserver!.disconnect();
+          boundaryObserver = null;
+          scheduleSync();
+        }
+      });
+      boundaryObserver.observe(document.body, { childList: true, subtree: true });
+    };
+
+    // Phase 1: 即時計測（boundary 未発見なら MutationObserver で待機）
+    scheduleSync();
+
+    // Phase 2: フォント読み込み後に再計測
+    document.fonts.ready.then(() => {
+      if (!cancelled) scheduleSync();
     });
 
-    window.addEventListener("load", syncHeroOverlay);
-    window.addEventListener("pageshow", syncHeroOverlay);
-    window.addEventListener("resize", syncHeroOverlay);
-    window.visualViewport?.addEventListener("resize", syncHeroOverlay);
+    // Phase 3: load / pageshow / resize で再計測
+    window.addEventListener("load", scheduleSync);
+    window.addEventListener("pageshow", scheduleSync);
+    window.addEventListener("resize", scheduleSync);
+    window.visualViewport?.addEventListener("resize", scheduleSync);
 
     return () => {
       cancelled = true;
-      if (syncFrameId !== null) {
-        window.cancelAnimationFrame(syncFrameId);
-      }
-      if (retryFrameId !== null) {
-        window.cancelAnimationFrame(retryFrameId);
-      }
-      window.removeEventListener("load", syncHeroOverlay);
-      window.removeEventListener("pageshow", syncHeroOverlay);
-      window.removeEventListener("resize", syncHeroOverlay);
-      window.visualViewport?.removeEventListener("resize", syncHeroOverlay);
+      if (pendingRaf !== null) cancelAnimationFrame(pendingRaf);
+      boundaryObserver?.disconnect();
+      window.removeEventListener("load", scheduleSync);
+      window.removeEventListener("pageshow", scheduleSync);
+      window.removeEventListener("resize", scheduleSync);
+      window.visualViewport?.removeEventListener("resize", scheduleSync);
     };
   }, [isHome]);
 
