@@ -6,7 +6,7 @@ import { ESTIMATE_URL } from "@/content/common";
 
 const HeroSection = () => {
   return (
-    <section data-home-hero className="relative min-h-screen v-stack justify-end overflow-hidden">
+    <section className="relative min-h-screen v-stack justify-end overflow-hidden">
       {/* Full-bleed background image */}
       <Image
         src={HERO_COPY.imageSrc}
@@ -22,6 +22,13 @@ const HeroSection = () => {
 
       {/* Warm fade at bottom for transition to next section */}
       <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-cream to-transparent" />
+
+      {/* Header theme boundary for switching from white to default logo */}
+      <div
+        data-home-hero-end
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-24 h-px md:bottom-32"
+      />
 
       {/* Decorative metric (desktop only) */}
       <div className="hidden lg:block absolute right-12 bottom-48 select-none pointer-events-none">

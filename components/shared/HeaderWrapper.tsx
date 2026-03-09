@@ -5,8 +5,20 @@ import { usePathname } from "next/navigation";
 import Header from "./Header";
 import MobileMenu from "./MobileMenu";
 
+const getHeroObserverMargin = () =>
+  window.innerWidth < 768 ? "-48px 0px 0px 0px" : "-72px 0px 0px 0px";
+
 const HeaderWrapper = () => {
   const pathname = usePathname();
+
+  return <HeaderWrapperInner key={pathname} pathname={pathname} />;
+};
+
+interface HeaderWrapperInnerProps {
+  pathname: string;
+}
+
+const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const isHome = pathname === "/";
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,7 +27,9 @@ const HeaderWrapper = () => {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const syncHeaderState = () => {
+    lastScrollY.current = window.scrollY;
+
+    const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
@@ -25,49 +39,65 @@ const HeaderWrapper = () => {
       }
 
       setIsScrolled(currentScrollY > 50);
-
-      if (isHome) {
-        if (currentScrollY <= 0) {
-          setIsHeroOverlay(true);
-          lastScrollY.current = currentScrollY;
-          return;
-        }
-
-        const hero = document.querySelector<HTMLElement>("[data-home-hero]");
-
-        if (hero) {
-          const headerOffset = window.innerWidth < 768 ? 48 : 72;
-          setIsHeroOverlay(hero.getBoundingClientRect().bottom > headerOffset);
-        } else {
-          setIsHeroOverlay(currentScrollY <= 0);
-        }
-      } else {
-        setIsHeroOverlay(false);
-      }
-
       lastScrollY.current = currentScrollY;
     };
 
-    lastScrollY.current = window.scrollY;
-    syncHeaderState();
+    handleScroll();
 
-    const frameId = window.requestAnimationFrame(syncHeaderState);
-    const timeoutId = window.setTimeout(syncHeaderState, 250);
-
-    window.addEventListener("scroll", syncHeaderState, { passive: true });
-    window.addEventListener("resize", syncHeaderState);
-    window.addEventListener("pageshow", syncHeaderState);
-    window.addEventListener("load", syncHeaderState);
-    window.visualViewport?.addEventListener("resize", syncHeaderState);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      window.cancelAnimationFrame(frameId);
-      window.clearTimeout(timeoutId);
-      window.removeEventListener("scroll", syncHeaderState);
-      window.removeEventListener("resize", syncHeaderState);
-      window.removeEventListener("pageshow", syncHeaderState);
-      window.removeEventListener("load", syncHeaderState);
-      window.visualViewport?.removeEventListener("resize", syncHeaderState);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isHome) return;
+
+    let observer: IntersectionObserver | null = null;
+    let frameId: number | null = null;
+    let cancelled = false;
+
+    const connectObserver = () => {
+      if (cancelled) return;
+
+      const target = document.querySelector<HTMLElement>("[data-home-hero-end]");
+
+      if (!target) {
+        frameId = window.requestAnimationFrame(connectObserver);
+        return;
+      }
+
+      observer?.disconnect();
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsHeroOverlay(entry.isIntersecting);
+        },
+        {
+          rootMargin: getHeroObserverMargin(),
+          threshold: 0,
+        }
+      );
+
+      observer.observe(target);
+    };
+
+    const handleResize = () => {
+      observer?.disconnect();
+      connectObserver();
+    };
+
+    connectObserver();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelled = true;
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+      observer?.disconnect();
+      window.removeEventListener("resize", handleResize);
     };
   }, [isHome]);
 
@@ -83,7 +113,7 @@ const HeaderWrapper = () => {
     <>
       <Header
         isScrolled={isScrolled}
-        isHeroOverlay={isHeroOverlay}
+        isHeroOverlay={isHome && isHeroOverlay}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
         onOpenMobileMenu={handleOpenMobileMenu}
