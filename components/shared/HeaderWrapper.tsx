@@ -24,8 +24,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const [isHeroOverlay, setIsHeroOverlay] = useState(isHome);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
-  const heroThresholdRef = useRef(0);
-  const applyHeroOverlayRef = useRef<(() => void) | null>(null);
+  const syncHeroOverlayRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     lastScrollY.current = window.scrollY;
@@ -42,7 +41,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       setIsScrolled(currentScrollY > 50);
 
       if (isHome) {
-        applyHeroOverlayRef.current?.();
+        syncHeroOverlayRef.current?.();
       }
 
       lastScrollY.current = currentScrollY;
@@ -59,8 +58,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
   useEffect(() => {
     if (!isHome) {
-      heroThresholdRef.current = 0;
-      applyHeroOverlayRef.current = null;
+      syncHeroOverlayRef.current = null;
       return;
     }
 
@@ -68,7 +66,8 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     let cancelled = false;
     let boundaryObserver: MutationObserver | null = null;
     let stableFrames = 0;
-    let lastObservedScrollY = 0;
+    let lastObservedBoundaryTop = 0;
+    let lastObservedHeaderHeight = 0;
     let settleStartTime = 0;
 
     const disconnectBoundaryObserver = () => {
@@ -76,50 +75,46 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       boundaryObserver = null;
     };
 
-    const measureBoundary = () => {
+    const readHeroOverlay = () => {
       const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-      if (!boundary) return false;
+      if (!boundary) return null;
 
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
-      heroThresholdRef.current = boundary.getBoundingClientRect().top + window.scrollY - headerHeight;
-      disconnectBoundaryObserver();
+      const boundaryTop = boundary.getBoundingClientRect().top;
 
-      return true;
-    };
-
-    const applyHeroOverlay = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 5) {
-        setIsHeroOverlay(true);
-        return;
-      }
-
-      if (heroThresholdRef.current > 0) {
-        setIsHeroOverlay(currentScrollY < heroThresholdRef.current);
-      }
+      return {
+        boundaryTop,
+        headerHeight,
+        isOverlay: boundaryTop > headerHeight + 1,
+      };
     };
 
     const runStableHeroSync = () => {
       pendingSettleRaf = null;
       if (cancelled) return;
 
-      if (!measureBoundary()) {
+      const heroOverlay = readHeroOverlay();
+      if (!heroOverlay) {
         waitForBoundary();
         return;
       }
 
-      const currentScrollY = window.scrollY;
-      if (Math.abs(currentScrollY - lastObservedScrollY) <= 1) {
+      disconnectBoundaryObserver();
+
+      if (
+        Math.abs(heroOverlay.boundaryTop - lastObservedBoundaryTop) <= 1 &&
+        Math.abs(heroOverlay.headerHeight - lastObservedHeaderHeight) <= 1
+      ) {
         stableFrames += 1;
       } else {
         stableFrames = 0;
       }
-      lastObservedScrollY = currentScrollY;
+      lastObservedBoundaryTop = heroOverlay.boundaryTop;
+      lastObservedHeaderHeight = heroOverlay.headerHeight;
 
       if (stableFrames >= 2 || performance.now() - settleStartTime >= 500) {
-        applyHeroOverlay();
+        setIsHeroOverlay(heroOverlay.isOverlay);
         return;
       }
 
@@ -129,7 +124,8 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     const scheduleStableHeroSync = () => {
       if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
       stableFrames = 0;
-      lastObservedScrollY = window.scrollY;
+      lastObservedBoundaryTop = 0;
+      lastObservedHeaderHeight = 0;
       settleStartTime = performance.now();
       pendingSettleRaf = requestAnimationFrame(runStableHeroSync);
     };
@@ -145,7 +141,13 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       boundaryObserver.observe(document.body, { childList: true, subtree: true });
     };
 
-    applyHeroOverlayRef.current = applyHeroOverlay;
+    syncHeroOverlayRef.current = () => {
+      const heroOverlay = readHeroOverlay();
+      if (!heroOverlay) return;
+
+      disconnectBoundaryObserver();
+      setIsHeroOverlay(heroOverlay.isOverlay);
+    };
 
     scheduleStableHeroSync();
 
@@ -160,7 +162,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
     return () => {
       cancelled = true;
-      applyHeroOverlayRef.current = null;
+      syncHeroOverlayRef.current = null;
       if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
       disconnectBoundaryObserver();
       window.removeEventListener("load", scheduleStableHeroSync);
