@@ -27,6 +27,12 @@ const HeaderWrapper = () => {
       setIsScrolled(currentScrollY > 50);
 
       if (isHome) {
+        if (currentScrollY <= 0) {
+          setIsHeroOverlay(true);
+          lastScrollY.current = currentScrollY;
+          return;
+        }
+
         const hero = document.querySelector<HTMLElement>("[data-home-hero]");
 
         if (hero) {
@@ -46,14 +52,22 @@ const HeaderWrapper = () => {
     syncHeaderState();
 
     const frameId = window.requestAnimationFrame(syncHeaderState);
+    const timeoutId = window.setTimeout(syncHeaderState, 250);
 
     window.addEventListener("scroll", syncHeaderState, { passive: true });
     window.addEventListener("resize", syncHeaderState);
+    window.addEventListener("pageshow", syncHeaderState);
+    window.addEventListener("load", syncHeaderState);
+    window.visualViewport?.addEventListener("resize", syncHeaderState);
 
     return () => {
       window.cancelAnimationFrame(frameId);
+      window.clearTimeout(timeoutId);
       window.removeEventListener("scroll", syncHeaderState);
       window.removeEventListener("resize", syncHeaderState);
+      window.removeEventListener("pageshow", syncHeaderState);
+      window.removeEventListener("load", syncHeaderState);
+      window.visualViewport?.removeEventListener("resize", syncHeaderState);
     };
   }, [isHome]);
 
