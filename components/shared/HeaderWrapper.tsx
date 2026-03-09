@@ -119,7 +119,10 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       const heroTop = hero.getBoundingClientRect().top;
       const heroBottom = hero.getBoundingClientRect().bottom;
       const boundaryTop = boundary.getBoundingClientRect().top;
-      const isAtHeroStart = heroTop >= -8 && heroBottom > headerHeight + 40;
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const visibleHeroHeight = Math.min(heroBottom, viewportHeight) - Math.max(heroTop, 0);
+      const topTolerance = Math.max(headerHeight + 24, 64);
+      const isAtHeroStart = heroTop >= -topTolerance && visibleHeroHeight >= viewportHeight * 0.55;
 
       return {
         heroTop,
