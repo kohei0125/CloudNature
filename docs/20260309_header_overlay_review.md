@@ -6,38 +6,62 @@
 
 ## 対象範囲
 
+- `components/shared/Header.tsx`
 - `components/shared/HeaderWrapper.tsx`
 
 ## 根本原因
 
-### なぜ本番だけ発生するか
+### 診断結果
 
-| 環境 | 挙動 |
-|------|------|
-| dev (Turbopack) | HTML生成→CSS→JS→hydrate がほぼ同時。Effect実行時にはレイアウト確定済み |
-| prod (SSG + CDN) | 静的HTML即配信 → JS後追いダウンロード → hydrate → Effect。この間にフォント未読込のレイアウトシフトが起きうる |
+診断ログにより以下が判明:
+- **全ての React render**: `isHeroOverlay=true`, `logoSrc=cloudnature_white.png`（白）
+- **実際の DOM**: `cloudnature.png`（黒）が表示される
 
-### 直接原因
+→ React は正しく白ロゴを render しているが、**DOM の `<img src>` が更新されていない**
 
-`getBoundingClientRect()` をrAFコールバックで呼ぶ手動計測方式は、レイアウト未確定タイミングで不正確な値を返しうる。`preload: false` + `display: "swap"` フォントがレイアウトシフトを誘発し、計測値がさらに不安定に。
+### 原因: React hydration の img src スキップ
+
+React 18 は hydration 時に `<img>` の `src` 属性の差分を**意図的にスキップ**する。画像の再読み込みによるフリッカーを避けるため。
+
+#### 発生シナリオ
+1. ユーザーが `/philosophy` 等を閲覧（SSG HTML に黒ロゴ `cloudnature.png`）
+2. クライアントサイドナビゲーションで `/` に遷移（React が白ロゴを render → DOM 更新される）
+3. ページをリロード（Cmd+R）
+4. ブラウザが新しい HTML を取得... しかし **bfcache やブラウザの最適化** により、前回の DOM が一部残る場合がある
+5. React hydration 時に `<img src>` の差分をスキップ → 黒ロゴが DOM に残る
 
 ### v1〜v6 が全て失敗した理由
 
-全てのアプローチが `getBoundingClientRect()` ベースの手動計測を前提としており、「いつ計測すれば正確か」を推測するヒューリスティック（rAFリトライ、stable frames、MutationObserver等）を追加しただけ。計測タイミングの根本問題は未解決。
+全てのアプローチが `isHeroOverlay` の state 管理（計測タイミング）を改善する方向だったが、**state は常に正しかった**。問題は React が正しい state を DOM に反映しない（img src をスキップする）点にあった。
 
-## 修正方針
+## 修正内容
 
-`getBoundingClientRect()` を完全廃止し、`IntersectionObserver` に置換。
+### Header.tsx — ロゴの二重レンダリング + CSS opacity 切り替え
 
-- IO はブラウザがレイアウト確定後にコールバックを発火するため、タイミング依存バグが構造的に発生しない
-- `rootMargin` でヘッダー高さ分だけビューポートを縮小し、境界要素がヘッダー下端を通過した瞬間を検出
-- ヘッダー高さ変化（フォント読込・スクロール状態変化）には `ResizeObserver` で IO を再生成して対応
+`src` 属性の動的変更を完全廃止。白ロゴ・黒ロゴの両方を常に DOM に配置し、CSS `opacity` で表示切り替え。
+
+- 白ロゴ: `opacity-100` / `opacity-0`（isHeroOverlay に応じて）
+- 黒ロゴ: `opacity-0` / `opacity-100`（逆）、`absolute` 配置で重ねる
+- `transition-opacity duration-300` でスムーズなクロスフェード
+- 白ロゴのみ `priority`（LCP 最適化）、黒ロゴは通常ロード
+- a11y: 黒ロゴは `alt=""` + `aria-hidden` で重複読み上げ防止
+
+### HeaderWrapper.tsx — IntersectionObserver（維持）
+
+IO ベースの境界検出は正しく動作しているためそのまま維持。
+
+## Codex レビュー結果
+
+- デュアル画像レイアウト: 正しく構成 ✅
+- a11y: 問題なし ✅
+- パフォーマンス: 非表示側ロゴから `priority` 削除済み ✅
+- トランジション: `opacity + duration-300` で自然 ✅
 
 ## 確認項目
 
-- [ ] `npm run build` 成功
+- [x] `npm run build` 成功
 - [ ] ローカルでトップリロード → 白ロゴ維持
-- [ ] スクロール途中でリロード → 黒ロゴ表示
-- [ ] スクロールでヒーロー通過 → 黒ロゴ切り替え
+- [ ] スクロール途中でリロード → 適切なロゴ表示
+- [ ] スクロールでヒーロー通過 → 黒ロゴ切り替え（クロスフェード）
 - [ ] 他ページ → ホーム遷移（SPA）→ 白ロゴ表示
 - [ ] Vercel デプロイ後、スマホ実機で確認

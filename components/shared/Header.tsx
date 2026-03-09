@@ -19,10 +19,6 @@ interface HeaderProps {
 
 const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
-  const logoSrc = isHeroOverlay ? "/images/cloudnature_white.png" : "/images/cloudnature.png";
-
-  // 診断ログ（原因特定後に削除）
-  console.log(`[Header] render isHeroOverlay=${isHeroOverlay} logoSrc=${logoSrc} isScrolled=${isScrolled}`);
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
@@ -43,14 +39,30 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
       )}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group relative">
+          {/* 白ロゴ（ヒーローオーバーレイ時） */}
           <Image
-            src={logoSrc}
+            src="/images/cloudnature_white.png"
             alt={HEADER_COPY.brand}
             width={180}
             height={50}
-            className="h-10 w-auto object-contain md:h-12"
+            className={cn(
+              "h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
+              isHeroOverlay ? "opacity-100" : "opacity-0"
+            )}
             priority
+          />
+          {/* 黒ロゴ（通常時） */}
+          <Image
+            src="/images/cloudnature.png"
+            alt=""
+            width={180}
+            height={50}
+            className={cn(
+              "absolute inset-y-0 left-0 my-auto h-10 w-auto object-contain md:h-12 transition-opacity duration-300",
+              isHeroOverlay ? "opacity-0" : "opacity-100"
+            )}
+            aria-hidden
           />
         </Link>
 
