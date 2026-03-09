@@ -69,6 +69,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     let observedHero: HTMLElement | null = null;
     let observedHeader: HTMLElement | null = null;
     let stableFrames = 0;
+    let lastObservedHeroTop = 0;
     let lastObservedBoundaryTop = 0;
     let lastObservedHeaderHeight = 0;
     let settleStartTime = 0;
@@ -115,12 +116,16 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       const header = document.querySelector<HTMLElement>("[data-site-header]");
       ensureResizeObserver(hero, header);
       const headerHeight = header?.getBoundingClientRect().height ?? getFallbackHeaderHeight();
+      const heroTop = hero.getBoundingClientRect().top;
+      const heroBottom = hero.getBoundingClientRect().bottom;
       const boundaryTop = boundary.getBoundingClientRect().top;
+      const isAtHeroStart = heroTop >= -8 && heroBottom > headerHeight + 40;
 
       return {
+        heroTop,
         boundaryTop,
         headerHeight,
-        isOverlay: boundaryTop > headerHeight + 1,
+        isOverlay: isAtHeroStart || boundaryTop > headerHeight + 1,
       };
     };
 
@@ -137,6 +142,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       disconnectBoundaryObserver();
 
       if (
+        Math.abs(heroOverlay.heroTop - lastObservedHeroTop) <= 1 &&
         Math.abs(heroOverlay.boundaryTop - lastObservedBoundaryTop) <= 1 &&
         Math.abs(heroOverlay.headerHeight - lastObservedHeaderHeight) <= 1
       ) {
@@ -144,6 +150,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       } else {
         stableFrames = 0;
       }
+      lastObservedHeroTop = heroOverlay.heroTop;
       lastObservedBoundaryTop = heroOverlay.boundaryTop;
       lastObservedHeaderHeight = heroOverlay.headerHeight;
 
@@ -158,6 +165,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     const scheduleStableHeroSync = () => {
       if (pendingSettleRaf !== null) cancelAnimationFrame(pendingSettleRaf);
       stableFrames = 0;
+      lastObservedHeroTop = 0;
       lastObservedBoundaryTop = 0;
       lastObservedHeaderHeight = 0;
       settleStartTime = performance.now();
