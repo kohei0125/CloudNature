@@ -61,7 +61,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     const connectObserver = () => {
       if (cancelled) return;
 
-      const target = document.querySelector<HTMLElement>("[data-home-hero-end]");
+      const target = document.querySelector<HTMLElement>("[data-home-hero]");
 
       if (!target) {
         frameId = window.requestAnimationFrame(connectObserver);
@@ -90,6 +90,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     connectObserver();
 
     window.addEventListener("resize", handleResize);
+    window.visualViewport?.addEventListener("resize", handleResize);
 
     return () => {
       cancelled = true;
@@ -98,6 +99,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       }
       observer?.disconnect();
       window.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("resize", handleResize);
     };
   }, [isHome]);
 
