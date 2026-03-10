@@ -36,8 +36,8 @@ EMAIL_FROM="${EMAIL_FROM:-CloudNature <cloudnature@stage-site.net>}"
 NOTIFY_EMAIL="${NOTIFY_EMAIL:-info@cloudnature.jp}"
 NOTION_DATABASE_ID="${NOTION_DATABASE_ID:-310f32ffde8d8087a5d5e9e2cee4cb3f}"
 GSC_SITE_URL="${GSC_SITE_URL:-sc-domain:cloudnature.jp}"
-GA4_PROPERTY_ID="${GA4_PROPERTY_ID:-}"
-REPORT_EMAIL="${REPORT_EMAIL:-}"
+GA4_PROPERTY_ID="${GA4_PROPERTY_ID:-properties/527141612}"
+REPORT_EMAIL="${REPORT_EMAIL:-info@cloudnature.jp}"
 
 # ---------------------------------------------------------------------------
 # シークレット（Secret Manager 参照名）
