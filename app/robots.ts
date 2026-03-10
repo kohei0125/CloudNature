@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { CANONICAL_SITE_URL, isIndexableDeployment } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const isProd = process.env.NEXT_PUBLIC_ENV === "production";
+  const isIndexable = isIndexableDeployment();
 
-  if (!isProd) {
+  if (!isIndexable) {
     return {
       rules: { userAgent: "*", disallow: "/" },
     };
@@ -11,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://cloudnature.jp/sitemap.xml",
+    sitemap: `${CANONICAL_SITE_URL}/sitemap.xml`,
   };
 }

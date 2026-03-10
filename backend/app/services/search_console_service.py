@@ -198,13 +198,13 @@ def inspect_urls(urls: list[str] | None = None) -> list[dict]:
                     "last_crawl_time": index_status.get("lastCrawlTime", ""),
                 }
             )
-        except Exception:
+        except Exception as exc:
             logger.exception("Failed to inspect URL: %s", url)
             results.append(
                 {
                     "url": url,
                     "verdict": "ERROR",
-                    "coverage_state": "Inspection failed",
+                    "coverage_state": f"Inspection API error ({type(exc).__name__})",
                     "indexing_state": "",
                     "last_crawl_time": "",
                 }

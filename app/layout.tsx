@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
 import Footer from "@/components/shared/Footer";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
+import { CANONICAL_SITE_URL, isIndexableDeployment } from "@/lib/site";
 
 const sans = Noto_Sans_JP({
   subsets: ["latin"],
@@ -25,16 +26,16 @@ const serif = Noto_Serif_JP({
 });
 
 export const metadata: Metadata = (() => {
-  const isProd = process.env.NEXT_PUBLIC_ENV === "production";
+  const isIndexable = isIndexableDeployment();
   return {
-    metadataBase: new URL("https://cloudnature.jp"),
+    metadataBase: new URL(CANONICAL_SITE_URL),
     title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
     description:
       "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
     openGraph: {
       title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
       description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
-      url: "https://cloudnature.jp",
+      url: CANONICAL_SITE_URL,
       siteName: "株式会社クラウドネイチャー",
       images: [
         {
@@ -54,8 +55,15 @@ export const metadata: Metadata = (() => {
       images: ["/images/og-image.png"],
     },
 
-    robots: isProd
-      ? undefined
+    robots: isIndexable
+      ? {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true
+        }
+      }
       : {
         index: false,
         follow: false,

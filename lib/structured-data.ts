@@ -1,4 +1,4 @@
-const BASE_URL = "https://cloudnature.jp";
+import { CANONICAL_SITE_URL as BASE_URL } from "@/lib/site";
 
 interface BreadcrumbItem {
   name: string;

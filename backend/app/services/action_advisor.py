@@ -82,7 +82,22 @@ def _rule_based_candidates(
 
     # インデックス異常
     for result in index_results:
-        if result.get("verdict") not in ("PASS", "NEUTRAL", "UNKNOWN"):
+        verdict = result.get("verdict")
+
+        if verdict == "ERROR":
+            candidates.append(
+                {
+                    "rule": "inspection_api_error",
+                    "priority": "P2",
+                    "url": result["url"],
+                    "verdict": verdict,
+                    "coverage_state": result.get("coverage_state", ""),
+                    "action_type": "Search Console連携確認",
+                }
+            )
+            continue
+
+        if verdict not in ("PASS", "NEUTRAL", "UNKNOWN"):
             candidates.append(
                 {
                     "rule": "index_error",
