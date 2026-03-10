@@ -164,6 +164,7 @@ IMAGE_TAG=v1.2.0 ./deploy.sh
 1. Cloud Build で `backend/` の Docker イメージをビルド＆プッシュ
 2. ダイジェスト指定で Cloud Run にデプロイ（タグの不整合を防止）
 3. 環境変数・Secret Manager 参照を一括設定
+4. Cloud Scheduler ジョブ（週次レポート）の作成・更新
 
 | 環境変数 | デフォルト値 | 説明 |
 |---|---|---|
@@ -171,6 +172,7 @@ IMAGE_TAG=v1.2.0 ./deploy.sh
 | `GCP_REGION` | `asia-northeast1` | Cloud Run リージョン |
 | `SERVICE_NAME` | `backend` | Cloud Run サービス名 |
 | `IMAGE_TAG` | git short hash | イメージタグ |
+| `SCHEDULER_SCHEDULE` | `0 10 * * 1` | 週次レポートの cron 式（デフォルト: 毎週月曜 10:00 JST） |
 
 シークレット（`API_KEY`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `DATABASE_URL`）は GCP Secret Manager から自動参照されます。
 
@@ -209,10 +211,16 @@ cd estimate && npm run build
 
 バックエンドが GA4 Data API + Search Console API からデータを取得し、Resend 経由でメール送信する。
 
+- **スケジュール**: Cloud Scheduler → `POST /api/v1/reports/weekly`（毎週月曜 10:00 JST）
+- **認証**: Cloud Scheduler → Cloud Run は OIDC トークン（IAM `roles/run.invoker`）。`X-API-Key` チェックはスキップ
+- **送信先**: 環境変数 `REPORT_EMAIL` に設定したアドレス
+- **冪等性**: `year_week` 単位で重複送信を防止（DB に `WeeklyReportLog` で記録）
 - **サイト別（hostName）セクション**: cloudnature.jp / ai.cloudnature.jp ごとのセッション・ユーザー・PV・前週比を表示
 - **閲覧ページ別 Top**: `hostName` + `pagePath` の2次元で集計（2サイトの同一パスが合算されない）
 - **本番ホスト絞り込み**: `PRODUCTION_HOSTS`（`ga4_service.py`）で localhost や `*.vercel.app` を除外
 - **GSC host分離**: 現時点ではスコープ外（`sc-domain:cloudnature.jp` はサブドメインを含むが、ai.cloudnature.jp の検索流入はほぼないため将来課題）
+
+Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新される。手動実行: `gcloud scheduler jobs run weekly-report --project video-gen-demo --location asia-northeast1`
 
 関連コード: `backend/app/services/ga4_service.py`, `backend/app/tasks/weekly_report.py`, `backend/app/templates/weekly_report_email.html`
 

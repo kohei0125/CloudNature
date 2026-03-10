@@ -96,8 +96,11 @@ def _mark_stale_processing_records() -> None:
 class ApiKeyMiddleware(BaseHTTPMiddleware):
     """Verify X-API-Key header when API_KEY is configured."""
 
+    # Cloud Scheduler → Cloud Run は IAM (OIDC) で認証されるため X-API-Key 不要
+    _SKIP_API_KEY_PATHS = {"/api/v1/health", "/api/v1/reports/weekly"}
+
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
-        if request.url.path == "/api/v1/health":
+        if request.url.path in self._SKIP_API_KEY_PATHS:
             return await call_next(request)
         if settings.api_key:
             provided = request.headers.get("X-API-Key", "")

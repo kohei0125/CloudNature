@@ -12,6 +12,9 @@ set -euo pipefail
 GCP_PROJECT="${GCP_PROJECT:-video-gen-demo}"
 GCP_REGION="${GCP_REGION:-asia-northeast1}"
 SERVICE_NAME="${SERVICE_NAME:-backend}"
+SCHEDULER_JOB_NAME="${SCHEDULER_JOB_NAME:-weekly-report}"
+SCHEDULER_SCHEDULE="${SCHEDULER_SCHEDULE:-0 10 * * 1}"  # 毎週月曜 10:00 JST
+SCHEDULER_TIMEZONE="${SCHEDULER_TIMEZONE:-Asia/Tokyo}"
 IMAGE_REPO="${IMAGE_REPO:-${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/cloudnature/${SERVICE_NAME}}"
 IMAGE_TAG="${IMAGE_TAG:-$(git -C backend rev-parse --short HEAD 2>/dev/null || date +%Y%m%d%H%M%S)}"
 BACKEND_DIR="${BACKEND_DIR:-backend}"
@@ -130,4 +133,68 @@ SERVICE_URL=$(gcloud run services describe "${SERVICE_NAME}" \
   --region "${GCP_REGION}" \
   --format="value(status.url)" 2>/dev/null)
 echo "  URL: ${SERVICE_URL}"
+
+# ---------------------------------------------------------------------------
+# 3. Cloud Scheduler ジョブ（週次レポート）
+# ---------------------------------------------------------------------------
+echo ""
+echo "⏰ Cloud Scheduler ジョブを設定中..."
+
+# Scheduler 用サービスアカウント（Cloud Run invoker 権限）
+SCHEDULER_SA="scheduler-invoker@${GCP_PROJECT}.iam.gserviceaccount.com"
+
+# サービスアカウントが存在しなければ作成
+if ! gcloud iam service-accounts describe "${SCHEDULER_SA}" \
+  --project "${GCP_PROJECT}" &>/dev/null; then
+  echo "  サービスアカウントを作成: ${SCHEDULER_SA}"
+  gcloud iam service-accounts create scheduler-invoker \
+    --display-name="Cloud Scheduler → Cloud Run invoker" \
+    --project "${GCP_PROJECT}" \
+    --quiet
+
+  # Cloud Run の呼び出し権限を付与
+  gcloud run services add-iam-policy-binding "${SERVICE_NAME}" \
+    --member="serviceAccount:${SCHEDULER_SA}" \
+    --role="roles/run.invoker" \
+    --project "${GCP_PROJECT}" \
+    --region "${GCP_REGION}" \
+    --quiet
+  echo "  ✅ サービスアカウント作成・権限付与完了"
+fi
+
+# ジョブを作成 or 更新
+REPORT_ENDPOINT="${SERVICE_URL}/api/v1/reports/weekly"
+if gcloud scheduler jobs describe "${SCHEDULER_JOB_NAME}" \
+  --project "${GCP_PROJECT}" \
+  --location "${GCP_REGION}" &>/dev/null; then
+  # 既存ジョブを更新
+  gcloud scheduler jobs update http "${SCHEDULER_JOB_NAME}" \
+    --project "${GCP_PROJECT}" \
+    --location "${GCP_REGION}" \
+    --schedule "${SCHEDULER_SCHEDULE}" \
+    --time-zone "${SCHEDULER_TIMEZONE}" \
+    --uri "${REPORT_ENDPOINT}" \
+    --http-method POST \
+    --oidc-service-account-email "${SCHEDULER_SA}" \
+    --oidc-token-audience "${SERVICE_URL}" \
+    --attempt-deadline 300s \
+    --quiet
+  echo "  ✅ Scheduler ジョブを更新: ${SCHEDULER_JOB_NAME}"
+else
+  # 新規作成
+  gcloud scheduler jobs create http "${SCHEDULER_JOB_NAME}" \
+    --project "${GCP_PROJECT}" \
+    --location "${GCP_REGION}" \
+    --schedule "${SCHEDULER_SCHEDULE}" \
+    --time-zone "${SCHEDULER_TIMEZONE}" \
+    --uri "${REPORT_ENDPOINT}" \
+    --http-method POST \
+    --oidc-service-account-email "${SCHEDULER_SA}" \
+    --oidc-token-audience "${SERVICE_URL}" \
+    --attempt-deadline 300s \
+    --quiet
+  echo "  ✅ Scheduler ジョブを作成: ${SCHEDULER_JOB_NAME}"
+fi
+echo "  スケジュール: ${SCHEDULER_SCHEDULE} (${SCHEDULER_TIMEZONE})"
+echo "  エンドポイント: ${REPORT_ENDPOINT}"
 
