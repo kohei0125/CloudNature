@@ -33,7 +33,7 @@ class Settings(BaseSettings):
     # GA4
     ga4_property_id: str = ""  # e.g. "properties/XXXXXXXXX"
     # レポート送信先
-    report_email: str = ""
+    report_email: str = "info@cloudnature.jp"
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
