@@ -8,7 +8,7 @@ export const HEADER_COPY = {
 export const FOOTER_COPY = {
   taglineLines: [
     "AIトランスフォーメーションで、",
-    "人手に代わる仕組みを。",
+    "人手に代わる仕組みを",
     "AIと業務自動化で、現場を変える。",
     "開発から定着支援まで、伴走型でサポートします。"
   ],
