@@ -211,6 +211,10 @@ cd estimate && npm run build
 
 バックエンドが GA4 Data API + Search Console API からデータを取得し、Resend 経由でメール送信する。
 
+- **テストコマンド**
+※weekly_report_logテーブルに同じyear_weekのレコードがない場合のみ実行される
+`gcloud scheduler jobs run weekly-report --project video-gen-demo --location asia-northeast1`
+
 - **スケジュール**: Cloud Scheduler → `POST /api/v1/reports/weekly`（毎週月曜 10:00 JST）
 - **認証**: Cloud Scheduler → Cloud Run は OIDC トークン（IAM `roles/run.invoker`）。`X-API-Key` チェックはスキップ
 - **送信先**: 環境変数 `REPORT_EMAIL` に設定したアドレス
