@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.jp/",
-    images: [{ url: "/images/niigata_city.jpg", width: 1200, height: 800, alt: HERO_COPY.heroImageAlt }]
+    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: HERO_COPY.heroImageAlt }]
   },
   twitter: {
     card: "summary_large_image",
     title: PAGE_META.home.title,
     description: PAGE_META.home.description,
-    images: ["/images/niigata_city.jpg"]
+    images: ["/images/og-img.jpg"]
   },
   alternates: { canonical: "https://cloudnature.jp/" }
 };
