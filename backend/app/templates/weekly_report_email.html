@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+</head>
+
+<body
+  style="background-color: #EDE8E5; font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; color: #19231B; line-height: 1.6; margin: 0; padding: 40px 20px;">
+  <div
+    style="max-width: 700px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+    <!-- ヘッダー -->
+    <div style="background-color: #19231B; padding: 24px; text-align: center;">
+      <h1 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: bold; letter-spacing: 1px;">CloudNature</h1>
+      <p style="color: #8A9668; margin: 8px 0 0 0; font-size: 14px;">週次 SEO・アクセスレポート</p>
+    </div>
+
+    <div style="padding: 32px;">
+      <!-- レポート期間 -->
+      <p style="text-align: center; color: #666; font-size: 14px; margin-top: 0;">
+        対象期間: {{report_period}}
+      </p>
+
+      <!-- データ取得警告 -->
+      {{data_warnings}}
+
+      <!-- ======================================== -->
+      <!-- 今週やることTop3 -->
+      <!-- ======================================== -->
+      <div style="margin-bottom: 32px; padding: 24px; background: #FAFAF5; border-radius: 8px; border: 1px solid #E8E4D8;">
+        <h2 style="color: #19231B; font-size: 18px; margin: 0 0 16px 0; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+          今週やることTop3
+        </h2>
+        {{action_suggestions}}
+      </div>
+
+      <!-- ======================================== -->
+      <!-- Part 1: サイトアクセス概要（GA4） -->
+      <!-- ======================================== -->
+      <h2 style="color: #19231B; font-size: 18px; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+        Part 1: サイトアクセス概要
+      </h2>
+
+      <!-- GA4サマリー -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">サマリー</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">指標</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">今週</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">前週比</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">12週トレンド</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ga4_summary_rows}}
+        </tbody>
+      </table>
+
+      <!-- サイト別アクセス -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">サイト別アクセス</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ホスト</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">セッション</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ユーザー</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">PV</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">前週比</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ga4_hostname_rows}}
+        </tbody>
+      </table>
+
+      <!-- チャネル別流入 -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">チャネル別流入</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">チャネル</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">セッション</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">前週比</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ga4_channel_rows}}
+        </tbody>
+      </table>
+
+      <!-- 閲覧ページ別Top -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">閲覧ページ別 Top</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ホスト</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">パス</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">PV</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ga4_page_rows}}
+        </tbody>
+      </table>
+
+      <!-- キーイベント -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">キーイベント</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">イベント名</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">件数</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">前週比</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ga4_key_event_rows}}
+        </tbody>
+      </table>
+
+      <!-- ======================================== -->
+      <!-- Part 2: 検索パフォーマンス（Search Console） -->
+      <!-- ======================================== -->
+      <h2 style="color: #19231B; font-size: 18px; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+        Part 2: 検索パフォーマンス
+      </h2>
+
+      <!-- GSCサマリー -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">サマリー</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">指標</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">今週</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">前週比</th>
+            <th style="padding: 10px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">12週トレンド</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{gsc_summary_rows}}
+        </tbody>
+      </table>
+
+      <!-- Top 10 クエリ -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">Top 10 検索クエリ</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クエリ</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クリック</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">表示</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">CTR</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">順位</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{gsc_query_rows}}
+        </tbody>
+      </table>
+
+      <!-- Top 10 ページ -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">Top 10 ページ</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ページ</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クリック</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">表示</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">CTR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{gsc_page_rows}}
+        </tbody>
+      </table>
+
+      <!-- 注目クエリ（改善機会） -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">注目クエリ（高表示・低CTR = 改善機会）</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クエリ</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">表示回数</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">CTR</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">順位</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{gsc_notable_query_rows}}
+        </tbody>
+      </table>
+
+      <!-- 上昇/下落クエリ -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">上昇/下落クエリ（前週比、100imp以上）</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クエリ</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">クリック</th>
+            <th style="padding: 8px 12px; text-align: right; font-size: 13px; border-bottom: 2px solid #EDE8E5;">変化率</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{gsc_movement_rows}}
+        </tbody>
+      </table>
+
+      <!-- ======================================== -->
+      <!-- Part 3: サイト健全性 -->
+      <!-- ======================================== -->
+      <h2 style="color: #19231B; font-size: 18px; margin-top: 32px; margin-bottom: 16px; border-bottom: 2px solid #8A9668; padding-bottom: 8px;">
+        Part 3: サイト健全性
+      </h2>
+
+      <!-- インデックス状況 -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">インデックス状況（主要ページ）</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ページ</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">ステータス</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">詳細</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{index_rows}}
+        </tbody>
+      </table>
+
+      <!-- サイトマップ -->
+      <h3 style="color: #19231B; font-size: 15px; margin-bottom: 12px;">サイトマップ</h3>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
+        <thead>
+          <tr style="background: #F4F2F0;">
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">サイトマップ</th>
+            <th style="padding: 8px 12px; text-align: left; font-size: 13px; border-bottom: 2px solid #EDE8E5;">状態</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{sitemap_rows}}
+        </tbody>
+      </table>
+
+    </div>
+
+    <!-- フッター -->
+    <div style="background-color: #F8F9FA; padding: 24px 32px; border-top: 1px solid #EDE8E5;">
+      <p style="margin: 0 0 8px 0; font-size: 12px; color: #888888;">
+        ※ Search Console のデータには2〜3日の遅延があります。GA4のデータにも処理遅延が生じる場合があります。
+      </p>
+      <p style="margin: 0 0 8px 0; font-size: 12px; color: #888888;">
+        ※ このメールは CloudNature の週次レポートシステムより自動送信されております。
+      </p>
+      <p style="margin: 0; font-size: 12px; color: #888888;">
+        ※ お問い合わせは
+        <a href="mailto:info@cloudnature.jp" style="color: #8A9668;">info@cloudnature.jp</a> までご連絡ください。
+      </p>
+    </div>
+  </div>
+</body>
+
+</html>

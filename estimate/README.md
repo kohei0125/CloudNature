@@ -41,6 +41,11 @@ BACKEND_URL=http://localhost:8000 npm run dev
 |------|------|-----------|
 | `BACKEND_URL` | FastAPIバックエンドのURL（サーバーサイドのみ） | `http://localhost:8000` |
 | `NEXT_PUBLIC_API_BASE` | クライアント側APIベースURL（空 = 相対パス） | `""` |
+| `NEXT_PUBLIC_ENV` | 環境識別（`production` 以外は noindex） | `development` |
+| `BACKEND_API_KEY` | backend へのAPIキー（本番環境で設定、ローカルでは空でスキップ） | `""` |
+| `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile サイトキー（bot対策、本番で設定） | `""` |
+| `CLOUDFLARE_TURNSTILE_SECRET_KEY` | Cloudflare Turnstile シークレットキー（サーバーサイド検証用） | `""` |
+| `NEXT_PUBLIC_GA_ID` | GA4測定ID（コーポレートサイトと同じ値、空なら計測無効） | `""` |
 
 ## ディレクトリ構成
 

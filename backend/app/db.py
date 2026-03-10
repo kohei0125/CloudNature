@@ -6,6 +6,7 @@ from sqlalchemy import inspect, text
 from sqlmodel import SQLModel, Session, create_engine
 
 from app.config import settings
+import app.models  # noqa: F401 — モデルをSQLModel.metadataに登録
 
 logger = logging.getLogger(__name__)
 

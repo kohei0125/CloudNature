@@ -26,6 +26,15 @@ class Settings(BaseSettings):
     notion_api_key: str = ""
     notion_database_id: str = ""
 
+    # Google API共通（ローカル開発用、Cloud RunではADC）
+    google_service_account_json: str = ""
+    # Search Console
+    gsc_site_url: str = ""  # e.g. "sc-domain:cloudnature.jp"
+    # GA4
+    ga4_property_id: str = ""  # e.g. "properties/XXXXXXXXX"
+    # レポート送信先
+    report_email: str = ""
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 
@@ -40,3 +49,7 @@ if not settings.resend_api_key:
     logger.warning("RESEND_API_KEY is not set — email sending is disabled")
 if not settings.notion_api_key:
     logger.warning("NOTION_API_KEY is not set — Notion integration is disabled")
+if not settings.gsc_site_url:
+    logger.warning("GSC_SITE_URL is not set — Search Console integration is disabled")
+if not settings.ga4_property_id:
+    logger.warning("GA4_PROPERTY_ID is not set — GA4 integration is disabled")

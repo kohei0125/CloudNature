@@ -32,6 +32,9 @@ DATA_TTL_DAYS="${DATA_TTL_DAYS:-31}"
 EMAIL_FROM="${EMAIL_FROM:-CloudNature <cloudnature@stage-site.net>}"
 NOTIFY_EMAIL="${NOTIFY_EMAIL:-info@cloudnature.jp}"
 NOTION_DATABASE_ID="${NOTION_DATABASE_ID:-310f32ffde8d8087a5d5e9e2cee4cb3f}"
+GSC_SITE_URL="${GSC_SITE_URL:-sc-domain:cloudnature.jp}"
+GA4_PROPERTY_ID="${GA4_PROPERTY_ID:-}"
+REPORT_EMAIL="${REPORT_EMAIL:-}"
 
 # ---------------------------------------------------------------------------
 # シークレット（Secret Manager 参照名）
@@ -106,7 +109,10 @@ FRONTEND_URL=${FRONTEND_URL},\
 CORS_ORIGINS=${CORS_ORIGINS},\
 DATA_TTL_DAYS=${DATA_TTL_DAYS},\
 NOTIFY_EMAIL=${NOTIFY_EMAIL},\
-NOTION_DATABASE_ID=${NOTION_DATABASE_ID}" \
+NOTION_DATABASE_ID=${NOTION_DATABASE_ID},\
+GSC_SITE_URL=${GSC_SITE_URL},\
+GA4_PROPERTY_ID=${GA4_PROPERTY_ID},\
+REPORT_EMAIL=${REPORT_EMAIL}" \
   --set-env-vars "EMAIL_FROM=${EMAIL_FROM}" \
   --set-secrets "\
 API_KEY=${SECRET_API_KEY}:latest,\
@@ -124,3 +130,4 @@ SERVICE_URL=$(gcloud run services describe "${SERVICE_NAME}" \
   --region "${GCP_REGION}" \
   --format="value(status.url)" 2>/dev/null)
 echo "  URL: ${SERVICE_URL}"
+

@@ -96,37 +96,31 @@ npm run dev
 
 ### backend/.env
 
+`backend/.env.sample` を参照。主要な変数:
+
 ```bash
-# Database (Neon pooled endpoint)
-DATABASE_URL=postgresql://neondb_owner:<PASSWORD>@ep-soft-silence-a1xc7x35-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
-
-# API Key（Vercel → backend 間認証、ローカルでは空でスキップ）
-API_KEY=
-
-# LLM
-OPENAI_API_KEY=<your-openai-api-key>
-OPENAI_MODEL=gpt-4o
-LLM_MAX_RETRIES=3
-LLM_TIMEOUT=30
-
-# Email
-RESEND_API_KEY=<your-resend-api-key>
-EMAIL_FROM=CloudNature <cloudnature@stage-site.net>
-NOTIFY_EMAIL=info@cloudnature.jp
-
-# App
-FRONTEND_URL=http://localhost:3001
-CORS_ORIGINS=http://localhost:3001
-DATA_TTL_DAYS=31
+DATABASE_URL=postgresql://...          # Neon pooled endpoint
+API_KEY=                               # Vercel → backend 間認証（ローカルでは空でスキップ）
+LLM_PROVIDER=gemini                    # "gemini" | "openai" | "fallback"
+GEMINI_API_KEY=<your-key>
+OPENAI_API_KEY=<your-key>
+RESEND_API_KEY=<your-key>              # 週次レポートメール送信に使用
+REPORT_EMAIL=                          # 週次レポート送信先メールアドレス
+GOOGLE_SERVICE_ACCOUNT_JSON=           # ローカル開発用（Cloud RunではADC）
+GSC_SITE_URL=sc-domain:cloudnature.jp  # Search Console ドメインプロパティ
+GA4_PROPERTY_ID=properties/XXXXXXXXX   # GA4 プロパティID
 ```
 
 ### estimate/.env.local
+
+`estimate/.env.sample` を参照。主要な変数:
 
 ```bash
 BACKEND_URL=http://localhost:8000
 NEXT_PUBLIC_API_BASE=
 NEXT_PUBLIC_ENV=development
 BACKEND_API_KEY=
+NEXT_PUBLIC_GA_ID=          # GA4測定ID（コーポレートサイトと同じ値、ローカルでは空でOK）
 ```
 
 ---
@@ -198,6 +192,32 @@ cd estimate && npm run build
 
 ---
 
+## GA4 アクセス計測
+
+コーポレートサイト（cloudnature.jp）と見積もりサイト（ai.cloudnature.jp）で **同一の GA4 プロパティ**（測定ID）を共有し、1つのプロパティ内で両サイトのデータを収集する。
+
+| サイト | GA4タグ | 設定場所 |
+|---|---|---|
+| cloudnature.jp | `components/shared/GoogleAnalytics.tsx` | `app/layout.tsx` |
+| ai.cloudnature.jp | `estimate/components/shared/GoogleAnalytics.tsx` | `estimate/app/layout.tsx` |
+
+- **測定ID**: 環境変数 `NEXT_PUBLIC_GA_ID`（Vercel の各プロジェクトで同じ値を設定）
+- **cross-domain**: GA4 管理画面で手動設定済み
+- **ローカル開発**: `NEXT_PUBLIC_GA_ID` を空にすれば計測タグは出力されない
+
+### 週次レポート
+
+バックエンドが GA4 Data API + Search Console API からデータを取得し、Resend 経由でメール送信する。
+
+- **サイト別（hostName）セクション**: cloudnature.jp / ai.cloudnature.jp ごとのセッション・ユーザー・PV・前週比を表示
+- **閲覧ページ別 Top**: `hostName` + `pagePath` の2次元で集計（2サイトの同一パスが合算されない）
+- **本番ホスト絞り込み**: `PRODUCTION_HOSTS`（`ga4_service.py`）で localhost や `*.vercel.app` を除外
+- **GSC host分離**: 現時点ではスコープ外（`sc-domain:cloudnature.jp` はサブドメインを含むが、ai.cloudnature.jp の検索流入はほぼないため将来課題）
+
+関連コード: `backend/app/services/ga4_service.py`, `backend/app/tasks/weekly_report.py`, `backend/app/templates/weekly_report_email.html`
+
+---
+
 ## ドキュメント
 
 | ファイル | 内容 |
@@ -207,3 +227,4 @@ cd estimate && npm run build
 | [`docs/20260216_estimate_strategy.md`](docs/20260216_estimate_strategy.md) | 見積もりシステム戦略 |
 | [`docs/20260216_estimate_top_design.md`](docs/20260216_estimate_top_design.md) | 見積もり UI/UX 設計 |
 | [`docs/20260212_estimate_system_design.md`](docs/20260212_estimate_system_design.md) | システム設計 |
+| [`docs/20260310_weekly_report_review.md`](docs/20260310_weekly_report_review.md) | 週次レポート機能 検証・レビュー |
