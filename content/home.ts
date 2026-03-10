@@ -156,7 +156,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "株式会社クラウドネイチャーを設立しました",
     excerpt: "新潟の中小企業のDX・AI活用を支援するため、株式会社クラウドネイチャーを設立いたしました。",
     url: "/news/company-established",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
   {
     id: "ai-estimate-release",
@@ -165,7 +165,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "AI見積もりシステムをリリースしました",
     excerpt: "チャット形式で要件を伝えるだけで、AIが最適なシステム構成と概算費用を自動算出するサービスを公開しました。",
     url: "/news/ai-estimate-release",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
   {
     id: "case-marketing-automation",
@@ -174,7 +174,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "コンテンツマーケティング自動化の導入事例を公開",
     excerpt: "AIと自動化ツールを活用し、記事執筆工数を80%削減した事例をご紹介します。",
     url: "/news/case-marketing-automation",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
   {
     id: "seminar-ai-intro",
@@ -183,7 +183,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "中小企業向けAI活用セミナーを開催します",
     excerpt: "「AIって何から始めればいい？」を解決する、未経験者向けの無料セミナーを新潟市で開催します。",
     url: "/news/seminar-ai-intro",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
   {
     id: "media-nikkei",
@@ -192,7 +192,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "日経クロステックにAI見積もりシステムが掲載されました",
     excerpt: "当社のAI見積もりシステムが、日経クロステックの「注目スタートアップ」特集に掲載されました。",
     url: "/news/media-nikkei",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
   {
     id: "blog-dify-tips",
@@ -201,7 +201,7 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "最新AIツールで業務AIチャットボットを作る5つのコツ",
     excerpt: "ノーコードAI開発ツールを使って、社内FAQボットを構築するためのベストプラクティスを紹介します。",
     url: "/news/blog-dify-tips",
-    image: "/images/og-image.png"
+    image: "/images/og-img.jpg"
   },
 ];
 

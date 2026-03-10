@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.jp/news",
-    images: [{ url: "/images/og-image.png", width: 1200, height: 630, alt: "クラウドネイチャーのニュース" }],
+    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: "クラウドネイチャーのニュース" }],
   },
   twitter: {
     card: "summary_large_image",
     title: PAGE_META.news.title,
     description: PAGE_META.news.description,
-    images: ["/images/og-image.png"],
+    images: ["/images/og-img.jpg"],
   },
   alternates: { canonical: "https://cloudnature.jp/news" },
 };

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     locale: "ja_JP",
     images: [
       {
-        url: "/images/og-image.png",
+        url: "/images/og-img.jpg",
         width: 1200,
         height: 630,
         alt: PAGE_META.privacy.title,

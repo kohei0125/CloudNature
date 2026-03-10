@@ -39,7 +39,7 @@ export const metadata: Metadata = (() => {
       siteName: "株式会社クラウドネイチャー",
       images: [
         {
-          url: "/images/og-image.png",
+          url: "/images/og-img.jpg",
           width: 1200,
           height: 630,
           alt: "株式会社クラウドネイチャー",
@@ -52,7 +52,7 @@ export const metadata: Metadata = (() => {
       card: "summary_large_image",
       title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
       description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
-      images: ["/images/og-image.png"],
+      images: ["/images/og-img.jpg"],
     },
 
     robots: isIndexable

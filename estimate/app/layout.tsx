@@ -55,7 +55,7 @@ export const metadata: Metadata = {
       "質問に答えるだけで、AIがシステム開発の概算見積もりを自動生成。",
     images: [
       {
-        url: "/images/og-image.png",
+        url: "/images/og-img.jpg",
         width: 1200,
         height: 630,
         alt: "CloudNature AI見積もりシミュレーター",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     title: "AI見積もりシミュレーター｜システム開発費を最1分で自動算出",
     description:
       "質問に答えるだけで、AIがシステム開発の概算見積もりを自動生成。WBS・機能一覧・費用比較をお届けします。",
-    images: ["/images/og-image.png"],
+    images: ["/images/og-img.jpg"],
   },
   alternates: {
     canonical: SITE_URL,
