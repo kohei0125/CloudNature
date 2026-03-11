@@ -3,7 +3,6 @@
 import { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
@@ -18,24 +17,41 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const scrollYRef = useRef(0);
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   // Lock body scroll when mobile menu is open
+  // iOS Safari では overflow:hidden だけではスクロールを防げないため
+  // position:fixed + touch-action:none で確実にブロックする
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
+      scrollYRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollYRef.current}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
       document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
     } else {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
+      window.scrollTo(0, scrollYRef.current);
       previousFocusRef.current?.focus();
     }
     return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
       document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     };
   }, [isOpen]);
 
@@ -88,7 +104,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       aria-modal="true"
       aria-label="モバイルメニュー"
       className={cn(
-        "!fixed inset-0 w-full h-screen min-h-[100dvh] z-[99999] bg-cream text-forest v-stack overflow-y-auto overflow-x-hidden overscroll-none texture-grain transition-opacity duration-200",
+        "!fixed inset-0 w-full h-[100dvh] z-[99999] bg-cream text-forest v-stack overflow-hidden overscroll-none texture-grain transition-opacity duration-200",
         isOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
       )}
       aria-hidden={!isOpen}
@@ -96,18 +112,6 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       {/* Ambient Background Blobs (Light Theme) */}
       <div className="absolute top-0 left-0 w-[80vw] h-[80vw] bg-cloud rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[80vw] h-[80vw] bg-sunset rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none"></div>
-
-      {/* Background Watermark Logo */}
-      {isOpen && (
-        <div className="absolute bottom-10 right-0 w-[90vw] h-[90vw] opacity-[0.05] pointer-events-none mix-blend-multiply">
-          <Image
-            src="/images/logo.webp"
-            alt=""
-            fill
-            className="object-contain grayscale"
-          />
-        </div>
-      )}
 
       {/* Close Button */}
       <button
@@ -120,7 +124,7 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
         <X className="w-7 h-7" strokeWidth={2.5} />
       </button>
 
-      <nav className="v-stack justify-center flex-grow px-8 pb-32 pt-24 gap-6 z-10" aria-label="モバイルナビゲーション">
+      <nav className="v-stack justify-center flex-1 min-h-0 px-8 pb-[env(safe-area-inset-bottom,2rem)] pt-20 gap-6 z-10" aria-label="モバイルナビゲーション">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.path}
