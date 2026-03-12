@@ -24,8 +24,11 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    lastScrollY.current = window.scrollY;
-    setIsScrolled(window.scrollY > 50);
+    const initScroll = () => {
+      lastScrollY.current = window.scrollY;
+      setIsScrolled(window.scrollY > 50);
+    };
+    initScroll();
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;

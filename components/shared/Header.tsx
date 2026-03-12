@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isPathActive } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
 
@@ -25,14 +25,14 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
   // hydration ミスマッチを回避するため、SSG では常に白ロゴ表示とし、
   // マウント後に JS で正しい状態に切り替える。
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const mount = () => setMounted(true);
+    mount();
+  }, []);
 
   // SSG: 常に白ロゴ表示（mounted=false → heroMode=true）
   // クライアント: isHeroOverlay に従う
   const heroMode = mounted ? isHeroOverlay : true;
-
-  const isActive = (path: string) =>
-    path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
     <header
@@ -79,10 +79,10 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
             <Link
               key={item.path}
               href={item.path}
-              aria-current={isActive(item.path) ? "page" : undefined}
+              aria-current={isPathActive(item.path, pathname) ? "page" : undefined}
               className={cn(
                 "text-sm font-medium tracking-wide transition-colors hover:text-sunset relative group",
-                isActive(item.path) ? "text-sunset" : heroMode ? "text-white" : "text-forest"
+                isPathActive(item.path, pathname) ? "text-sunset" : heroMode ? "text-white" : "text-forest"
               )}
             >
               {item.label}

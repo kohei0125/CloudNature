@@ -4,9 +4,10 @@ import { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, isPathActive } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -17,48 +18,22 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  const scrollYRef = useRef(0);
 
-  const isActive = (path: string) =>
-    path === "/" ? pathname === "/" : pathname.startsWith(path);
+  useScrollLock(isOpen);
 
-  // Lock body scroll when mobile menu is open
-  // iOS Safari では overflow:hidden だけではスクロールを防げないため
-  // position:fixed + touch-action:none で確実にブロックする
+  // フォーカス管理: メニュー開閉時にフォーカスを保存・復元
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
-      scrollYRef.current = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollYRef.current}px`;
-      document.body.style.left = "0";
-      document.body.style.right = "0";
-      document.body.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
+      const firstLink = menuRef.current?.querySelector<HTMLElement>("a[href]");
+      firstLink?.focus();
     } else {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
-      window.scrollTo(0, scrollYRef.current);
       previousFocusRef.current?.focus();
     }
-    return () => {
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.overflow = "";
-      document.body.style.touchAction = "";
-    };
   }, [isOpen]);
 
-  // Focus trap and ESC key handler
+  // フォーカストラップ & ESC キーハンドラ
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (!isOpen) return;
-
     if (e.key === "Escape") {
       onClose();
       return;
@@ -81,20 +56,14 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
         first.focus();
       }
     }
-  }, [isOpen, onClose]);
+  }, [onClose]);
 
+  // isOpen 時のみリスナーを登録
   useEffect(() => {
+    if (!isOpen) return;
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [handleKeyDown]);
-
-  // Auto-focus first link when opened
-  useEffect(() => {
-    if (isOpen && menuRef.current) {
-      const firstLink = menuRef.current.querySelector<HTMLElement>("a[href]");
-      firstLink?.focus();
-    }
-  }, [isOpen]);
+  }, [isOpen, handleKeyDown]);
 
   return (
     <div
@@ -130,10 +99,10 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             key={item.path}
             href={item.path}
             onClick={onClose}
-            aria-current={isActive(item.path) ? "page" : undefined}
+            aria-current={isPathActive(item.path, pathname) ? "page" : undefined}
             className={cn(
               "text-2xl font-sans font-bold tracking-wider transition-all duration-300 transform hover:text-sunset",
-              isActive(item.path) ? "text-sunset" : "text-forest"
+              isPathActive(item.path, pathname) ? "text-sunset" : "text-forest"
             )}
           >
             {item.label}
