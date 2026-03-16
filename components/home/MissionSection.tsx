@@ -20,6 +20,8 @@ const MissionSection = () => {
               {MISSION_COPY.paragraphs[1]}
               <br className="hidden md:block" />
               {MISSION_COPY.paragraphs[2]}
+              <br className="hidden md:block" />
+              {MISSION_COPY.paragraphs[3]}
             </p>
           </div>
 

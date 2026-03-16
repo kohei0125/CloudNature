@@ -2,7 +2,7 @@ import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/typ
 
 export const HERO_COPY = {
   imageSrc: "/images/niigata_city.jpg",
-  badge: "AI時代の企業の開発パートナー",
+  badge: "AIを、どこよりも使いこなす開発パートナー",
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
   description:
@@ -32,9 +32,10 @@ export const MISSION_COPY = {
   eyebrow: "OUR PROMISE",
   title: "人手に代わる、仕組みを届ける",
   paragraphs: [
-    "中小企業が本当に必要としているのは、コンサルの提案書ではありません。",
-    "明日から使える「システム」と「AIエージェント」、そして現場への定着支援です。",
-    "CloudNatureは、作って終わりにしない、伴走型の開発パートナーです。"
+    "AIの進化はもう、誰も立ち止まれないスピードで世界を書き換えています。",
+    "一方で本質的なAI活用ができる企業は、まだ多くありません。",
+    "この転換期を、誰よりも深く理解し、どこよりも早く提供する。",
+    "それが私たちのミッションです。",
   ]
 };
 
