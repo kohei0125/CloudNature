@@ -15,7 +15,7 @@ const MissionDeepDive = () => {
           {MISSION_DEEP_DIVE.description}
         </p>
 
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <div className="absolute -top-20 -left-20 w-64 h-64 bg-cloud/30 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-sage/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-sunset/10 rounded-full blur-3xl pointer-events-none" />
