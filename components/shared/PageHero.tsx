@@ -16,7 +16,7 @@ interface PageHeroProps {
   bgColor?: string;
 }
 
-const PageHero = ({ eyebrow, title, description, bgColor = "#F0EEE9" }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA" }: PageHeroProps) => {
   return (
     <section className="pt-32 pb-16 relative overflow-hidden texture-grain" style={{ backgroundColor: bgColor }}>
       {heroBlobs}

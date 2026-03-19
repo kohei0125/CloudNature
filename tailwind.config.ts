@@ -15,14 +15,14 @@ const config: Config = {
       colors: {
         sage: "#8A9668",
         forest: "#19231B",
-        pebble: "#EDE8E5",
+        pebble: "#F0F0F0",
         sunset: "#DD9348",
         cloud: "#C8E8FF",
         earth: "#261D14",
         sea: "#79C0BC",
         stone: "#CADCEB",
-        cream: "#F0EEE9",
-        linen: "#F4F2F0",
+        cream: "#FAFAFA",
+        linen: "#F5F5F5",
         mist: "#F8F9FA",
       },
       backgroundImage: {

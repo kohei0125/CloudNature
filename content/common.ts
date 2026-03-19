@@ -10,7 +10,7 @@ export const SITE_CTA = {
 export const COLORS = {
   sageGreen: "#8A9668",
   deepForest: "#19231B",
-  pebbleBeige: "#EDE8E5",
+  pebbleBeige: "#F0F0F0",
   warmSunset: "#DD9348",
   cloudBlue: "#C8E8FF",
   earth: "#261D14",
