@@ -5,7 +5,6 @@ import { CANONICAL_SITE_URL as BASE_URL } from "@/lib/site";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: "2026-02-27", changeFrequency: "weekly", priority: 1.0 },
-    { url: `${BASE_URL}/philosophy`, lastModified: "2026-02-20", changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/services`, lastModified: "2026-02-20", changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/cases`, lastModified: "2026-02-27", changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/company`, lastModified: "2026-02-06", changeFrequency: "monthly", priority: 0.7 },

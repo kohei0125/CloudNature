@@ -20,7 +20,6 @@ export const COLORS = {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: "ホーム", path: "/" },
-  { label: "想い", path: "/philosophy" },
   { label: "サービス", path: "/services" },
   { label: "事例", path: "/cases" },
   { label: "企業情報", path: "/company" },
@@ -32,10 +31,6 @@ export const PAGE_META = {
     title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
     description:
       "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決。先進的なAIと業務自動化で、現場の負担を半分に。無料診断受付中。"
-  },
-  philosophy: {
-    title: "想い | 新潟発のIT企業 クラウドネイチャー",
-    description: "作って終わりにしない、伴走型の開発パートナー。新潟の中小企業に寄り添い、AIとシステムで現場の課題を解決します。"
   },
   services: {
     title: "サービス | 新潟のAI・システム開発 クラウドネイチャー",

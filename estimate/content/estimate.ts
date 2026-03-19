@@ -277,7 +277,6 @@ export const LP_COPY = {
       { label: "AI活用支援", path: "https://cloudnature.jp/services" },
     ],
     companyLinks: [
-      { label: "想い (Philosophy)", path: "https://cloudnature.jp/philosophy" },
       { label: "企業情報", path: "https://cloudnature.jp/company" },
       { label: "導入事例", path: "https://cloudnature.jp/cases" },
       { label: "利用規約", path: "https://cloudnature.jp/terms" },

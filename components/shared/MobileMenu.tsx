@@ -78,9 +78,6 @@ const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
       )}
       aria-hidden={!isOpen}
     >
-      {/* Ambient Background Blobs (Light Theme) */}
-      <div className="absolute top-0 left-0 w-[80vw] h-[80vw] bg-cloud rounded-full mix-blend-multiply filter blur-[80px] opacity-40 pointer-events-none"></div>
-      <div className="absolute bottom-0 right-0 w-[80vw] h-[80vw] bg-sunset rounded-full mix-blend-multiply filter blur-[80px] opacity-30 pointer-events-none"></div>
 
       {/* Close Button */}
       <button

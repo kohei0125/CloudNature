@@ -1,6 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { MISSION_COPY, VALUES } from "@/content/home";
 
 const MissionSection = () => {
@@ -73,12 +71,6 @@ const MissionSection = () => {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="mt-12 text-center">
-          <Link href="/philosophy" className="text-sage font-bold inline-flex items-center gap-2 hover:gap-3 transition-all">
-            私たちの想いを詳しく見る <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
 
         {/* SEO Content (Screen Reader Only) - Values List */}
         <div className="sr-only">

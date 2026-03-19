@@ -20,7 +20,6 @@ export const FOOTER_COPY = {
     { label: "AI活用支援", path: "/services" }
   ],
   companyLinks: [
-    { label: "想い (Philosophy)", path: "/philosophy" },
     { label: "企業情報", path: "/company" },
     { label: "導入事例", path: "/cases" },
     { label: "利用規約", path: "/terms" },

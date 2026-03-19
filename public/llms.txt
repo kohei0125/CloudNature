@@ -30,7 +30,6 @@
 ## ページ一覧
 
 - [トップページ](https://cloudnature.jp/): サービス概要、事例紹介、CTA
-- [想い](https://cloudnature.jp/philosophy): 創業ストーリー、ミッション、開発アプローチ
 - [サービス](https://cloudnature.jp/services): サービス詳細、導入フロー、料金体系、FAQ
 - [導入事例](https://cloudnature.jp/cases): KPIハイライト付きの詳細な導入事例
 - [企業情報](https://cloudnature.jp/company): 会社概要、代表メッセージ、アクセス
