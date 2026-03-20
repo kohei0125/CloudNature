@@ -8,18 +8,12 @@ import MobileMenu from "./MobileMenu";
 const HeaderWrapper = () => {
   const pathname = usePathname();
 
-  return <HeaderWrapperInner key={pathname} pathname={pathname} />;
+  return <HeaderWrapperInner key={pathname} />;
 };
 
-interface HeaderWrapperInnerProps {
-  pathname: string;
-}
-
-const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
-  const isHome = pathname === "/";
+const HeaderWrapperInner = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isHeroOverlay, setIsHeroOverlay] = useState(isHome);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
 
@@ -41,15 +35,6 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
 
       setIsScrolled(currentScrollY > 50);
       lastScrollY.current = currentScrollY;
-
-      // ヒーローオーバーレイ判定はスクロール時のみ
-      if (isHome) {
-        const boundary = document.querySelector<HTMLElement>("[data-hero-dark-end]");
-        const header = document.querySelector<HTMLElement>("[data-site-header]");
-        if (boundary && header) {
-          setIsHeroOverlay(boundary.getBoundingClientRect().top > header.offsetHeight);
-        }
-      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -59,7 +44,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, [isHome]);
+  }, []);
 
   const handleOpenMobileMenu = useCallback(() => {
     setMobileMenuOpen(true);
@@ -73,7 +58,7 @@ const HeaderWrapperInner = ({ pathname }: HeaderWrapperInnerProps) => {
     <>
       <Header
         isScrolled={isScrolled}
-        isHeroOverlay={isHome && isHeroOverlay}
+        isHeroOverlay={false}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
         onOpenMobileMenu={handleOpenMobileMenu}

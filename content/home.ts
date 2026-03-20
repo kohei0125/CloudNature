@@ -1,12 +1,12 @@
 import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/types";
 
 export const HERO_COPY = {
-  imageSrc: "/images/niigata_city.jpg",
+  imageSrc: "/images/niigata.jpeg",
   badge: "AIを、どこよりも使いこなす開発パートナー",
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
   description:
-    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、システム・AIエージェントを活用した「即効性のある業務自動化」を提供します。無料診断で、あなたの会社の自動化余地をご提案。",
+    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、AIエージェントを活用した「即効性のある効率化」を提供します。",
   primaryCta: "最短1分でAIお見積り",
   secondaryCta: "お問い合わせ",
   heroImageAlt: "Modern office collaboration"

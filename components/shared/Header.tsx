@@ -30,9 +30,9 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
     mount();
   }, []);
 
-  // SSG: 常に白ロゴ表示（mounted=false → heroMode=true）
+  // SSG: 常に黒ロゴ表示（mounted=false → heroMode=false）
   // クライアント: isHeroOverlay に従う
-  const heroMode = mounted ? isHeroOverlay : true;
+  const heroMode = mounted ? isHeroOverlay : false;
 
   return (
     <header
@@ -44,12 +44,12 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
           ? "bg-transparent"
           : isScrolled
             ? heroMode
-              ? "bg-transparent py-2 md:py-3"
-              : "bg-transparent py-2 md:bg-white/90 md:py-3 md:backdrop-blur-md md:shadow-sm"
-            : "bg-transparent py-3 md:py-5"
+              ? "bg-transparent py-1.5 md:py-2"
+              : "bg-transparent py-1.5 md:bg-white/90 md:py-2 md:backdrop-blur-md md:shadow-sm"
+            : "bg-transparent py-1.5 md:py-2"
       )}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
+      <div className="mx-auto max-w-full px-4 md:px-16 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 group relative">
           {/* 白ロゴ（ヒーローオーバーレイ時） */}
           <Image
@@ -68,7 +68,7 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
             width={180}
             height={50}
             style={{ opacity: heroMode ? 0 : 1, transition: "opacity 300ms" }}
-            className="absolute inset-y-0 left-0 my-auto h-10 w-auto object-contain md:h-12"
+            className="absolute inset-y-0 left-0 my-auto h-10 w-auto object-contain md:h-11"
             aria-hidden
           />
         </Link>
@@ -104,7 +104,7 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
         <button
           type="button"
           className={cn(
-            "absolute right-0 top-0 flex h-12 w-12 flex-col items-center justify-center gap-0.5 shadow-lg transition-colors md:hidden",
+            "absolute right-0 inset-y-0 flex w-12 flex-col items-center justify-center gap-0.5 shadow-lg transition-colors md:hidden",
             isMobileMenuOpen
               ? "text-forest"
               : heroMode
