@@ -8,6 +8,7 @@ CloudNature コーポレートサイト & AI見積もりシステムのモノレ
 ├── app/             コーポレートサイト (Next.js)   → cloudnature.jp
 ├── estimate/        AI見積もりフロントエンド (Next.js) → ai.cloudnature.jp
 ├── backend/         見積もりAPI (FastAPI)           → Cloud Run
+├── gas/             ファネルダッシュボード (Google Apps Script)
 ├── docs/            設計書・TODO
 └── docker-compose.yml  ローカル開発用
 ```
@@ -228,6 +229,18 @@ Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新さ
 
 関連コード: `backend/app/services/ga4_service.py`, `backend/app/tasks/weekly_report.py`, `backend/app/templates/weekly_report_email.html`
 
+### ファネルダッシュボード（Google Spreadsheet）
+
+週次データを Google Spreadsheet に蓄積し、チャートで可視化する。GAS が GA4 / GSC API から直接データを取得する方式（バックエンドとは独立）。
+
+- **GASコード**: `gas/funnel_dashboard.js`（Apps Script の `コード.gs` にコピペ）
+- **設定ファイル**: `gas/appsscript.json`
+- **スケジュール**: 毎週月曜 10:30 JST（メール送信の30分後）
+- **シート構成**: 週次サマリー / チャネル別 / 検索キーワード Top10 / 閲覧ページ Top10 / キーイベント詳細 / チャート
+- **メールリンク**: 環境変数 `FUNNEL_SPREADSHEET_URL` を設定すると週次メールのフッターにリンクが表示される
+
+セットアップ手順・設計詳細は [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) を参照。
+
 ---
 
 ## ドキュメント
@@ -240,3 +253,4 @@ Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新さ
 | [`docs/20260216_estimate_top_design.md`](docs/20260216_estimate_top_design.md) | 見積もり UI/UX 設計 |
 | [`docs/20260212_estimate_system_design.md`](docs/20260212_estimate_system_design.md) | システム設計 |
 | [`docs/20260310_weekly_report_review.md`](docs/20260310_weekly_report_review.md) | 週次レポート機能 検証・レビュー |
+| [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) | ファネルダッシュボード GAS実装指示書 |

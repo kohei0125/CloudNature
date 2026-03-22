@@ -556,6 +556,18 @@ def _build_report_html(
         )
     template = template.replace("{{sitemap_rows}}", sitemap_rows)
 
+    # ファネルダッシュボード リンク
+    funnel_url = settings.funnel_spreadsheet_url
+    if funnel_url:
+        funnel_link_html = (
+            '<p style="margin: 0 0 12px 0; font-size: 13px;">'
+            f'<a href="{html.escape(funnel_url)}" style="color: #8A9668; font-weight: bold;">'
+            'ファネルダッシュボード（Google Spreadsheet）を開く</a></p>'
+        )
+    else:
+        funnel_link_html = ""
+    template = template.replace("{{funnel_dashboard_link}}", funnel_link_html)
+
     return template
 
 

@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     ga4_property_id: str = ""  # e.g. "properties/XXXXXXXXX"
     # レポート送信先
     report_email: str = "info@cloudnature.jp"
+    # ファネルダッシュボード スプレッドシートURL
+    funnel_spreadsheet_url: str = ""
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
