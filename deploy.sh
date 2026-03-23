@@ -38,6 +38,7 @@ NOTION_DATABASE_ID="${NOTION_DATABASE_ID:-310f32ffde8d8087a5d5e9e2cee4cb3f}"
 GSC_SITE_URL="${GSC_SITE_URL:-sc-domain:cloudnature.jp}"
 GA4_PROPERTY_ID="${GA4_PROPERTY_ID:-properties/527141612}"
 REPORT_EMAIL="${REPORT_EMAIL:-info@cloudnature.jp}"
+FUNNEL_SPREADSHEET_URL="${FUNNEL_SPREADSHEET_URL:-https://docs.google.com/spreadsheets/d/18YCt3c8dky3-0-0H-2-8VB2XEaAZRSdmuhlkAo9242k/edit}"
 
 # ---------------------------------------------------------------------------
 # シークレット（Secret Manager 参照名）
@@ -115,7 +116,8 @@ NOTIFY_EMAIL=${NOTIFY_EMAIL},\
 NOTION_DATABASE_ID=${NOTION_DATABASE_ID},\
 GSC_SITE_URL=${GSC_SITE_URL},\
 GA4_PROPERTY_ID=${GA4_PROPERTY_ID},\
-REPORT_EMAIL=${REPORT_EMAIL}" \
+REPORT_EMAIL=${REPORT_EMAIL},\
+FUNNEL_SPREADSHEET_URL=${FUNNEL_SPREADSHEET_URL}" \
   --set-env-vars "EMAIL_FROM=${EMAIL_FROM}" \
   --set-secrets "\
 API_KEY=${SECRET_API_KEY}:latest,\
