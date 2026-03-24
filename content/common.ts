@@ -61,7 +61,7 @@ export const PAGE_META = {
     description: "サービスのご利用にあたっての規約・条件についてご案内します。"
   },
   news: {
-    title: "ニュース | 株式会社クラウドネイチャー",
-    description: "CloudNatureの最新ニュース、登壇実績等の情報を発信しています。"
+    title: "お知らせ | 株式会社クラウドネイチャー",
+    description: "CloudNatureの最新のお知らせ、登壇実績等の情報を発信しています。"
   }
 };

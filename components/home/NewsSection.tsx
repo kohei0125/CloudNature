@@ -50,7 +50,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
 
   const getSourceText = (category: string) => {
     switch (category) {
-      case "ニュース": return "NEWS";
+      case "お知らせ": return "NOTICE";
       case "事例紹介": return "CASE STUDY";
       case "イベント": return "EVENT";
       case "メディア": return "MEDIA";
@@ -60,7 +60,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
   };
 
   return (
-    <section className="bg-white py-20 md:py-28 overflow-hidden">
+    <section className="bg-mist py-20 md:py-28 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <div className="v-stack md:h-stack justify-between items-end mb-12 md:mb-16 gap-6">
           <div className="mx-auto md:mx-0 text-center md:text-left">

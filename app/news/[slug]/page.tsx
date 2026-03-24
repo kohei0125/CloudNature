@@ -95,11 +95,11 @@ const NewsArticlePage = async ({ params }: PageProps) => {
   const article = await getArticleWithFallback(slug);
   if (!article) notFound();
 
-  const category = (article.category?.name ?? "ニュース") as NewsCategory;
+  const category = (article.category?.name ?? "お知らせ") as NewsCategory;
   const colorClass = NEWS_CATEGORY_COLORS[category] ?? "bg-stone/20 text-forest";
 
   const breadcrumb = breadcrumbJsonLd([
-    { name: "ニュース", path: "/news" },
+    { name: "お知らせ", path: "/news" },
     { name: article.title, path: `/news/${article.id}` },
   ]);
 

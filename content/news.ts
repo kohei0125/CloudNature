@@ -1,6 +1,6 @@
 export const NEWS_PAGE = {
-  eyebrow: "NEWS",
-  title: "ニュース",
+  eyebrow: "NOTICE",
+  title: "お知らせ",
   description: "CloudNatureの最新情報、事例紹介、技術ブログをお届けします。",
 };
 

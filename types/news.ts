@@ -1,4 +1,4 @@
-export type NewsCategory = "ニュース" | "事例紹介" | "イベント" | "メディア" | "ブログ";
+export type NewsCategory = "お知らせ" | "事例紹介" | "イベント" | "メディア" | "ブログ";
 
 export interface NewsItem {
   id: string;

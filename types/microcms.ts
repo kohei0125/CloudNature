@@ -39,8 +39,8 @@ export interface MicroCMSNewsArticle extends MicroCMSDate {
 }
 
 const CATEGORY_MAP: Record<string, NewsCategory> = {
-  "ニュース": "ニュース",
-  "お知らせ": "ニュース",
+  "ニュース": "お知らせ",
+  "お知らせ": "お知らせ",
   "事例紹介": "事例紹介",
   "イベント": "イベント",
   "メディア": "メディア",
@@ -49,8 +49,8 @@ const CATEGORY_MAP: Record<string, NewsCategory> = {
 
 /** microCMS 記事 → 既存 NewsItem 型へ変換 */
 export function toNewsItem(article: MicroCMSNewsArticle): NewsItem {
-  const rawCategory = article.category?.name ?? "ニュース";
-  const category: NewsCategory = CATEGORY_MAP[rawCategory] ?? "ニュース";
+  const rawCategory = article.category?.name ?? "お知らせ";
+  const category: NewsCategory = CATEGORY_MAP[rawCategory] ?? "お知らせ";
   return {
     id: article.id,
     publishedAt: article.publishedAt,

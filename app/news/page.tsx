@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ja_JP",
     url: "https://cloudnature.jp/news",
-    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: "クラウドネイチャーのニュース" }],
+    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: "クラウドネイチャーのお知らせ" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -42,7 +42,7 @@ const NewsPage = async () => {
     items = NEWS_ITEMS;
   }
 
-  const breadcrumb = breadcrumbJsonLd([{ name: "ニュース", path: "/news" }]);
+  const breadcrumb = breadcrumbJsonLd([{ name: "お知らせ", path: "/news" }]);
 
   return (
     <div className="bg-cream">

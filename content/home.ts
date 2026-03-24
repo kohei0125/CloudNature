@@ -137,12 +137,12 @@ export const CASE_STUDIES: CaseStudy[] = [
 
 export const NEWS_SECTION = {
   eyebrow: "Discover us",
-  title: "ニュース",
+  title: "お知らせ",
   cta: { label: "他の記事を見る", href: "/news" }
 };
 
 export const NEWS_CATEGORY_COLORS: Record<NewsCategory, string> = {
-  "ニュース": "bg-sage/20 text-sage",
+  "お知らせ": "bg-sage/20 text-sage",
   "事例紹介": "bg-sunset/20 text-sunset",
   "イベント": "bg-sea/20 text-sea",
   "メディア": "bg-cloud/20 text-forest",
@@ -153,7 +153,7 @@ export const NEWS_ITEMS: NewsItem[] = [
   {
     id: "company-established",
     publishedAt: "2025-11-01",
-    category: "ニュース",
+    category: "お知らせ",
     title: "株式会社クラウドネイチャーを設立しました",
     excerpt: "新潟の中小企業のDX・AI活用を支援するため、株式会社クラウドネイチャーを設立いたしました。",
     url: "/news/company-established",
@@ -162,7 +162,7 @@ export const NEWS_ITEMS: NewsItem[] = [
   {
     id: "ai-estimate-release",
     publishedAt: "2026-01-15",
-    category: "ニュース",
+    category: "お知らせ",
     title: "AI見積もりシステムをリリースしました",
     excerpt: "チャット形式で要件を伝えるだけで、AIが最適なシステム構成と概算費用を自動算出するサービスを公開しました。",
     url: "/news/ai-estimate-release",
