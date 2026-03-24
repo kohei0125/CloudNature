@@ -9,6 +9,7 @@ import HeroSection from "@/components/home/HeroSection";
 import MissionSection from "@/components/home/MissionSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import CasesSection from "@/components/home/CasesSection";
+import CasesCarouselSection from "@/components/home/CasesCarouselSection";
 import CtaSection from "@/components/home/CtaSection";
 import NewsSection from "@/components/home/NewsSection";
 
@@ -50,9 +51,12 @@ const Home = async () => {
   return (
     <div className="w-full bg-cream">
       <HeroSection />
+      <CasesCarouselSection />
+      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#ffffff" />
       <MissionSection />
       <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
       <ServicesSection />
+      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#19231b" withTexture={false} />
       <CasesSection />
       <WaveSeparator position="top" color="#ffffff" bgColor="#19231b" withTexture={false} />
       <NewsSection items={newsItems} />

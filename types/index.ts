@@ -6,4 +6,5 @@ export * from './contact';
 export * from './legal';
 export * from './company';
 export * from './news';
+export * from './usecases';
 export * from './microcms';
