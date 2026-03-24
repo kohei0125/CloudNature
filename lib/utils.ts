@@ -9,3 +9,15 @@ export function cn(...inputs: ClassValue[]) {
 export function isPathActive(path: string, pathname: string): boolean {
   return path === "/" ? pathname === "/" : pathname.startsWith(path);
 }
+
+/** 日付を「YYYY年M月D日」形式にフォーマット */
+export function formatDateJP(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${y}年${m}月${d}日`;
+}
+
+/** 日付を「YYYY.MM.DD」形式にフォーマット */
+export function formatDateDot(iso: string): string {
+  const [y, m, d] = iso.split("-");
+  return `${y}.${m}.${d}`;
+}

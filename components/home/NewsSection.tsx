@@ -6,14 +6,9 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatDateDot } from "@/lib/utils";
 import { NEWS_SECTION, NEWS_CATEGORY_COLORS } from "@/content/home";
 import type { NewsItem } from "@/types";
-
-const formatDate = (iso: string) => {
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-};
 
 interface NewsSectionProps {
   items: NewsItem[];
@@ -67,22 +62,21 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
   return (
     <section className="bg-white py-20 md:py-28 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
-        {/* ヘッダー部分 */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-8 lg:mb-12 gap-6 border-b border-stone/40 pb-8">
-          <div>
-            <h2 className="text-[clamp(1.375rem,5vw,2.25rem)] font-bold text-forest mb-2 font-serif tracking-tight">
-              {NEWS_SECTION.title}
-            </h2>
-            <p className="text-sage font-medium tracking-wide">
+        <div className="v-stack md:h-stack justify-between items-end mb-12 md:mb-16 gap-6">
+          <div className="mx-auto md:mx-0 text-center md:text-left">
+            <p className="text-sm font-bold tracking-widest text-sage mb-3 uppercase">
               {NEWS_SECTION.eyebrow}
             </p>
+            <h2 className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold text-forest">
+              {NEWS_SECTION.title}
+            </h2>
           </div>
           <Link
             href={NEWS_SECTION.cta.href}
-            className="hidden md:inline-flex items-center justify-center gap-2 bg-forest text-white font-bold py-3 px-6 hover:bg-forest/80 transition-colors text-sm rounded-sm"
+            className="hidden md:inline-flex text-sunset font-bold items-center gap-2 hover:gap-3 transition-all"
           >
             {NEWS_SECTION.cta.label}
-            <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </Link>

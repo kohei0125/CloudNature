@@ -1,13 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { formatDateDot } from "@/lib/utils";
 import { NEWS_CATEGORY_COLORS } from "@/content/home";
 import type { NewsItem } from "@/types";
-
-const formatDate = (iso: string) => {
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-};
 
 interface NewsCardProps {
   item: NewsItem;
@@ -39,7 +35,7 @@ const NewsCard = ({ item, disableLink = false }: NewsCardProps) => {
           <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${colorClass}`}>
             {item.category}
           </span>
-          <time className="text-xs text-gray-400 font-medium">{formatDate(item.publishedAt)}</time>
+          <time className="text-xs text-gray-400 font-medium">{formatDateDot(item.publishedAt)}</time>
         </div>
         <h3 className="text-forest font-bold leading-relaxed line-clamp-2 text-[15px] group-hover:text-sage transition-colors">
           {item.title}

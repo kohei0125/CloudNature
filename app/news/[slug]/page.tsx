@@ -9,6 +9,7 @@ import { NEWS_CATEGORY_COLORS, NEWS_ITEMS } from "@/content/home";
 import NewsBody from "@/components/news/NewsBody";
 import type { NewsCategory } from "@/types";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { formatDateJP } from "@/lib/utils";
 import type { MicroCMSNewsArticle } from "@/types/microcms";
 
 export const revalidate = 60;
@@ -89,11 +90,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-const formatDate = (iso: string) => {
-  const d = new Date(iso);
-  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
-};
-
 const NewsArticlePage = async ({ params }: PageProps) => {
   const { slug } = await params;
   const article = await getArticleWithFallback(slug);
@@ -141,7 +137,7 @@ const NewsArticlePage = async ({ params }: PageProps) => {
               {category}
             </span>
             <time className="text-sm text-gray-400 font-medium">
-              {formatDate(article.publishedAt)}
+              {formatDateJP(article.publishedAt)}
             </time>
           </div>
 
