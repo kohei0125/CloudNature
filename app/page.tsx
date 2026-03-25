@@ -52,7 +52,7 @@ const Home = async () => {
     <div className="w-full bg-cream">
       <HeroSection />
       <NewsSection items={newsItems} />
-      <WaveSeparator position="top" color="#fcfdfd" bgColor="#f8f9fa" />
+      <WaveSeparator position="top" color="#ffffff" bgColor="#f8f9fa" withTexture={false} />
       <MissionSection />
       <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
       <ServicesSection />
@@ -60,7 +60,7 @@ const Home = async () => {
       <CasesSection />
       <WaveSeparator position="top" color="#f8f9fa" bgColor="#19231b" withTexture={false} />
       <CasesCarouselSection />
-      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#f0f0f0" />
+      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#f0f0f0" withTexture={false} />
       <CtaSection />
     </div>
   );

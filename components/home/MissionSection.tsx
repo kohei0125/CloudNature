@@ -26,7 +26,7 @@ const MissionSection = () => {
           {/* Right Column: Glassmorphism Cards */}
           <div className="relative">
             {/* Abstract Background Blob for Glass Effect */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-cloud/30 via-sage/20 to-sunset/20 rounded-full blur-3xl opacity-60"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[80%] bg-gradient-to-tr from-cloud/30 via-sage/20 to-sunset/20 rounded-full blur-2xl opacity-90"></div>
 
             <div className="relative space-y-4 md:space-y-6">
               {VALUES.map((value, index) => {

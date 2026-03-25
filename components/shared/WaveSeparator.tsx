@@ -23,7 +23,7 @@ const WaveSeparator: React.FC<WaveSeparatorProps> = ({
 
   return (
     <div
-      className={cn("w-full overflow-hidden leading-[0] relative", withTexture && "texture-grain", position === 'top' && "rotate-180", className)}
+      className={cn("w-full overflow-hidden leading-[0] relative -my-px", withTexture && "texture-grain", position === 'top' && "rotate-180", className)}
       style={{ backgroundColor: bgColor }}
     >
       <svg
