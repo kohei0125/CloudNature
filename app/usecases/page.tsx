@@ -128,7 +128,7 @@ export default function UseCasesPage() {
                   className="group flex gap-4 md:gap-8 py-4 md:py-8 first:pt-0 last:pb-0"
                 >
                   {/* サムネイル */}
-                  <div className="relative flex-shrink-0 w-20 h-20 md:w-56 md:h-auto md:aspect-[16/10] rounded-lg overflow-hidden bg-mist">
+                  <div className="relative flex-shrink-0 w-28 aspect-[16/10] md:w-56 md:aspect-[16/10] rounded-lg overflow-hidden bg-mist">
                     <Image
                       src={article.image}
                       alt={article.title}
