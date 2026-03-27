@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import { ArrowLeft } from "lucide-react";
 import { USECASES_ARTICLES, USECASES_DETAIL } from "@/content/usecases";
 import { CASES_CTA } from "@/content/cases";
 import CtaBanner from "@/components/shared/CtaBanner";
 import NewsBody from "@/components/news/NewsBody";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
 
 interface PageProps {
@@ -37,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: article.excerpt,
       type: "article",
       locale: "ja_JP",
-      url: `https://cloudnature.jp/usecases/${article.id}`,
+      url: `${CANONICAL_SITE_URL}/usecases/${article.id}`,
       images: [{ url: article.image, width: 1200, height: 630, alt: article.title }],
     },
     twitter: {
@@ -46,7 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: article.excerpt,
       images: [article.image],
     },
-    alternates: { canonical: `https://cloudnature.jp/usecases/${article.id}` },
+    alternates: { canonical: `${CANONICAL_SITE_URL}/usecases/${article.id}` },
   };
 }
 
@@ -64,10 +66,28 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
+    description: article.excerpt,
     datePublished: article.publishedAt,
-    author: { "@type": "Organization", name: "株式会社クラウドネイチャー", url: "https://cloudnature.jp" },
-    publisher: { "@id": "https://cloudnature.jp/#organization" },
-    image: `https://cloudnature.jp${article.image}`,
+    dateModified: article.publishedAt,
+    articleSection: article.category,
+    inLanguage: "ja",
+    author: {
+      "@type": "Organization",
+      name: "株式会社クラウドネイチャー",
+      url: CANONICAL_SITE_URL,
+      logo: `${CANONICAL_SITE_URL}/images/logo.png`,
+    },
+    publisher: { "@id": `${CANONICAL_SITE_URL}/#organization` },
+    image: {
+      "@type": "ImageObject",
+      url: `${CANONICAL_SITE_URL}${article.image}`,
+      width: 1200,
+      height: 630,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${CANONICAL_SITE_URL}/usecases/${article.id}`,
+    },
   };
 
   return (
@@ -113,6 +133,10 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
           <NewsBody html={article.body} />
         </div>
       </article>
+
+      {article.body.includes("twitter-tweet") && (
+        <Script src="https://platform.twitter.com/widgets.js" strategy="lazyOnload" />
+      )}
 
       <CtaBanner
         eyebrow={CASES_CTA.eyebrow}

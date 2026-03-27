@@ -7,6 +7,7 @@ import CtaBanner from "@/components/shared/CtaBanner";
 import { USECASES_ARTICLES } from "@/content/usecases";
 import { CASES_CTA } from "@/content/cases";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     description: "話題のAI活用事例・ツールを徹底検証してお届け",
     type: "website",
     locale: "ja_JP",
-    url: "https://cloudnature.jp/usecases",
+    url: `${CANONICAL_SITE_URL}/usecases`,
     images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: "話題のAI活用術" }],
   },
   twitter: {
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     title: "話題のAI活用術 | クラウドネイチャー",
     description: "話題のAI活用事例・ツールを徹底検証してお届け",
   },
-  alternates: { canonical: "https://cloudnature.jp/usecases" },
+  alternates: { canonical: `${CANONICAL_SITE_URL}/usecases` },
 };
 
 const categories = Array.from(
@@ -39,11 +40,29 @@ const archiveYears = Array.from(
 export default function UseCasesPage() {
   const breadcrumb = breadcrumbJsonLd([{ name: "話題のAI活用術", path: "/usecases" }]);
 
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "話題のAI活用術",
+    description: "話題のAI活用事例・ツールを徹底検証してお届け",
+    url: `${CANONICAL_SITE_URL}/usecases`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: USECASES_ARTICLES.length,
+      itemListElement: USECASES_ARTICLES.map((article, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${CANONICAL_SITE_URL}/usecases/${article.id}`,
+        name: article.title,
+      })),
+    },
+  };
+
   return (
     <div className="w-full bg-cream">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, collectionSchema]) }}
       />
       <PageHero
         eyebrow="AI USE CASES"
