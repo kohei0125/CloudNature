@@ -66,6 +66,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
           eyebrow={NEWS_SECTION.eyebrow}
           title={NEWS_SECTION.title}
           cta={{ ...NEWS_SECTION.cta, external: true }}
+          eyebrowColor="text-sunset"
           ctaDesktopOnly
         />
       </div>
@@ -106,7 +107,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                           )}
                         </div>
                         <div className="p-6 flex flex-col flex-1">
-                          <h3 className="text-forest font-bold leading-relaxed mb-2 line-clamp-3 text-[15px] group-hover:text-sage transition-colors">
+                          <h3 className="text-forest font-bold leading-relaxed mb-2 line-clamp-3 text-[15px] group-hover:text-sunset transition-colors">
                             {item.title}
                           </h3>
                           <p className="text-sm text-gray-500 leading-relaxed line-clamp-2 mb-4">
@@ -116,7 +117,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                             <span className="text-sm font-bold text-forest/60 tracking-widest uppercase">
                               {getSourceText(item.category)}
                             </span>
-                            <div className="w-6 h-6 rounded-full bg-sage/20 text-sage flex items-center justify-center flex-shrink-0 transition-transform group-hover:bg-sage group-hover:text-white">
+                            <div className="w-6 h-6 rounded-full bg-sunset/20 text-sunset flex items-center justify-center flex-shrink-0 transition-transform group-hover:bg-sunset group-hover:text-white">
                               <ArrowRight className="w-3.5 h-3.5" />
                             </div>
                           </div>
@@ -148,7 +149,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
             <button
               onClick={scrollPrev}
               disabled={!canScrollPrev}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-forest shadow-sm hover:bg-sage hover:text-white transition-colors disabled:opacity-50"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-forest shadow-sm hover:bg-sunset hover:text-white transition-colors disabled:opacity-50"
               aria-label="前へ"
             >
               <ChevronLeft className="w-5 h-5 ml-0.5" />
@@ -156,7 +157,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
             <button
               onClick={scrollNext}
               disabled={!canScrollNext}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-sage text-white hover:bg-forest transition-colors disabled:opacity-50"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-sunset text-white hover:bg-sunset/80 transition-colors disabled:opacity-50"
               aria-label="次へ"
             >
               <ChevronRight className="w-5 h-5 mr-0.5" />
@@ -193,25 +194,25 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                     <div className="w-full h-full bg-gradient-to-br from-sage/10 to-cloud/30" />
                   )}
                 </div>
-                <div className="flex flex-col justify-between flex-1 py-1 min-w-0">
-                  <h3 className="text-forest font-bold text-[13px] leading-snug mb-2 line-clamp-2 group-hover:text-sage transition-colors">
+                <div className="flex flex-col justify-between flex-1 py-1 min-w-0 pr-6">
+                  <h3 className="text-forest font-bold text-[13px] leading-snug mb-2 line-clamp-2 group-hover:text-sunset transition-colors">
                     {item.title}
                   </h3>
                   <div className="flex items-center justify-between mt-auto">
                     <span className="text-[11px] font-bold text-forest/60 tracking-wider uppercase">
                       {getSourceText(item.category)}
                     </span>
-                    <div className="w-5 h-5 rounded-full bg-sage text-white flex items-center justify-center flex-shrink-0">
-                      <ArrowRight className="w-3 h-3" />
-                    </div>
                   </div>
+                </div>
+                                <div className="w-5 h-5 rounded-full bg-sunset text-white flex items-center justify-center absolute right-3 bottom-3">
+                  <ChevronRight className="w-3 h-3" />
                 </div>
               </>
             );
             return disableLink ? (
               <div
                 key={item.id}
-                className="group flex items-center bg-white rounded-lg border border-gray-100 shadow-sm p-3 gap-4"
+                className="group relative flex items-center bg-white rounded-lg border border-gray-100 shadow-sm p-3 gap-4"
               >
                 {mobileContent}
               </div>
@@ -219,7 +220,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
               <Link
                 key={item.id}
                 href={item.url}
-                className="group flex items-center bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-3 gap-4"
+                className="group relative flex items-center bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-3 gap-4"
               >
                 {mobileContent}
               </Link>
@@ -231,7 +232,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
         <div className="mt-8">
           <Link
             href={NEWS_SECTION.cta.href}
-            className="flex items-center justify-center gap-2 bg-forest text-white font-bold py-3.5 px-6 hover:bg-forest/80 transition-colors text-sm rounded-sm w-full"
+            className="flex items-center justify-center gap-2 bg-sunset text-white font-bold py-3.5 px-6 hover:bg-sunset/80 transition-colors text-sm rounded-sm w-full"
           >
             {NEWS_SECTION.cta.label}
             <ExternalLink className="w-4 h-4 ml-1" />
