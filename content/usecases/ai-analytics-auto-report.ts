@@ -1,24 +1,12 @@
 import type { UseCaseArticle } from "@/types";
 
-export const USECASES_SECTION = {
-  eyebrow: "AI USE CASES",
-  title: "話題のAI活用術",
-  cta: { label: "事例をもっと見る", href: "/usecases" }
-};
-
-export const USECASES_DETAIL = {
-  backLabel: "話題のAI活用術一覧に戻る",
-  backHref: "/usecases",
-};
-
-export const USECASES_ARTICLES: UseCaseArticle[] = [
-  {
-    id: "ai-analytics-auto-report",
-    publishedAt: "2026-03-24",
-    category: "業務効率化",
-    title: "【自社事例】月4時間のアクセス分析がゼロに——AI×自動配信で週次レポートが届く仕組み",
-    excerpt: "毎週1時間かけていたGA4・Search Consoleの分析作業を完全自動化。AIが改善アクションまで提案し、メール・スプレッドシートに自動配信。月4時間の工数をゼロにした自社事例です。",
-    body: `<h2>「また今週も、見られなかった」</h2>
+export const article: UseCaseArticle = {
+  id: "ai-analytics-auto-report",
+  publishedAt: "2026-03-24",
+  category: "業務効率化",
+  title: "【自社事例】月4時間のアクセス分析がゼロに——AI×自動配信で週次レポートが届く仕組み",
+  excerpt: "毎週1時間かけていたGA4・Search Consoleの分析作業を完全自動化。AIが改善アクションまで提案し、メール・スプレッドシートに自動配信。月4時間の工数をゼロにした自社事例です。",
+  body: `<h2>「また今週も、見られなかった」</h2>
 <p>GA4の管理画面を最後に開いたのは、いつですか？</p>
 <p>「やらないといけない」とわかっている。でも、管理画面にログインして、期間を設定して、数字を読み解いて、前週と比較して、スプレッドシートに転記して……。その一連の作業を思い浮かべると、つい後回しにしてしまう。</p>
 <p>気づけば先月のデータを一度も見ていなかった。そんな経験、ありませんか？</p>
@@ -93,6 +81,5 @@ export const USECASES_ARTICLES: UseCaseArticle[] = [
 <p>今回ご紹介した仕組みは、特別な技術を持つ会社だからできたわけではありません。「手動で続けることが難しい業務を、仕組みで解決する」——それだけのことです。</p>
 <p>アクセス解析に限らず、「やらないといけないけど手が回らない業務」は、多くの会社に必ず存在します。</p>
 <p>まずどの業務から手をつけるべきか、無料診断で一緒に整理します。お気軽にご相談ください。</p>`,
-    image: "/images/tmp/blog_banner1.jpg"
-  }
-];
+  image: "/images/tmp/blog_banner1.jpg"
+};
