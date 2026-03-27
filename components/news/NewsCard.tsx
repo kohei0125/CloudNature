@@ -17,15 +17,24 @@ const NewsCard = ({ item, disableLink = false }: NewsCardProps) => {
 
   const content = (
     <>
-      <div className="relative w-full aspect-[16/10] overflow-hidden bg-mist">
+      <div className="relative w-full aspect-video overflow-hidden bg-mist">
         {item.image ? (
-          <Image
-            src={item.image}
-            alt={item.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
+          <>
+            <Image
+              src={item.image}
+              alt=""
+              fill
+              className="object-cover blur-md scale-110 opacity-60"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <Image
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-contain transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          </>
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-sage/10 to-cloud/30" />
         )}
@@ -40,9 +49,11 @@ const NewsCard = ({ item, disableLink = false }: NewsCardProps) => {
         <h3 className="text-forest font-bold leading-relaxed line-clamp-2 text-[15px] group-hover:text-sage transition-colors">
           {item.title}
         </h3>
-        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
-          {item.excerpt}
-        </p>
+        <div className="hidden md:block">
+          <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
+            {item.excerpt}
+          </p>
+        </div>
         <div className="flex items-center justify-end mt-1">
           <div className="w-6 h-6 rounded-full bg-sage/20 text-sage flex items-center justify-center transition-all group-hover:bg-sage group-hover:text-white">
             <ArrowRight className="w-3.5 h-3.5" />

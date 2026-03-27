@@ -131,12 +131,19 @@ export default function UseCasesPage() {
                   <div className="relative flex-shrink-0 w-32 aspect-video md:w-72 md:aspect-video rounded-lg overflow-hidden bg-mist">
                     <Image
                       src={article.image}
-                      alt={article.title}
+                      alt=""
                       fill
-                      className="object-contain transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover blur-md scale-110 opacity-60"
                       sizes="(max-width: 768px) 128px, 288px"
                     />
-                    <span className="hidden md:block absolute top-3 left-3 text-[11px] font-bold px-3 py-1 rounded bg-sage text-white shadow-sm">
+                    <Image
+                      src={article.image}
+                      alt={article.title}
+                      fill
+                      className="object-contain transition-transform duration-500 group-hover:scale-105 relative z-10"
+                      sizes="(max-width: 768px) 128px, 288px"
+                    />
+                    <span className="hidden md:block absolute top-3 left-3 z-20 text-[11px] font-bold px-3 py-1 rounded bg-sage text-white shadow-sm">
                       {article.category}
                     </span>
                   </div>
