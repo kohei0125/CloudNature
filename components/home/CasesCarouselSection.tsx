@@ -176,7 +176,9 @@ const CasesCarouselSection = () => {
                     <h3 className="text-forest font-bold text-sm leading-snug line-clamp-2">
                       {article.title}
                     </h3>
-                    <ChevronRight className="w-4 h-4 flex-shrink-0 text-gray-300" />
+                    <div className="w-5 h-5 rounded-full bg-sunset text-white flex items-center justify-center flex-shrink-0">
+                      <ChevronRight className="w-3 h-3" />
+                    </div>
                   </div>
                 </Link>
               </div>
@@ -199,7 +201,7 @@ const CasesCarouselSection = () => {
           </div>
           <Link
             href={USECASES_SECTION.cta.href}
-            className="flex items-center justify-center gap-2 bg-forest text-white font-bold py-3 px-6 hover:bg-forest/80 transition-colors text-[13px] rounded-sm w-full"
+            className="flex items-center justify-center gap-2 bg-sunset text-white font-bold py-3 px-6 hover:bg-sunset/80 transition-colors text-[13px] rounded-sm w-full"
           >
             {USECASES_SECTION.cta.label}
             <ArrowRight className="w-4 h-4" />
