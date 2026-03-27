@@ -52,7 +52,7 @@ const SectionHeader = ({
             ctaDesktopOnly ? "hidden md:inline-flex" : "inline-flex"
           )}
         >
-          {cta.label} {cta.external ? <ExternalLink className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
+          {cta.label} {cta.external ? <ExternalLink className="w-4 h-4 flex-shrink-0" /> : <ArrowRight className="w-4 h-4 flex-shrink-0" />}
         </Link>
       ) : null}
     </div>

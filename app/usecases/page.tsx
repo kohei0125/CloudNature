@@ -170,7 +170,7 @@ export default function UseCasesPage() {
                   </div>
 
                   {/* スマホ: 右矢印 */}
-                  <div className="flex md:hidden items-center">
+                  <div className="flex md:hidden items-center flex-shrink-0">
                     <ChevronRight className="w-4 h-4 text-gray-300" />
                   </div>
                 </Link>

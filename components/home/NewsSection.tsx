@@ -116,7 +116,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                             <span className="text-sm font-bold text-forest/60 tracking-widest uppercase">
                               {getSourceText(item.category)}
                             </span>
-                            <div className="w-6 h-6 rounded-full bg-sage/20 text-sage flex items-center justify-center transition-transform group-hover:bg-sage group-hover:text-white">
+                            <div className="w-6 h-6 rounded-full bg-sage/20 text-sage flex items-center justify-center flex-shrink-0 transition-transform group-hover:bg-sage group-hover:text-white">
                               <ArrowRight className="w-3.5 h-3.5" />
                             </div>
                           </div>
