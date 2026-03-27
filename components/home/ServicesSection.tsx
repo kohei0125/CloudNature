@@ -1,4 +1,4 @@
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import { CheckCircle2, ArrowRight, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICES_SECTION, SERVICES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
@@ -75,7 +75,7 @@ const ServicesSection = () => {
                       {service.ctaLabel || "詳しくはこちら"}
                       <span className="absolute -bottom-1 left-0 w-full h-[1.5px] bg-forest/20 group-hover/link:bg-forest transition-colors" />
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
+                    <ExternalLink className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
                   </a>
                 )}
               </div>

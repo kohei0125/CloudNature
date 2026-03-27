@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CaseStudyDetail } from "@/types";
 
@@ -74,7 +74,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
             className="inline-flex items-center gap-1.5 text-sm text-sunset font-medium hover:underline mb-6"
           >
             {study.link.label}
-            <ArrowRight className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4" />
           </Link>
         ) : null}
 

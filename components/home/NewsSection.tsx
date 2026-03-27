@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { ArrowRight, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { NEWS_SECTION, NEWS_CATEGORY_COLORS } from "@/content/home";
 import type { NewsItem } from "@/types";
@@ -65,7 +65,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
         <SectionHeader
           eyebrow={NEWS_SECTION.eyebrow}
           title={NEWS_SECTION.title}
-          cta={{ ...NEWS_SECTION.cta, external: true }}
+          cta={NEWS_SECTION.cta}
           eyebrowColor="text-sunset"
           ctaDesktopOnly
         />
@@ -204,7 +204,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                     </span>
                   </div>
                 </div>
-                                <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center absolute right-3 bottom-3">
+                <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center absolute right-3 bottom-3">
                   <ChevronRight className="w-3 h-3" />
                 </div>
               </>
@@ -235,7 +235,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
             className="flex items-center justify-center gap-2 bg-sunset text-white font-bold py-3.5 px-6 hover:bg-sunset/80 transition-colors text-sm rounded-sm w-full"
           >
             {NEWS_SECTION.cta.label}
-            <ExternalLink className="w-4 h-4 ml-1" />
+            <ArrowRight className="w-4 h-4 ml-1" />
           </Link>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { CASES_SECTION, CASE_STUDIES } from "@/content/home";
@@ -54,9 +54,9 @@ const CasesSection = () => {
                       {study.after}
                     </p>
                     {study.link && (
-                      <Link href={study.link.href} className="inline-flex items-center gap-1 mt-2 text-xs text-sunset font-bold hover:gap-2 transition-all">
-                        {study.link.label} <ArrowRight className="w-3 h-3 flex-shrink-0" />
-                      </Link>
+                      <a href={study.link.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 mt-2 text-xs text-sunset font-bold hover:gap-2 transition-all">
+                        {study.link.label} <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                      </a>
                     )}
                   </div>
                 </div>

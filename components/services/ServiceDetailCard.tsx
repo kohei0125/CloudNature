@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -137,7 +137,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
             )}
           >
             新潟AIアカデミーを詳しく見る
-            <ArrowRight className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4" />
           </a>
         )}
       </div>
