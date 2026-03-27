@@ -6,6 +6,7 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 import { USECASES_SECTION, USECASES_ARTICLES } from "@/content/usecases";
 
 const CasesCarouselSection = () => {
@@ -65,25 +66,15 @@ const CasesCarouselSection = () => {
   }, [spApi, onSpSelect]);
 
   return (
-    <section className="bg-mist pt-12 pb-20 md:py-28 overflow-hidden">
+    <section className="bg-mist py-16 md:py-24 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="v-stack md:h-stack justify-between items-end mb-12 md:mb-16 gap-6">
-          <div className="mx-auto md:mx-0 text-center md:text-left">
-            <p className="text-sm font-bold tracking-widest text-sunset mb-3 uppercase">
-              {USECASES_SECTION.eyebrow}
-            </p>
-            <h2 className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold text-forest">
-              {USECASES_SECTION.title}
-            </h2>
-          </div>
-          <Link
-            href={USECASES_SECTION.cta.href}
-            className="hidden md:inline-flex text-sunset font-bold items-center gap-2 hover:gap-3 transition-all"
-          >
-            {USECASES_SECTION.cta.label}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        <SectionHeader
+          eyebrow={USECASES_SECTION.eyebrow}
+          title={USECASES_SECTION.title}
+          cta={USECASES_SECTION.cta}
+          eyebrowColor="text-sunset"
+          ctaDesktopOnly
+        />
       </div>
 
       {/* ===== PC/タブレット カルーセル ===== */}
@@ -101,6 +92,13 @@ const CasesCarouselSection = () => {
                     className="group flex flex-col bg-white rounded-lg border border-gray-100/50 shadow-sm hover:shadow-lg transition-all duration-300 h-full overflow-hidden"
                   >
                     <div className="relative w-full aspect-video overflow-hidden bg-mist">
+                      <Image
+                        src={article.image}
+                        alt=""
+                        fill
+                        className="object-cover blur-md scale-110 opacity-60"
+                        sizes="(max-width: 1024px) 45vw, 25vw"
+                      />
                       <Image
                         src={article.image}
                         alt={article.title}
@@ -161,6 +159,13 @@ const CasesCarouselSection = () => {
                   <div className="relative w-full aspect-video overflow-hidden bg-mist">
                     <Image
                       src={article.image}
+                      alt=""
+                      fill
+                      className="object-cover blur-md scale-110 opacity-60"
+                      sizes="85vw"
+                    />
+                    <Image
+                      src={article.image}
                       alt={article.title}
                       fill
                       className="object-contain"
@@ -186,9 +191,8 @@ const CasesCarouselSection = () => {
               <button
                 key={i}
                 onClick={() => spApi?.scrollTo(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === spIndex ? "bg-sunset w-5" : "bg-gray-300"
-                }`}
+                className={`w-2 h-2 rounded-full transition-all ${i === spIndex ? "bg-sunset w-5" : "bg-gray-300"
+                  }`}
                 aria-label={`スライド ${i + 1}`}
               />
             ))}

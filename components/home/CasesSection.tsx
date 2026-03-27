@@ -11,7 +11,6 @@ const CasesSection = () => {
         <SectionHeader
           eyebrow={CASES_SECTION.eyebrow}
           title={CASES_SECTION.title}
-          centered
           darkMode
         />
 
