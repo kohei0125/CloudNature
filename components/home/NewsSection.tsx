@@ -204,7 +204,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
                     </span>
                   </div>
                 </div>
-                                <div className="w-5 h-5 rounded-full bg-sunset text-white flex items-center justify-center absolute right-3 bottom-3">
+                                <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center absolute right-3 bottom-3">
                   <ChevronRight className="w-3 h-3" />
                 </div>
               </>

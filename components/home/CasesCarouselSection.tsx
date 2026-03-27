@@ -176,7 +176,7 @@ const CasesCarouselSection = () => {
                     <h3 className="text-forest font-bold text-sm leading-snug line-clamp-2">
                       {article.title}
                     </h3>
-                    <div className="w-5 h-5 rounded-full bg-sunset text-white flex items-center justify-center flex-shrink-0">
+                    <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center flex-shrink-0">
                       <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
