@@ -128,13 +128,13 @@ export default function UseCasesPage() {
                   className="group flex gap-4 md:gap-8 py-4 md:py-8 first:pt-0 last:pb-0"
                 >
                   {/* サムネイル */}
-                  <div className="relative flex-shrink-0 w-28 aspect-[16/10] md:w-56 md:aspect-[16/10] rounded-lg overflow-hidden bg-mist">
+                  <div className="relative flex-shrink-0 w-32 aspect-video md:w-72 md:aspect-video rounded-lg overflow-hidden bg-mist">
                     <Image
                       src={article.image}
                       alt={article.title}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 80px, 224px"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 128px, 288px"
                     />
                     <span className="hidden md:block absolute top-3 left-3 text-[11px] font-bold px-3 py-1 rounded bg-sage text-white shadow-sm">
                       {article.category}
