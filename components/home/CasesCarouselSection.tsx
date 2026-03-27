@@ -100,12 +100,12 @@ const CasesCarouselSection = () => {
                     href={`/usecases/${article.id}`}
                     className="group flex flex-col bg-white rounded-lg border border-gray-100/50 shadow-sm hover:shadow-lg transition-all duration-300 h-full overflow-hidden"
                   >
-                    <div className="relative w-full aspect-[2/1] overflow-hidden bg-mist">
+                    <div className="relative w-full aspect-video overflow-hidden bg-mist">
                       <Image
                         src={article.image}
                         alt={article.title}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-contain transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 1024px) 45vw, 25vw"
                       />
                     </div>
@@ -158,12 +158,12 @@ const CasesCarouselSection = () => {
                   href={`/usecases/${article.id}`}
                   className="group flex flex-col bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden h-full"
                 >
-                  <div className="relative w-full aspect-[16/9] overflow-hidden bg-mist">
+                  <div className="relative w-full aspect-video overflow-hidden bg-mist">
                     <Image
                       src={article.image}
                       alt={article.title}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                       sizes="85vw"
                     />
                   </div>
