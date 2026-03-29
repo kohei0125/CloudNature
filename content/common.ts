@@ -22,6 +22,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "ホーム", path: "/" },
   { label: "サービス", path: "/services" },
   { label: "事例", path: "/cases" },
+  { label: "AIガイド", path: "/usecases" },
   { label: "企業情報", path: "/company" },
   { label: "お問い合わせ", path: "/contact" }
 ];

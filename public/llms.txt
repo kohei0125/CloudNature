@@ -21,9 +21,9 @@
 - AI学習管理システム: 研修管理工数を削減し、学習定着を支援
 - コンテンツマーケティングの自律的運営: 執筆・投稿工数を80%削減し、公開頻度を向上
 
-## AI活用コンテンツ
+## AIガイド
 
-- [話題のAI活用術](https://cloudnature.jp/usecases): AI導入、業務自動化、最新ツール活用に関する記事一覧
+- [AI導入のヒント・実践ガイド](https://cloudnature.jp/usecases): AI導入、業務自動化、最新ツール活用に関する記事一覧
 - [AI営業活動を自動化する方法](https://cloudnature.jp/usecases/ai-auto-sales-delivery): 営業資料作成や報告業務のAI活用例
 - [Google Analyticsの集計とレポート作成を自動化する方法](https://cloudnature.jp/usecases/ai-analytics-auto-report): 定期レポート業務のスモールスタート例
 
@@ -41,7 +41,7 @@
 - [トップページ](https://cloudnature.jp/): AI導入支援の概要、導入事例、FAQ、CTA
 - [サービス一覧](https://cloudnature.jp/services): サービス全体の整理、導入フロー、FAQ
 - [導入事例](https://cloudnature.jp/cases): 実績と成果の一覧
-- [話題のAI活用術](https://cloudnature.jp/usecases): AI活用記事一覧
+- [AIガイド](https://cloudnature.jp/usecases): AI導入・業務自動化のガイド記事一覧
 - [お知らせ](https://cloudnature.jp/news): 最新情報、事例紹介、技術ブログ
 - [企業情報](https://cloudnature.jp/company): 会社概要、代表メッセージ、アクセス
 - [お問い合わせ](https://cloudnature.jp/contact): 無料相談・お問い合わせフォーム

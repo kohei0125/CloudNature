@@ -22,6 +22,7 @@ export const FOOTER_COPY = {
   companyLinks: [
     { label: "企業情報", path: "/company" },
     { label: "導入事例", path: "/cases" },
+    { label: "AIガイド", path: "/usecases" },
     { label: "利用規約", path: "/terms" },
     { label: "プライバシーポリシー", path: "/privacy" },
     { label: "情報セキュリティ方針", path: "/security" }

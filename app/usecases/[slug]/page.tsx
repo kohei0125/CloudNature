@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import { ArrowLeft } from "lucide-react";
-import { USECASES_ARTICLES, USECASES_DETAIL } from "@/content/usecases";
+import { USECASES_ARTICLES, USECASES_DETAIL, USECASES_SECTION } from "@/content/usecases";
 import { CASES_CTA } from "@/content/cases";
 import CtaBanner from "@/components/shared/CtaBanner";
 import NewsBody from "@/components/news/NewsBody";
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = findArticle(slug);
   if (!article) return {};
 
-  const title = `${article.title} | 話題のAI活用術 | クラウドネイチャー`;
+  const title = `${article.title} | ${USECASES_SECTION.title} | クラウドネイチャー`;
 
   return {
     title,
@@ -60,7 +60,7 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
   if (!article) notFound();
 
   const breadcrumb = breadcrumbJsonLd([
-    { name: "話題のAI活用術", path: "/usecases" },
+    { name: USECASES_SECTION.title, path: "/usecases" },
     { name: article.title, path: `/usecases/${article.id}` },
   ]);
 

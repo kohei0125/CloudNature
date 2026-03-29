@@ -4,27 +4,27 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import CtaBanner from "@/components/shared/CtaBanner";
-import { USECASES_ARTICLES } from "@/content/usecases";
+import { USECASES_ARTICLES, USECASES_SECTION } from "@/content/usecases";
 import { CASES_CTA } from "@/content/cases";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "話題のAI活用術 | クラウドネイチャー",
-  description: "話題のAI活用事例・ツールを徹底検証してお届け",
+  title: `${USECASES_SECTION.title} | クラウドネイチャー`,
+  description: USECASES_SECTION.description,
   openGraph: {
-    title: "話題のAI活用術 | クラウドネイチャー",
-    description: "話題のAI活用事例・ツールを徹底検証してお届け",
+    title: `${USECASES_SECTION.title} | クラウドネイチャー`,
+    description: USECASES_SECTION.description,
     type: "website",
     locale: "ja_JP",
     url: `${CANONICAL_SITE_URL}/usecases`,
-    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: "話題のAI活用術" }],
+    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: USECASES_SECTION.title }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "話題のAI活用術 | クラウドネイチャー",
-    description: "話題のAI活用事例・ツールを徹底検証してお届け",
+    title: `${USECASES_SECTION.title} | クラウドネイチャー`,
+    description: USECASES_SECTION.description,
   },
   alternates: { canonical: `${CANONICAL_SITE_URL}/usecases` },
 };
@@ -38,13 +38,13 @@ const archiveYears = Array.from(
 ).sort((a, b) => b - a);
 
 export default function UseCasesPage() {
-  const breadcrumb = breadcrumbJsonLd([{ name: "話題のAI活用術", path: "/usecases" }]);
+  const breadcrumb = breadcrumbJsonLd([{ name: USECASES_SECTION.title, path: "/usecases" }]);
 
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "話題のAI活用術",
-    description: "話題のAI活用事例・ツールを徹底検証してお届け",
+    name: USECASES_SECTION.title,
+    description: USECASES_SECTION.description,
     url: `${CANONICAL_SITE_URL}/usecases`,
     mainEntity: {
       "@type": "ItemList",
@@ -65,9 +65,20 @@ export default function UseCasesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, collectionSchema]) }}
       />
       <PageHero
-        eyebrow="AI USE CASES"
-        title="話題のAI活用術"
-        description="話題のAI活用事例・ツールを徹底検証してお届け"
+        eyebrow={USECASES_SECTION.eyebrow}
+        title={USECASES_SECTION.title}
+        description={(
+          <>
+            <span className="sm:hidden">
+              AI導入の考え方や
+              <br />
+              業種別の進め方を学べる記事をまとめます
+            </span>
+            <span className="hidden sm:inline">
+              {USECASES_SECTION.description}
+            </span>
+          </>
+        )}
       />
 
       <section className="py-8 md:py-24 bg-white">

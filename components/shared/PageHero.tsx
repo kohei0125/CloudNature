@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 
 const heroBlobs = (
   <>
@@ -12,7 +13,7 @@ const heroBlobs = (
 interface PageHeroProps {
   eyebrow: string;
   title: string;
-  description?: string;
+  description?: ReactNode;
   bgColor?: string;
 }
 
