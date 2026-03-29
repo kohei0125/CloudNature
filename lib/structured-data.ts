@@ -20,3 +20,26 @@ export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
     ],
   };
 }
+
+export function faqPageJsonLd(items: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+}
+
+export function serviceJsonLd(service: { title: string; description: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.description,
+    provider: { "@id": `${BASE_URL}/#organization` },
+    areaServed: { "@type": "Place", name: "新潟県" },
+  };
+}
