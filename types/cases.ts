@@ -20,4 +20,5 @@ export interface CaseStudyDetail {
   link?: { label: string; href: string };
   image: string;
   imageMobile?: string;
+  relatedServiceIds?: string[];
 }

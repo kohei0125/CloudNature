@@ -6,4 +6,5 @@ export interface UseCaseArticle {
   excerpt: string;
   body: string;
   image: string;
+  relatedServiceIds?: string[];
 }

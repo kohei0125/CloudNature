@@ -8,6 +8,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { USECASES_SECTION, USECASES_ARTICLES } from "@/content/usecases";
+import { formatDateJP } from "@/lib/utils";
 
 const CasesCarouselSection = () => {
   /* --- PC carousel --- */
@@ -108,10 +109,23 @@ const CasesCarouselSection = () => {
                       />
                     </div>
                     <div className="p-4 flex items-center justify-between gap-3">
-                      <h3 className="text-forest font-bold leading-snug line-clamp-2 text-base lg:text-lg group-hover:text-sunset transition-colors">
-                        {article.title}
-                      </h3>
-                      <div className="w-6 h-6 flex-shrink-0 rounded-full bg-sunset/20 text-sunset flex items-center justify-center transition-transform group-hover:bg-sunset group-hover:text-white">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="inline-flex px-2.5 py-1 rounded-full bg-sage/10 text-sage text-[10px] font-bold tracking-wide">
+                            {article.category}
+                          </span>
+                          <time className="text-[11px] text-gray-400">
+                            {formatDateJP(article.publishedAt)}
+                          </time>
+                        </div>
+                        <h3 className="text-forest font-bold leading-snug line-clamp-2 text-base lg:text-lg group-hover:text-sunset transition-colors mb-2">
+                          {article.title}
+                        </h3>
+                        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
+                          {article.excerpt}
+                        </p>
+                      </div>
+                      <div className="w-6 h-6 flex-shrink-0 rounded-full bg-sunset/20 text-sunset flex items-center justify-center transition-transform group-hover:bg-sunset group-hover:text-white self-end">
                         <ArrowRight className="w-3.5 h-3.5" />
                       </div>
                     </div>
@@ -173,10 +187,20 @@ const CasesCarouselSection = () => {
                     />
                   </div>
                   <div className="p-3.5 flex items-center justify-between gap-2">
-                    <h3 className="text-forest font-bold text-sm leading-snug line-clamp-2">
-                      {article.title}
-                    </h3>
-                    <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center flex-shrink-0">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="inline-flex px-2 py-0.5 rounded-full bg-sage/10 text-sage text-[10px] font-bold tracking-wide">
+                          {article.category}
+                        </span>
+                        <time className="text-[10px] text-gray-400">
+                          {formatDateJP(article.publishedAt)}
+                        </time>
+                      </div>
+                      <h3 className="text-forest font-bold text-sm leading-snug line-clamp-2">
+                        {article.title}
+                      </h3>
+                    </div>
+                    <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center flex-shrink-0 self-end">
                       <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>

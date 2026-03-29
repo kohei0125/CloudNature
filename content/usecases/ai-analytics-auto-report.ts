@@ -3,9 +3,10 @@ import type { UseCaseArticle } from "@/types";
 export const article: UseCaseArticle = {
   id: "ai-analytics-auto-report",
   publishedAt: "2026-03-24",
-  category: "業務効率化",
-  title: "【自社事例】月4時間のアクセス分析がゼロに——AI×自動配信で週次レポートが届く仕組み",
-  excerpt: "毎週1時間かけていたGA4・Search Consoleの分析作業を完全自動化。AIが改善アクションまで提案し、メール・スプレッドシートに自動配信。月4時間の工数をゼロにした自社事例です。",
+  category: "実践ガイド",
+  relatedServiceIds: ["ai-support", "ai", "dev"],
+  title: "週次レポート作成を自動化する方法 | GA4・Search Console・AI配信の実践例",
+  excerpt: "毎週のアクセス分析を自動配信に置き換えた自社実践をもとに、GA4・Search Console・AIを使ったレポート自動化の進め方を解説します。",
   body: `<h2>「また今週も、見られなかった」</h2>
 <p>GA4（ウェブサイトアクセス解析ツール）の管理画面を最後に開いたのは、いつですか？</p>
 <p>「やらないといけない」とわかっている。でも、管理画面にログインして、期間を設定して、数字を読み解いて、前週と比較して、スプレッドシートに転記して……。その一連の作業を思い浮かべると、つい後回しにしてしまう。</p>

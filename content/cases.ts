@@ -26,7 +26,8 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
       role: "IT企業"
     },
     link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/chat" },
-    image: "/images/meeting.jpg"
+    image: "/images/meeting.jpg",
+    relatedServiceIds: ["ai-support", "ai", "dev"]
   },
   {
     id: "ai-lms",
@@ -47,7 +48,8 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
       role: "研修サービス企業"
     },
     image: "/images/lms_banner.jpg",
-    imageMobile: "/images/top_lms_banner.jpg"
+    imageMobile: "/images/top_lms_banner.jpg",
+    relatedServiceIds: ["ai-support", "ai", "dev"]
   },
   {
     id: "marketing-automation",
@@ -67,7 +69,8 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
       author: "マーケティング担当",
       role: "マーケティング企業"
     },
-    image: "/images/marketing.jpg"
+    image: "/images/marketing.jpg",
+    relatedServiceIds: ["ai-support", "ai"]
   }
 ];
 

@@ -7,21 +7,22 @@ export const HEADER_COPY = {
 
 export const FOOTER_COPY = {
   taglineLines: [
-    "AIトランスフォーメーションで、",
-    "人手に代わる仕組みを",
-    "AIと業務自動化で、現場を変える。",
-    "開発から定着支援まで、伴走型でサポートします。"
+    "「当たり前の作業」から減らす。",
+    "AIで、人手に頼らない仕組みを",
+    "AI導入から運用まで、伴走型でサポートします。",
+    "新潟の中小企業の業務効率化パートナー。"
   ],
   serviceHeading: "Service",
   companyHeading: "Company",
   serviceLinks: [
-    { label: "システム開発", path: "/services" },
-    { label: "AIエージェント開発", path: "/services" },
-    { label: "AI活用支援", path: "/services" }
+    { label: "AI導入・伴走支援", path: "/services/ai-support" },
+    { label: "AIエージェント開発", path: "/services/ai-agent" },
+    { label: "システム開発", path: "/services/system-dev" }
   ],
   companyLinks: [
     { label: "企業情報", path: "/company" },
     { label: "導入事例", path: "/cases" },
+    { label: "AIガイド", path: "/usecases" },
     { label: "利用規約", path: "/terms" },
     { label: "プライバシーポリシー", path: "/privacy" },
     { label: "情報セキュリティ方針", path: "/security" }

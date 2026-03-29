@@ -2,14 +2,14 @@ import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/typ
 
 export const HERO_COPY = {
   imageSrc: "/images/niigata.jpeg",
-  badge: "AIを、どこよりも使いこなす開発パートナー",
+  badge: "AI導入から運用まで伴走する開発パートナー",
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
   description:
-    "人が足りない。でも、採用コストはかけられない。そんな企業の課題に、AIエージェントを活用した「即効性のある効率化」を提供します。",
+    "毎日の転記、問い合わせ対応、報告書作成——\n「仕方ない」と思っていた業務こそ、AIで最も成果が出る領域です。\nスモールスタートで、確かな一歩を。",
   primaryCta: "最短1分でAIお見積り",
   secondaryCta: "お問い合わせ",
-  heroImageAlt: "Modern office collaboration"
+  heroImageAlt: "新潟の中小企業向けAI導入支援・業務自動化パートナー クラウドネイチャー"
 };
 
 export const HERO_BENTO = {
@@ -18,13 +18,13 @@ export const HERO_BENTO = {
   caseDesc: "トップ営業のノウハウをAI化し、商談後の付帯業務を80%削減。",
   metricLabel: "IMPACT",
   aiCard: {
-    description: "24時間稼働の「デジタル社員」。\nAIや各種ツールと連携し\n単純作業から高度な判断業務まで\nAIがあなたに代行",
+    description: "AIと各種ツールが連携し、\n業務の自動化から判断支援まで\nチームの生産性を高めます",
     tags: ["AI", "LINE", "Notion", "Gmail", "Slack"]
   },
   metricCard: {
     value: "2.5",
     unit: "x",
-    description: "業務効率化の成果\n定型業務を自動化。\n残った80%を、創造化。\nより付加価値の高い営業や\n戦略立案へ"
+    description: "業務効率化の成果\n定型業務を自動化し、\nより付加価値の高い業務へ\nリソースをシフト"
   }
 };
 
@@ -41,22 +41,22 @@ export const MISSION_COPY = {
 
 export const VALUES: ValueProp[] = [
   {
-    title: "VALUE 1: 実用本位のエンジニアリング",
-    displayTitle: "実用本位のエンジニアリング",
-    subtitle: "Practical Engineering",
-    description: "「本当に必要な機能」だけを、適正価格で。大手が提案する高額なパッケージではなく、御社の業務フローに合わせた最小構成で開発します。結果、導入コストは半分以下、運用負担もゼロに近づけます。"
+    title: "VALUE 1: スモールスタートで、確かな成果を",
+    displayTitle: "スモールスタートで、確かな成果を",
+    subtitle: "Start Small, Deliver Results",
+    description: "大規模なDXプロジェクトにはしません。まず1つの業務から始めて、効果を確認してから広げる。御社の業務フローに合わせた最小構成で、導入コストを抑えながら確実に成果を出します。"
   },
   {
-    title: "VALUE 2: 運用まで見据えた伴走",
-    displayTitle: "運用まで見据えた伴走",
+    title: "VALUE 2: 導入後も、使える状態になるまで伴走",
+    displayTitle: "導入後も、使える状態になるまで伴走",
     subtitle: "Sustainable Partnership",
-    description: "導入後の運用サポート、現場向けマニュアル作成、そして社員研修まで。「使われないシステム」を作らないために、CloudNatureは御社の一員として動きます。急なトラブルにも、新潟市内なら即日訪問対応が可能です。"
+    description: "手順書・研修・例外対応まで含めて「運用が回る形」に。「使われないシステム」を作らないために、CloudNatureは御社の一員として動きます。急なトラブルにも、新潟市内なら即日訪問対応が可能です。"
   },
   {
-    title: "VALUE 3: 誠実な実装、確実な成果",
-    displayTitle: "誠実な実装、確実な成果",
-    subtitle: "Integrity & Results",
-    description: "見積もりから納品まで、すべてのプロセスを明確にお伝えします。追加費用が発生する場合は必ず事前相談。新潟の企業様との長期的な信頼関係を、誠実な仕事の積み重ねで築きます。"
+    title: "VALUE 3: できること・できないことを、正直に伝える",
+    displayTitle: "できること・できないことを、正直に伝える",
+    subtitle: "Integrity & Trust",
+    description: "AIで解決できる領域と、システム開発が必要な領域を正直にお伝えします。見積もりから納品まで、すべてのプロセスを明確に。新潟の企業様との長期的な信頼関係を、誠実な仕事の積み重ねで築きます。"
   }
 ];
 
@@ -68,11 +68,18 @@ export const SERVICES_SECTION = {
 
 export const SERVICES: ServiceItem[] = [
   {
-    id: "dev",
-    title: "システム開発",
-    description: "新規システムのゼロからの構築はもちろん、既存の業務システムを活かした機能追加・連携まで幅広く対応。「全部作り直し」に縛られない、予算や課題に合わせた柔軟な開発をご提案します。",
-    features: ["新規業務システム・Webアプリ開発", "既存システムへの機能追加・連携", "業務効率化・自動化システム"],
-    techStack: ["Python", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
+    id: "ai-support",
+    title: "AI導入・伴走支援",
+    description:
+      "「何から始めればいいか分からない」から、「現場でAIが動いている」までを伴走。まずヒアリングで自動化できる業務を特定し、経営者向けスクールまたは法人導入伴走の2つのパスで支援します。",
+    features: [
+      "ヒアリングで自動化余地を診断",
+      "法人向けAI導入コンサルティング・伴走支援",
+      "経営者・社員向けAIセミナー・研修の実施"
+    ],
+    techStack: ["AI導入診断", "法人研修", "個別スクール", "オンライン対応"],
+    ctaUrl: "https://niigata-ai-academy.com",
+    ctaLabel: "新潟AIアカデミーを見る"
   },
   {
     id: "ai",
@@ -82,18 +89,11 @@ export const SERVICES: ServiceItem[] = [
     techStack: ["AIエージェント構築", "業務自動化プラットフォーム", "OpenAI", "Gemini"]
   },
   {
-    id: "ai-training",
-    title: "AI活用支援",
-    description:
-      "「AIを使いたいけど、何から始めれば？」を最短1ヶ月で解決。未経験の社員でも資料作成時間を3時間→30分に短縮した実績あり。セミナー・個別スクール・法人研修で、御社に最適なAI人材育成を実現します。",
-    features: [
-      "未経験から最短1ヶ月でAI業務活用スキルを習得",
-      "法人向けAIセミナー・社員研修の実施",
-      "受講後の継続サポートと全額返金保証"
-    ],
-    techStack: ["セミナー", "個別スクール", "法人研修", "オンライン対応"],
-    ctaUrl: "https://niigata-ai-academy.com",
-    ctaLabel: "新潟AIアカデミーを見る"
+    id: "dev",
+    title: "システム開発",
+    description: "新規システムのゼロからの構築はもちろん、既存の業務システムを活かした機能追加・連携まで幅広く対応。「全部作り直し」に縛られない、予算や課題に合わせた柔軟な開発をご提案します。",
+    features: ["新規業務システム・Webアプリ開発", "既存システムへの機能追加・連携", "業務効率化・自動化システム"],
+    techStack: ["Python", "PHP（Web開発）", "React（高速UI）", "AWS（安定基盤）"]
   }
 ];
 
@@ -208,13 +208,13 @@ export const NEWS_ITEMS: NewsItem[] = [
 
 export const CTA_BANNER = {
   eyebrow: "CONSULTATION",
-  titleLines: ["会社の「自動化余地」を、", "30分で無料診断。"],
+  titleLines: ["まずは、お気軽に", "ご相談ください。"],
   description:
-    "どの業務がAI化できるのか、導入コストはいくらか、何ヶ月で元が取れるのか——経営判断に必要な数字を、すべてお見せします。",
+    "AI導入の可能性や費用感について、30分の無料相談で率直にお話しします。",
   appealPoints: [
-    "御社の業務から「自動化できる工程」を特定",
-    "導入コストと回収期間を具体的に試算",
-    "最適な技術スタックと導入ステップをご提案"
+    "御社の業務をお伺いし、AI活用の方向性を整理",
+    "費用感やスケジュールを率直にご説明",
+    "無理な営業は一切いたしません"
   ],
   bookHighlights: [
     "AIエージェントの基礎知識",

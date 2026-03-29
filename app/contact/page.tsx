@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { CONTACT_HERO, STEP_FLOW_TITLE } from "@/content/contact";
+import { CONTACT_HERO, CONTACT_FAQ, STEP_FLOW_TITLE } from "@/content/contact";
 import PageHero from "@/components/shared/PageHero";
 import ContactForm from "@/components/contact/ContactForm";
 import StepFlow from "@/components/contact/StepFlow";
 import AlternativeContact from "@/components/contact/AlternativeContact";
 import ContactFaq from "@/components/contact/ContactFaq";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.contact.title,
@@ -38,11 +38,13 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   const breadcrumb = breadcrumbJsonLd([{ name: "お問い合わせ", path: "/contact" }]);
 
+  const faqSchema = faqPageJsonLd(CONTACT_FAQ);
+
   return (
     <div className="w-full bg-cream">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, faqSchema]) }}
       />
       <PageHero
         eyebrow={CONTACT_HERO.eyebrow}

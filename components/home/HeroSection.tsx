@@ -56,10 +56,15 @@ const HeroSection = () => {
               </h1>
 
               <p
-                className="text-sm md:text-base text-white leading-relaxed max-w-xl mb-6 md:mb-8 font-medium rounded-lg bg-black/10 backdrop-blur-[1px] px-3 py-2 rounded-md"
+                className="text-sm md:text-base text-white leading-relaxed max-w-[600px] mb-6 md:mb-8 font-medium rounded-lg bg-black/10 backdrop-blur-[1px] px-3 py-2 rounded-md"
                 style={{ animation: "hero-text-up 600ms ease-out both", animationDelay: "200ms" }}
               >
-                {HERO_COPY.description}
+                {HERO_COPY.description.split('\n').map((line, i, arr) => (
+                  <span key={i}>
+                    {line}
+                    {i < arr.length - 1 && <br className="hidden md:block" />}
+                  </span>
+                ))}
               </p>
 
               {/* CTA */}

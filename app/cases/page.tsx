@@ -7,6 +7,8 @@ import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
+import RelatedLinks from "@/components/shared/RelatedLinks";
+import { SERVICE_PAGE_MAP } from "@/content/services";
 
 export const metadata: Metadata = {
   title: PAGE_META.cases.title,
@@ -69,6 +71,15 @@ export default function CasesPage() {
           ))}
         </div>
       </section>
+      <RelatedLinks
+        eyebrow="SERVICES"
+        title="関連するサービス"
+        items={Object.values(SERVICE_PAGE_MAP).map((s) => ({
+          label: s.title,
+          href: s.path,
+          description: "サービス詳細",
+        }))}
+      />
       <CtaBanner
         eyebrow={CASES_CTA.eyebrow}
         title={CASES_CTA.title}

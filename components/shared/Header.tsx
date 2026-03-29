@@ -74,7 +74,7 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8" aria-label="メインナビゲーション">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8" aria-label="メインナビゲーション">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.path}
