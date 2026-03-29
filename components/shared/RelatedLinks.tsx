@@ -34,7 +34,7 @@ const RelatedLinks = ({
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((item) => (
             <Link
-              key={item.href}
+              key={`${item.href}:${item.label}`}
               href={item.href}
               className="group flex items-center justify-between gap-3 bg-white rounded-xl px-5 py-4 border border-gray-100 hover:border-sage/30 hover:shadow-sm transition-all"
             >

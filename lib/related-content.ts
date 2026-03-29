@@ -9,8 +9,12 @@ export function getRelatedLinksForService(serviceId: string): RelatedLinkItem[] 
   const relatedCases = CASE_STUDY_DETAILS.filter(
     (c) => c.relatedServiceIds?.includes(serviceId)
   );
-  for (const c of relatedCases) {
-    links.push({ label: c.title, href: "/cases", description: "導入事例" });
+  if (relatedCases.length > 0) {
+    links.push({
+      label: "関連する導入事例を見る",
+      href: "/cases",
+      description: `${relatedCases.length}件の関連事例`
+    });
   }
 
   const relatedUsecases = USECASES_ARTICLES.filter(
