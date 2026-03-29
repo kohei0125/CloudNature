@@ -11,7 +11,13 @@ export default function robots(): MetadataRoute.Robots {
   }
 
   return {
-    rules: { userAgent: "*", allow: "/" },
+    rules: [
+      { userAgent: "*", allow: "/" },
+      { userAgent: "OAI-SearchBot", allow: "/" },
+      { userAgent: "GPTBot", disallow: "/" },
+      { userAgent: "Google-Extended", disallow: "/" },
+      { userAgent: "ClaudeBot", disallow: "/" },
+    ],
     sitemap: `${CANONICAL_SITE_URL}/sitemap.xml`,
   };
 }
