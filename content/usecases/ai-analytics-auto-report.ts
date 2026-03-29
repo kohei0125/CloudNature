@@ -4,6 +4,7 @@ export const article: UseCaseArticle = {
   id: "ai-analytics-auto-report",
   publishedAt: "2026-03-24",
   category: "業務効率化",
+  relatedServiceIds: ["ai-support", "ai", "dev"],
   title: "【自社事例】月4時間のアクセス分析がゼロに——AI×自動配信で週次レポートが届く仕組み",
   excerpt: "毎週1時間かけていたGA4・Search Consoleの分析作業を完全自動化。AIが改善アクションまで提案し、メール・スプレッドシートに自動配信。月4時間の工数をゼロにした自社事例です。",
   body: `<h2>「また今週も、見られなかった」</h2>

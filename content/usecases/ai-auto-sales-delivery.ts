@@ -4,6 +4,7 @@ export const article: UseCaseArticle = {
   id: "ai-auto-sales-delivery",
   publishedAt: "2026-03-27",
   category: "業務効率化",
+  relatedServiceIds: ["ai-support", "ai"],
   title: "寝ている間にAIが案件を獲得!? 完全自動化された「無人営業＆納品」システム",
   excerpt: "AIエージェントがクラウドソーシングから案件を自動で探し、応募し、納品物まで作成。株式会社honkoma・林拓海氏が1晩で10万円分の案件を獲得した驚異の「無人営業＆納品」システムの全貌を解説します。",
   body: `<h2>あなたが寝ている間に、「AI社員」が稼いでくれたら？</h2>

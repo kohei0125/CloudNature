@@ -1,6 +1,12 @@
 import { ServiceDetail, FlowStep, PricingItem, FaqItem } from "@/types";
 import { ESTIMATE_URL } from "@/content/common";
 
+export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> = {
+  "ai-support": { title: "AI導入・伴走支援", path: "/services/ai-support" },
+  "ai": { title: "AIエージェント開発", path: "/services/ai-agent" },
+  "dev": { title: "システム開発", path: "/services/system-dev" },
+};
+
 export const SERVICES_HERO = {
   eyebrow: "SOLUTIONS",
   title: "必要な分だけ、確かな技術を",

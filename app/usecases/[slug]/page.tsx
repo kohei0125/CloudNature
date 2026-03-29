@@ -11,6 +11,8 @@ import NewsBody from "@/components/news/NewsBody";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
+import RelatedLinks from "@/components/shared/RelatedLinks";
+import { getRelatedServicesLinks } from "@/lib/related-content";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -137,6 +139,15 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
       {article.body.includes("twitter-tweet") && (
         <Script src="https://platform.twitter.com/widgets.js" strategy="lazyOnload" />
       )}
+
+      <RelatedLinks
+        eyebrow="SERVICES"
+        title="関連するサービス"
+        items={[
+          ...getRelatedServicesLinks(article.relatedServiceIds),
+          { label: "お問い合わせ・無料相談", href: "/contact", description: "まずはお気軽にご相談ください" },
+        ]}
+      />
 
       <CtaBanner
         eyebrow={CASES_CTA.eyebrow}

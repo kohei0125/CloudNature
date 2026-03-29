@@ -7,8 +7,11 @@ import ServicesFaq from "@/components/services/ServicesFaq";
 import CtaBanner from "@/components/shared/CtaBanner";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd } from "@/lib/structured-data";
+import RelatedLinks from "@/components/shared/RelatedLinks";
+import { getRelatedLinksForService } from "@/lib/related-content";
 
 const service = SERVICE_DETAILS.find((s) => s.id === "dev")!;
+const relatedLinks = getRelatedLinksForService("dev");
 
 export const metadata: Metadata = {
   title: PAGE_META.servicesSystemDev.title,
@@ -56,6 +59,8 @@ export default function SystemDevPage() {
       </section>
 
       <ServicesFaq items={SYSTEM_DEV_FAQ} />
+
+      <RelatedLinks eyebrow="RELATED" title="関連する事例・コンテンツ" items={relatedLinks} />
 
       <CtaBanner
         title={SERVICES_BOTTOM_CTA.title}
