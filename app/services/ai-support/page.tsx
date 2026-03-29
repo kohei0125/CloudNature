@@ -1,0 +1,68 @@
+import type { Metadata } from "next";
+import { PAGE_META } from "@/content/common";
+import { SERVICE_DETAILS, AI_SUPPORT_FAQ, SERVICES_BOTTOM_CTA } from "@/content/services";
+import PageHero from "@/components/shared/PageHero";
+import ServiceDetailCard from "@/components/services/ServiceDetailCard";
+import ServicesFaq from "@/components/services/ServicesFaq";
+import CtaBanner from "@/components/shared/CtaBanner";
+import { ScrollReveal } from "@/components/shared/ScrollReveal";
+import { breadcrumbJsonLd, faqPageJsonLd, serviceJsonLd } from "@/lib/structured-data";
+
+const service = SERVICE_DETAILS.find((s) => s.id === "ai-support")!;
+
+export const metadata: Metadata = {
+  title: PAGE_META.servicesAiSupport.title,
+  description: PAGE_META.servicesAiSupport.description,
+  openGraph: {
+    title: PAGE_META.servicesAiSupport.title,
+    description: PAGE_META.servicesAiSupport.description,
+    type: "website",
+    locale: "ja_JP",
+    url: "https://cloudnature.jp/services/ai-support",
+    images: [{ url: "/images/og-img.jpg", width: 1200, height: 630, alt: service.title }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_META.servicesAiSupport.title,
+    description: PAGE_META.servicesAiSupport.description,
+  },
+  alternates: { canonical: "https://cloudnature.jp/services/ai-support" },
+};
+
+export default function AiSupportPage() {
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "サービス", path: "/services" },
+    { name: service.title, path: "/services/ai-support" },
+  ]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd(service), faqPageJsonLd(AI_SUPPORT_FAQ)]) }}
+      />
+      <PageHero
+        eyebrow="AI CONSULTING & SUPPORT"
+        title={service.title}
+        description={service.description}
+      />
+
+      <section className="py-16 md:py-24 bg-linen">
+        <div className="container mx-auto px-6">
+          <ScrollReveal variant="fade-up">
+            <ServiceDetailCard service={service} index={0} />
+          </ScrollReveal>
+        </div>
+      </section>
+
+      <ServicesFaq items={AI_SUPPORT_FAQ} />
+
+      <CtaBanner
+        title={SERVICES_BOTTOM_CTA.title}
+        description={SERVICES_BOTTOM_CTA.description}
+        primaryCta={SERVICES_BOTTOM_CTA.primaryCta}
+        secondaryCta={SERVICES_BOTTOM_CTA.secondaryCta}
+      />
+    </>
+  );
+}
