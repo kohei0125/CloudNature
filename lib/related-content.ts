@@ -33,6 +33,6 @@ export function getRelatedServicesLinks(serviceIds: string[] | undefined): Relat
   if (!serviceIds || serviceIds.length === 0) return [];
   return serviceIds
     .map((id) => SERVICE_PAGE_MAP[id])
-    .filter(Boolean)
+    .filter((s): s is { title: string; path: string } => Boolean(s))
     .map((s) => ({ label: s.title, href: s.path, description: "サービス詳細" }));
 }

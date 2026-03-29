@@ -12,21 +12,6 @@ export const HERO_COPY = {
   heroImageAlt: "新潟の中小企業向けAI導入支援・業務自動化パートナー クラウドネイチャー"
 };
 
-export const HERO_BENTO = {
-  caseBadge: "Case Study",
-  caseTitle: "営業DX：ナレッジ展開と商談自動化",
-  caseDesc: "トップ営業のノウハウをAI化し、商談後の付帯業務を80%削減。",
-  metricLabel: "IMPACT",
-  aiCard: {
-    description: "AIと各種ツールが連携し、\n業務の自動化から判断支援まで\nチームの生産性を高めます",
-    tags: ["AI", "LINE", "Notion", "Gmail", "Slack"]
-  },
-  metricCard: {
-    value: "2.5",
-    unit: "x",
-    description: "業務効率化の成果\n定型業務を自動化し、\nより付加価値の高い業務へ\nリソースをシフト"
-  }
-};
 
 export const MISSION_COPY = {
   eyebrow: "OUR PROMISE",
