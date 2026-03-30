@@ -50,7 +50,7 @@ export default function CasesPage() {
         title={CASES_HERO.title}
         description={CASES_HERO.description}
       />
-      <section className="py-16 md:py-24 bg-mist">
+      <section id="cases-list" className="py-16 md:py-24 bg-mist">
         <div className="container mx-auto px-6 space-y-16 md:space-y-20">
           {CASE_STUDY_DETAILS.map((study, index) => (
             <div key={study.id}>

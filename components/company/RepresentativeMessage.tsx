@@ -5,7 +5,7 @@ const RepresentativeMessage = () => {
   const [firstParagraph, ...restParagraphs] = REPRESENTATIVE_MESSAGE.paragraphs;
 
   return (
-    <section className="py-16 md:py-24 bg-white texture-grain">
+    <section id="representative" aria-labelledby="representative-heading" className="py-16 md:py-24 bg-white texture-grain">
       <div className="container mx-auto px-6 max-w-3xl relative">
         <span className="absolute -top-4 left-0 text-[6rem] font-serif leading-none text-sunset/10 pointer-events-none select-none">
           &ldquo;
@@ -13,6 +13,7 @@ const RepresentativeMessage = () => {
 
         <SectionHeader
           eyebrow={REPRESENTATIVE_MESSAGE.eyebrow}
+          headingId="representative-heading"
           title={REPRESENTATIVE_MESSAGE.title}
           centered
         />

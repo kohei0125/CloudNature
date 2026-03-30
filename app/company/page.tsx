@@ -57,7 +57,7 @@ export default function CompanyPage() {
         <CompanyOverview />
       </ScrollReveal>
 
-      <section className="pb-8 bg-white">
+      <section id="company-info" className="pb-8 bg-white">
         <div className="container mx-auto px-6 max-w-2xl">
           <InlineCta
             title={COMPANY_MID_CTA.text}

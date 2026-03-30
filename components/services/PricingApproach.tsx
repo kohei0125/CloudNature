@@ -14,9 +14,9 @@ const accents = [
 
 const PricingApproach = () => {
   return (
-    <section className="py-16 md:py-24 bg-white texture-grain">
+    <section id="pricing" aria-labelledby="pricing-heading" className="py-16 md:py-24 bg-white texture-grain">
       <div className="container mx-auto px-6">
-        <SectionHeader eyebrow="PRICING" title="料金の考え方" centered />
+        <SectionHeader eyebrow="PRICING" title="料金の考え方" centered headingId="pricing-heading" />
 
         <div className="grid md:grid-cols-3 gap-4 md:gap-8">
           {PRICING_APPROACH.map((item, index) => {

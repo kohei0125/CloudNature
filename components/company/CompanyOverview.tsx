@@ -3,7 +3,7 @@ import { COMPANY_OVERVIEW } from "@/content/company";
 
 const CompanyOverview = () => {
   return (
-    <section className="py-16 md:py-24 bg-mist texture-grain relative overflow-hidden">
+    <section id="overview" aria-labelledby="overview-heading" className="py-16 md:py-24 bg-mist texture-grain relative overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-20 -left-32 w-80 h-80 bg-cloud rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none" />
       <div className="absolute bottom-20 -right-32 w-80 h-80 bg-sage rounded-full mix-blend-multiply filter blur-3xl opacity-15 pointer-events-none" />
@@ -13,6 +13,7 @@ const CompanyOverview = () => {
           eyebrow="OVERVIEW"
           title="会社概要"
           centered
+          headingId="overview-heading"
         />
 
         <div className="glass-card rounded-2xl overflow-hidden">

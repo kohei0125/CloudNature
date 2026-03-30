@@ -6,13 +6,13 @@ import { IMPLEMENTATION_FLOW } from "@/content/services";
 
 const ImplementationFlow = () => {
   return (
-    <section className="py-16 md:py-24 bg-mist relative overflow-hidden">
+    <section id="implementation" aria-labelledby="implementation-heading" className="py-16 md:py-24 bg-mist relative overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-20 -left-32 w-64 h-64 bg-sage/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-20 -right-32 w-64 h-64 bg-sunset/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <SectionHeader eyebrow="PROCESS" title="導入の流れ" centered />
+        <SectionHeader eyebrow="PROCESS" title="導入の流れ" centered headingId="implementation-heading" />
 
         {/* Desktop: horizontal timeline */}
         <div className="hidden lg:block relative">
@@ -40,9 +40,9 @@ const ImplementationFlow = () => {
                 <div className="w-12 h-12 rounded-xl bg-forest text-white center text-sm font-bold relative z-10">
                   {String(item.step).padStart(2, "0")}
                 </div>
-                <h4 className="font-bold text-forest text-base mt-4 mb-2">
+                <h3 className="font-bold text-forest text-base mt-4 mb-2">
                   {item.title}
-                </h4>
+                </h3>
                 <p className="text-gray-600 text-xs leading-relaxed">
                   {item.description}
                 </p>
@@ -78,9 +78,9 @@ const ImplementationFlow = () => {
                 )}
               </div>
               <div className="p-4 rounded-xl bg-white/70 border border-forest/5 shadow-sm flex-1 mb-2">
-                <h4 className="font-bold text-forest text-base">
+                <h3 className="font-bold text-forest text-base">
                   {item.title}
-                </h4>
+                </h3>
                 <p className="text-gray-600 text-sm leading-relaxed mt-1">
                   {item.description}
                 </p>

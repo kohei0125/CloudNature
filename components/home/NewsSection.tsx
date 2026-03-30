@@ -60,7 +60,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
   };
 
   return (
-    <section className="bg-mist py-16 md:py-24 overflow-hidden">
+    <section id="news" aria-labelledby="news-heading" className="bg-mist py-16 md:py-24 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader
           eyebrow={NEWS_SECTION.eyebrow}
@@ -68,6 +68,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
           cta={NEWS_SECTION.cta}
           eyebrowColor="text-sunset"
           ctaDesktopOnly
+          headingId="news-heading"
         />
       </div>
 

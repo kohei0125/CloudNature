@@ -9,7 +9,7 @@ interface LegalDocumentProps {
 
 const LegalDocument = ({ sections, relatedLink }: LegalDocumentProps) => {
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section id="legal-content" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-6 max-w-3xl">
         <div className="space-y-10">
           {sections.map((section, index) => (

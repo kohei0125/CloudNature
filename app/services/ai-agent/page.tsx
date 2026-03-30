@@ -50,7 +50,7 @@ export default function AiAgentPage() {
         description={service.description}
       />
 
-      <section className="py-16 md:py-24 bg-linen">
+      <section id="service-detail" className="py-16 md:py-24 bg-linen">
         <div className="container mx-auto px-6">
           <ScrollReveal variant="fade-up">
             <ServiceDetailCard service={service} index={0} />

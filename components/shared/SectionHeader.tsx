@@ -12,6 +12,8 @@ interface SectionHeaderProps {
   eyebrowColor?: string;
   /** CTA をデスクトップのみ表示（モバイルで非表示） */
   ctaDesktopOnly?: boolean;
+  /** h2 に付与する id（aria-labelledby 連携用） */
+  headingId?: string;
 }
 
 const SectionHeader = ({
@@ -22,6 +24,7 @@ const SectionHeader = ({
   darkMode = false,
   eyebrowColor = "text-sage",
   ctaDesktopOnly = false,
+  headingId,
 }: SectionHeaderProps) => {
   if (centered) {
     return (
@@ -29,7 +32,7 @@ const SectionHeader = ({
         <p className={cn("text-sm font-bold tracking-widest mb-3 uppercase", eyebrowColor)}>
           {eyebrow}
         </p>
-        <h2 className={cn("text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
+        <h2 id={headingId} className={cn("text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>
@@ -40,7 +43,7 @@ const SectionHeader = ({
     <div className="v-stack md:h-stack justify-between items-end mb-8 md:mb-16 gap-6">
       <div className="mx-auto md:mx-0 text-center md:text-left">
         <p className={cn("text-sm font-bold tracking-widest mb-3 uppercase", eyebrowColor)}>{eyebrow}</p>
-        <h2 className={cn("text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
+        <h2 id={headingId} className={cn("text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold", darkMode ? "text-white" : "text-forest")}>
           {title}
         </h2>
       </div>

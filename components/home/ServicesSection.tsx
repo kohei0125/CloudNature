@@ -11,12 +11,13 @@ const topBorders: Record<number, string> = {
 
 const ServicesSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-mist texture-grain overflow-hidden">
+    <section id="services" aria-labelledby="services-heading" className="py-16 md:py-24 bg-mist texture-grain overflow-hidden">
       <div className="container mx-auto px-6">
         <SectionHeader
           eyebrow={SERVICES_SECTION.eyebrow}
           title={SERVICES_SECTION.title}
           cta={{ label: SERVICES_SECTION.cta, href: "/services" }}
+          headingId="services-heading"
         />
 
         <div className="grid lg:grid-cols-3">

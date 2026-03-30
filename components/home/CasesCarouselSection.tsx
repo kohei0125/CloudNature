@@ -67,7 +67,7 @@ const CasesCarouselSection = () => {
   }, [spApi, onSpSelect]);
 
   return (
-    <section className="bg-mist py-16 md:py-24 overflow-hidden">
+    <section id="usecases" aria-labelledby="usecases-heading" className="bg-mist py-16 md:py-24 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader
           eyebrow={USECASES_SECTION.eyebrow}
@@ -75,6 +75,7 @@ const CasesCarouselSection = () => {
           cta={USECASES_SECTION.cta}
           eyebrowColor="text-sunset"
           ctaDesktopOnly
+          headingId="usecases-heading"
         />
       </div>
 

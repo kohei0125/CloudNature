@@ -11,23 +11,27 @@ interface RelatedLinksProps {
   eyebrow?: string;
   title?: string;
   items: RelatedLinkItem[];
+  /** section に付与する id（複数配置時の衝突回避用） */
+  id?: string;
 }
 
 const RelatedLinks = ({
   eyebrow = "RELATED",
   title = "関連ページ",
   items,
+  id = "related",
 }: RelatedLinksProps) => {
+  const headingId = `${id}-heading`;
   if (items.length === 0) return null;
 
   return (
-    <section className="py-12 md:py-16 bg-linen">
+    <section id={id} aria-labelledby={headingId} className="py-12 md:py-16 bg-linen">
       <div className="container mx-auto px-6 max-w-4xl">
         <div className="text-center mb-8">
           <p className="text-sm font-bold tracking-widest mb-2 uppercase text-sage">
             {eyebrow}
           </p>
-          <h2 className="text-lg md:text-xl font-serif font-bold text-forest">
+          <h2 id={headingId} className="text-lg md:text-xl font-serif font-bold text-forest">
             {title}
           </h2>
         </div>

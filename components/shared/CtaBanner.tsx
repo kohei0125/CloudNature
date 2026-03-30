@@ -7,18 +7,21 @@ interface CtaBannerProps {
   description: string;
   primaryCta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
+  /** section に付与する id（複数配置時の衝突回避用） */
+  id?: string;
 }
 
-const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta }: CtaBannerProps) => {
+const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id = "cta-banner" }: CtaBannerProps) => {
+  const headingId = `${id}-heading`;
   return (
-    <section className="py-16 md:py-24 bg-forest text-white relative overflow-hidden texture-grain">
+    <section id={id} aria-labelledby={headingId} className="py-16 md:py-24 bg-forest text-white relative overflow-hidden texture-grain">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_70%,#DD9348,transparent_25%),radial-gradient(circle_at_50%_50%,#C8E8FF,transparent_30%)]"></div>
 
       <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
         {eyebrow ? (
           <p className="text-sm font-bold tracking-widest text-sage mb-4 uppercase">{eyebrow}</p>
         ) : null}
-        <h2 className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold mb-6">
+        <h2 id={headingId} className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold mb-6">
           {title}
         </h2>
         <p className="text-white/70 leading-relaxed mb-10 max-w-2xl mx-auto">

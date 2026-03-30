@@ -3,13 +3,13 @@ import { MISSION_COPY, VALUES } from "@/content/home";
 
 const MissionSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
+    <section id="mission" aria-labelledby="mission-heading" className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-20 items-center">
           {/* Left Column: Text */}
           <div className="text-center md:text-left z-10 relative">
             <p className="text-sm font-bold tracking-widest text-sage mb-4">{MISSION_COPY.eyebrow}</p>
-            <h2 className="text-[clamp(1.375rem,4vw,2.25rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
+            <h2 id="mission-heading" className="text-[clamp(1.375rem,4vw,2.25rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
               {MISSION_COPY.title}
             </h2>
             <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">
@@ -77,7 +77,7 @@ const MissionSection = () => {
           <ul>
             {VALUES.map((value, index) => (
               <li key={index}>
-                <h4>{value.title}</h4>
+                <h3>{value.title}</h3>
                 <p>{value.description}</p>
               </li>
             ))}

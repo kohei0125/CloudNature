@@ -53,7 +53,7 @@ export default function ContactPage() {
       />
       {/* Form + Step Flow 2-column layout */}
       <ScrollReveal>
-        <section className="py-16 md:py-24">
+        <section id="contact-form" className="py-16 md:py-24">
           <div className="container mx-auto px-6">
             <div className="grid md:grid-cols-5 gap-8 md:gap-12">
               <div className="md:col-span-3">

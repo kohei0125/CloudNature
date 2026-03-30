@@ -4,12 +4,13 @@ import { COMPANY_ACCESS } from "@/content/company";
 
 const AccessSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-white texture-grain">
+    <section id="access" aria-labelledby="access-heading" className="py-16 md:py-24 bg-white texture-grain">
       <div className="container mx-auto px-6 max-w-3xl">
         <SectionHeader
           eyebrow={COMPANY_ACCESS.eyebrow}
           title={COMPANY_ACCESS.title}
           centered
+          headingId="access-heading"
         />
 
         <div className="glass-card rounded-2xl p-8 md:p-10">

@@ -6,12 +6,13 @@ import SectionHeader from "@/components/shared/SectionHeader";
 
 const CasesSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-forest text-white relative overflow-hidden">
+    <section id="cases" aria-labelledby="cases-heading" className="py-16 md:py-24 bg-forest text-white relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         <SectionHeader
           eyebrow={CASES_SECTION.eyebrow}
           title={CASES_SECTION.title}
           darkMode
+          headingId="cases-heading"
         />
 
         <div className="grid md:grid-cols-3 gap-8">

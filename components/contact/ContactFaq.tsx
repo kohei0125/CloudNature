@@ -4,9 +4,9 @@ import { CONTACT_FAQ } from "@/content/contact";
 
 const ContactFaq = () => {
   return (
-    <section className="py-16 md:py-24">
+    <section id="contact-faq" aria-labelledby="contact-faq-heading" className="py-16 md:py-24">
       <div className="container mx-auto px-6">
-        <SectionHeader eyebrow="FAQ" title="よくあるご質問" centered />
+        <SectionHeader eyebrow="FAQ" title="よくあるご質問" centered headingId="contact-faq-heading" />
         <div className="max-w-3xl mx-auto">
           <FaqAccordion items={CONTACT_FAQ} />
         </div>

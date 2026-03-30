@@ -6,7 +6,7 @@ import { ESTIMATE_URL } from "@/content/common";
 
 const HeroSection = () => {
   return (
-    <section>
+    <section id="hero">
       {/* ヘッダー分のスペーサー */}
       <div className="pt-[52px] md:pt-16" />
 

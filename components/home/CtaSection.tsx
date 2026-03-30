@@ -5,14 +5,14 @@ import { CTA_BANNER } from "@/content/home";
 
 const CtaSection = () => {
   return (
-    <section className="py-16 md:py-24 bg-pebble relative">
+    <section id="cta" aria-labelledby="cta-heading" className="py-16 md:py-24 bg-pebble relative">
       <div className="container mx-auto px-6 relative z-10">
         <div className="bg-white rounded-[32px] overflow-hidden shadow-xl grid md:grid-cols-2">
 
           {/* Left Column: Content */}
           <div className="p-8 md:p-16 space-y-8 v-stack justify-center">
             <div>
-              <h2 className="text-[clamp(1.25rem,5vw,1.75rem)] font-serif font-bold text-forest leading-tight mb-4">
+              <h2 id="cta-heading" className="text-[clamp(1.25rem,5vw,1.75rem)] font-serif font-bold text-forest leading-tight mb-4">
                 {CTA_BANNER.titleLines[0]}
                 <br />
                 {CTA_BANNER.titleLines[1]}
@@ -30,7 +30,7 @@ const CtaSection = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="font-bold text-forest text-sm mb-1">業務自動化マニュアル</h4>
+                    <h3 className="font-bold text-forest text-sm mb-1">業務自動化マニュアル</h3>
                     <p className="mt-2 text-xs leading-relaxed text-sage">
                       無料相談にご参加いただいた方へお渡ししています。
                     </p>

@@ -81,7 +81,7 @@ export default function UseCasesPage() {
         )}
       />
 
-      <section className="py-8 md:py-24 bg-white">
+      <section id="usecases-list" className="py-8 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 md:px-6">
 
           <p className="hidden md:block text-sm text-gray-500 text-right mb-8">

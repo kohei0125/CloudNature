@@ -15,11 +15,13 @@ interface PageHeroProps {
   title: string;
   description?: ReactNode;
   bgColor?: string;
+  /** section に付与する id */
+  id?: string;
 }
 
-const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA" }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id }: PageHeroProps) => {
   return (
-    <section className="pt-32 pb-16 relative overflow-hidden texture-grain" style={{ backgroundColor: bgColor }}>
+    <section id={id} className="pt-32 pb-16 relative overflow-hidden texture-grain" style={{ backgroundColor: bgColor }}>
       {heroBlobs}
 
       <div className="container mx-auto px-6 relative z-10 text-center">

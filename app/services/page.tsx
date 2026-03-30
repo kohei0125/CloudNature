@@ -63,7 +63,7 @@ export default function ServicesPage() {
         description={SERVICES_HERO.description}
       />
 
-      <section className="py-16 md:py-24 bg-linen">
+      <section id="service-list" className="py-16 md:py-24 bg-linen">
         <div className="container mx-auto px-6 space-y-16 md:space-y-20">
           {SERVICE_DETAILS.map((service, index) => (
             <ScrollReveal key={service.id} variant="fade-up" delay={index * 0.1}>
