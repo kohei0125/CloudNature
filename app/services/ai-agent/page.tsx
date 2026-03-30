@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { SERVICE_DETAILS, AI_AGENT_FAQ, SERVICES_BOTTOM_CTA } from "@/content/services";
+import { SERVICE_DETAILS, AI_AGENT_FAQ, SERVICES_BOTTOM_CTA, SERVICE_PAGE_MAP } from "@/content/services";
 import PageHero from "@/components/shared/PageHero";
 import ServiceDetailCard from "@/components/services/ServiceDetailCard";
 import ServicesFaq from "@/components/services/ServicesFaq";
@@ -42,7 +42,7 @@ export default function AiAgentPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd(service), faqPageJsonLd(AI_AGENT_FAQ)]) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd({ ...service, path: SERVICE_PAGE_MAP[service.id].path }), faqPageJsonLd(AI_AGENT_FAQ)]) }}
       />
       <PageHero
         eyebrow="AI AGENT DEVELOPMENT"

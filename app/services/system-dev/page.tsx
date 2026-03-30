@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { SERVICE_DETAILS, SYSTEM_DEV_FAQ, SERVICES_BOTTOM_CTA } from "@/content/services";
+import { SERVICE_DETAILS, SYSTEM_DEV_FAQ, SERVICES_BOTTOM_CTA, SERVICE_PAGE_MAP } from "@/content/services";
 import PageHero from "@/components/shared/PageHero";
 import ServiceDetailCard from "@/components/services/ServiceDetailCard";
 import ServicesFaq from "@/components/services/ServicesFaq";
@@ -42,7 +42,7 @@ export default function SystemDevPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd(service), faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd({ ...service, path: SERVICE_PAGE_MAP[service.id].path }), faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
       />
       <PageHero
         eyebrow="SYSTEM DEVELOPMENT"

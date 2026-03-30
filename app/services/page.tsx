@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { SERVICES_HERO, SERVICE_DETAILS, SERVICES_MID_CTA, SERVICES_BOTTOM_CTA, SERVICES_FAQ } from "@/content/services";
+import { SERVICES_HERO, SERVICE_DETAILS, SERVICES_MID_CTA, SERVICES_BOTTOM_CTA, SERVICES_FAQ, SERVICE_PAGE_MAP } from "@/content/services";
 import PageHero from "@/components/shared/PageHero";
 import ServiceDetailCard from "@/components/services/ServiceDetailCard";
 import ImplementationFlow from "@/components/services/ImplementationFlow";
@@ -9,7 +9,7 @@ import ServicesFaq from "@/components/services/ServicesFaq";
 import CtaBanner from "@/components/shared/CtaBanner";
 import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { breadcrumbJsonLd, serviceJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   title: PAGE_META.services.title,
@@ -33,23 +33,11 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   const breadcrumb = breadcrumbJsonLd([{ name: "サービス", path: "/services" }]);
 
-  const serviceSchema = SERVICE_DETAILS.map((s) => ({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: s.title,
-    description: s.description,
-    provider: { "@id": "https://cloudnature.jp/#organization" },
-  }));
+  const serviceSchema = SERVICE_DETAILS.map((s) =>
+    serviceJsonLd({ ...s, path: SERVICE_PAGE_MAP[s.id].path })
+  );
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: SERVICES_FAQ.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: { "@type": "Answer", text: faq.answer },
-    })),
-  };
+  const faqSchema = faqPageJsonLd(SERVICES_FAQ);
 
   return (
     <>
