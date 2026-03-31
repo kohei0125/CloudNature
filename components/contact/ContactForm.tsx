@@ -186,7 +186,7 @@ const ContactForm = () => {
           value={formData.phone}
           onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
           onBlur={() => handleBlur("phone")}
-          placeholder="例：090-1234-5678"
+          placeholder="例：09012345678"
           aria-invalid={Boolean(getError("phone"))}
           aria-describedby={getError("phone") ? "contact-phone-error" : undefined}
           className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("phone") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}

@@ -152,7 +152,7 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
           value={contact.phone}
           onChange={(e) => handleChange("phone", e.target.value)}
           onBlur={() => handleBlur("phone")}
-          placeholder="090-1234-5678"
+          placeholder="09012345678"
           maxLength={20}
           className={fieldClass(!!phoneError)}
         />
