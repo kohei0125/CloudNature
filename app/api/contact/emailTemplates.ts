@@ -1,6 +1,7 @@
 export interface ContactRequestBody {
   name: string;
   email: string;
+  phone: string;
   company?: string;
   subject: string;
   message: string;
@@ -38,6 +39,10 @@ export function buildEmailHtml(body: ContactRequestBody): string {
         <tr>
           <td style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">メールアドレス</td>
           <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;"><a href="mailto:${escapeHtml(body.email)}" style="color: #8A9668;">${escapeHtml(body.email)}</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">電話番号</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; vertical-align: top;">${escapeHtml(body.phone)}</td>
         </tr>
         <tr>
           <td style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">会社名</td>
@@ -81,6 +86,10 @@ export function buildConfirmationEmailHtml(body: ContactRequestBody): string {
         以下の内容でお問い合わせを受け付けいたしました。
       </p>
       <table style="width: 100%; border-collapse: collapse; margin-top: 24px; margin-bottom: 24px;">
+        <tr>
+          <td style="padding: 12px; background: #F4F2F0; font-weight: bold; width: 30%; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">電話番号</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">${escapeHtml(body.phone)}</td>
+        </tr>
         <tr>
           <td style="padding: 12px; background: #F4F2F0; font-weight: bold; width: 30%; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">お問い合わせ種別</td>
           <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; border-top: 1px solid #EDE8E5; vertical-align: top;">${escapeHtml(body.subject)}</td>

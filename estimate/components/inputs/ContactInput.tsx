@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Lock, BellOff } from "lucide-react";
-import { cn, EMAIL_REGEX, parseContact } from "@/lib/utils";
+import { cn, EMAIL_REGEX, PHONE_REGEX, parseContact } from "@/lib/utils";
 import type { ContactValue } from "@/lib/utils";
 import { ERROR_MESSAGES } from "@/content/estimate";
 
@@ -40,6 +40,11 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
   const companyError =
     touched.company && contact.company.trim().length === 0
       ? "企業・団体名をご入力ください"
+      : null;
+
+  const phoneError =
+    touched.phone && contact.phone.trim().length > 0 && !PHONE_REGEX.test(contact.phone.trim())
+      ? "正しい電話番号をご入力ください"
       : null;
 
   const fieldClass = (hasError: boolean) =>
@@ -131,6 +136,33 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
             className="text-xs text-red-500"
           >
             {companyError}
+          </motion.span>
+        )}
+      </div>
+
+      {/* Phone */}
+      <div className="v-stack gap-1.5">
+        <label htmlFor="contact-phone" className="text-sm font-medium text-gray-700">
+          電話番号 <span className="text-red-400">*</span>
+        </label>
+        <input
+          id="contact-phone"
+          type="tel"
+          inputMode="tel"
+          value={contact.phone}
+          onChange={(e) => handleChange("phone", e.target.value)}
+          onBlur={() => handleBlur("phone")}
+          placeholder="090-1234-5678"
+          maxLength={20}
+          className={fieldClass(!!phoneError)}
+        />
+        {phoneError && (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-xs text-red-500"
+          >
+            {phoneError}
           </motion.span>
         )}
       </div>

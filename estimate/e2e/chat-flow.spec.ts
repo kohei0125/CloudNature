@@ -220,10 +220,12 @@ test.describe("Chat flow (/chat)", () => {
     // Contact form fields visible
     const nameInput = page.locator("#contact-name");
     const companyInput = page.locator("#contact-company");
+    const phoneInput = page.locator("#contact-phone");
     const emailInput = page.locator("#contact-email");
 
     await expect(nameInput).toBeVisible();
     await expect(companyInput).toBeVisible();
+    await expect(phoneInput).toBeVisible();
     await expect(emailInput).toBeVisible();
 
     // Trust signals visible
@@ -233,16 +235,20 @@ test.describe("Chat flow (/chat)", () => {
     const submitButton = page.getByRole("button", { name: "送信する" });
     await expect(submitButton).toBeDisabled();
 
-    // Fill only name - still disabled (company & email required)
+    // Fill only name - still disabled (company, phone & email required)
     await nameInput.fill("テスト太郎");
     await expect(submitButton).toBeDisabled();
 
-    // Fill email but no company - still disabled
+    // Fill email but no company/phone - still disabled
     await emailInput.fill("test@example.com");
     await expect(submitButton).toBeDisabled();
 
-    // Fill company - should become enabled (all required fields filled)
+    // Fill company but no phone - still disabled
     await companyInput.fill("テスト株式会社");
+    await expect(submitButton).toBeDisabled();
+
+    // Fill phone - should become enabled (all required fields filled)
+    await phoneInput.fill("090-1234-5678");
     await expect(submitButton).toBeEnabled();
   });
 
@@ -261,6 +267,7 @@ test.describe("Chat flow (/chat)", () => {
     // Fill contact form
     await page.locator("#contact-name").fill("テスト太郎");
     await page.locator("#contact-company").fill("テスト株式会社");
+    await page.locator("#contact-phone").fill("090-1234-5678");
     await page.locator("#contact-email").fill("test@example.com");
 
     // Click submit

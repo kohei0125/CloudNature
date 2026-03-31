@@ -12,6 +12,7 @@ export interface FaqItem {
 export interface ContactFormLabels {
   name: string;
   email: string;
+  phone: string;
   company: string;
   subject: string;
   message: string;

@@ -9,6 +9,7 @@ export const CONTACT_HERO = {
 export const CONTACT_FORM_LABELS: ContactFormLabels = {
   name: "お名前",
   email: "メールアドレス",
+  phone: "電話番号",
   company: "会社名",
   subject: "お問い合わせ種別",
   message: "お問い合わせ内容",

@@ -307,6 +307,7 @@ def save_estimate_to_notion(
             "rich_text": [{"text": {"content": contact.get("company", "")}}]
         },
         "メールアドレス": {"email": contact.get("email", "") or None},
+        "電話番号": {"phone_number": contact.get("phone", "") or None},
         "種別": {"select": {"name": "お見積もり"}},
         "ステータス": {"select": {"name": "未対応"}},
     }

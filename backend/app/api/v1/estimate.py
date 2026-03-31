@@ -2,6 +2,7 @@
 
 import json
 import logging
+import re
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 
@@ -21,6 +22,8 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/estimate", tags=["estimate"])
 
+_PHONE_REGEX = re.compile(r"^[0-9\-+()（）\s]*[0-9][0-9\-+()（）\s]*$")
+
 
 def _parse_contact(answers: dict) -> dict:
     """Extract contact info from step 13 answer.
@@ -29,16 +32,17 @@ def _parse_contact(answers: dict) -> dict:
     """
     raw = answers.get("13", answers.get("step_13", ""))
     if not raw:
-        return {"name": "", "company": "", "email": ""}
+        return {"name": "", "company": "", "phone": "", "email": ""}
     try:
         parsed = json.loads(raw) if isinstance(raw, str) else raw
         return {
             "name": parsed.get("name", ""),
             "company": parsed.get("company", ""),
+            "phone": parsed.get("phone", ""),
             "email": parsed.get("email", ""),
         }
     except (json.JSONDecodeError, AttributeError):
-        return {"name": "", "company": "", "email": ""}
+        return {"name": "", "company": "", "phone": "", "email": ""}
 
 
 async def _send_emails(estimate_data: dict, answers: dict) -> None:
@@ -108,6 +112,7 @@ async def _send_emails(estimate_data: dict, answers: dict) -> None:
         client_name=contact["name"],
         client_company=contact["company"],
         client_email=customer_email,
+        client_phone=contact["phone"],
         pdf_data=pdf_data,
         project_name=project_name,
         hybrid_cost=hybrid_cost,
@@ -173,6 +178,13 @@ async def generate_estimate(
     session = session_service.get_estimate_session(request.session_id)
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found")
+
+    # 連絡先バリデーション
+    contact = _parse_contact(request.answers)
+    if not contact["name"].strip() or not contact["email"].strip():
+        raise HTTPException(status_code=400, detail="Name and email are required")
+    if not contact["phone"].strip() or not _PHONE_REGEX.match(contact["phone"].strip()):
+        raise HTTPException(status_code=400, detail="Valid phone number is required")
 
     result = await estimate_service.generate_estimate(
         request.session_id, request.answers

@@ -85,6 +85,7 @@ async def send_estimate_notification(
     client_name: str,
     client_company: str,
     client_email: str,
+    client_phone: str = "",
     pdf_data: bytes | None = None,
     project_name: str = "",
     hybrid_cost: int = 0,
@@ -153,6 +154,7 @@ async def send_estimate_notification(
             template.replace("{{client_name}}", html.escape(client_name))
             .replace("{{client_company}}", html.escape(client_company) if client_company.strip() else "（未入力）")
             .replace("{{client_email}}", html.escape(client_email))
+            .replace("{{client_phone}}", html.escape(client_phone) if client_phone.strip() else "（未入力）")
             .replace("{{estimate_summary_section}}", summary_section)
         )
 

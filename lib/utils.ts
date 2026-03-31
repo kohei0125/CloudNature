@@ -5,6 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const PHONE_REGEX = /^[0-9\-+()（）\s]*[0-9][0-9\-+()（）\s]*$/;
+
 /** パスがアクティブかどうかを判定する（"/" は完全一致、それ以外は前方一致） */
 export function isPathActive(path: string, pathname: string): boolean {
   return path === "/" ? pathname === "/" : pathname.startsWith(path);

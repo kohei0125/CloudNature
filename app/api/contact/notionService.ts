@@ -40,6 +40,7 @@ function divider(): BlockObjectRequest {
 export interface ContactNotionPayload {
   name: string;
   email: string;
+  phone: string;
   company?: string;
   subject?: string;
   message: string;
@@ -67,6 +68,7 @@ export async function saveContactToNotion(
       "名前": { title: [{ text: { content: payload.name } }] },
       "会社名": { rich_text: [{ text: { content: payload.company || "" } }] },
       "メールアドレス": { email: payload.email },
+      "電話番号": { phone_number: payload.phone },
       "種別": { select: { name: "お問い合わせ" } },
       "ステータス": { select: { name: "未対応" } },
     },

@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
 import { ESTIMATE_URL } from "@/content/common";
+import { PHONE_REGEX } from "@/lib/utils";
 
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
@@ -22,6 +23,7 @@ const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     company: "",
     subject: CONTACT_SUBJECTS[0],
     message: "",
@@ -39,6 +41,9 @@ const ContactForm = () => {
     if (field === "email" && !value.trim()) return "メールアドレスを入力してください";
     if (field === "email" && value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
       return "正しいメールアドレスを入力してください";
+    if (field === "phone" && !value.trim()) return "電話番号を入力してください";
+    if (field === "phone" && value.trim() && !PHONE_REGEX.test(value))
+      return "正しい電話番号を入力してください";
     if (field === "message" && !value.trim()) return "お問い合わせ内容を入力してください";
     return "";
   };
@@ -55,11 +60,13 @@ const ContactForm = () => {
   const isValid =
     formData.name.trim() !== "" &&
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+    formData.phone.trim() !== "" &&
+    PHONE_REGEX.test(formData.phone) &&
     formData.message.trim() !== "";
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setTouched({ name: true, email: true, message: true });
+    setTouched({ name: true, email: true, phone: true, message: true });
     if (!isValid) return;
 
     setSubmitting(true);
@@ -163,6 +170,28 @@ const ContactForm = () => {
           className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("email") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
         />
         {getError("email") && <p id="contact-email-error" className="text-red-500 text-xs mt-1">{getError("email")}</p>}
+      </div>
+
+      {/* Phone */}
+      <div>
+        <label htmlFor="contact-phone" className="block text-sm font-bold text-forest mb-1.5">
+          {CONTACT_FORM_LABELS.phone}
+          <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
+        </label>
+        <input
+          id="contact-phone"
+          type="tel"
+          inputMode="tel"
+          required
+          value={formData.phone}
+          onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+          onBlur={() => handleBlur("phone")}
+          placeholder="例：090-1234-5678"
+          aria-invalid={Boolean(getError("phone"))}
+          aria-describedby={getError("phone") ? "contact-phone-error" : undefined}
+          className={`w-full border rounded-lg p-3 focus:ring-2 focus:ring-sage/50 focus:border-sage outline-none transition-colors ${getError("phone") ? "border-red-300 bg-red-50/50" : "border-gray-200"}`}
+        />
+        {getError("phone") && <p id="contact-phone-error" className="text-red-500 text-xs mt-1">{getError("phone")}</p>}
       </div>
 
       {/* Company */}

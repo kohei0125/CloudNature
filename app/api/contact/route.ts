@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { ContactRequestBody, buildEmailHtml, buildConfirmationEmailHtml } from "./emailTemplates";
 import { CONTACT_SUBJECTS } from "@/content/contact";
+import { PHONE_REGEX } from "@/lib/utils";
 import { saveContactToNotion } from "./notionService";
 
 // ローカルはクラウドフレアのチェックをスキップ
@@ -79,7 +80,7 @@ export async function POST(request: NextRequest) {
     const body: ContactRequestBody = await request.json();
 
     // Server-side validation
-    if (!body.name?.trim() || !body.email?.trim() || !body.message?.trim()) {
+    if (!body.name?.trim() || !body.email?.trim() || !body.phone?.trim() || !body.message?.trim()) {
       return NextResponse.json(
         { error: "必須項目を入力してください" },
         { status: 400 }
@@ -89,6 +90,13 @@ export async function POST(request: NextRequest) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
       return NextResponse.json(
         { error: "正しいメールアドレスを入力してください" },
+        { status: 400 }
+      );
+    }
+
+    if (!PHONE_REGEX.test(body.phone)) {
+      return NextResponse.json(
+        { error: "正しい電話番号を入力してください" },
         { status: 400 }
       );
     }
@@ -173,6 +181,7 @@ export async function POST(request: NextRequest) {
     saveContactToNotion({
       name: body.name,
       email: body.email,
+      phone: body.phone,
       company: body.company,
       subject: body.subject,
       message: body.message,

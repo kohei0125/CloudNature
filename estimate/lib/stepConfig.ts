@@ -1,6 +1,6 @@
 import type { StepConfig } from "@/types/estimate";
 import { STEP_OPTIONS } from "@/content/estimate";
-import { EMAIL_REGEX } from "@/lib/utils";
+import { EMAIL_REGEX, PHONE_REGEX } from "@/lib/utils";
 
 export const STEP_CONFIGS: StepConfig[] = [
   // Step 1: Business type
@@ -112,6 +112,12 @@ export const STEP_CONFIGS: StepConfig[] = [
         }
         if (!parsed.company || parsed.company.trim().length < 1) {
           return "企業・団体名をご入力ください";
+        }
+        if (!parsed.phone || parsed.phone.trim().length < 1) {
+          return "電話番号をご入力ください";
+        }
+        if (!PHONE_REGEX.test(parsed.phone.trim())) {
+          return "正しい電話番号をご入力ください";
         }
         if (!parsed.email || !EMAIL_REGEX.test(parsed.email.trim())) {
           return "有効なメールアドレスをご入力ください";
