@@ -4,8 +4,7 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import CtaBanner from "@/components/shared/CtaBanner";
-import { USECASES_ARTICLES, USECASES_SECTION } from "@/content/usecases";
-import { CASES_CTA } from "@/content/cases";
+import { USECASES_ARTICLES, USECASES_SECTION, USECASES_CTA } from "@/content/usecases";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
@@ -191,13 +190,7 @@ export default function UseCasesPage() {
         </div>
       </section>
 
-      <CtaBanner
-        eyebrow={CASES_CTA.eyebrow}
-        title={CASES_CTA.title}
-        description={CASES_CTA.description}
-        primaryCta={CASES_CTA.primaryCta}
-        secondaryCta={CASES_CTA.secondaryCta}
-      />
+      <CtaBanner {...USECASES_CTA} />
     </div>
   );
 }

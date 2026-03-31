@@ -9,6 +9,9 @@ const BenefitsSection = dynamic(
 const FlowSection = dynamic(
   () => import("@/components/landing/FlowSection")
 );
+const EstimateDetailsSection = dynamic(
+  () => import("@/components/landing/EstimateDetailsSection")
+);
 const FaqSection = dynamic(
   () => import("@/components/landing/FaqSection")
 );
@@ -81,6 +84,7 @@ export default function EstimatePage() {
       <HeroSection />
       <BenefitsSection />
       <FlowSection />
+      <EstimateDetailsSection />
       <FaqSection />
       <TrustBar />
       <FooterSection />

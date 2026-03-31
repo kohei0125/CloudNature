@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import { ArrowLeft } from "lucide-react";
-import { USECASES_ARTICLES, USECASES_DETAIL, USECASES_SECTION } from "@/content/usecases";
-import { CASES_CTA } from "@/content/cases";
+import { USECASES_ARTICLES, USECASES_CTA, USECASES_DETAIL, USECASES_SECTION } from "@/content/usecases";
 import CtaBanner from "@/components/shared/CtaBanner";
 import NewsBody from "@/components/news/NewsBody";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
@@ -149,13 +148,7 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
         ]}
       />
 
-      <CtaBanner
-        eyebrow={CASES_CTA.eyebrow}
-        title={CASES_CTA.title}
-        description={CASES_CTA.description}
-        primaryCta={CASES_CTA.primaryCta}
-        secondaryCta={CASES_CTA.secondaryCta}
-      />
+      <CtaBanner {...USECASES_CTA} />
     </div>
   );
 };
