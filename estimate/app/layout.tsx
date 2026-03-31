@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI見積もりシミュレーター｜システム開発費を最1分で自動算出",
+    title: "AI見積もりシミュレーター｜システム開発費を最短1分で自動算出",
     description:
       "質問に答えるだけで、AIがシステム開発の概算見積もりを自動生成。WBS・機能一覧・費用比較をお届けします。",
     images: ["/images/og-img.jpg"],
