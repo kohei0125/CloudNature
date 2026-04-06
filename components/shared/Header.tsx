@@ -93,7 +93,7 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
             href="/contact"
             className={cn(
               "px-6 py-2 rounded-full text-sm font-bold transition-colors shadow-lg",
-              heroMode ? "bg-white text-forest hover:bg-sunset hover:text-white" : "bg-forest text-white hover:bg-sunset"
+              heroMode ? "bg-white text-forest hover:bg-sunset hover:text-white" : "bg-sunset text-white hover:bg-forest"
             )}
           >
             {HEADER_COPY.consultation}
