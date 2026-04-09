@@ -22,7 +22,7 @@
 |---|--------|---------|------|------|--------|------|
 | 1 | **P0** | `UI` | `[CC]` | 保留 | **Step 4（自由記述）の選択肢化** | よくある課題5つを選択肢として提示＋「その他（自由記述）」を併設。選択肢選択時は30字制限を不要に。§7.2 |
 | 2 | **P0** | `UI` | `[CC]` | 保留 | **フォローメール同意UIの追加** | Step 13 or Complete画面に「お役立ち情報のメール送付に同意する」チェック追加。デフォルトOFF。同意状態をDBに保存。§10.3 |
-| 3 | **P0** | `--` | `[CC]` | | **GA4カスタムイベントの実装** | `dataLayer.push` を追加。対象: estimate_start / estimate_step / estimate_step_freetext / estimate_step_ai_features / generate_lead / contact_submit。§8.3 |
+| 3 | **P0** | `--` | `[CC]` | 完了 | **GA4カスタムイベントの実装** | `dataLayer.push` を追加。対象: estimate_start / estimate_step / estimate_step_freetext / estimate_step_ai_features / generate_lead / view_estimate_complete / contact_submit。§8.3 |
 | 4 | **P0** | `UI` | `[CC]` | 保留 | **概算レンジの先出し（段階的開示）** | Step 12完了時点で概算の総額レンジを表示。詳細（PDF・内訳・体制）は連絡先入力後。§7.2 |
 | 5 | **P0** | `UI` | `[CC]` | 保留 | **LP上に「概算」の前提を明示** | 見積もり開始前に免責文言を表示。「相場の1/2」「40%削減」に条件付記（※AIハイブリッド開発の場合）。§7.1 |
 | 6 | **P0** | `--` | `[混]` | | **GTM導入・GA4移行** | GTMアカウント・コンテナ作成（外部）→ GTMスニペットをサイトに埋め込み（CC）→ タグ・トリガー設定（外部） |
