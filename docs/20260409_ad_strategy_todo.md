@@ -52,12 +52,18 @@
 
 ### #6a GTM動作確認手順
 
+> **重要: 両サイト（cloudnature.jp / ai.cloudnature.jp）とも同じGA4プロパティ `G-1CF4H5GXSM` を使用中。**
+> GTM切替時にGTM内でGA4設定タグを作り忘れるとGA4のデータが止まるので注意。
+
 1. GTMコンテナを作成し、コンテナID（GTM-XXXXXXX）を取得
-2. Vercelの環境変数に `NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX` を設定（両サイト）
-3. デプロイ後、[GTM Tag Assistant](https://tagassistant.google.com/) でサイトにアクセス
-4. GTMコンテナが正しくロードされていることを確認
-5. GTM管理画面でGA4設定タグを作成し、GA4のリアルタイムレポートでデータが来ることを確認
-6. 旧gtag.js直接読み込みは `NEXT_PUBLIC_GTM_ID` 設定時に自動で無効化されるので二重計測にならない
+2. **GTM管理画面で先にGA4設定タグ（G-1CF4H5GXSM）を作成・公開する**（これを忘れるとGA4データが途絶える）
+3. Vercelの環境変数に `NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX` を設定（両サイト）
+4. **まず1サイト（estimateを推奨）だけデプロイし、GA4リアルタイムレポートでデータが来ることを確認**
+5. 問題なければもう1サイトもデプロイ
+6. [GTM Tag Assistant](https://tagassistant.google.com/) で両サイトのGTMコンテナ読み込みを確認
+7. 旧gtag.js直接読み込みは `NEXT_PUBLIC_GTM_ID` 設定時に自動で無効化されるので二重計測にならない
+
+**ロールバック手順:** GTM切替後に問題があれば、Vercelから `NEXT_PUBLIC_GTM_ID` を削除して再デプロイ。元のgtag.js直接読み込みに自動で戻る
 
 ### 着手順の目安
 
