@@ -22,10 +22,12 @@
 |---|--------|---------|------|------|--------|------|
 | 1 | **P0** | `UI` | `[CC]` | 保留 | **Step 4（自由記述）の選択肢化** | よくある課題5つを選択肢として提示＋「その他（自由記述）」を併設。選択肢選択時は30字制限を不要に。§7.2 |
 | 2 | **P0** | `UI` | `[CC]` | 保留 | **フォローメール同意UIの追加** | Step 13 or Complete画面に「お役立ち情報のメール送付に同意する」チェック追加。デフォルトOFF。同意状態をDBに保存。§10.3 |
-| 3 | **P0** | `--` | `[CC]` | 完了 | **GA4カスタムイベントの実装** | `dataLayer.push` を追加。対象: estimate_start / estimate_step / estimate_step_freetext / estimate_step_ai_features / generate_lead / view_estimate_complete / contact_submit。§8.3 |
+| 3 | **P0** | `--` | `[CC]` | 実装完了 | **GA4カスタムイベントの実装** | `gtag('event', ...)` で送信。対象: estimate_start / estimate_step / estimate_step_freetext / estimate_step_ai_features / generate_lead / view_estimate_complete / contact_submit。§8.3 |
+| 3a | **P0** | `--` | `[外]` | | **GA4イベントの動作確認** | ブラウザでローカル確認→本番デプロイ後に確認。手順は下記「確認手順」参照 |
 | 4 | **P0** | `UI` | `[CC]` | 保留 | **概算レンジの先出し（段階的開示）** | Step 12完了時点で概算の総額レンジを表示。詳細（PDF・内訳・体制）は連絡先入力後。§7.2 |
 | 5 | **P0** | `UI` | `[CC]` | 保留 | **LP上に「概算」の前提を明示** | 見積もり開始前に免責文言を表示。「相場の1/2」「40%削減」に条件付記（※AIハイブリッド開発の場合）。§7.1 |
 | 6 | **P0** | `--` | `[混]` | CC部分完了 | **GTM導入・GA4移行** | GTMスニペット埋め込み済み（NEXT_PUBLIC_GTM_ID設定で切替）。残: GTMアカウント・コンテナ作成→環境変数設定→タグ・トリガー設定（すべて外部作業） |
+| 6a | **P0** | `--` | `[外]` | | **GTM動作確認** | GTMコンテナ作成＋環境変数設定後に確認。手順は下記「確認手順」参照 |
 | 7 | **P0** | `UI` | `[混]` | 保留 | **Cookie同意バナーの導入** | SaaS選定・契約（外部）→ スクリプト埋め込み（CC）→ GTM Consent Mode連携（外部）。バナー表示は目視確認 |
 | 8 | **P0** | `--` | `[外]` | | **Google広告コンバージョンタグの設置** | Google広告アカウント開設、CVアクション作成、GTMでタグ設定。すべて管理画面作業 |
 | 9 | **P0** | `--` | `[外]` | | **社会的証明のコンテンツ作成** | 最低1件の事例を作成（自社プロジェクトでもOK）。見積もり実績の集計。中身は自分で用意 |
@@ -33,6 +35,29 @@
 | 11 | **P1** | `UI` | `[CC]` | 保留 | **見積もり完了画面の導線強化** | 「無料相談を予約する」ボタンの視覚的強調。「概算→無料相談→正式見積もり」のステップ図示。§7.3 |
 | 12 | **P1** | `UI` | `[CC]` | 保留 | **LP上の「概算≠正式」表現統一** | 広告文・LP・結果画面・メールで「概算」「シミュレーション」を一貫使用。免責文言の配置調整。§12.4 |
 | 13 | **P2** | `UI` | `[CC]` | 保留 | **見積もりアウトプットのサンプル表示** | ファーストビュー直下にぼかし入りのサンプル出力画像を配置。§7.1 |
+
+### #3a GA4イベントの確認手順
+
+1. Chrome DevTools の Console で `npm run dev` のローカル環境を開く
+2. Console に `window.gtag` と入力し、関数が存在することを確認
+3. 見積もりフローを1回通す。各ステップで Console に以下を入力して直前のイベントを確認:
+   - `dataLayer.filter(e => e[0] === 'event')` でイベント一覧を確認
+4. **GA4 DebugView で確認**（本番デプロイ後）:
+   - GA4管理画面 → 管理 → DebugView
+   - Chrome拡張「[Google Analytics Debugger](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna)」をON
+   - ai.cloudnature.jp で見積もりフローを通す
+   - DebugView に estimate_start → estimate_step(×12) → generate_lead → view_estimate_complete が出ること
+   - cloudnature.jp/contact でフォーム送信 → contact_submit が出ること
+5. **GA4 リアルタイムレポート** でもイベントが表示されることを確認
+
+### #6a GTM動作確認手順
+
+1. GTMコンテナを作成し、コンテナID（GTM-XXXXXXX）を取得
+2. Vercelの環境変数に `NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX` を設定（両サイト）
+3. デプロイ後、[GTM Tag Assistant](https://tagassistant.google.com/) でサイトにアクセス
+4. GTMコンテナが正しくロードされていることを確認
+5. GTM管理画面でGA4設定タグを作成し、GA4のリアルタイムレポートでデータが来ることを確認
+6. 旧gtag.js直接読み込みは `NEXT_PUBLIC_GTM_ID` 設定時に自動で無効化されるので二重計測にならない
 
 ### 着手順の目安
 
