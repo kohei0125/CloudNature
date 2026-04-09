@@ -40,6 +40,7 @@ export function useEstimateApi() {
       dispatch({ type: "SET_STATUS", status: "in_progress" });
       const res = await api.createSession();
       dispatch({ type: "SET_SESSION_ID", sessionId: res.sessionId });
+      window.gtag?.("event", "estimate_start", { session_id: res.sessionId });
       return res.sessionId;
     } catch {
       dispatch({ type: "SET_STATUS", status: "error" });

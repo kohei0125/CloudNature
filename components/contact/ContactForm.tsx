@@ -88,6 +88,10 @@ const ContactForm = () => {
         return;
       }
 
+      window.gtag?.("event", "contact_submit", {
+        form_type: "contact",
+        subject: formData.subject,
+      });
       setSubmitted(true);
     } catch {
       setError("送信に失敗しました。しばらく経ってから再度お試しください。");

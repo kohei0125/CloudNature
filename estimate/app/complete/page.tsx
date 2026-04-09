@@ -44,7 +44,12 @@ export default function CompletePage() {
         }
       }
       const saved = load<GeneratedEstimate>("estimate_result");
-      if (saved) setEstimate(saved);
+      if (saved) {
+        setEstimate(saved);
+        window.gtag?.("event", "view_estimate_complete", {
+          features_count: saved.features?.length ?? 0,
+        });
+      }
       setLoading(false);
 
       // Clear session data so returning users start fresh

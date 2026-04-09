@@ -135,8 +135,26 @@ function ChatPageContent() {
       await submitStep(currentStep, answer, allAnswers);
     }
 
+    // GA4: ステップ完了イベント
+    window.gtag?.("event", "estimate_step", {
+      step_number: currentStep,
+      step_type: stepConfig?.type,
+    });
+    if (currentStep === 4) {
+      const text = answers[4];
+      window.gtag?.("event", "estimate_step_freetext", {
+        text_length: typeof text === "string" ? text.length : 0,
+      });
+    }
+    if (currentStep === 8) {
+      const selected = answers[8];
+      window.gtag?.("event", "estimate_step_ai_features", {
+        selected_count: Array.isArray(selected) ? selected.length : 0,
+      });
+    }
+
     dispatch({ type: "NEXT_STEP" });
-  }, [currentStep, dispatch, submitStep]);
+  }, [currentStep, stepConfig, dispatch, submitStep]);
 
   // Handle final submission — all answers are sent via triggerGenerate
   const handleSubmit = useCallback(async () => {
@@ -149,6 +167,9 @@ function ChatPageContent() {
     turnstileRef.current?.reset();
     turnstileTokenRef.current = null;
     if (result?.estimate) {
+      window.gtag?.("event", "generate_lead", {
+        session_id: stateRef.current.sessionId,
+      });
       save("estimate_result", result.estimate);
       router.push("/complete");
     }
