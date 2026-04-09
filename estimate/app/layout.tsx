@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import EstimateHeader from "@/components/shared/EstimateHeader";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
+import GtmNoscript from "@/components/shared/GtmNoscript";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -89,6 +90,7 @@ export default function EstimateLayout({
     <html lang="ja" className={`${notoSansJP.variable} ${notoSerifJP.variable}`}>
       <body>
         <GoogleAnalytics />
+        <GtmNoscript />
         <div className="min-h-screen font-sans selection:bg-blue-200">
           <EstimateHeader />
           {children}

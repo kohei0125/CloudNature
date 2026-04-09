@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
 import Footer from "@/components/shared/Footer";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
+import GtmNoscript from "@/components/shared/GtmNoscript";
 import { CANONICAL_SITE_URL, isIndexableDeployment } from "@/lib/site";
 
 const sans = Noto_Sans_JP({
@@ -139,6 +140,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={cn(sans.variable, serif.variable)}>
         <GoogleAnalytics />
+        <GtmNoscript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
