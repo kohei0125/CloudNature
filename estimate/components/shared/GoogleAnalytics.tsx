@@ -2,8 +2,12 @@
 
 import Script from "next/script";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+const SHARED_GA_ID = "G-1CF4H5GXSM";
+const GA_ID =
+  process.env.NEXT_PUBLIC_ENV === "production"
+    ? SHARED_GA_ID
+    : process.env.NEXT_PUBLIC_GA_ID;
 
 export default function GoogleAnalytics() {
   // GTMが設定されている場合はGTM経由でGA4を管理
@@ -21,7 +25,7 @@ export default function GoogleAnalytics() {
     );
   }
 
-  // GTM未設定の場合はgtag.js直接読み込み（現行互換）
+  // 本番の ai.cloudnature.jp は shared GA4 へ統一し、非本番だけ env で上書きする。
   if (!GA_ID) return null;
 
   return (

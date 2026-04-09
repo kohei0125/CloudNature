@@ -121,7 +121,7 @@ BACKEND_URL=http://localhost:8000
 NEXT_PUBLIC_API_BASE=
 NEXT_PUBLIC_ENV=development
 BACKEND_API_KEY=
-NEXT_PUBLIC_GA_ID=          # GA4測定ID（コーポレートサイトと同じ値、ローカルでは空でOK）
+NEXT_PUBLIC_GA_ID=          # 非本番のGA4測定ID。estimate本番は共有IDをコード固定
 ```
 
 ---
@@ -204,9 +204,9 @@ cd estimate && npm run build
 | cloudnature.jp | `components/shared/GoogleAnalytics.tsx` | `app/layout.tsx` |
 | ai.cloudnature.jp | `estimate/components/shared/GoogleAnalytics.tsx` | `estimate/app/layout.tsx` |
 
-- **測定ID**: 環境変数 `NEXT_PUBLIC_GA_ID`（Vercel の各プロジェクトで同じ値を設定）
+- **測定ID**: `cloudnature.jp` は環境変数 `NEXT_PUBLIC_GA_ID`、`ai.cloudnature.jp` は本番で `G-1CF4H5GXSM` を使用
 - **cross-domain**: GA4 管理画面で手動設定済み
-- **ローカル開発**: `NEXT_PUBLIC_GA_ID` を空にすれば計測タグは出力されない
+- **ローカル開発**: `estimate` は `NEXT_PUBLIC_ENV!=production` かつ `NEXT_PUBLIC_GA_ID` が空なら計測タグは出力されない
 
 ### 週次レポート
 

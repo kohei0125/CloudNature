@@ -45,7 +45,7 @@ BACKEND_URL=http://localhost:8000 npm run dev
 | `BACKEND_API_KEY` | backend へのAPIキー（本番環境で設定、ローカルでは空でスキップ） | `""` |
 | `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY` | Cloudflare Turnstile サイトキー（bot対策、本番で設定） | `""` |
 | `CLOUDFLARE_TURNSTILE_SECRET_KEY` | Cloudflare Turnstile シークレットキー（サーバーサイド検証用） | `""` |
-| `NEXT_PUBLIC_GA_ID` | GA4測定ID（コーポレートサイトと同じ値、空なら計測無効） | `""` |
+| `NEXT_PUBLIC_GA_ID` | 非本番用のGA4測定ID（本番は共有ID `G-1CF4H5GXSM` を使用） | `""` |
 
 ## ディレクトリ構成
 
