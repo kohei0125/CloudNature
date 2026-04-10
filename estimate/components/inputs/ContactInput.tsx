@@ -82,7 +82,7 @@ export default function ContactInput({ value, onChange }: ContactInputProps) {
           <div className="flex items-center gap-2.5">
             <BellOff className="h-4 w-4 shrink-0 text-sage" />
             <span className="text-[0.8125rem] text-gray-600">
-              お見積もり以外に使用しません。営業メールもお送りいたしません。
+              お見積もり以外に使用しません。
             </span>
           </div>
         </div>
