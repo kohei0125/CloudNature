@@ -79,7 +79,7 @@ test.describe("Landing page (/)", () => {
       page.getByRole("heading", { name: "最先端のAI活用で設計・開発の効率化" }).first()
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "中間マージンを排除し40%コスト削減" }).first()
+      page.getByRole("heading", { name: "中間マージンを排除しコストを大幅削減※1" }).first()
     ).toBeVisible();
   });
 

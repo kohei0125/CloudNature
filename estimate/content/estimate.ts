@@ -168,6 +168,12 @@ export const LP_COPY = {
     disclaimer: "※ 実際の費用はプロジェクト詳細により変動します",
   },
 
+  // 免責注記（LP共通）
+  disclaimers: {
+    cost: "※1 AIハイブリッド開発の場合。要件により異なります",
+    speed: "※2 選択式の場合の目安。自由記述の内容により変動します",
+  },
+
   // 選ばれる理由
   reasons: {
     eyebrow: "Why choose us",
@@ -192,7 +198,7 @@ export const LP_COPY = {
       {
         number: "03",
         icon: "users",
-        title: "中間マージンを排除し40%コスト削減",
+        title: "中間マージンを排除しコストを大幅削減※1",
         subtitle: "最適リソースの動的アサインメント",
         description:
           "AI要件定義の結果に基づき、最適な人材を自動マッチング。多重下請け構造を排除し、高品質と低価格を両立します。",
@@ -302,7 +308,7 @@ export const LP_COPY = {
   bottomCta: {
     heading: "最短1分でお見積もり。無料でお試しください。",
     cta: "無料で見積もりを始める",
-    ctaSub: "営業電話一切なし",
+    ctaSub: "",
   },
 
   // フッター

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { LP_COPY } from "@/content/estimate";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
-const { bottomCta } = LP_COPY;
+const { bottomCta, disclaimers } = LP_COPY;
 
 export default function TrustBar() {
   return (
@@ -41,6 +41,10 @@ export default function TrustBar() {
 
           <p className="mt-4 text-sm text-white/35">{bottomCta.ctaSub}</p>
         </motion.div>
+
+        <p className="mt-8 text-[10px] leading-relaxed text-white/20">
+          {disclaimers.cost} / {disclaimers.speed}
+        </p>
       </div>
     </section>
   );

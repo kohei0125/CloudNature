@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s | CloudNature AI見積もり",
   },
   description:
-    "AIエージェントがシステム開発の概算見積もりを自動生成。質問に答えるだけで、WBS・機能一覧・費用比較を最短1分でお届け。相場の1/2のコストで高品質な開発を実現するCloudNatureの無料見積もりツール。",
+    "AIエージェントがシステム開発の概算見積もりを自動生成。質問に答えるだけで、WBS・機能一覧・費用比較を最短1分でお届け。AIハイブリッド開発でコスト削減を実現するCloudNatureの無料見積もりツール。",
   keywords: [
     "AI見積もり",
     "AI開発",

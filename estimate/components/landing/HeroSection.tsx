@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { LP_COPY } from "@/content/estimate";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
-const { hero, simulator } = LP_COPY;
+const { hero, simulator, disclaimers } = LP_COPY;
 
 function CostSimulator() {
   const [appIdx, setAppIdx] = useState(0);
@@ -184,6 +184,12 @@ export default function HeroSection() {
             <span className="md:hidden">{hero.descriptionShort}</span>
             <span className="hidden md:inline">{hero.description}</span>
           </motion.p>
+
+          <p className="mt-2 max-w-lg text-[10px] leading-relaxed text-forest/30">
+            {disclaimers.cost}
+            <br />
+            {disclaimers.speed}
+          </p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}

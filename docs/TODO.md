@@ -8,10 +8,10 @@
 
 ## 計測・分析
 
-- **未着手** KPI と計測設計を追加する
-  - GA4 タグは導入済みだが、CV イベントの計測設計が未整備
-  - 最低限: `お問い合わせ送信` `AI見積もりクリック` `サービスページ遷移` をイベント化
-  - Search Console で追う対象 KW と対象 URL の対応表を作成
+- **部分対応** KPI と計測設計を追加する
+  - GA4 カスタムイベント実装済み: `estimate_start` / `estimate_step` / `generate_lead` / `view_estimate_complete` / `contact_submit`
+  - GA4 測定ID統一済み: 両サイトとも `G-1CF4H5GXSM` に一本化（2026-04-10）
+  - 残: Search Console で追う対象 KW と対象 URL の対応表を作成
 - **未着手** Search Console ベースの月次レビューを運用化する
   - 対象 KW ごとの掲載順位・表示回数・CTR・流入先 URL・問い合わせ寄与
 
@@ -50,7 +50,9 @@
 ## 構造化データ
 
 - **未着手** `/cases` に `CollectionPage` または `ItemList` を追加
-- **未着手** HowTo 構造化データの拡張（ブログ記事内の手順解説向け）
+- **部分対応** HowTo 構造化データの拡張
+  - `ai.cloudnature.jp` LP に「プロジェクトの進め方」HowTo 追加済み（2026-04-10）
+  - 残: ブログ記事内の手順解説向け HowTo
 - **未着手** Service JSON-LD の補強（`serviceType` 等。`priceRange` は根拠確定後）
 
 ## コンテンツ（後回し）

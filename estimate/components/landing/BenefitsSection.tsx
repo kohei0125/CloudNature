@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { LP_COPY } from "@/content/estimate";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
-const { reasons } = LP_COPY;
+const { reasons, disclaimers } = LP_COPY;
 
 const items = [
   {
@@ -110,6 +110,12 @@ export default function BenefitsSection() {
             );
           })}
         </div>
+
+        <p className="mt-8 text-[10px] leading-relaxed text-forest/30 md:mt-10">
+          {disclaimers.cost}
+          <br />
+          {disclaimers.speed}
+        </p>
       </div>
     </section>
   );
