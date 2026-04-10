@@ -111,11 +111,17 @@ export default function BenefitsSection() {
           })}
         </div>
 
-        <p className="mt-8 text-[10px] leading-relaxed text-forest/30 md:mt-10">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, ease }}
+          className="mt-8 text-[10px] leading-relaxed text-forest/30 md:mt-10"
+        >
           {disclaimers.cost}
           <br />
           {disclaimers.speed}
-        </p>
+        </motion.p>
       </div>
     </section>
   );

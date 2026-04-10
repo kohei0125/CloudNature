@@ -42,9 +42,15 @@ export default function TrustBar() {
           <p className="mt-4 text-sm text-white/35">{bottomCta.ctaSub}</p>
         </motion.div>
 
-        <p className="mt-8 text-[10px] leading-relaxed text-white/20">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: 0.2, ease }}
+          className="mt-8 text-[10px] leading-relaxed text-white/20"
+        >
           {disclaimers.cost} / {disclaimers.speed}
-        </p>
+        </motion.p>
       </div>
     </section>
   );

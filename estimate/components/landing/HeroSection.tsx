@@ -185,11 +185,16 @@ export default function HeroSection() {
             <span className="hidden md:inline">{hero.description}</span>
           </motion.p>
 
-          <p className="mt-2 max-w-lg text-[10px] leading-relaxed text-forest/30">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.35, ease }}
+            className="mt-2 max-w-lg text-[10px] leading-relaxed text-forest/30"
+          >
             {disclaimers.cost}
             <br />
             {disclaimers.speed}
-          </p>
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
