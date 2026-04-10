@@ -55,6 +55,33 @@ export default function EstimateHeader() {
             priority
           />
         </a>
+        <nav
+          aria-label="補助ナビゲーション"
+          className={`ml-auto hidden items-center gap-6 text-sm font-medium md:flex ${shouldUseWhiteLogo ? "text-white/85" : "text-forest/75"
+            }`}
+        >
+          <a
+            href="https://cloudnature.jp/company"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-sunset"
+          >
+            会社概要
+          </a>
+          <a
+            href="https://cloudnature.jp/cases"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-sunset"
+          >
+            導入事例
+          </a>
+          <a
+            href="https://cloudnature.jp/contact"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-sunset"
+          >
+            お問い合わせ
+          </a>
+        </nav>
       </div>
     </header>
   );

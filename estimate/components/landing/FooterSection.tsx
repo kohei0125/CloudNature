@@ -31,6 +31,11 @@ export default function FooterSection() {
               <br />
               {footer.taglineLines[2]}
             </p>
+            <div className="mt-6 space-y-1.5 pl-1 text-sm leading-relaxed text-gray-400">
+              {footer.companyMeta.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+            </div>
           </div>
 
           {/* Service links */}

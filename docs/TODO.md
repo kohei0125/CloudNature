@@ -1,6 +1,6 @@
 # CloudNature プロジェクト TODO
 
-最終更新: 2026-04-04
+最終更新: 2026-04-10
 
 凡例: **完了** / **部分対応** / **スキップ** / **未着手**
 
@@ -36,6 +36,10 @@
 - **スキップ** `estimate/app/layout.tsx` の `keywords` フィールド削除 → 害がないため維持
 - **スキップ** `app/layout.tsx` の Organization `sameAs` → SNS アカウントなし。開設時に再検討
 - **部分対応** 各ページの title / description 精査 → `/usecases` 改善済み。他ページは概ね適切だが個別精査は未実施
+- **部分対応** `ai.cloudnature.jp` LP のブラウザレビュー反映
+  - H1 / ヒーロー見出しの見直し、モバイル・デスクトップ改行調整、FAQ ARIA、補助ナビ、会社情報追記、`Organization` / `HowTo`、シミュレーター根拠補足まで対応済み
+  - 残: ソーシャルプルーフ、説明コンテンツ追加、比較表、主要セクションのアニメーション見直し
+  - ref: `docs/20260410_estimate_browser_review_todo.md`
 
 ## サイト構造・内部リンク
 

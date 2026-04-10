@@ -85,6 +85,9 @@ function CostSimulator() {
             </p>
           </div>
         </div>
+        <p className="mt-3 text-[11px] leading-relaxed text-forest/45">
+          {simulator.basisNote}
+        </p>
         <p className="mt-3 text-[10px] text-forest/30">
           {simulator.disclaimer}
         </p>
@@ -118,7 +121,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-white/50" />
       </div>
 
-      <div className="mx-auto grid w-full max-w-7xl gap-6 px-5 md:grid-cols-[3fr_2fr] md:items-center md:gap-8 md:px-10">
+      <div className="mx-auto grid w-full max-w-screen-2xl gap-6 px-5 md:grid-cols-[3fr_2fr] md:items-center md:gap-8 md:px-10">
         {/* Left: Text */}
         <div>
           <motion.p
@@ -134,20 +137,42 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease }}
-            className="mt-4 font-serif text-[clamp(1.8rem,4vw,3.5rem)] font-bold leading-[1.15] tracking-tight md:mt-10"
+            className="mt-4 font-serif text-[clamp(1.68rem,8.2vw,2.7rem)] font-bold leading-[1.1] tracking-tight md:mt-10 md:text-[clamp(2.8rem,4vw,3.5rem)]"
           >
-            <span className="block text-[0.45em] font-bold tracking-wide text-forest/40">現場で使える独自システム開発</span>
-            <span className="text-[0.8em] font-bold">開発</span>
-            <span className="text-[1.3em] text-sunset">コスト</span>
-            <span className="text-[0.8em] font-bold">を相場の</span>
-            <span className="text-[1.3em] text-sunset">1/2</span>
-            <span className="text-[0.8em] font-bold">へ</span>
-            <br />
-            <span className="text-[0.8em] font-bold">まずは</span>
-            <span className="text-[1.3em] text-sunset">1分</span>
-            <span className="text-[0.8em] font-bold">で</span>
-            <span className="text-[1.3em] text-sunset">お見積</span>
-            <span className="text-[0.8em] font-bold">から。</span>
+            <span className="block text-[0.45em] font-bold tracking-wide text-forest/40">
+              AI見積もりシミュレーター
+            </span>
+            <span className="mt-2 grid gap-1 md:hidden">
+              <span className="block whitespace-nowrap">
+                システム開発の
+              </span>
+              <span className="block whitespace-nowrap">
+                <span className="text-sunset">コスト</span>を相場の
+                <span className="text-sunset">1/2</span>へ
+              </span>
+              <span className="block whitespace-nowrap">
+                まずは<span className="text-sunset">1分</span>で
+              </span>
+              <span className="block whitespace-nowrap">
+                <span className="text-sunset">自動見積もり</span>から。
+              </span>
+            </span>
+            <span className="mt-1 hidden md:block">
+              <span className="block whitespace-nowrap">
+                <span className="text-[0.8em] font-bold">システム開発</span>
+                <span className="text-[1.3em] text-sunset">コスト</span>
+                <span className="text-[0.8em] font-bold">を相場の</span>
+                <span className="text-[1.3em] text-sunset">1/2</span>
+                <span className="text-[0.8em] font-bold">へ</span>
+              </span>
+              <span className="block whitespace-nowrap">
+                <span className="text-[0.8em] font-bold">まずは</span>
+                <span className="text-[1.3em] text-sunset">1分</span>
+                <span className="text-[0.8em] font-bold">で</span>
+                <span className="text-[1.3em] text-sunset">自動見積もり</span>
+                <span className="text-[0.8em] font-bold">から。</span>
+              </span>
+            </span>
           </motion.h1>
 
           <motion.p

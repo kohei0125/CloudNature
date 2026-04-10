@@ -10,6 +10,8 @@ const { faq } = LP_COPY;
 
 function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false);
+  const buttonId = `faq-button-${index}`;
+  const panelId = `faq-panel-${index}`;
 
   function handleToggle() {
     setOpen((prev) => !prev);
@@ -25,6 +27,10 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
     >
       <button
         onClick={handleToggle}
+        type="button"
+        id={buttonId}
+        aria-expanded={open}
+        aria-controls={panelId}
         className="flex w-full items-center justify-between py-5 text-left"
       >
         <span className="pr-4 text-[15px] font-bold leading-relaxed text-forest">
@@ -38,6 +44,9 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
       <AnimatePresence>
         {open && (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
