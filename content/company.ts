@@ -55,6 +55,6 @@ export const COMPANY_CTA = {
   title: "まずはお気軽にご相談ください",
   description:
     "AIが概算費用を即時算出。または30分の無料ヒアリングで、御社の課題に最適な解決策をご提案します。",
-  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/chat" },
+  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/" },
   secondaryCta: { label: "お問い合わせ・ご相談", href: "/contact" },
 };
