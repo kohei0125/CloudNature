@@ -4,6 +4,7 @@ import Script from "next/script";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+const IS_PROD = process.env.NEXT_PUBLIC_ENV === "production";
 
 export default function GoogleAnalytics() {
   // GTMが設定されている場合はGTM経由でGA4を管理
@@ -35,7 +36,7 @@ export default function GoogleAnalytics() {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_ID}');
+          gtag('config', '${GA_ID}'${IS_PROD ? ", { cookie_domain: '.cloudnature.jp' }" : ""});
         `}
       </Script>
     </>
