@@ -53,7 +53,7 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
   },
   {
     id: "marketing-automation",
-    title: "コンテンツマーケティングの自律的運営",
+    title: "AIによるコンテンツマーケティング業務の自動化",
     category: "マーケティング × AI自動化",
     client: "新潟県内 マーケティング企業",
     challenge: "トレンドのリサーチから記事執筆まで全て手動で行い、更新頻度が低く内容も薄くなっていた。担当者は他業務との兼任で、月に2〜3本の記事作成が限界だった。",
