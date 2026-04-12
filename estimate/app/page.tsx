@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
-import Script from "next/script";
 import HeroSection from "@/components/landing/HeroSection";
+import JsonLd from "@/components/shared/JsonLd";
+import { SITE_URL, POSTAL_ADDRESS } from "@/lib/metadata";
 import { LP_COPY } from "@/content/estimate";
 
 const BenefitsSection = dynamic(
@@ -34,22 +35,20 @@ export default function EstimatePage() {
     logo: "https://cloudnature.jp/images/logo.png",
     description:
       "新潟の中小企業向けにAI導入支援、AIエージェント開発、システム開発を提供する伴走型パートナー。",
-    address: {
-      "@type": "PostalAddress",
-      postalCode: "951-8068",
-      addressLocality: "新潟市中央区",
-      streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
-      addressRegion: "新潟県",
-      addressCountry: "JP",
+    address: POSTAL_ADDRESS,
+    areaServed: {
+      "@type": "State",
+      name: "新潟県",
     },
+    sameAs: ["https://niigata-ai-academy.com"],
   };
   const webApplication = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "CloudNature AI見積もりシミュレーター",
-    url: "https://ai.cloudnature.jp",
+    url: SITE_URL,
     description:
-      "AIエージェントがシステム開発の概算見積もりを自動生成。質問に答えるだけで、WBS・機能一覧・費用比較を最短1分でお届け。",
+      "AIエージェントがシステム開発の要件をヒアリングし、概算見積もりと開発計画書を最短1分で自動生成する無料ツール。新潟県の中小企業のAI導入・業務自動化を支援。",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     offers: {
@@ -58,6 +57,12 @@ export default function EstimatePage() {
       priceCurrency: "JPY",
       description: "無料でご利用いただけます",
     },
+    featureList: [
+      "AIによる自動見積もり生成",
+      "開発計画書の自動作成",
+      "Webアプリ・AIエージェント・業務自動化に対応",
+      "概算費用の即時算出",
+    ],
     creator: {
       "@id": organizationId,
     },
@@ -65,60 +70,110 @@ export default function EstimatePage() {
   const howTo = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "CloudNatureでシステム開発の概算見積もりを進める方法",
+    name: "AI見積もりシミュレーターの使い方",
     description:
-      "AI見積もりから詳細ヒアリング、開発、納品までの流れを4ステップで案内します。",
+      "AIチャットに質問形式で答えるだけで、システム開発の概算見積もりを自動生成できます。",
     totalTime: "PT1M",
     step: LP_COPY.flow.steps.map((step, index) => ({
       "@type": "HowToStep",
       position: index + 1,
       name: step.title,
       text: step.description,
-      url: `https://ai.cloudnature.jp/#flow`,
+      url: `${SITE_URL}/#flow`,
+    })),
+  };
+  const localBusiness = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "CloudNature - AI導入支援・システム開発",
+    url: SITE_URL,
+    image: `${SITE_URL}/images/og-img.jpg`,
+    address: POSTAL_ADDRESS,
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 37.9161,
+      longitude: 139.0364,
+    },
+    areaServed: [
+      { "@type": "State", name: "新潟県" },
+      { "@type": "City", name: "新潟市" },
+      { "@type": "City", name: "長岡市" },
+      { "@type": "City", name: "上越市" },
+      { "@type": "City", name: "三条市" },
+      { "@type": "City", name: "燕市" },
+    ],
+    priceRange: "$$",
+    knowsAbout: [
+      "AI導入支援",
+      "AIエージェント開発",
+      "システム開発",
+      "業務自動化",
+      "Webアプリケーション開発",
+      "n8n",
+      "生成AI活用支援",
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "システム開発サービス",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "AIエージェント開発",
+            description:
+              "業務課題に合わせたAIエージェントの企画・開発・導入支援",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Webアプリケーション開発",
+            description:
+              "業務効率化のためのWebアプリ・社内ツールの設計・開発",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "業務自動化",
+            description: "n8n・AI活用による業務プロセスの自動化設計・構築",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "AI導入コンサルティング",
+            description:
+              "経営課題のヒアリングからAI活用方針の策定、実装支援まで",
+          },
+        },
+      ],
+    },
+  };
+  const faqPage = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: LP_COPY.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
     })),
   };
 
   return (
     <main className="relative">
-      <Script
-        id="json-ld-organization"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organization),
-        }}
-      />
-      <Script
-        id="json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(webApplication),
-        }}
-      />
-      <Script
-        id="json-ld-howto"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(howTo),
-        }}
-      />
-      <Script
-        id="json-ld-faq"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: LP_COPY.faq.items.map((item) => ({
-              "@type": "Question",
-              name: item.q,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: item.a,
-              },
-            })),
-          }),
-        }}
-      />
+      <JsonLd data={organization} />
+      <JsonLd data={webApplication} />
+      <JsonLd data={howTo} />
+      <JsonLd data={faqPage} />
+      <JsonLd data={localBusiness} />
       <div
         className="fixed inset-0 z-[9999] pointer-events-none mix-blend-multiply"
         style={{

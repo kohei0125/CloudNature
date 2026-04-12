@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
-
-const SITE_URL = "https://ai.cloudnature.jp";
+import { SITE_URL, SITE_NAME, OG_IMAGE } from "@/lib/metadata";
 
 export const metadata: Metadata = {
-  title: "AI見積もりシミュレーター｜チャットで簡単・最短1分",
+  title: {
+    absolute:
+      "AI見積もりツール｜無料でシステム開発費を自動算出【CloudNature】",
+  },
   description:
-    "AIエージェントに質問形式で答えるだけで、システム開発の概算見積もり・WBS・機能一覧を自動生成。完全無料でお試しいただけます。",
+    "AIが質問に沿ってヒアリングし、システム開発の概算見積もり・開発計画書を最短1分で自動生成。営業電話なし・完全無料。新潟県の中小企業のAI導入・業務自動化をサポートします。",
   openGraph: {
-    title: "AI見積もりシミュレーター｜チャットで簡単・最短1分",
+    title:
+      "AI見積もりツール｜無料でシステム開発費を自動算出【CloudNature】",
     description:
       "質問に答えるだけで、AIがシステム開発の概算見積もりを自動生成。",
     url: `${SITE_URL}/chat`,
+    siteName: SITE_NAME,
+    locale: "ja_JP",
+    type: "website",
+    images: [OG_IMAGE],
   },
   twitter: {
-    title: "AI見積もりシミュレーター｜チャットで簡単・最短1分",
+    card: "summary_large_image",
+    title:
+      "AI見積もりツール｜無料でシステム開発費を自動算出【CloudNature】",
     description:
       "質問に答えるだけで、AIがシステム開発の概算見積もりを自動生成。",
+    images: [OG_IMAGE.url],
   },
   alternates: {
     canonical: `${SITE_URL}/chat`,
