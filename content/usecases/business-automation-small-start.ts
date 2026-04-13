@@ -97,7 +97,7 @@ export const article: UseCaseArticle = {
 </tbody>
 </table>
 
-<p><strong>重要なのは「AIに100%任せない」設計です。</strong>AIは下書き・分類・集計までを担当し、最終確認と判断は人がやる。この切り分けが自動化を安全に運用するコツです。先述のマーケティング企業でも、AIが記事の下書きを作成し、担当者が戦略的な視点で仕上げる体制にしたことで、<strong>品質を落とさずに公開頻度を約2.7倍</strong>にできました。</p>
+<p><strong>重要なのは「AIに100%任せない」設計です。</strong>AIは下書き・分類・集計までを担当し、最終確認と判断は人がやる。この<a href="/usecases/ai-task-allocation">AIと人間の役割の仕分け方</a>が、自動化を安全に運用するコツです。先述のマーケティング企業でも、AIが記事の下書きを作成し、担当者が戦略的な視点で仕上げる体制にしたことで、<strong>品質を落とさずに公開頻度を約2.7倍</strong>にできました。</p>
 <figure>
 <img src="/images/blog/business-automation/08-ai-assisted-work.webp" alt="AIと人の役割分担を示す図。AIが下書き・分類・初稿の80%を担当し、人が最終確認・微調整・判断の20%を担う" width="3823" height="2134" loading="lazy" />
 <figcaption>AIに80%を任せ、人が20%の最終判断を行う設計が安全運用のコツ</figcaption>
