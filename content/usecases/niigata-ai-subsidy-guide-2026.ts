@@ -13,12 +13,12 @@ export const article: UseCaseArticle = {
 <p>「AIを導入したいけど、コストがネックで…」——新潟の中小企業の経営者から、私たちが最もよく聞く言葉です。</p>
 <p>実は2026年度、国はAI導入支援に本腰を入れています。さらに新潟県・市にも独自の支援制度があります。ただし制度が多すぎて「結局うちはどれが使えるの？」となるのも事実です。</p>
 <p>この記事では、新潟でAI導入支援をしている私たち（株式会社クラウドネイチャー）が、<strong>現場でよく聞かれる補助金の疑問</strong>に答える形で、使える制度と選び方をまとめました。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-01.jpg" alt="新潟の中小企業がAI導入で使える補助金ガイド【2026年版】「コストの壁」を越える、自社に最適な支援制度の選び方" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/01-cover-subsidy-guide.webp" alt="新潟の中小企業がAI導入で使える補助金ガイド【2026年版】「コストの壁」を越える、自社に最適な支援制度の選び方" />
 
 <h2>2026年、AI導入に補助金が使いやすくなった理由</h2>
 <p>2026年度、これまでの「IT導入補助金」が<strong>「デジタル化・AI導入補助金」</strong>に名称変更されました。名前が変わっただけではありません。国の令和7年度補正予算では中小企業のデジタル化・AI支援に大規模な予算が計上されています。</p>
 <p>背景には、中小企業のAI導入率がまだ約5%という現実があります。特に新潟のような地方は人手不足が深刻です。だからこそ「人がやらなくていい業務をAIに任せる」動きに対して、国も県も手厚い支援を用意しています。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-02.jpg" alt="「AIは高い」という常識は、2026年の特大予算が過去のものにする。令和7年度補正予算3,400億円計上" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/02-2026-budget-boost.webp" alt="「AIは高い」という常識は、2026年の特大予算が過去のものにする。令和7年度補正予算3,400億円計上" />
 
 <h2>【国の制度】AI導入に使える主要5つの補助金</h2>
 <p>まずは国の制度を見ていきます。なお、令和7年度補正予算で「ものづくり補助金」「新事業進出補助金」「省力化投資補助金」は同一の基金事業に再編されていますが、ここでは申請時の枠組みに沿って分けて紹介します。それぞれ対象や金額が異なるため、自社の目的に合ったものを選ぶことが重要です。</p>
@@ -36,7 +36,7 @@ export const article: UseCaseArticle = {
 </table>
 <p>ChatGPTやkintone、会計ソフトなど、<strong>既存のクラウドツールを導入したい場合</strong>に最適です。ただし「事前に登録されたITツールのみが対象」という制約があるため、導入したいツールが登録リストにあるかの事前確認が必須です。</p>
 <p>私たちの支援先でも最も利用率が高い補助金です。「まず1つのツールから」という小さなスタートに向いています。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-05.jpg" alt="はじめてのAI導入なら「デジタル化・AI導入補助金」一択。最大補助額450万円、補助率1/2〜2/3、申請頻度約1ヶ月に1回" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/05-digital-ai-subsidy.webp" alt="はじめてのAI導入なら「デジタル化・AI導入補助金」一択。最大補助額450万円、補助率1/2〜2/3、申請頻度約1ヶ月に1回" />
 
 <h3>② ものづくり補助金</h3>
 <p><strong>自社独自のAIシステムを開発したい場合の本命です。</strong></p>
@@ -62,7 +62,7 @@ export const article: UseCaseArticle = {
 </tbody>
 </table>
 <p>たとえば「製造業がAIを活用したデータ分析サービスを外販する」のような、既存事業＋AIで新領域に進出するケースが対象です。補助額は大きいですが、事業計画の審査も厳格です。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-06.jpg" alt="独自開発と新事業への挑戦を支える2つの大型支援。ものづくり補助金（最大1,250万円〜4,000万円）と新事業進出補助金（最大9,000万円）" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/06-manufacturing-new-business.webp" alt="独自開発と新事業への挑戦を支える2つの大型支援。ものづくり補助金（最大1,250万円〜4,000万円）と新事業進出補助金（最大9,000万円）" />
 
 <h3>④ 省力化投資補助金</h3>
 <p><strong>現場の人手不足を、AIやロボットで直接解決したい場合に。</strong></p>
@@ -98,7 +98,7 @@ export const article: UseCaseArticle = {
 <tr><td>持続化補助金</td><td>50万円（特例で最大200万円）</td><td>小さく始めるに最適</td><td>低</td></tr>
 </tbody>
 </table>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-03.jpg" alt="俯瞰でわかる：国の主要5大制度マトリクス。補助金額の規模と導入のアプローチで各制度をマッピング" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/03-five-subsidies-matrix.webp" alt="俯瞰でわかる：国の主要5大制度マトリクス。補助金額の規模と導入のアプローチで各制度をマッピング" />
 
 <h2>【新潟限定】地元で使える補助金・支援制度</h2>
 <p>国の制度に加えて、<strong>新潟県・市には独自の支援制度</strong>があります。全国版の補助金記事には載っていない、地元ならではの情報です。</p>
@@ -113,7 +113,7 @@ export const article: UseCaseArticle = {
 <h3>市町村レベルのDX補助金</h3>
 <p>たとえば新発田市では<strong>「市内産業DX推進補助金」</strong>（上限50万円）を実施しています。発注先が市内企業であれば補助率が上がる仕組みで、地元のIT企業に依頼するメリットがあります。</p>
 <p>お住まいの市町村にも同様の制度がある場合があります。まずは市役所の商工課に問い合わせてみてください。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-07.jpg" alt="全国版の記事には載っていない「新潟独自の支援制度」。新潟県（NICO）、新潟市、各市町村のDX補助金を紹介" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/07-niigata-local-support.webp" alt="全国版の記事には載っていない「新潟独自の支援制度」。新潟県（NICO）、新潟市、各市町村のDX補助金を紹介" />
 
 <h2>「うちはどれを使えばいい？」タイプ別の選び方</h2>
 <p>やりたいことから逆引きで選ぶのが一番確実です。</p>
@@ -128,7 +128,7 @@ export const article: UseCaseArticle = {
 <tr><td>先端AIで新製品・サービスを開発したい（新潟県内企業）</td><td>NICO DX先端技術活用支援</td></tr>
 </tbody>
 </table>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-04.jpg" alt="自社の「やりたいこと」から逆引きする最適ルート。目的別に6つの補助金制度への最適な導線を示すフローチャート" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/04-choose-by-goal-flowchart.webp" alt="自社の「やりたいこと」から逆引きする最適ルート。目的別に6つの補助金制度への最適な導線を示すフローチャート" />
 
 <h2>補助金申請でよくある失敗5つ</h2>
 <p>支援の現場で実際に見てきた「やってしまいがちなミス」をまとめます。</p>
@@ -147,8 +147,8 @@ export const article: UseCaseArticle = {
 
 <p><strong>⑤ 「補助金が出るから」で不要なツールまで入れる</strong></p>
 <p>補助金は手段であって目的ではありません。本当に必要な1業務の改善に絞る方が、結果的に成果が出ます。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-08.jpg" alt="支援の現場で頻発する、補助金申請「5つの致命的なミス」。交付決定前の発注、対象外ツールの購入、過去利用の減点、ID取得の遅れ、手段の目的化" />
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-09.jpg" alt="成功のためのゴールデンルール：補助金選びより先にすべきこと。失敗するアプローチと成功するアプローチの比較" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/08-five-common-mistakes.webp" alt="支援の現場で頻発する、補助金申請「5つの致命的なミス」。交付決定前の発注、対象外ツールの購入、過去利用の減点、ID取得の遅れ、手段の目的化" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/09-golden-rule-before-subsidy.webp" alt="成功のためのゴールデンルール：補助金選びより先にすべきこと。失敗するアプローチと成功するアプローチの比較" />
 
 <h2>補助金を活用してAI導入を始める6ステップ</h2>
 <table>
@@ -163,7 +163,7 @@ export const article: UseCaseArticle = {
 </tbody>
 </table>
 <p><strong>最も大事なのはSTEP 2です。</strong>補助金を調べる前に「何を自動化するか」を決めること。ここが曖昧なまま申請しても、採択されにくく、導入後も成果が出ません。</p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-10.jpg" alt="最短でAI導入を実現する「6つのステップ」。GビズID取得から交付決定後の導入開始までのプロセスフロー" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/10-six-steps-to-start.webp" alt="最短でAI導入を実現する「6つのステップ」。GビズID取得から交付決定後の導入開始までのプロセスフロー" />
 
 <h2>まとめ：2026年度はAI導入の追い風が吹いている</h2>
 <p>2026年度は「デジタル化・AI導入補助金」への名称変更に象徴されるように、<strong>国・県ともにAI導入への支援が拡充</strong>されています。</p>
@@ -171,11 +171,11 @@ export const article: UseCaseArticle = {
 <p><strong>① 国の5制度＋新潟独自の制度を、やりたいことから逆引きで選ぶ</strong></p>
 <p><strong>② 交付決定前の発注やGビズID未取得など、よくある失敗を避ける</strong></p>
 <p><strong>③ 補助金の前に「最初に自動化する1業務」を決めることが成功の鍵</strong></p>
-<img src="/images/tmp/niigata-ai-subsidy-guide-2026/Niigata_AI_Subsidy_Guide_2026-11.jpg" alt="本日のまとめ：AI導入を成功に導く3つのポイント" />
+<img src="/images/blog/niigata-ai-subsidy-guide-2026/11-three-key-points-summary.webp" alt="本日のまとめ：AI導入を成功に導く3つのポイント" />
 
 <h2>どの補助金が使えるか分からない場合は</h2>
 <p>「うちの業務にはどの補助金が合うのか」「そもそもAIで何が自動化できるのか」——まずはそこから整理するのが一番の近道です。</p>
 <p>株式会社クラウドネイチャーでは、<strong>無料相談（30分・オンライン対応）</strong>で、御社の業務に合った補助金の選び方と、最初に自動化すべき1業務を一緒に整理します。お気軽にご相談ください。</p>
 <p><strong>※ 本記事の補助金情報は2026年4月時点の公募要領に基づいています。補助額・補助率・申請要件は公募回ごとに変更される場合があります。最新情報は各制度の公式サイトをご確認ください。</strong></p>`,
-  image: "/images/tmp/niigata-ai-subsidy-guide-2026/thumbnail.jpg",
+  image: "/images/blog/niigata-ai-subsidy-guide-2026/thumbnail.webp",
 };
