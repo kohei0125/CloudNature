@@ -4,7 +4,6 @@ import { CONTACT_HERO, CONTACT_FAQ, STEP_FLOW_TITLE } from "@/content/contact";
 import PageHero from "@/components/shared/PageHero";
 import ContactForm from "@/components/contact/ContactForm";
 import StepFlow from "@/components/contact/StepFlow";
-import AlternativeContact from "@/components/contact/AlternativeContact";
 import ContactFaq from "@/components/contact/ContactFaq";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
@@ -63,9 +62,6 @@ export default function ContactPage() {
                 <div className="sticky top-32">
                   <h3 className="font-bold text-forest text-lg mb-6">{STEP_FLOW_TITLE}</h3>
                   <StepFlow />
-                  <div className="mt-8">
-                    <AlternativeContact />
-                  </div>
                 </div>
               </div>
             </div>

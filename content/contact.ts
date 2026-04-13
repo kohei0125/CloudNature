@@ -39,10 +39,6 @@ export const STEP_FLOW: StepFlowItem[] = [
   { step: 4, title: "開発スタート", description: "ご納得いただけたら、伴走型で開発を進めます。" }
 ];
 
-export const ALTERNATIVE_CONTACT = {
-  title: "その他のお問い合わせ方法",
-  email: { label: "メール", value: "info@cloudnature.jp" }
-};
 
 export const CONTACT_FAQ: FaqItem[] = [
   {
