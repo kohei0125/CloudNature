@@ -13,28 +13,37 @@ export const article: UseCaseArticle = {
 <p>「業務自動化って、大がかりなシステム導入のことでしょう？」——そう思っている方が多いのですが、実はそこが一番の落とし穴です。</p>
 <p>私たちが新潟の中小企業を支援してきた中で断言できるのは、<strong>業務自動化は「小さく始めた会社」ほど成功する</strong>ということです。逆に「全社DXプロジェクト」として始めた会社ほど、途中で頓挫しています。</p>
 <p>この記事では、<strong>まず1つの業務だけに絞って、2週間で動くものを作る</strong>という、私たちが実際に支援の現場で使っている進め方を解説します。</p>
-<img src="/images/blog/business-automation/01-cover-small-start.webp" alt="業務自動化の始め方：まず1業務だけ、2週間で動くものを作る。現場が迷わない、失敗しないスモールスタートの極意" />
+<figure>
+<img src="/images/blog/business-automation/01-cover-small-start.webp" alt="業務自動化の始め方を示すカバー画像。まず1業務だけ、2週間で動くものを作るスモールスタートの極意" width="3823" height="2134" />
+<figcaption>業務自動化は「1業務×2週間」のスモールスタートが最も成功率が高い</figcaption>
+</figure>
 
 <h2>なぜ「1業務だけ」なのか——大きく始めると失敗する3つの理由</h2>
 <p>業務自動化がうまくいかない会社には、共通するパターンがあります。</p>
 <p><strong>「あれもこれも自動化したい」→ 全体設計に時間がかかる → 現場が付いてこない → 半年経っても何も動いていない</strong></p>
 <p>これは規模の大きな会社に限った話ではありません。従業員10名の会社でも同じことが起きます。</p>
-<img src="/images/blog/business-automation/02-full-dx-project-pitfall.webp" alt="「全社DXプロジェクト」という一番の落とし穴。あれもこれも一気にやろうとすると全体設計に疲弊し半年経っても動かない。まずこの1つだけに絞れば2週間で成果が出る" />
+<figure>
+<img src="/images/blog/business-automation/02-full-dx-project-pitfall.webp" alt="全社DXプロジェクトの失敗パターンを図解。あれもこれも一気にやろうとして全体設計に疲弊し、半年経っても何も動かない" width="3823" height="2134" loading="lazy" />
+<figcaption>「全社DXプロジェクト」として大きく始めると頓挫しやすい</figcaption>
+</figure>
 <p>逆に、うまくいく会社は最初から<strong>「まずこの1つだけ」</strong>と決めています。理由は3つです。</p>
 
-<p><strong>① 2週間で成果が見える</strong></p>
-<p>小さく始めれば、2週間で「動くもの」ができます。実際に私たちが支援した新潟県内のマーケティング企業では、最初に「記事作成の下書き自動化」の1業務だけに絞った結果、<strong>2週間で執筆工数80%削減、月の公開本数が3本→8本</strong>に増えました。「作業時間が減った」という実感が生まれると、社内の「次もやりたい」という空気が自然に広がります。</p>
-
-<p><strong>② 失敗してもダメージが小さい</strong></p>
-<p>万が一うまくいかなくても、1業務だけなら元の運用にすぐ戻せます。数百万円の投資を先にする必要もありません。</p>
-
-<p><strong>③ 横展開のテンプレートになる</strong></p>
-<p>最初の1業務で自動化の「型」ができれば、2つ目以降は圧倒的に早くなります。私たちの支援先では、最初の1業務に2週間かかったものが、3〜4業務目には数日で回るようになったケースが複数あります。</p>
-<img src="/images/blog/business-automation/03-why-one-task-first.webp" alt="成功する会社は「1業務・2週間」から始める。①2週間で成果が見える ②ダメージが極小 ③横展開の「型」になる" />
+<ol>
+<li><strong>2週間で成果が見える</strong>——小さく始めれば、2週間で「動くもの」ができます。実際に私たちが支援した新潟県内のマーケティング企業では、最初に「記事作成の下書き自動化」の1業務だけに絞った結果、<strong>2週間で執筆工数80%削減、月の公開本数が3本→8本</strong>に増えました。「作業時間が減った」という実感が生まれると、社内の「次もやりたい」という空気が自然に広がります。</li>
+<li><strong>失敗してもダメージが小さい</strong>——万が一うまくいかなくても、1業務だけなら元の運用にすぐ戻せます。数百万円の投資を先にする必要もありません。</li>
+<li><strong>横展開のテンプレートになる</strong>——最初の1業務で自動化の「型」ができれば、2つ目以降は圧倒的に早くなります。私たちの支援先では、最初の1業務に2週間かかったものが、3〜4業務目には数日で回るようになったケースが複数あります。</li>
+</ol>
+<figure>
+<img src="/images/blog/business-automation/03-why-one-task-first.webp" alt="1業務から始める3つのメリットをまとめた図。2週間で成果が見える、ダメージが極小、横展開の型になる" width="3823" height="2134" loading="lazy" />
+<figcaption>成功する会社は「1業務・2週間」から始めている</figcaption>
+</figure>
 
 <h2>自動化すべき「最初の1業務」の見つけ方</h2>
 <p>「1業務だけ」と言われても、どの業務を選べばいいか迷うのは当然です。私たちがヒアリングで必ず使う<strong>4つの質問</strong>をご紹介します。この問いに答えるだけで、自動化の候補が自然に絞り込めます。</p>
-<img src="/images/blog/business-automation/04-four-questions-find-task.webp" alt="「最初の1つ」を見つける4つの質問。①きっかけは何？ ②どこに残したい？ ③ミスが怖いのはどこ？ ④特定の人しかできない？" />
+<figure>
+<img src="/images/blog/business-automation/04-four-questions-find-task.webp" alt="自動化対象を見つける4つの質問の図解。きっかけは何か、どこに記録するか、ミスの影響度、属人化しているか" width="3823" height="2134" loading="lazy" />
+<figcaption>この4つの質問に答えるだけで、自動化の候補が絞り込める</figcaption>
+</figure>
 
 <h3>質問①：その業務の「きっかけ」は何か？</h3>
 <p>業務が始まるトリガーを確認します。メール、LINE、フォーム送信など<strong>入口がデジタル</strong>であるほど自動化しやすくなります。逆に「口頭」や「FAX」が入口の場合は、まずそこをデジタル化する一手間が必要です。</p>
@@ -49,11 +58,17 @@ export const article: UseCaseArticle = {
 <p>特定の人しかできない属人化業務は、自動化による効果が最も大きい業務でもあります。手順を言語化して自動化すれば、<strong>担当者の退職・異動リスク</strong>にも備えられます。</p>
 
 <p><strong>目安として、「1回15分×週10回以上」発生している作業</strong>なら、自動化の効果が実感しやすいです。週2.5時間 ＝ 月10時間の削減になります。</p>
-<img src="/images/blog/business-automation/05-golden-rule-time-savings.webp" alt="自動化の「黄金ルール」：削減効果の目安。1回15分の作業×週10回以上×4週間＝月10時間の削減" />
+<figure>
+<img src="/images/blog/business-automation/05-golden-rule-time-savings.webp" alt="自動化の黄金ルールを示す計算式。1回15分×週10回以上×4週間で月10時間の削減効果" width="3823" height="2134" loading="lazy" />
+<figcaption>1回15分×週10回以上の作業なら、月10時間の削減が見込める</figcaption>
+</figure>
 
 <h2>業務自動化の2つのアプローチ</h2>
 <p>業務自動化には、大きく分けて<strong>2つの方向性</strong>があります。それぞれ得意領域が異なるため、組み合わせると最も効果的です。</p>
-<img src="/images/blog/business-automation/06-two-approaches.webp" alt="業務自動化を構成する「2つのアプローチ」。A）「手」を動かす作業をなくす（n8n, Power Automate） B）「頭」を使う作業を支援する（ChatGPT, Claude, Dify）" />
+<figure>
+<img src="/images/blog/business-automation/06-two-approaches.webp" alt="業務自動化の2つのアプローチを比較した図。ワークフロー自動化（n8n, Power Automate）とAI支援（ChatGPT, Claude, Dify）" width="3823" height="2134" loading="lazy" />
+<figcaption>「手の自動化」と「頭の支援」を組み合わせると最も効果的</figcaption>
+</figure>
 
 <h3>A）「手」を動かす作業をなくす——ワークフロー自動化</h3>
 <p>データの転記、入力、集計、ファイルの移動など、<strong>毎回同じ手順で繰り返す作業</strong>が対象です。n8nやPower Automateなどの自動化ツールで、「決まったトリガーで、決まった処理を、自動で実行する」仕組みを作ります。</p>
@@ -66,7 +81,10 @@ export const article: UseCaseArticle = {
 </tbody>
 </table>
 <p>実際に私たち自身も、このアプローチで<strong>週次レポートの作成を完全自動化</strong>しています。GA4やSearch Consoleのデータを自動取得し、AIがインサイトを生成、毎週月曜にスプレッドシートへ自動反映する仕組みです。それまで毎週60分かけていた作成作業が<strong>0分</strong>になり、分析の頻度も月1〜2回から毎週に増えました。</p>
-<img src="/images/blog/business-automation/07-workflow-automation.webp" alt="アプローチA：「手」を動かす作業をなくす。Webフォーム→スプレッドシート自動転記＋Slack通知、請求データ→会計ソフト自動連携の具体例" />
+<figure>
+<img src="/images/blog/business-automation/07-workflow-automation.webp" alt="ワークフロー自動化の具体例。Webフォームからスプレッドシートへの自動転記とSlack通知、請求データの会計ソフト自動連携" width="3823" height="2134" loading="lazy" />
+<figcaption>フォーム→転記→通知まで、人の手を介さずに完結するワークフローの例</figcaption>
+</figure>
 
 <h3>B）「頭」を使う作業を支援する——AI支援</h3>
 <p>文章作成、判断、要約、問い合わせ対応など、<strong>考える作業</strong>が対象です。ChatGPTやClaude、Difyなどの生成AIで、「下書き」や「定型回答の生成」を担わせます。</p>
@@ -80,17 +98,26 @@ export const article: UseCaseArticle = {
 </table>
 
 <p><strong>重要なのは「AIに100%任せない」設計です。</strong>AIは下書き・分類・集計までを担当し、最終確認と判断は人がやる。この切り分けが自動化を安全に運用するコツです。先述のマーケティング企業でも、AIが記事の下書きを作成し、担当者が戦略的な視点で仕上げる体制にしたことで、<strong>品質を落とさずに公開頻度を約2.7倍</strong>にできました。</p>
-<img src="/images/blog/business-automation/08-ai-assisted-work.webp" alt="アプローチB：「頭」を使う作業を支援する。AIの役割（80%）は下書き生成・分類・初稿作成、人の役割（20%）は最終確認・微調整・最終判断。この切り分けが安全運用の最大のコツ" />
+<figure>
+<img src="/images/blog/business-automation/08-ai-assisted-work.webp" alt="AIと人の役割分担を示す図。AIが下書き・分類・初稿の80%を担当し、人が最終確認・微調整・判断の20%を担う" width="3823" height="2134" loading="lazy" />
+<figcaption>AIに80%を任せ、人が20%の最終判断を行う設計が安全運用のコツ</figcaption>
+</figure>
 
 <h2>「1業務×2週間」の具体的な進め方</h2>
 <p>私たちが実際に支援で使っている、2週間のスケジュールです。</p>
-<img src="/images/blog/business-automation/09-two-week-roadmap.webp" alt="「1業務×2週間」の具体的なロードマップ。Week1：現状整理→設計（Day1-5）、Week2：構築→テスト→本番投入（Day6-14）" />
+<figure>
+<img src="/images/blog/business-automation/09-two-week-roadmap.webp" alt="2週間の業務自動化ロードマップ。Week1で現状整理と設計、Week2で構築・テスト・本番投入" width="3823" height="2134" loading="lazy" />
+<figcaption>「1業務×2週間」で成果を出すロードマップ</figcaption>
+</figure>
 
 <h3>Week 1：現状整理 → 設計</h3>
 
 <p><strong>Day 1〜2：現状フローの書き起こし（30分〜1時間）</strong></p>
 <p>対象業務の「始まりから終わりまで」を1枚の図に書き起こします。複雑に考える必要はありません。「誰が」「何を見て」「どこに入力するか」を順番に並べるだけです。</p>
-<img src="/images/blog/business-automation/10-day1-current-flow.webp" alt="Day1の極意：複雑な業務フロー図は不要。「誰が」「何を見て」「どこに入力するか」の3つの要素を順番に並べるだけで現状整理は完了" />
+<figure>
+<img src="/images/blog/business-automation/10-day1-current-flow.webp" alt="現状フローの書き起こし方法。誰が・何を見て・どこに入力するかの3要素を順番に並べるだけで完了" width="3823" height="2134" loading="lazy" />
+<figcaption>複雑なフロー図は不要。3つの要素を順に書き出すだけで業務の全体像が見える</figcaption>
+</figure>
 
 <p><strong>Day 3〜4：自動化の「最小構成」を決める</strong></p>
 <p>書き起こしたフローの中から、<strong>人がやる必要がない部分</strong>を特定します。全部を自動化しようとせず、「ここだけ自動にすれば一番ラクになる」というポイントに絞ります。この「最小構成」の見極めが成否を分けます。</p>
@@ -111,7 +138,10 @@ export const article: UseCaseArticle = {
 
 <h2>自動化しやすい業務・しにくい業務</h2>
 <p>「うちの業務は特殊だから自動化は難しい」と言われることがあります。実際には、<strong>完全に自動化できなくても、一部分だけ自動化するだけで大きな効果が出る</strong>ケースがほとんどです。</p>
-<img src="/images/blog/business-automation/11-automation-compatibility.webp" alt="業務の相性チェック：自動化の「壁」と対処法。議事録・定型問い合わせ・データ転記は簡単、職人の技術・クレーム対応・法律判断は難しいが部分的な活用法がある" />
+<figure>
+<img src="/images/blog/business-automation/11-automation-compatibility.webp" alt="業務別の自動化しやすさを比較した表。議事録・定型問い合わせ・データ転記は容易、職人の技術・クレーム対応・法律判断は部分的に活用可能" width="3823" height="2134" loading="lazy" />
+<figcaption>完全自動化が難しい業務でも、部分的なAI活用で効果が出る</figcaption>
+</figure>
 
 <h3>自動化しやすい業務</h3>
 <table>
@@ -146,8 +176,11 @@ export const article: UseCaseArticle = {
 <p>たとえば、1回15分の作業が週20回発生しているなら：</p>
 <p><strong>15分 × 20回 × 4週 ＝ 月20時間（約0.5人月）の削減</strong></p>
 <p>月20時間が浮けば、その時間を営業活動や顧客対応に使えます。「人を増やさずに回る状態」に一歩近づくということです。導入効果を経営層に報告する際にも、この数字があれば説得力が出ます。</p>
-<p>もう少し大きな例では、私たちが自社で開発した<strong>AI見積もりシステム</strong>があります。システム開発の見積もりは、従来ヒアリングから算出まで数日かかっていました。これをAIチャットによる要件整理＋自動算出に置き換えた結果、<strong>見積もり作成時間が数日→約1分に短縮（工数95%削減）</strong>。この効果は社内だけでなく、お客様の「見積もりを待つ時間」も劇的に減らしました。</p>
-<img src="/images/blog/business-automation/12-measure-results.webp" alt="感覚ではなく「数字」で効果を証明する。導入前：1回15分×週20回＝月20時間 → 導入後：月0時間（約0.5人月の作業時間削減）。浮いた月20時間は営業活動や顧客対応へ再投資" />
+<p>もう少し大きな例では、私たちが自社で開発した<strong><a href="/usecases/ai-installation-failure">AI見積もりシステム</a></strong>があります。システム開発の見積もりは、従来ヒアリングから算出まで数日かかっていました。これをAIチャットによる要件整理＋自動算出に置き換えた結果、<strong>見積もり作成時間が数日→約1分に短縮（工数95%削減）</strong>。この効果は社内だけでなく、お客様の「見積もりを待つ時間」も劇的に減らしました。</p>
+<figure>
+<img src="/images/blog/business-automation/12-measure-results.webp" alt="自動化の効果を数字で示す計算例。導入前は月20時間の作業が、導入後は0時間に。浮いた時間を営業や顧客対応へ再投資" width="3823" height="2134" loading="lazy" />
+<figcaption>導入効果は「数字」で測る。月20時間の削減は約0.5人月分に相当</figcaption>
+</figure>
 
 <h2>2つ目以降は驚くほど早い</h2>
 <p>最初の1業務で<strong>「自動化の型」</strong>ができると、2つ目以降の展開は格段に早くなります。理由は明確です。</p>
@@ -158,17 +191,25 @@ export const article: UseCaseArticle = {
 </ul>
 <p>先述のマーケティング企業でも、最初の「記事下書き自動化」の成功後、競合リサーチの自動収集、SNS投稿の下書き生成と次々に横展開が進み、<strong>3ヶ月でリーチが2倍</strong>に。また、私たちが支援した新潟県内の研修サービス企業では、最初に「受講進捗の可視化」を自動化したことをきっかけに、AIによる苦手分野の自動出題まで拡張し、<strong>研修の修了率が大幅に向上</strong>しました。</p>
 <p>だからこそ、<strong>最初の1業務の選び方と進め方が、業務自動化全体の成否を決めます</strong>。</p>
-<img src="/images/blog/business-automation/13-ripple-effect.webp" alt="波及効果：2つ目以降は驚くほど早い。ツールの知識が蓄積→構築の手順が社内に定着→現場のモチベーション向上。最初の1業務が全社展開の「型」になる循環" />
+<figure>
+<img src="/images/blog/business-automation/13-ripple-effect.webp" alt="自動化の波及効果を示す図。ツール知識の蓄積、手順の社内定着、現場モチベーション向上の好循環" width="3823" height="2134" loading="lazy" />
+<figcaption>最初の1業務の成功が、全社展開の「型」になる</figcaption>
+</figure>
 
 <h2>まとめ</h2>
 <p>業務自動化を成功させるポイントは3つです。</p>
-<p><strong>① 「1業務だけ」「2週間」で始めるのが最も成功率が高い</strong></p>
-<p><strong>② 「手の自動化」と「頭の支援」を組み合わせ、AIに100%任せない設計にする</strong></p>
-<p><strong>③ 最初の1業務で型ができれば、2つ目以降は加速的に展開できる</strong></p>
-<img src="/images/blog/business-automation/14-three-principles-summary.webp" alt="まとめ：成功するための3つの鉄則。【規模】まず1業務だけ2週間で作る 【設計】手の自動化と頭の支援を組み合わせAIには100%任せない 【展開】最初の1つを型にして2つ目以降を加速させる" />
+<ol>
+<li><strong>「1業務だけ」「2週間」で始める</strong>のが最も成功率が高い</li>
+<li><strong>「手の自動化」と「頭の支援」を組み合わせ</strong>、AIに100%任せない設計にする</li>
+<li><strong>最初の1業務で型ができれば</strong>、2つ目以降は加速的に展開できる</li>
+</ol>
+<figure>
+<img src="/images/blog/business-automation/14-three-principles-summary.webp" alt="業務自動化を成功させる3つの鉄則のまとめ。規模はまず1業務、設計はAIに100%任せない、展開は型を横展開" width="3823" height="2134" loading="lazy" />
+<figcaption>業務自動化を成功させる3つの鉄則</figcaption>
+</figure>
 
 <h2>「最初の1業務」が決まらない場合は</h2>
 <p>「自動化したい気持ちはあるけど、どの業務から手をつけていいか分からない」——それが一番多い悩みです。</p>
-<p>株式会社クラウドネイチャーでは、<strong>無料相談（30分・オンライン対応）</strong>で、御社の業務の中から「最短で効果が出る1業務」を一緒に特定します。まずは30分だけ、現状の業務フローを教えてください。</p>`,
+<p>株式会社クラウドネイチャーでは、<strong>無料相談（30分・オンライン対応）</strong>で、御社の業務の中から「最短で効果が出る1業務」を一緒に特定します。まずは30分だけ、現状の業務フローを教えてください。 <a href="/contact">無料相談のお申し込みはこちら</a></p>`,
   image: "/images/blog/business-automation/thumbnail.webp",
 };
