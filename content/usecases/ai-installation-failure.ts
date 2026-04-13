@@ -117,7 +117,7 @@ export const article: UseCaseArticle = {
 <li><strong>最小単位で始める</strong>——1人の社員の、1つの業務から成果を出す</li>
 <li><strong>成功事実を社内に広げる</strong>——数字で見える効果が次の導入への納得感を生む</li>
 </ol>
-<p>ツール選びも、研修も、全社展開も、その後で十分間に合います。「どの仕事をAIに渡し、どの仕事に人間を集中させるか」という仕分けの考え方は<a href="/usecases/ai-task-allocation">AIエージェントと人間の持ち場を再定義する</a>で詳しく解説しています。</p>
+<p>ツール選びも、研修も、全社展開も、その後で十分間に合います。「どの仕事をAIに渡し、どの仕事に人間を集中させるか」という仕分けの考え方は<a href="/usecases/ai-task-allocation">AIエージェント vs 人間 | 中小企業の業務仕分けルール</a>で詳しく解説しています。</p>
 <p>「うちは、まずどの業務から手をつければいいのか」——その整理を一緒にするところから、私たちの支援は始まります。</p>
 <p><strong>まずは30分、御社の業務課題を整理してみませんか？</strong> <a href="/contact">無料相談のお申し込みはこちら</a></p>`,
   image: "/images/blog/ai-installation-failure/00-thumbnail.webp",

@@ -6,7 +6,7 @@ export const article: UseCaseArticle = {
   category: "経営戦略",
   relatedServiceIds: ["ai-support", "ai"],
   title:
-    "AIエージェントと人間の「持ち場」を再定義する｜中小企業の業務仕分けルール",
+    "AIエージェント vs 人間｜中小企業の業務仕分けルール",
   excerpt:
     "「AIに何を任せ、人間は何をすべきか」——新潟の中小企業が明日から使える業務仕分けの判断基準を、AIエージェントと人間の役割整理を通じて解説します。",
   body: `<h2>「AIに仕事を奪われるか」は、もう間違った問いである</h2>
