@@ -35,6 +35,10 @@ __pycache__
 .env.*.local
 backend/.env
 
+# External tools
+.superset/
+.takt/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
