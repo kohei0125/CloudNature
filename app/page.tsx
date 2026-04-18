@@ -61,7 +61,7 @@ const Home = async () => {
       <WaveSeparator position="top" color="#f8f9fa" bgColor="#19231b" withTexture={false} />
       <CasesCarouselSection />
       <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#f0f0f0" withTexture={false} />
-      <CtaSection />
+      {/* <CtaSection /> */}
     </div>
   );
 };
