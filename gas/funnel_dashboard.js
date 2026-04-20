@@ -502,8 +502,7 @@ function getGSCTopQueries(startStr, endStr) {
  * Sheet 1（週次サマリー）に1行書き込む。
  * キーイベント（フォーム開始・リード獲得・成約）も統合。
  */
-function writeToSummarySheet(yearWeek, dateRange, corpMetrics, estMetrics, gscMetrics, corpEvents, estEvents) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+function writeToSummarySheet(ss, yearWeek, dateRange, corpMetrics, estMetrics, gscMetrics, corpEvents, estEvents) {
   const sheet = ss.getSheetByName(SHEET_SUMMARY);
 
   clearWeekRows(sheet, yearWeek, 2);
@@ -543,8 +542,7 @@ function writeToSummarySheet(yearWeek, dateRange, corpMetrics, estMetrics, gscMe
 /**
  * Sheet 2（チャネル別）に書き込む。
  */
-function writeToChannelSheet(yearWeek, corpChannels, estChannels) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+function writeToChannelSheet(ss, yearWeek, corpChannels, estChannels) {
   const sheet = ss.getSheetByName(SHEET_CHANNEL);
 
   clearWeekRows(sheet, yearWeek, 1);
@@ -565,8 +563,7 @@ function writeToChannelSheet(yearWeek, corpChannels, estChannels) {
 /**
  * Sheet 3（Top検索クエリ）に書き込む。
  */
-function writeToQuerySheet(yearWeek, queries) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+function writeToQuerySheet(ss, yearWeek, queries) {
   const sheet = ss.getSheetByName(SHEET_QUERY);
 
   clearWeekRows(sheet, yearWeek, 1);
@@ -584,8 +581,7 @@ function writeToQuerySheet(yearWeek, queries) {
 /**
  * Sheet 4（Topページ）に書き込む。GA4 PVベース。
  */
-function writeToPageSheet(yearWeek, corpPages, estPages) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+function writeToPageSheet(ss, yearWeek, corpPages, estPages) {
   const sheet = ss.getSheetByName(SHEET_PAGE);
 
   clearWeekRows(sheet, yearWeek, 1);
@@ -606,8 +602,7 @@ function writeToPageSheet(yearWeek, corpPages, estPages) {
 /**
  * Sheet 5（キーイベント詳細）に書き込む。
  */
-function writeToKeyEventSheet(yearWeek, corpEvents, estEvents) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+function writeToKeyEventSheet(ss, yearWeek, corpEvents, estEvents) {
   const sheet = ss.getSheetByName(SHEET_KEY_EVENT);
 
   clearWeekRows(sheet, yearWeek, 1);
@@ -823,31 +818,70 @@ function fetchWeeklyData(targetDateOrEvent, overrideRange) {
   const dateRange = startStr + ' ~ ' + endStr;
   Logger.log('取得対象: %s (%s)', yearWeek, dateRange);
 
+  const t0 = Date.now();
+
   // GA4 データ取得
   const corpMetrics = getGA4HostMetrics(CORPORATE_HOST, startStr, endStr);
   const estMetrics = getGA4HostMetrics(ESTIMATE_HOST, startStr, endStr);
+  Logger.log('GA4 metrics: %d ms', Date.now() - t0);
+
   const corpChannels = getGA4ChannelsByHost(CORPORATE_HOST, startStr, endStr);
   const estChannels = getGA4ChannelsByHost(ESTIMATE_HOST, startStr, endStr);
   const corpPages = getGA4TopPagesByHost(CORPORATE_HOST, startStr, endStr);
   const estPages = getGA4TopPagesByHost(ESTIMATE_HOST, startStr, endStr);
   const corpEvents = getGA4KeyEventsByHost(CORPORATE_HOST, startStr, endStr);
   const estEvents = getGA4KeyEventsByHost(ESTIMATE_HOST, startStr, endStr);
+  Logger.log('GA4 all: %d ms', Date.now() - t0);
 
   // GSC データ取得
   const gscMetrics = getGSCMetrics(startStr, endStr);
   const gscQueries = getGSCTopQueries(startStr, endStr);
+  Logger.log('GSC done: %d ms', Date.now() - t0);
 
-  // 各シートに書き込み
-  writeToSummarySheet(yearWeek, dateRange, corpMetrics, estMetrics, gscMetrics, corpEvents, estEvents);
-  writeToChannelSheet(yearWeek, corpChannels, estChannels);
-  writeToQuerySheet(yearWeek, gscQueries);
-  writeToPageSheet(yearWeek, corpPages, estPages);
-  writeToKeyEventSheet(yearWeek, corpEvents, estEvents);
+  // 各シートに書き込み（ss を1回だけ取得して使い回す）
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  writeToSummarySheet(ss, yearWeek, dateRange, corpMetrics, estMetrics, gscMetrics, corpEvents, estEvents);
+  writeToChannelSheet(ss, yearWeek, corpChannels, estChannels);
+  writeToQuerySheet(ss, yearWeek, gscQueries);
+  writeToPageSheet(ss, yearWeek, corpPages, estPages);
+  writeToKeyEventSheet(ss, yearWeek, corpEvents, estEvents);
+  SpreadsheetApp.flush();
+  Logger.log('Sheet write done: %d ms', Date.now() - t0);
 
-  // チャート再作成
+  // チャート更新をワンショットトリガーで1分後にスケジュール（実行時間6分制限の回避）
+  scheduleChartUpdate_();
+  Logger.log('fetchWeeklyData 完了: %s (total %d ms)', yearWeek, Date.now() - t0);
+}
+
+/**
+ * updateCharts のワンショットトリガーを1分後に作成する。
+ * fetchWeeklyData 完了後に呼ばれるため、順序が保証される。
+ */
+function scheduleChartUpdate_() {
+  // 既存の updateCharts ワンショットトリガーがあれば削除（重複防止）
+  const triggers = ScriptApp.getProjectTriggers();
+  for (const trigger of triggers) {
+    if (trigger.getHandlerFunction() === 'updateCharts' && trigger.getTriggerSource() === ScriptApp.TriggerSource.CLOCK) {
+      // 週次トリガーでなく after() で作ったワンショットの場合、EventType は CLOCK
+      ScriptApp.deleteTrigger(trigger);
+    }
+  }
+
+  ScriptApp.newTrigger('updateCharts')
+    .timeBased()
+    .after(60 * 1000) // 1分後
+    .create();
+  Logger.log('updateCharts を1分後にスケジュール');
+}
+
+/**
+ * チャートのみを再作成する。
+ * fetchWeeklyData 完了後にワンショットトリガーで自動実行される。
+ * 手動実行も可能。
+ */
+function updateCharts() {
   rebuildCharts();
-
-  Logger.log('fetchWeeklyData 完了: %s', yearWeek);
+  Logger.log('updateCharts 完了');
 }
 
 /**
@@ -890,23 +924,27 @@ function backfill(startMondayStr, endMondayStr) {
     }
   }
 
-  Logger.log('backfill 完了: %d 週分取得', weekCount);
+  // 全週投入後にチャートを再作成
+  rebuildCharts();
+  Logger.log('backfill 完了: %d 週分取得（チャート更新済み）', weekCount);
 }
 
 /**
  * 毎週月曜 10:30 JST のトリガーを設定する。
  */
 function setupTrigger() {
-  // 既存の fetchWeeklyData トリガーを削除
+  // 既存トリガーを全て削除
   const triggers = ScriptApp.getProjectTriggers();
   for (const trigger of triggers) {
-    if (trigger.getHandlerFunction() === 'fetchWeeklyData') {
+    const fn = trigger.getHandlerFunction();
+    if (fn === 'fetchWeeklyData' || fn === 'updateCharts') {
       ScriptApp.deleteTrigger(trigger);
-      Logger.log('既存トリガーを削除: %s', trigger.getUniqueId());
+      Logger.log('既存トリガーを削除: %s (%s)', fn, trigger.getUniqueId());
     }
   }
 
-  // 新規トリガー作成
+  // データ書き込み: 毎週月曜 10:30 JST
+  // チャート更新は fetchWeeklyData 完了後にワンショットトリガーで自動実行される
   ScriptApp.newTrigger('fetchWeeklyData')
     .timeBased()
     .onWeekDay(ScriptApp.WeekDay.MONDAY)
@@ -914,5 +952,5 @@ function setupTrigger() {
     .nearMinute(30)
     .create();
 
-  Logger.log('setupTrigger 完了: 毎週月曜 10:30 JST');
+  Logger.log('setupTrigger 完了: fetchWeeklyData=毎週月曜10:30 → 完了後にupdateChartsを自動スケジュール');
 }
