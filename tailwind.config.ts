@@ -9,10 +9,24 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", "Noto Sans JP", "sans-serif"],
-        serif: ["var(--font-serif)", "Noto Serif JP", "serif"]
+        sans: ["var(--font-inter)", "var(--font-sans)", "Noto Sans JP", "Hiragino Kaku Gothic ProN", "BIZ UDPGothic", "sans-serif"],
       },
       colors: {
+        teal: {
+          DEFAULT: "#0e483e",
+          50: "#F6FAFA",
+          100: "#E0F2F1",
+          200: "#B2DFDB",
+          300: "#80CBC4",
+          400: "#4DB6AC",
+          500: "#26A69A",
+          600: "#00897B",
+          700: "#005D5F",
+          800: "#055448",
+          900: "#0A5346",
+          950: "#042F2E",
+        },
+        // レガシー互換（他ページで参照されている可能性あり）
         sage: "#8A9668",
         forest: "#19231B",
         pebble: "#F0F0F0",
@@ -25,16 +39,18 @@ const config: Config = {
         linen: "#F5F5F5",
         mist: "#F8F9FA",
       },
-      backgroundImage: {
-        "inorganic-lines": "repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 20px)",
-      },
       animation: {
         "infinite-scroll": "infinite-scroll 25s linear infinite",
+        "hero-fade-in": "hero-fade-in 700ms ease-out both",
       },
       keyframes: {
         "infinite-scroll": {
           from: { transform: "translateX(0)" },
           to: { transform: "translateX(-50%)" },
+        },
+        "hero-fade-in": {
+          from: { opacity: "0", transform: "translateY(20px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
       }
     }

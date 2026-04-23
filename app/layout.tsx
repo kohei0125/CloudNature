@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
+import { Noto_Sans_JP, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
@@ -17,13 +17,11 @@ const sans = Noto_Sans_JP({
   variable: "--font-sans"
 });
 
-const serif = Noto_Serif_JP({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["700"],
+  weight: ["400", "600", "700"],
   display: "swap",
-  preload: false,
-  fallback: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "serif"],
-  variable: "--font-serif"
+  variable: "--font-inter"
 });
 
 export const metadata: Metadata = (() => {
@@ -138,14 +136,14 @@ export default function RootLayout({
 
   return (
     <html lang="ja">
-      <body className={cn(sans.variable, serif.variable)}>
+      <body className={cn(sans.variable, inter.variable)}>
         <GoogleAnalytics />
         <GtmNoscript />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="v-stack min-h-screen font-sans text-forest selection:bg-sunset selection:text-white">
+        <div className="v-stack min-h-screen font-sans text-gray-800 selection:bg-teal-600 selection:text-white">
           <HeaderWrapper />
           <main className="flex-grow">{children}</main>
           <Footer />

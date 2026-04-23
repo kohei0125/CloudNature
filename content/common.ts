@@ -19,11 +19,11 @@ export const COLORS = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "お知らせ", path: "/news" },
   { label: "サービス", path: "/services" },
-  { label: "事例", path: "/cases" },
+  { label: "導入事例", path: "/cases" },
   { label: "AIガイド", path: "/usecases" },
-  { label: "企業情報", path: "/company" }
+  { label: "会社情報", path: "/company" },
+  { label: "お知らせ", path: "/news" },
 ];
 
 export const PAGE_META = {

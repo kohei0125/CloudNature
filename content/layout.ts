@@ -1,19 +1,15 @@
 export const HEADER_COPY = {
   brand: "CloudNature",
-  consultation: "無料相談",
+  downloadCta: "資料ダウンロード",
+  contactCta: "お問い合わせ",
   mobilePrompt: "お急ぎの方はこちら",
-  mobileButton: "無料相談を予約する"
+  mobileButton: "お問い合わせ"
 };
 
 export const FOOTER_COPY = {
-  taglineLines: [
-    "「当たり前の作業」から減らす。",
-    "AIで、人手に頼らない仕組みを",
-    "AI導入から運用まで、伴走型でサポートします。",
-    "新潟の中小企業の業務効率化パートナー。"
-  ],
-  serviceHeading: "Service",
-  companyHeading: "Company",
+  description: "AI導入から運用まで伴走する開発パートナー",
+  serviceHeading: "SERVICE",
+  companyHeading: "COMPANY",
   serviceLinks: [
     { label: "AI導入・伴走支援", path: "/services/ai-support" },
     { label: "AIエージェント開発", path: "/services/ai-agent" },
@@ -23,13 +19,12 @@ export const FOOTER_COPY = {
     { label: "企業情報", path: "/company" },
     { label: "導入事例", path: "/cases" },
     { label: "AIガイド", path: "/usecases" },
+    { label: "お知らせ", path: "/news" },
+  ],
+  legalLinks: [
     { label: "利用規約", path: "/terms" },
     { label: "プライバシーポリシー", path: "/privacy" },
     { label: "情報セキュリティ方針", path: "/security" }
   ],
   copyright: "© 2026 CloudNature Co., Ltd. All Rights Reserved.",
-  badges: [
-    { icon: "ShieldCheck" as const, label: "AI Guidelines" },
-    { icon: "Check" as const, label: "GDPR Compliant" }
-  ]
 };
