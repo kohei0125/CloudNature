@@ -27,7 +27,7 @@ const WaveSeparator: React.FC<WaveSeparatorProps> = ({
       style={{ backgroundColor: bgColor }}
     >
       <svg
-        className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]"
+        className="relative block w-[calc(100%+1.3px)] h-[36px] md:h-[56px]"
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1200 120"

@@ -4,14 +4,13 @@ import { HERO_COPY, NEWS_ITEMS } from "@/content/home";
 import { getNewsList } from "@/lib/microcms";
 import { toNewsItem } from "@/types/microcms";
 import type { NewsItem } from "@/types";
-import WaveSeparator from "@/components/shared/WaveSeparator";
 import HeroSection from "@/components/home/HeroSection";
-import MissionSection from "@/components/home/MissionSection";
+import NewsSection from "@/components/home/NewsSection";
 import ServicesSection from "@/components/home/ServicesSection";
+import WaveSeparator from "@/components/shared/WaveSeparator";
 import CasesSection from "@/components/home/CasesSection";
 import CasesCarouselSection from "@/components/home/CasesCarouselSection";
 import CtaSection from "@/components/home/CtaSection";
-import NewsSection from "@/components/home/NewsSection";
 
 export const metadata: Metadata = {
   title: PAGE_META.home.title,
@@ -49,19 +48,15 @@ const Home = async () => {
   }
 
   return (
-    <div className="w-full bg-cream">
+    <div className="w-full bg-white">
       <HeroSection />
       <NewsSection items={newsItems} />
-      <WaveSeparator position="top" color="#ffffff" bgColor="#f8f9fa" withTexture={false} />
-      <MissionSection />
-      <WaveSeparator position="top" color="#F8F9FA" bgColor="#ffffff" />
       <ServicesSection />
-      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#19231b" withTexture={false} />
+      <WaveSeparator position="bottom" color="#F6FAFA" bgColor="#0e483e" withTexture={false} />
       <CasesSection />
-      <WaveSeparator position="top" color="#f8f9fa" bgColor="#19231b" withTexture={false} />
+      <WaveSeparator position="top" color="#ffffff" bgColor="#0e483e" withTexture={false} />
       <CasesCarouselSection />
-      <WaveSeparator position="bottom" color="#F8F9FA" bgColor="#19231b" withTexture={false} />
-      {/* <CtaSection /> */}
+      <CtaSection />
     </div>
   );
 };

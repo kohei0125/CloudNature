@@ -31,7 +31,7 @@ const RelatedLinks = ({
           <p className="text-sm font-bold tracking-widest mb-2 uppercase text-sage">
             {eyebrow}
           </p>
-          <h2 id={headingId} className="text-lg md:text-xl font-serif font-bold text-forest">
+          <h2 id={headingId} className="text-lg md:text-xl font-sans font-bold text-forest">
             {title}
           </h2>
         </div>

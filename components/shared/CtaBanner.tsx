@@ -21,7 +21,7 @@ const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id =
         {eyebrow ? (
           <p className="text-sm font-bold tracking-widest text-sage mb-4 uppercase">{eyebrow}</p>
         ) : null}
-        <h2 id={headingId} className="text-[clamp(1.375rem,5vw,2.25rem)] font-serif font-bold mb-6">
+        <h2 id={headingId} className="text-[clamp(1.375rem,5vw,2.25rem)] font-sans font-bold mb-6">
           {title}
         </h2>
         <p className="text-white/70 leading-relaxed mb-10 max-w-2xl mx-auto">

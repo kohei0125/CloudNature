@@ -1,114 +1,42 @@
-import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { CTA_BANNER } from "@/content/home";
 
 const CtaSection = () => {
   return (
-    <section id="cta" aria-labelledby="cta-heading" className="py-16 md:py-24 bg-pebble relative">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="bg-white rounded-[32px] overflow-hidden shadow-xl grid md:grid-cols-2">
+    <section id="cta" aria-labelledby="cta-heading" className="py-16 md:py-24 bg-white relative overflow-hidden border-t border-gray-100">
+      {/* 左側の円形装飾 */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-[30%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-br from-lime-100/80 to-emerald-100/80 pointer-events-none" />
+      <div className="absolute -bottom-[10%] left-[5%] md:left-[10%] w-[200px] h-[200px] md:w-[300px] md:h-[300px] rounded-full bg-gradient-to-tr from-emerald-100/60 to-teal-100/60 pointer-events-none backdrop-blur-[2px]" />
 
-          {/* Left Column: Content */}
-          <div className="p-8 md:p-16 space-y-8 v-stack justify-center">
-            <div>
-              <h2 id="cta-heading" className="text-[clamp(1.25rem,5vw,1.75rem)] font-serif font-bold text-forest leading-tight mb-4">
-                {CTA_BANNER.titleLines[0]}
-                <br />
-                {CTA_BANNER.titleLines[1]}
-              </h2>
+      {/* 右側の円形装飾 */}
+      <div className="absolute -top-[10%] right-0 translate-x-[20%] w-[350px] h-[350px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-bl from-teal-100/80 to-emerald-100/80 pointer-events-none" />
+      <div className="absolute -bottom-[5%] right-[10%] w-[200px] h-[200px] md:w-[250px] md:h-[250px] rounded-full bg-gradient-to-tl from-emerald-100/60 to-lime-100/60 pointer-events-none backdrop-blur-[2px]" />
 
-              <div className="block md:hidden mb-6">
-                <div className="bg-gray-50 rounded-xl p-5 border border-gray-100 flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src="/images/manual.png"
-                      alt={CTA_BANNER.downloadTitle}
-                      width={60}
-                      height={84}
-                      className="w-16 h-auto shadow-md rounded-sm"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-forest text-sm mb-1">業務自動化マニュアル</h3>
-                    <p className="mt-2 text-xs leading-relaxed text-sage">
-                      無料相談にご参加いただいた方へお渡ししています。
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-6">
-                <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-                  {CTA_BANNER.description}
-                </p>
-
-                {/* Appeal Points List */}
-                {CTA_BANNER.appealPoints && (
-                  <ul className="space-y-3">
-                    {CTA_BANNER.appealPoints.map((point, index) => (
-                      <li key={index} className="flex items-start gap-3 text-forest font-medium text-sm sm:text-base">
-                        <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-sage flex-shrink-0" />
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+      <div className="mx-auto max-w-5xl px-6 md:px-8 relative z-10">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
+          {/* Mail icon */}
+          <div className="shrink-0 relative">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border border-gray-200 bg-white flex items-center justify-center shadow-sm">
+              <Image src="/images/renewal/icon_cta_mail_tr.png" alt="Contact Us" width={80} height={80} className="object-contain w-16 h-16 md:w-20 md:h-20" />
             </div>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="v-stack sm:h-stack gap-4 pt-2">
-              <Link href="/contact" className="btn-puffy btn-puffy-accent px-14 py-4 rounded-full font-bold center gap-3 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all">
+          <div className="text-center max-w-xl">
+            <h2 id="cta-heading" className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              {CTA_BANNER.title}
+            </h2>
+            <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-8">
+              {CTA_BANNER.description}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/contact" className="btn-primary">
                 {CTA_BANNER.primaryCta}
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
-
-          {/* Right Column: Consultation Summary */}
-          <div className="hidden md:flex bg-gradient-to-br from-forest to-earth p-10 lg:p-12 items-center justify-center border-t md:border-t-0 relative overflow-hidden group">
-            <div className="absolute top-10 right-10 w-32 h-32 bg-sage/20 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-10 left-10 w-24 h-24 bg-sunset/15 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="relative z-10 flex w-full max-w-lg mx-auto flex-col lg:flex-row items-center gap-8">
-              <div className="transform group-hover:scale-105 transition-transform duration-500 ease-out flex-shrink-0">
-                <Image
-                  src="/images/manual.png"
-                  alt={CTA_BANNER.downloadTitle}
-                  width={200}
-                  height={280}
-                  className="w-[150px] lg:w-[200px] h-auto object-contain drop-shadow-2xl rounded-sm"
-                />
-              </div>
-              <div className="flex-1 space-y-4 text-white">
-                <div className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-[0.18em] text-sage">
-                  CONSULTATION BONUS
-                </div>
-                <h3 className="font-serif text-xl font-bold leading-tight">
-                  無料相談後に、
-                  <br />
-                  実践ガイドをお渡しします。
-                </h3>
-                {CTA_BANNER.bookHighlights && (
-                  <div className="text-white space-y-4">
-                    <h4 className="font-serif font-bold text-lg text-sage/90 border-b border-sage/30 pb-2 mb-3">
-                      本書の内容
-                    </h4>
-                    <ul className="space-y-3">
-                      {CTA_BANNER.bookHighlights.map((highlight, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-gray-200">
-                          <CheckCircle2 className="w-4 h-4 text-sage flex-shrink-0 mt-0.5" />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </section>

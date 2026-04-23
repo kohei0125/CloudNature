@@ -116,7 +116,7 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
             </time>
           </div>
 
-          <h1 className="text-xl md:text-[clamp(1.25rem,4vw,2.5rem)] font-serif font-bold text-forest leading-tight mb-5 md:mb-8">
+          <h1 className="text-xl md:text-[clamp(1.25rem,4vw,2.5rem)] font-sans font-bold text-forest leading-tight mb-5 md:mb-8">
             {article.title}
           </h1>
 

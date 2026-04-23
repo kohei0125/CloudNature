@@ -1,87 +1,69 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { MISSION_COPY, VALUES } from "@/content/home";
+
+const VALUE_ICONS = [
+  "/images/renewal/icon_value_1_tr.png",
+  "/images/renewal/icon_value_2_tr.png",
+  "/images/renewal/icon_value_3_tr.png"
+];
 
 const MissionSection = () => {
   return (
-    <section id="mission" aria-labelledby="mission-heading" className="py-16 md:py-24 bg-white relative texture-grain overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-20 items-center">
-          {/* Left Column: Text */}
-          <div className="text-center md:text-left z-10 relative">
-            <p className="text-sm font-bold tracking-widest text-sage mb-4">{MISSION_COPY.eyebrow}</p>
-            <h2 id="mission-heading" className="text-[clamp(1.375rem,4vw,2.25rem)] font-serif font-bold text-forest mb-8 text-balance md:text-wrap">
-              {MISSION_COPY.title}
-            </h2>
-            <p className="text-sm leading-loose text-gray-600 md:text-base mb-8 md:mb-0">
-              {MISSION_COPY.paragraphs[0]}
-              <br className="hidden md:block" />
-              {MISSION_COPY.paragraphs[1]}
-              <br className="hidden md:block" />
-              {MISSION_COPY.paragraphs[2]}
-              <br className="hidden md:block" />
-              {MISSION_COPY.paragraphs[3]}
+    <section id="mission" aria-labelledby="mission-heading" className="py-16 md:py-20 bg-teal-50">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="grid md:grid-cols-[1fr_2fr] gap-10 lg:gap-14 items-center">
+
+          {/* Left: ラベル + 見出し + 説明 + リンク */}
+          <div>
+            <p className="text-xs font-bold tracking-[0.2em] text-teal-800 mb-3 uppercase">
+              {MISSION_COPY.eyebrow}
             </p>
-          </div>
-
-          {/* Right Column: Glassmorphism Cards */}
-          <div className="relative">
-            {/* Abstract Background Blob for Glass Effect */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[80%] bg-gradient-to-tr from-cloud/30 via-sage/20 to-sunset/20 rounded-full blur-2xl opacity-90"></div>
-
-            <div className="relative space-y-4 md:space-y-6">
-              {VALUES.map((value, index) => {
-                const textColors = ["text-sage", "text-sunset", "text-sea"] as const;
-                const icons = ["/images/logo_green.webp", "/images/logo_orange.webp", "/images/logo_blue.webp"];
-                const textColor = textColors[index];
-                const iconSrc = icons[index];
-
-                return (
-                  <div
-                    key={index}
-                    className="group flex items-start gap-5 p-5 md:p-6 bg-white/40 backdrop-blur-md border border-white/60 rounded-2xl shadow-sm hover:shadow-lg hover:bg-white/60 transition-all duration-300 relative overflow-hidden"
-                  >
-                    {/* Number */}
-                    <div
-                      className={`text-5xl md:text-6xl font-bold absolute -right-2 -top-4 font-serif pointer-events-none select-none group-hover:scale-110 transition-transform opacity-20 ${textColor}`}
-                    >
-                      0{index + 1}
-                    </div>
-
-                    <div className="flex-shrink-0 w-12 h-12 bg-white rounded-full center shadow-sm transition-colors relative z-10">
-                      <Image
-                        src={iconSrc}
-                        alt=""
-                        width={28}
-                        height={28}
-                        className="object-contain"
-                      />
-                    </div>
-
-                    <div className="relative z-10">
-                      <h3 className="text-lg font-bold text-forest mb-1">{value.displayTitle}</h3>
-                      <p className={`text-xs font-bold mb-2 tracking-wider ${textColor}`}>{value.subtitle}</p>
-                      <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                        {value.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+            <h2 id="mission-heading" className="text-[1.5rem] md:text-[1.65rem] font-bold text-gray-900 mb-5 leading-[1.5]">
+              {MISSION_COPY.titleLine1}
+              <br />
+              {MISSION_COPY.titleLine2}
+            </h2>
+            <div className="text-[13px] text-gray-500 leading-[1.9] mb-6">
+              {MISSION_COPY.paragraphs.map((line, i) => (
+                <span key={i}>
+                  {line === "" ? <br /> : <>{line}<br /></>}
+                </span>
+              ))}
             </div>
+            <Link
+              href={MISSION_COPY.link.href}
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-teal-800 hover:text-teal-700 transition-colors"
+            >
+              {MISSION_COPY.link.label}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-        </div>
 
-
-        {/* SEO Content (Screen Reader Only) - Values List */}
-        <div className="sr-only">
-          <ul>
+          {/* Right: 3つのバリューカード（横並び・中央揃え） */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8">
             {VALUES.map((value, index) => (
-              <li key={index}>
-                <h3>{value.title}</h3>
-                <p>{value.description}</p>
-              </li>
+              <div key={index} className="text-center px-2">
+                <div className="flex justify-center mb-3">
+                  <Image
+                    src={VALUE_ICONS[index]}
+                    alt=""
+                    width={52}
+                    height={52}
+                    className="object-contain"
+                  />
+                </div>
+                <h3 className="text-[13px] font-bold text-gray-900 mb-2 leading-[1.6]">
+                  {value.displayTitle}
+                </h3>
+                <p className="text-xs text-gray-500 leading-[1.8]">
+                  {value.description}
+                </p>
+              </div>
             ))}
-          </ul>
+          </div>
+
         </div>
       </div>
     </section>

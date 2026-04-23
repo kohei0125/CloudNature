@@ -8,7 +8,7 @@ const Error = ({
 }) => (
   <div className="pt-32 pb-20 container mx-auto px-6 text-center min-h-[60vh] v-stack items-center justify-center">
     <p className="text-sm font-bold tracking-widest text-sunset mb-4">ERROR</p>
-    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-forest">
+    <h1 className="text-2xl md:text-3xl font-sans font-bold mb-6 text-forest">
       問題が発生しました
     </h1>
     <p className="text-gray-600 max-w-xl mx-auto">

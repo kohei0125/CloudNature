@@ -142,7 +142,7 @@ const NewsArticlePage = async ({ params }: PageProps) => {
           </div>
 
           {/* タイトル */}
-          <h1 className="text-[clamp(1.25rem,4vw,2.5rem)] font-serif font-bold text-forest leading-tight mb-6 md:mb-8">
+          <h1 className="text-[clamp(1.25rem,4vw,2.5rem)] font-sans font-bold text-forest leading-tight mb-6 md:mb-8">
             {article.title}
           </h1>
 

@@ -68,7 +68,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
       <div className="md:w-[55%] v-stack justify-center">
         {/* Number + Subtitle (desktop) */}
         <div className="hidden md:flex items-center gap-4 mb-4">
-          <span className="text-forest/20 font-serif text-5xl font-bold leading-none">
+          <span className="text-forest/20 font-sans text-5xl font-bold leading-none">
             {num}
           </span>
           <div
@@ -85,11 +85,11 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
         </div>
 
         {/* Mobile number */}
-        <span className="text-forest/15 font-serif text-4xl font-bold leading-none mb-2 md:hidden">
+        <span className="text-forest/15 font-sans text-4xl font-bold leading-none mb-2 md:hidden">
           {num}
         </span>
 
-        <h3 className="text-2xl md:text-3xl font-serif font-bold text-forest mb-4 leading-snug">
+        <h3 className="text-2xl md:text-3xl font-sans font-bold text-forest mb-4 leading-snug">
           {service.title}
         </h3>
         <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-8">

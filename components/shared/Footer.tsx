@@ -1,47 +1,45 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ShieldCheck, Check } from "lucide-react";
 import { HEADER_COPY, FOOTER_COPY } from "@/content/layout";
-
-const BADGE_ICONS = { ShieldCheck, Check } as const;
 
 const Footer = () => {
   return (
-    <footer className="bg-forest text-white pt-24 pb-12 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-5 bg-[url('/images/wood-pattern.svg')]"></div>
-
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-4 gap-12 mb-16">
-          <div className="md:col-span-2">
-            <div className="mb-6">
+    <footer className="bg-teal-900 text-white pt-16 pb-8">
+      <div className="mx-auto max-w-7xl px-6 md:px-8">
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
+          {/* Left: Logo + Description + Legal */}
+          <div>
+            <div className="mb-4">
               <Image
                 src="/images/cloudnature_white.png"
                 alt={HEADER_COPY.brand}
-                width={215}
+                width={180}
                 height={50}
-                className="object-contain h-10 md:h-12 w-auto"
+                className="object-contain h-9 md:h-10 w-auto"
                 priority={false}
               />
             </div>
-            <p className="text-gray-400 leading-loose max-w-md mb-8 pl-1">
-              {FOOTER_COPY.taglineLines[0]}
-              <br />
-              {FOOTER_COPY.taglineLines[1]}
-              <br />
-              {FOOTER_COPY.taglineLines[2]}
+            <p className="text-teal-200/70 text-sm leading-relaxed mb-6">
+              {FOOTER_COPY.description}
             </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-teal-200/50">
+              {FOOTER_COPY.legalLinks.map((link) => (
+                <Link key={link.label} href={link.path} className="hover:text-white transition-colors">
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
 
+          {/* Right: SERVICE links */}
           <div>
-            <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.serviceHeading}</h4>
-            <ul className="v-stack gap-4 text-gray-400 text-sm">
+            <h4 className="font-bold mb-5 text-teal-300 tracking-[0.2em] text-xs uppercase">
+              {FOOTER_COPY.serviceHeading}
+            </h4>
+            <ul className="v-stack gap-3 text-teal-200/70 text-sm">
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.path} className="group hover:text-white transition-colors relative block">
-                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-sunset opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
+                  <Link href={link.path} className="hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -49,15 +47,15 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Right: COMPANY links */}
           <div>
-            <h4 className="font-bold mb-6 text-sage tracking-widest text-sm uppercase">{FOOTER_COPY.companyHeading}</h4>
-            <ul className="v-stack gap-4 text-gray-400 text-sm">
+            <h4 className="font-bold mb-5 text-teal-300 tracking-[0.2em] text-xs uppercase">
+              {FOOTER_COPY.companyHeading}
+            </h4>
+            <ul className="v-stack gap-3 text-teal-200/70 text-sm">
               {FOOTER_COPY.companyLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.path} className="group hover:text-white transition-colors relative block">
-                    <span className="absolute -left-5 top-1/2 -translate-y-1/2 text-sunset opacity-0 group-hover:opacity-100 transition-opacity">
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
+                  <Link href={link.path} className="hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -66,19 +64,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 v-stack md:h-stack justify-between items-center text-xs text-gray-500">
+        <div className="border-t border-white/10 pt-6 text-center text-xs text-teal-200/40">
           <p>{FOOTER_COPY.copyright}</p>
-          <div className="flex gap-8 mt-4 md:mt-0">
-            {FOOTER_COPY.badges.map((badge) => {
-              const Icon = BADGE_ICONS[badge.icon];
-              return (
-                <div key={badge.label} className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-sage" />
-                  <span>{badge.label}</span>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
     </footer>

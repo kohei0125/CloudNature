@@ -3,7 +3,7 @@ import Link from "next/link";
 const NotFound = () => (
   <div className="pt-32 pb-20 container mx-auto px-6 text-center min-h-[60vh] v-stack items-center justify-center">
     <p className="text-sm font-bold tracking-widest text-sage mb-4">404</p>
-    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-forest">
+    <h1 className="text-2xl md:text-3xl font-sans font-bold mb-6 text-forest">
       ページが見つかりません
     </h1>
     <p className="text-gray-600 max-w-xl mx-auto">

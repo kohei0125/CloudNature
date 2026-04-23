@@ -67,13 +67,13 @@ const CasesCarouselSection = () => {
   }, [spApi, onSpSelect]);
 
   return (
-    <section id="usecases" aria-labelledby="usecases-heading" className="bg-mist py-16 md:py-24 overflow-hidden">
+    <section id="usecases" aria-labelledby="usecases-heading" className="bg-white py-12 md:py-16 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <SectionHeader
           eyebrow={USECASES_SECTION.eyebrow}
           title={USECASES_SECTION.title}
           cta={USECASES_SECTION.cta}
-          eyebrowColor="text-sunset"
+          eyebrowColor="text-teal-800"
           ctaDesktopOnly
           headingId="usecases-heading"
         />
@@ -83,17 +83,17 @@ const CasesCarouselSection = () => {
       <div className="hidden md:block pl-[max(1.5rem,calc((100vw-72rem)/2))] mr-0">
         <div className="relative">
           <div ref={pcRef} className="overflow-hidden">
-            <div className="flex -ml-4 pr-6">
+            <div className="flex -ml-3 pr-6">
               {USECASES_ARTICLES.map((article) => (
                 <div
                   key={article.id}
-                  className="flex-[0_0_45%] lg:flex-[0_0_28.5%] pl-4"
+                  className="flex-[0_0_38%] lg:flex-[0_0_24%] pl-3"
                 >
                   <Link
                     href={`/usecases/${article.id}`}
                     className="group flex flex-col bg-white rounded-lg border border-gray-100/50 shadow-sm hover:shadow-lg transition-all duration-300 h-full overflow-hidden"
                   >
-                    <div className="relative w-full aspect-video overflow-hidden bg-mist">
+                    <div className="relative w-full aspect-video overflow-hidden bg-gray-50">
                       <Image
                         src={article.image}
                         alt=""
@@ -109,24 +109,24 @@ const CasesCarouselSection = () => {
                         sizes="(max-width: 1024px) 45vw, 25vw"
                       />
                     </div>
-                    <div className="p-4 flex items-center justify-between gap-3">
+                    <div className="p-3 flex items-center justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="inline-flex px-2.5 py-1 rounded-full bg-sage/10 text-sage text-[10px] font-bold tracking-wide">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="inline-flex px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 text-[10px] font-bold tracking-wide">
                             {article.category}
                           </span>
-                          <time className="text-[11px] text-gray-400">
+                          <time className="text-[10px] text-gray-400">
                             {formatDateJP(article.publishedAt)}
                           </time>
                         </div>
-                        <h3 className="text-forest font-bold leading-snug line-clamp-2 text-base lg:text-lg group-hover:text-sunset transition-colors mb-2">
+                        <h3 className="text-gray-900 font-bold leading-snug line-clamp-2 text-sm group-hover:text-teal-700 transition-colors mb-1">
                           {article.title}
                         </h3>
-                        <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">
+                        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
                           {article.excerpt}
                         </p>
                       </div>
-                      <div className="w-6 h-6 flex-shrink-0 rounded-full bg-sunset/20 text-sunset flex items-center justify-center transition-transform group-hover:bg-sunset group-hover:text-white self-end">
+                      <div className="w-5 h-5 flex-shrink-0 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center transition-transform group-hover:bg-teal-800 group-hover:text-white self-end">
                         <ArrowRight className="w-3.5 h-3.5" />
                       </div>
                     </div>
@@ -136,20 +136,20 @@ const CasesCarouselSection = () => {
             </div>
           </div>
 
-          <div className="flex justify-end items-center gap-4 mt-10 pr-6">
-            <div className="text-sm font-bold text-forest/50 mr-2 tracking-widest">
+          <div className="flex justify-end items-center gap-3 mt-6 pr-6">
+            <div className="text-sm font-bold text-gray-400 mr-2 tracking-widest">
               {pcIndex + 1} / {pcCount}
             </div>
             <button
               onClick={pcPrev}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-forest shadow-sm hover:bg-sunset hover:text-white transition-colors"
+              className="btn-carousel-prev"
               aria-label="前へ"
             >
               <ChevronLeft className="w-5 h-5 ml-0.5" />
             </button>
             <button
               onClick={pcNext}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-sunset text-white hover:bg-sunset/80 transition-colors"
+              className="btn-carousel-next"
               aria-label="次へ"
             >
               <ChevronRight className="w-5 h-5 mr-0.5" />
@@ -171,7 +171,7 @@ const CasesCarouselSection = () => {
                   href={`/usecases/${article.id}`}
                   className="group flex flex-col bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden h-full"
                 >
-                  <div className="relative w-full aspect-video overflow-hidden bg-mist">
+                  <div className="relative w-full aspect-video overflow-hidden bg-gray-50">
                     <Image
                       src={article.image}
                       alt=""
@@ -190,18 +190,18 @@ const CasesCarouselSection = () => {
                   <div className="p-3.5 flex items-center justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="inline-flex px-2 py-0.5 rounded-full bg-sage/10 text-sage text-[10px] font-bold tracking-wide">
+                        <span className="inline-flex px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 text-[10px] font-bold tracking-wide">
                           {article.category}
                         </span>
                         <time className="text-[10px] text-gray-400">
                           {formatDateJP(article.publishedAt)}
                         </time>
                       </div>
-                      <h3 className="text-forest font-bold text-sm leading-snug line-clamp-2">
+                      <h3 className="text-gray-900 font-bold text-sm leading-snug line-clamp-2">
                         {article.title}
                       </h3>
                     </div>
-                    <div className="w-5 h-5 rounded-full bg-sunset/20 text-sunset flex items-center justify-center flex-shrink-0 self-end">
+                    <div className="w-5 h-5 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center flex-shrink-0 self-end">
                       <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
@@ -211,22 +211,20 @@ const CasesCarouselSection = () => {
           </div>
         </div>
 
-        {/* ドットインジケーター + CTA */}
         <div className="flex flex-col items-center gap-5 mt-5 px-6">
           <div className="flex gap-1.5">
             {Array.from({ length: spCount }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => spApi?.scrollTo(i)}
-                className={`w-2 h-2 rounded-full transition-all ${i === spIndex ? "bg-sunset w-5" : "bg-gray-300"
-                  }`}
+                className={`w-2 h-2 rounded-full transition-all ${i === spIndex ? "bg-teal-800 w-5" : "bg-gray-300"}`}
                 aria-label={`スライド ${i + 1}`}
               />
             ))}
           </div>
           <Link
             href={USECASES_SECTION.cta.href}
-            className="flex items-center justify-center gap-2 bg-sunset text-white font-bold py-3 px-6 hover:bg-sunset/80 transition-colors text-[13px] rounded-sm w-full"
+            className="flex items-center justify-center gap-2 bg-teal-800 text-white font-bold py-3 px-6 hover:bg-teal-700 transition-colors text-[13px] rounded-sm w-full"
           >
             {USECASES_SECTION.cta.label}
             <ArrowRight className="w-4 h-4" />

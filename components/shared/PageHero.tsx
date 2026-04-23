@@ -37,7 +37,7 @@ const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id }: Page
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-          className="text-[clamp(1.5rem,5vw,3rem)] font-serif font-bold text-forest mb-6"
+          className="text-[clamp(1.5rem,5vw,3rem)] font-sans font-bold text-forest mb-6"
         >
           {title}
         </motion.h1>

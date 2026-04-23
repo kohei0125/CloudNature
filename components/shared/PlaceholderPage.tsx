@@ -3,7 +3,7 @@ import { PLACEHOLDER_COPY } from "@/content/placeholder";
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="pt-32 pb-20 container mx-auto px-6 text-center min-h-[60vh] v-stack items-center justify-center">
-    <h1 className="text-2xl md:text-3xl font-serif font-bold mb-6 text-forest">{title}</h1>
+    <h1 className="text-2xl md:text-3xl font-sans font-bold mb-6 text-forest">{title}</h1>
     <p className="text-gray-600 max-w-xl mx-auto">{PLACEHOLDER_COPY.description}</p>
     <Link
       href="/"
