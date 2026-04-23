@@ -36,6 +36,12 @@ function useReveal() {
   return { ref, visible };
 }
 
+const SERVICE_PATHS: Record<string, string> = {
+  dev: "/services/system-dev",
+  ai: "/services/ai-agent",
+  "ai-support": "/services/ai-support",
+};
+
 const NUMBERS = ["01", "02", "03"];
 
 const CARD_CONFIG = [
@@ -83,7 +89,7 @@ const ServicesSection = () => {
                   transition: `opacity 0.7s cubic-bezier(0.16,1,0.3,1) ${cfg.delay}, transform 0.7s cubic-bezier(0.16,1,0.3,1) ${cfg.delay}`,
                 }}
               >
-                <Link href={`/services/${service.id === "dev" ? "system-dev" : service.id}`} className="block flex-1">
+                <Link href={SERVICE_PATHS[service.id] ?? `/services/${service.id}`} className="block flex-1">
                   <div
                     className="relative overflow-hidden p-6 md:p-7 h-full flex flex-col"
                     style={{
