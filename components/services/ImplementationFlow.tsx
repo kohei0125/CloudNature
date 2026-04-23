@@ -8,8 +8,8 @@ const ImplementationFlow = () => {
   return (
     <section id="implementation" aria-labelledby="implementation-heading" className="py-16 md:py-24 bg-mist relative overflow-hidden">
       {/* Decorative blobs */}
-      <div className="absolute top-20 -left-32 w-64 h-64 bg-sage/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 -right-32 w-64 h-64 bg-sunset/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-20 -left-32 w-64 h-64 bg-teal-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 -right-32 w-64 h-64 bg-teal-800/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
         <SectionHeader eyebrow="PROCESS" title="導入の流れ" centered headingId="implementation-heading" />
@@ -20,7 +20,7 @@ const ImplementationFlow = () => {
           <div className="absolute top-6 left-[calc(100%/12)] right-[calc(100%/12)] h-px bg-forest/10" />
           {/* Animated gradient overlay */}
           <motion.div
-            className="absolute top-6 left-[calc(100%/12)] h-px bg-gradient-to-r from-sage via-sunset to-sea"
+            className="absolute top-6 left-[calc(100%/12)] h-px bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400"
             initial={{ width: 0 }}
             whileInView={{ width: "calc(100% - 100%/6)" }}
             viewport={{ once: true, amount: 0.3 }}

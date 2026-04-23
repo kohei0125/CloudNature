@@ -7,21 +7,21 @@ import { cn } from "@/lib/utils";
 import type { ServiceDetail } from "@/types";
 
 const accentBg: Record<string, string> = {
-  sage: "bg-sage",
-  sunset: "bg-sunset",
-  sea: "bg-sea",
+  primary: "bg-teal-800",
+  secondary: "bg-teal-600",
+  tertiary: "bg-teal-500",
 };
 
 const accentText: Record<string, string> = {
-  sage: "text-sage",
-  sunset: "text-sunset",
-  sea: "text-sea",
+  primary: "text-teal-800",
+  secondary: "text-teal-600",
+  tertiary: "text-teal-500",
 };
 
 const accentBorder: Record<string, string> = {
-  sage: "border-sage",
-  sunset: "border-sunset",
-  sea: "border-sea",
+  primary: "border-teal-800",
+  secondary: "border-teal-600",
+  tertiary: "border-teal-500",
 };
 
 interface ServiceDetailCardProps {

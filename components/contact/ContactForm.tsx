@@ -134,13 +134,15 @@ const ContactForm = () => {
     );
   }
 
+  const requiredBadge = <span className="text-teal-800 text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>;
+
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-6 md:p-8 border border-gray-200 space-y-5" noValidate>
       {/* Name */}
       <div>
         <label htmlFor="contact-name" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.name}
-          <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
+          {requiredBadge}
         </label>
         <input
           id="contact-name"
@@ -160,7 +162,7 @@ const ContactForm = () => {
       <div>
         <label htmlFor="contact-email" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.email}
-          <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
+          {requiredBadge}
         </label>
         <input
           id="contact-email"
@@ -180,7 +182,7 @@ const ContactForm = () => {
       <div>
         <label htmlFor="contact-phone" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.phone}
-          <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
+          {requiredBadge}
         </label>
         <input
           id="contact-phone"
@@ -235,7 +237,7 @@ const ContactForm = () => {
       <div>
         <label htmlFor="contact-message" className="block text-sm font-bold text-forest mb-1.5">
           {CONTACT_FORM_LABELS.message}
-          <span className="text-sunset text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>
+          {requiredBadge}
         </label>
         <textarea
           id="contact-message"

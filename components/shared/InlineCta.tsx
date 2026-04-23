@@ -12,7 +12,7 @@ const InlineCta = ({ title, primaryLabel, secondaryLabel }: InlineCtaProps) => {
   return (
     <div className="glass-card rounded-2xl p-8 md:p-10 text-center relative overflow-hidden">
       {/* Decorative blur elements */}
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-sunset/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-800/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-sage/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative z-10">

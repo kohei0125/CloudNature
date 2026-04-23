@@ -108,7 +108,7 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
           </Link>
 
           <div className="flex flex-wrap items-center gap-2 mb-3 md:mb-4">
-            <span className="text-[11px] md:text-xs font-bold px-2.5 py-0.5 rounded-full bg-sunset/20 text-sunset">
+            <span className="text-[11px] md:text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-800/20 text-teal-800">
               {article.category}
             </span>
             <time className="text-xs md:text-sm text-gray-400 font-medium">

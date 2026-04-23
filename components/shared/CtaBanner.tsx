@@ -15,7 +15,7 @@ const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id =
   const headingId = `${id}-heading`;
   return (
     <section id={id} aria-labelledby={headingId} className="py-16 md:py-24 bg-forest text-white relative overflow-hidden texture-grain">
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_70%,#DD9348,transparent_25%),radial-gradient(circle_at_50%_50%,#C8E8FF,transparent_30%)]"></div>
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_70%,#80CBC4,transparent_25%),radial-gradient(circle_at_50%_50%,#C8E8FF,transparent_30%)]"></div>
 
       <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
         {eyebrow ? (
@@ -30,7 +30,7 @@ const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id =
         <div className="v-stack sm:h-stack gap-4 justify-center">
           <Link
             href={primaryCta.href}
-            className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-sunset/20 hover:shadow-sunset/40 transition-all"
+            className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-teal-800/20 hover:shadow-teal-800/40 transition-all"
           >
             {primaryCta.label}
             <ArrowRight className="w-4 h-4" />

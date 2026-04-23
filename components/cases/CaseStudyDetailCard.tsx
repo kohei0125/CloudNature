@@ -40,7 +40,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
 
       {/* Content */}
       <div className={cn(!isEven && "md:order-1")}>
-        <span className="inline-block px-4 py-1.5 bg-sunset text-white text-xs font-bold rounded-full mb-4">
+        <span className="inline-block px-4 py-1.5 bg-teal-800 text-white text-xs font-bold rounded-full mb-4">
           {study.category}
         </span>
         <h3 className="text-xl md:text-2xl font-bold text-forest mb-2">{study.title}</h3>
@@ -71,7 +71,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
             href={study.link.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-sunset font-medium hover:underline mb-6"
+            className="inline-flex items-center gap-1.5 text-sm text-teal-800 font-medium hover:underline mb-6"
           >
             {study.link.label}
             <ExternalLink className="w-4 h-4" />
@@ -79,7 +79,7 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
         ) : null}
 
         {study.quote ? (
-          <blockquote className="glass-card rounded-r-xl border-l-4 border-sunset pl-4 py-3 pr-4">
+          <blockquote className="glass-card rounded-r-xl border-l-4 border-teal-800 pl-4 py-3 pr-4">
             <p className="text-sm italic text-gray-600 leading-relaxed mb-2">
               {study.quote.text}
             </p>

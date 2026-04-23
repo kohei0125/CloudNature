@@ -7,9 +7,9 @@ import { PRICING_APPROACH } from "@/content/services";
 
 const icons = [FileSearch, TrendingUp, HandCoins];
 const accents = [
-  { bg: "bg-sage/10", text: "text-sage", bar: "bg-sage" },
-  { bg: "bg-sunset/10", text: "text-sunset", bar: "bg-sunset" },
-  { bg: "bg-sea/10", text: "text-sea", bar: "bg-sea" },
+  { bg: "bg-teal-600/10", text: "text-teal-600", bar: "bg-teal-600" },
+  { bg: "bg-teal-800/10", text: "text-teal-800", bar: "bg-teal-800" },
+  { bg: "bg-teal-500/10", text: "text-teal-500", bar: "bg-teal-500" },
 ];
 
 const PricingApproach = () => {

@@ -38,7 +38,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       }
     ],
     techStack: ["AI導入診断", "法人研修", "個別スクール"],
-    accentColor: "sea",
+    accentColor: "tertiary",
     image: "/images/services/dx_support.png",
     externalUrl: "https://niigata-ai-academy.com"
   },
@@ -53,7 +53,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "SaaS間のデータ自動連携", description: "n8nを活用し、Slack・Gmail・Notion・kintoneなど各種SaaSを自動連携。データの手動転記を完全に撲滅します。" }
     ],
     techStack: ["Google ADK", "Mastra", "Dify", "n8n", "OpenAI", "Claude"],
-    accentColor: "sunset",
+    accentColor: "primary",
     image: "/images/services/ai_agent.png"
   },
   {
@@ -67,7 +67,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
       { title: "業務効率化・自動化システム", description: "手作業で行っていたデータ入力、帳票作成、メール送信などを自動化。ヒューマンエラーを削減し、生産性を向上。" }
     ],
     techStack: ["Python", "PHP", "React", "AWS"],
-    accentColor: "sage",
+    accentColor: "secondary",
     image: "/images/services/system_dev.png"
   }
 ];

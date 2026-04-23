@@ -29,8 +29,8 @@ const AccessSection = () => {
             </div>
 
             <div className="h-stack gap-4 items-start">
-              <div className="w-10 h-10 rounded-full bg-sunset/10 center shrink-0">
-                <Train className="w-5 h-5 text-sunset" />
+              <div className="w-10 h-10 rounded-full bg-teal-800/10 center shrink-0">
+                <Train className="w-5 h-5 text-teal-800" />
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-1">アクセス</p>
