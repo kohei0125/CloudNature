@@ -99,7 +99,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: "AI見積もりシステムの自動連携",
     category: "製造業",
     before: "",
-    after: "見積作成にかかる時間を80%削減。ヒューマンエラーも同時に実現。",
+    after: "AIが見積もり作業を代替することで工数を大幅に圧縮。その分をコストに還元します。",
     link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/" },
     image: "/images/meeting.jpg"
   },
