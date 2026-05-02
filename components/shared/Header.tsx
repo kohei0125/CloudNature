@@ -49,8 +49,8 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
               href={item.path}
               aria-current={isPathActive(item.path, pathname) ? "page" : undefined}
               className={cn(
-                "text-sm font-medium tracking-wide transition-colors hover:text-teal-700",
-                isPathActive(item.path, pathname) ? "text-teal-800 font-bold" : "text-gray-700"
+                "text-sm font-bold tracking-wide transition-colors hover:text-teal-700",
+                isPathActive(item.path, pathname) ? "text-teal-800" : "text-gray-700"
               )}
             >
               {item.label}

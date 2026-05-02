@@ -78,7 +78,7 @@ const HeroSection = () => {
           />
         </div>
 
-        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white from-20% via-white/50 via-50% to-transparent to-90%" />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white from-25% via-white/50 via-42% to-transparent to-60%" />
 
         <div
           className="absolute inset-0 z-[2] opacity-[0.06] pointer-events-none"
