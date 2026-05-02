@@ -1,7 +1,7 @@
 import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/types";
 
 export const HERO_COPY = {
-  imageSrc: "/images/niigata.jpeg",
+  imageSrc: "/images/niigata_view.jpeg",
   badge: "AI導入から運用まで伴走する開発パートナー",
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
