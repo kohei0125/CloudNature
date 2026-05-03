@@ -19,6 +19,13 @@ interface GenerateRequestBody {
   turnstileToken?: string;
 }
 
+interface TurnstileVerifyResponse {
+  success: boolean;
+  "error-codes"?: string[];
+  challenge_ts?: string;
+  hostname?: string;
+}
+
 async function verifyTurnstile(token: string): Promise<boolean> {
   try {
     const res = await fetch(TURNSTILE_VERIFY_URL, {
@@ -29,7 +36,20 @@ async function verifyTurnstile(token: string): Promise<boolean> {
         response: token,
       }),
     });
-    const data = await res.json();
+    const data = (await res.json()) as TurnstileVerifyResponse;
+    if (data.success !== true) {
+      logger.error(
+        "turnstile",
+        "siteverify rejected token:",
+        JSON.stringify({
+          errorCodes: data["error-codes"],
+          hostname: data.hostname,
+          challengeTs: data.challenge_ts,
+          tokenLen: token.length,
+          secretConfigured: CLOUDFLARE_TURNSTILE_SECRET_KEY.length > 0,
+        }),
+      );
+    }
     return data.success === true;
   } catch (error) {
     logger.error("turnstile", "verification failed:", error);
