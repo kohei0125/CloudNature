@@ -38,7 +38,8 @@ export function useStepNavigation() {
   const canGoNext =
     currentStep < TOTAL_STEPS &&
     status !== "generating" &&
-    isCurrentStepValid;
+    isCurrentStepValid &&
+    isAiStepReady;
 
   const canGoBack = currentStep > 1 && status !== "generating";
 

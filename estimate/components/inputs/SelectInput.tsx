@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { StepOption } from "@/types/estimate";
@@ -20,11 +21,28 @@ export default function SelectInput({
   onAutoAdvance,
   "aria-label": ariaLabel,
 }: SelectInputProps) {
+  const advanceTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current !== null) {
+        window.clearTimeout(advanceTimerRef.current);
+        advanceTimerRef.current = null;
+      }
+    };
+  }, []);
+
   function handleSelect(optionValue: string) {
     onChange(optionValue);
-    if (onAutoAdvance) {
-      setTimeout(onAutoAdvance, 120);
+    if (!onAutoAdvance) return;
+    // 連打で複数のタイマーが積まれないよう、既存分をクリアして1本に絞る
+    if (advanceTimerRef.current !== null) {
+      window.clearTimeout(advanceTimerRef.current);
     }
+    advanceTimerRef.current = window.setTimeout(() => {
+      advanceTimerRef.current = null;
+      onAutoAdvance();
+    }, 120);
   }
 
   return (

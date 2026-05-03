@@ -45,7 +45,9 @@ function ChatPageContent() {
   const sessionInitRef = useRef(false);
   const stateRef = useRef(state);
   const turnstileRef = useRef<TurnstileInstance | null>(null);
-  const turnstileTokenRef = useRef<string | null>(null);
+  const isAdvancingRef = useRef(false);
+  const isSubmittingRef = useRef(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [generatingElapsedSec, setGeneratingElapsedSec] = useState(0);
   useEffect(() => {
     stateRef.current = state;
@@ -126,58 +128,80 @@ function ChatPageContent() {
   // Uses dispatch directly instead of goNext() to avoid stale canGoNextRef
   // after async submitStep (which temporarily sets status to "generating").
   const handleNext = useCallback(async () => {
-    const { answers, sessionId } = stateRef.current;
-    const answer = answers[currentStep];
+    if (isAdvancingRef.current) return;
+    isAdvancingRef.current = true;
+    try {
+      const { answers, sessionId } = stateRef.current;
+      const answer = answers[currentStep];
 
-    // Step 7: await AI option generation — pass all answers explicitly
-    if (currentStep === 7 && sessionId && answer !== undefined) {
-      const allAnswers = { ...answers, [currentStep]: answer } as Record<string, string | string[]>;
-      await submitStep(currentStep, answer, allAnswers);
-    }
+      // Step 7: await AI option generation — pass all answers explicitly
+      if (currentStep === 7 && sessionId && answer !== undefined) {
+        const allAnswers = { ...answers, [currentStep]: answer } as Record<string, string | string[]>;
+        const res = await submitStep(currentStep, answer, allAnswers);
+        if (!res?.aiOptions?.step8Features?.length) {
+          dispatch({ type: "SET_STATUS", status: "error" });
+          return;
+        }
+      }
 
-    // GA4: ステップ完了イベント
-    window.gtag?.("event", "estimate_step", {
-      step_number: currentStep,
-      step_type: stepConfig?.type,
-    });
-    if (currentStep === 4) {
-      const text = answers[4];
-      window.gtag?.("event", "estimate_step_freetext", {
-        text_length: typeof text === "string" ? text.length : 0,
+      // GA4: ステップ完了イベント
+      window.gtag?.("event", "estimate_step", {
+        step_number: currentStep,
+        step_type: stepConfig?.type,
       });
-    }
-    if (currentStep === 8) {
-      const selected = answers[8];
-      window.gtag?.("event", "estimate_step_ai_features", {
-        selected_count: Array.isArray(selected) ? selected.length : 0,
-      });
-    }
+      if (currentStep === 4) {
+        const text = answers[4];
+        window.gtag?.("event", "estimate_step_freetext", {
+          text_length: typeof text === "string" ? text.length : 0,
+        });
+      }
+      if (currentStep === 8) {
+        const selected = answers[8];
+        window.gtag?.("event", "estimate_step_ai_features", {
+          selected_count: Array.isArray(selected) ? selected.length : 0,
+        });
+      }
 
-    dispatch({ type: "NEXT_STEP" });
+      dispatch({ type: "NEXT_STEP" });
+    } finally {
+      isAdvancingRef.current = false;
+    }
   }, [currentStep, stepConfig, dispatch, submitStep]);
 
   // Handle final submission — all answers are sent via triggerGenerate
   const handleSubmit = useCallback(async () => {
+    if (isSubmittingRef.current) return;
     const { sessionId } = stateRef.current;
     if (!sessionId) return;
+    if (TURNSTILE_SITE_KEY && !turnstileToken) return;
 
-    const token = turnstileTokenRef.current ?? undefined;
-    const result = await triggerGenerate(token);
-    // Reset Turnstile for potential retry
-    turnstileRef.current?.reset();
-    turnstileTokenRef.current = null;
-    if (result?.estimate) {
-      window.gtag?.("event", "generate_lead", {
-        session_id: stateRef.current.sessionId,
-      });
-      save("estimate_result", result.estimate);
-      router.push("/complete");
+    isSubmittingRef.current = true;
+    try {
+      const token = turnstileToken ?? undefined;
+      const result = await triggerGenerate(token);
+      // 1回限り消費されるTurnstileトークンを失敗時の再試行のためにリセット
+      turnstileRef.current?.reset();
+      setTurnstileToken(null);
+      if (result?.estimate) {
+        window.gtag?.("event", "generate_lead", {
+          session_id: stateRef.current.sessionId,
+        });
+        save("estimate_result", result.estimate);
+        router.push("/complete");
+      }
+    } finally {
+      isSubmittingRef.current = false;
     }
-  }, [triggerGenerate, router]);
+  }, [triggerGenerate, router, turnstileToken]);
 
   const handleRetry = useCallback(() => {
     dispatch({ type: "SET_STATUS", status: "in_progress" });
-  }, [dispatch]);
+    // Step 7 はAI機能候補生成失敗で error に落ちる経路。
+    // ユーザーが再選択しなくてもリトライできるよう handleNext を再実行する。
+    if (stateRef.current.currentStep === 7) {
+      void handleNext();
+    }
+  }, [dispatch, handleNext]);
 
   const handleExit = useCallback(() => {
     router.push("/");
@@ -191,7 +215,8 @@ function ChatPageContent() {
   const canSubmit = isLastStep && state.status !== "generating" && stepConfig !== undefined && (() => {
     const answer = state.answers[currentStep];
     if (!answer) return false;
-    if (stepConfig.validation) return stepConfig.validation(answer) === null;
+    if (stepConfig.validation && stepConfig.validation(answer) !== null) return false;
+    if (TURNSTILE_SITE_KEY && !turnstileToken) return false;
     return true;
   })();
   const canProceed = isLastStep ? canSubmit : canGoNext;
@@ -266,8 +291,9 @@ function ChatPageContent() {
                           <Turnstile
                             ref={turnstileRef}
                             siteKey={TURNSTILE_SITE_KEY}
-                            onSuccess={(token) => { turnstileTokenRef.current = token; }}
-                            onExpire={() => { turnstileTokenRef.current = null; }}
+                            onSuccess={(token) => setTurnstileToken(token)}
+                            onExpire={() => setTurnstileToken(null)}
+                            onError={() => setTurnstileToken(null)}
                             options={{ size: "normal", theme: "light" }}
                           />
                         )}
