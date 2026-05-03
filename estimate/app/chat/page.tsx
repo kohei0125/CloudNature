@@ -17,6 +17,7 @@ import { useStepNavigation } from "@/hooks/useStepNavigation";
 import { useSessionPersistence } from "@/hooks/useSessionPersistence";
 import { useEstimateApi } from "@/hooks/useEstimateApi";
 import { save } from "@/lib/sessionStorage";
+import { reportError } from "@/lib/errorReporter";
 import ChatErrorBoundary from "@/components/chat/ChatErrorBoundary";
 import ProgressBar from "@/components/chat/ProgressBar";
 import QuestionBubble from "@/components/chat/QuestionBubble";
@@ -138,7 +139,18 @@ function ChatPageContent() {
       if (currentStep === 7 && sessionId && answer !== undefined) {
         const allAnswers = { ...answers, [currentStep]: answer } as Record<string, string | string[]>;
         const res = await submitStep(currentStep, answer, allAnswers);
-        if (!res?.aiOptions?.step8Features?.length) {
+        if (res === null) {
+          // submitStep は通信失敗時に submit_step_failed を既に通知して null を返す
+          dispatch({ type: "SET_STATUS", status: "error" });
+          return;
+        }
+        if (!res.aiOptions?.step8Features?.length) {
+          reportError({
+            sessionId,
+            errorType: "step7_ai_options_empty",
+            message: "step8Features missing or empty",
+            stepNumber: 7,
+          });
           dispatch({ type: "SET_STATUS", status: "error" });
           return;
         }

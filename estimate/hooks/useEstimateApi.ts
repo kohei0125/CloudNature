@@ -3,8 +3,20 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useEstimateSession } from "./useEstimateSession";
 import * as api from "@/lib/estimateApi";
+import { ApiError } from "@/lib/estimateApi";
 import { AI_MESSAGES, ERROR_MESSAGES } from "@/content/estimate";
+import { reportError } from "@/lib/errorReporter";
 import type { ChatMessage } from "@/types/estimate";
+
+function describeError(err: unknown): { message: string; statusCode?: number } {
+  if (err instanceof ApiError) {
+    return { message: `${err.name}: ${err.message}`, statusCode: err.status };
+  }
+  if (err instanceof Error) {
+    return { message: `${err.name}: ${err.message}` };
+  }
+  return { message: String(err) };
+}
 
 function createMessage(
   prefix: string,
@@ -42,9 +54,16 @@ export function useEstimateApi() {
       dispatch({ type: "SET_SESSION_ID", sessionId: res.sessionId });
       window.gtag?.("event", "estimate_start", { session_id: res.sessionId });
       return res.sessionId;
-    } catch {
+    } catch (err) {
       dispatch({ type: "SET_STATUS", status: "error" });
       addMessage("error", ERROR_MESSAGES.networkError);
+      const detail = describeError(err);
+      reportError({
+        sessionId: null,
+        errorType: "start_session_failed",
+        message: detail.message,
+        statusCode: detail.statusCode,
+      });
       return null;
     }
   }, [dispatch, addMessage]);
@@ -71,11 +90,19 @@ export function useEstimateApi() {
         }
 
         return res;
-      } catch {
+      } catch (err) {
         if (stepNumber === 7) {
           dispatch({ type: "SET_STATUS", status: "in_progress" });
         }
         addMessage("error", ERROR_MESSAGES.networkError);
+        const detail = describeError(err);
+        reportError({
+          sessionId: sessionIdRef.current,
+          errorType: "submit_step_failed",
+          message: detail.message,
+          statusCode: detail.statusCode,
+          stepNumber,
+        });
         return null;
       }
     },
@@ -105,14 +132,26 @@ export function useEstimateApi() {
           if (res.status === "error") {
             dispatch({ type: "SET_STATUS", status: "error" });
             addMessage("error", AI_MESSAGES.error);
+            reportError({
+              sessionId,
+              errorType: "poll_result_status_error",
+              message: "backend returned status=error during result polling",
+            });
             return null;
           }
-        } catch {
+        } catch (err) {
           consecutiveErrors++;
           // Abort after 5 consecutive network errors
           if (consecutiveErrors >= 5) {
             dispatch({ type: "SET_STATUS", status: "error" });
             addMessage("error", ERROR_MESSAGES.networkError);
+            const detail = describeError(err);
+            reportError({
+              sessionId,
+              errorType: "poll_result_network_failed",
+              message: detail.message,
+              statusCode: detail.statusCode,
+            });
             return null;
           }
         }
@@ -120,6 +159,11 @@ export function useEstimateApi() {
 
       dispatch({ type: "SET_STATUS", status: "error" });
       addMessage("error", ERROR_MESSAGES.serverError);
+      reportError({
+        sessionId,
+        errorType: "poll_result_max_attempts",
+        message: "polling exceeded MAX_POLLS without completion",
+      });
       return null;
     },
     [dispatch, addMessage]
@@ -149,10 +193,22 @@ export function useEstimateApi() {
 
       dispatch({ type: "SET_STATUS", status: "error" });
       addMessage("error", AI_MESSAGES.error);
+      reportError({
+        sessionId,
+        errorType: "trigger_generate_unexpected_status",
+        message: `unexpected response status: ${res.status}`,
+      });
       return null;
-    } catch {
+    } catch (err) {
       dispatch({ type: "SET_STATUS", status: "error" });
       addMessage("error", ERROR_MESSAGES.networkError);
+      const detail = describeError(err);
+      reportError({
+        sessionId,
+        errorType: "trigger_generate_failed",
+        message: detail.message,
+        statusCode: detail.statusCode,
+      });
       return null;
     }
   }, [dispatch, addMessage, pollForResult]);
