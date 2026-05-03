@@ -174,6 +174,7 @@ POST /generate
 | POST | `/api/v1/estimate/step` | ステップ回答送信 |
 | POST | `/api/v1/estimate/generate` | 見積もり生成 |
 | GET | `/api/v1/estimate/result/{id}` | 結果ポーリング |
+| POST | `/api/v1/estimate/report-error` | クライアント側エラー通知（運用者メール） |
 | GET | `/health` | ヘルスチェック (DB接続確認) |
 
 ### `/step` リクエスト
@@ -604,6 +605,44 @@ _send_emails(estimate_data, answers)
 | 宛先 | `settings.notify_email` |
 | 内容 | 顧客名、会社名、メール、プロジェクト名、概算金額、業種 |
 | 条件 | `RESEND_API_KEY` + `NOTIFY_EMAIL` 設定済み |
+
+### 9.3.1 運営者向けエラー通知メール
+
+見積もりフローで検知した障害を運用者にリアルタイム通知する。
+
+| 項目 | 値 |
+|------|-----|
+| 件名 | `【CloudNature】見積もりエラー検知 [<error_type>]` |
+| 宛先 | `settings.notify_email` |
+| 内容 | 発生時刻 / 発生元 (frontend or backend) / エラー種別 / session_id / メッセージ / 補足コンテキスト（step_number, status_code, user_agent等） |
+| 条件 | `RESEND_API_KEY` + `NOTIFY_EMAIL` 設定済み |
+| 重複抑止 | 同一 session_id × error_type は5分以内なら送信しない（`error_notification_service.py`） |
+
+**通知トリガー:**
+
+| トリガー | error_type | 検知箇所 |
+|---|---|---|
+| LLM動的質問の全リトライ失敗 | `dynamic_questions_llm_exhausted` | `estimate_service.generate_dynamic_questions` |
+| LLM見積もり生成の全リトライ失敗 | `estimate_generation_llm_exhausted` | `estimate_service.generate_estimate` |
+| `/step` Step7 例外 | `step7_dynamic_questions_exception` | `api/v1/estimate.submit_step` |
+| `/step` Step7 結果が空 | `step7_dynamic_questions_empty` | `api/v1/estimate.submit_step` |
+| `/generate` 例外 | `generate_estimate_exception` | `api/v1/estimate.generate_estimate` |
+| フロント `startSession` 失敗 | `start_session_failed` | `useEstimateApi` |
+| フロント `submitStep` 失敗 | `submit_step_failed` | `useEstimateApi` |
+| フロント Step7 AI候補空 | `step7_ai_options_empty` | `chat/page.tsx handleNext` |
+| フロント `triggerGenerate` 失敗 | `trigger_generate_failed` / `trigger_generate_unexpected_status` | `useEstimateApi` |
+| フロント結果ポーリング失敗 | `poll_result_network_failed` / `poll_result_status_error` / `poll_result_max_attempts` | `useEstimateApi.pollForResult` |
+
+フロント側のトリガーは `POST /api/v1/estimate/report-error` 経由でバックエンドに転送され、上記重複抑止後にメール送信される。フロント側でも `sessionStorage` で同一 session × error_type の5分窓重複抑止を行うため、二段階で抑止される。
+
+**濫用対策:**
+
+| 層 | 対策 |
+|---|---|
+| Next.js Route (`/api/estimate/report-error`) | 同一サイト由来 (`Origin`/`Referer` が一致) のみ受け付け、外部からの cross-origin 呼び出しは 403 |
+| Backend (`/api/v1/estimate/report-error`) | `session_id` 指定時はDBに存在する有効セッションかを検証し、未知の session_id は静かに 204 返却 |
+| Backend レート制限 | 既存の 60req/min/IP（全エンドポイント共通） |
+| 重複抑止の障害復旧 | Resend 送信失敗時は dedup マークをクリアして次回発生時に再送（最初の1通が失敗して継続障害が見えなくなる事故を防ぐ） |
 
 ### 9.4 Notion保存
 

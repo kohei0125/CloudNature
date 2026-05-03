@@ -157,6 +157,15 @@ estimate/
 - **Turnstile 必須化（本番）**: `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY` 設定時、トークン未取得では「送信する」ボタンを無効化し、`handleSubmit` 内でも二重チェック。これにより `/api/estimate/generate` の 403 (Turnstile token required) を防止。
 - **`/api/estimate/start` のタイムアウト**: 30秒（Cloud Run コールドスタート対策）。
 
+### エラー通知（運用者メール）
+
+`lib/errorReporter.ts` の `reportError()` は、フロント側で検知したエラーを `POST /api/estimate/report-error` 経由でバックエンドに転送し、運用者メール（`NOTIFY_EMAIL`）に送信する。
+
+- **トリガー**: `useEstimateApi` の各 catch（`startSession` / `submitStep` / `triggerGenerate` / `pollForResult`）と、`chat/page.tsx` の Step7 AI候補空ケース。
+- **重複抑止**: 同一 `sessionId × errorType` は `sessionStorage` で5分間ローカル抑止。サーバー側でも同条件で5分間抑止される（二段階）。
+- **送信方式**: `navigator.sendBeacon()` を優先し、未対応時は `fetch({ keepalive: true })` にフォールバック。ページ遷移直前でも届きやすくしている。
+- **PII 配慮**: 連絡先・自由記述は通知本文に含めない。送られるのは `sessionId` / `errorType` / 短縮メッセージ / `step_number` / `status_code` / `user_agent` のみ。
+
 ## npm scripts
 
 ```bash

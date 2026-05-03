@@ -135,6 +135,7 @@ NEXT_PUBLIC_GA_ID=          # 非本番のGA4測定ID。estimate本番は共有I
 | POST | `/api/v1/estimate/step` | ステップ回答送信（Step 7 のみ AI 動的質問生成） |
 | POST | `/api/v1/estimate/generate` | 全回答を受け取り見積もり生成 |
 | GET | `/api/v1/estimate/result/{id}` | 生成結果ポーリング |
+| POST | `/api/v1/estimate/report-error` | クライアント側エラー報告（運用者へメール通知） |
 | GET | `/api/v1/health` | ヘルスチェック（API Key 不要） |
 
 DB 書き込みは `/generate` の最終送信時のみ。Step 1-12 の回答はフロントエンドの localStorage で管理し、Step 7 では回答をリクエスト Body に含めて AI 動的質問を生成する。
