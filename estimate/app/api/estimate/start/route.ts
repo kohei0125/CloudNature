@@ -4,7 +4,7 @@ import { logger } from "@/lib/logger";
 
 const BACKEND_URL =
   process.env.BACKEND_URL ?? "http://localhost:8000";
-const TIMEOUT_MS = 15_000;
+const TIMEOUT_MS = 30_000; // Cloud Runコールドスタートを許容するため30秒に延長
 
 export async function POST() {
   const controller = new AbortController();
