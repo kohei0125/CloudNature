@@ -136,7 +136,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
               accentText[service.accentColor]
             )}
           >
-            新潟AIアカデミーを詳しく見る
+            {service.externalLabel}
             <ExternalLink className="w-4 h-4" />
           </a>
         )}

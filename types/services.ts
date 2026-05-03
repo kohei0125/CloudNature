@@ -18,6 +18,7 @@ export interface ServiceDetail {
   accentColor: string;
   image?: string;
   externalUrl?: string;
+  externalLabel?: string;
 }
 
 export interface FlowStep {

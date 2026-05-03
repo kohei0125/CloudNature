@@ -39,9 +39,20 @@ const Footer = () => {
             <ul className="v-stack gap-3 text-teal-200/70 text-sm">
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.path} className="hover:text-white transition-colors">
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link href={link.path} className="hover:text-white transition-colors">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

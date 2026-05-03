@@ -40,7 +40,8 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     techStack: ["AI導入診断", "法人研修", "個別スクール"],
     accentColor: "tertiary",
     image: "/images/services/dx_support.png",
-    externalUrl: "https://niigata-ai-academy.com"
+    externalUrl: "https://niigata-ai-academy.com",
+    externalLabel: "新潟AIアカデミーを詳しく見る"
   },
   {
     id: "ai",
@@ -68,7 +69,9 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     ],
     techStack: ["Python", "PHP", "React", "AWS"],
     accentColor: "secondary",
-    image: "/images/services/system_dev.png"
+    image: "/images/services/system_dev.png",
+    externalUrl: ESTIMATE_URL,
+    externalLabel: "AI見積もりを試す"
   }
 ];
 

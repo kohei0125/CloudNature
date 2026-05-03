@@ -1,3 +1,5 @@
+import { ESTIMATE_URL } from "@/content/common";
+
 export const HEADER_COPY = {
   brand: "CloudNature",
   downloadCta: "資料ダウンロード",
@@ -13,7 +15,8 @@ export const FOOTER_COPY = {
   serviceLinks: [
     { label: "AI導入・伴走支援", path: "/services/ai-support" },
     { label: "AIエージェント開発", path: "/services/ai-agent" },
-    { label: "システム開発", path: "/services/system-dev" }
+    { label: "システム開発", path: "/services/system-dev" },
+    { label: "AI見積もり", path: ESTIMATE_URL, external: true }
   ],
   companyLinks: [
     { label: "企業情報", path: "/company" },
