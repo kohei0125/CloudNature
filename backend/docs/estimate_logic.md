@@ -543,10 +543,11 @@ OpenAI APIが使えない場合のテンプレート応答:
 |---|---------|---------|
 | 1 | JSONスキーマ検証 | 必須フィールド欠落、features 3〜8個でない、discussion_agenda 3〜5個でない |
 | 2 | 価格型検証 | `standard_price` / `hybrid_price` が数値でない |
-| 3 | **重複feature名検出** | 同名のfeatureが存在する |
-| 4 | **合計整合性チェック** | `Σ feature.standard_price ≠ total_cost.standard` または `Σ feature.hybrid_price ≠ total_cost.hybrid` |
+| 3 | **重複feature名検出** | 同名のfeatureが存在する（LLM 出力段でのみ検査。`_enforce_calculated_prices()` の label 上書きで再発する可能性は残るが、step8 ラベルは UI で重複選択できないため通常は発生しない） |
 
-\#3, \#4 は品質監査追加時に強化されたチェック項目。
+> **注意:** 旧仕様にあった「合計整合性チェック (`Σ feature.price == total_cost`)」は削除した。直後の `_enforce_calculated_prices` で全金額が Pricing Engine の決定的計算値に上書きされるため、LLM の算術精度に依存した検証は無意味で、Gemini-2.5-flash 等で頻繁に validation 失敗→3回リトライ全失敗→FallbackAdapter 走行を引き起こしていた。
+>
+> またデバッグ容易性のため、すべての validate 失敗箇所で WARNING ログを出力する（schema 違反、価格型違反、重複名）。
 
 ---
 
@@ -739,9 +740,9 @@ deploy.sh 起動
 
 | リスク | 対策 |
 |--------|------|
-| LLMが金額を勝手に変更 | `_enforce_calculated_prices()` で計算値に上書き |
-| 内訳と合計が不一致 | `validate_estimate_output()` で `Σ features == total` を検証 |
-| 重複機能で水増し | `validate_estimate_output()` で重複feature名を検出 |
+| LLMが金額を勝手に変更 | `_enforce_calculated_prices()` で `features[].standard/hybrid_price` と `total_cost` を Pricing Engine の計算値に強制上書き |
+| 内訳と合計が不一致 | `_enforce_calculated_prices()` で features と total_cost を同じ計算値に揃えるため構造的に発生しない（LLM 出力段の合計整合性チェックは廃止済み） |
+| 重複機能で水増し | `validate_estimate_output()` で重複 feature 名を検出（LLM 出力段のみ。`_enforce_calculated_prices()` の label 上書きで再発する余地はあるが、step8 ラベルは UI 側で重複選択できないため実害は限定的） |
 
 ### 11.3 HTTPエラー
 

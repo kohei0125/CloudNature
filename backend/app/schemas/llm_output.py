@@ -1,10 +1,13 @@
 """JSON Schema definitions and validation for LLM outputs."""
 
+import logging
 import re
 
 import jsonschema
 
 from app.core.pricing_engine import _BASE_PRICES
+
+logger = logging.getLogger(__name__)
 
 # Value must be lowercase English + underscores, 3-30 chars
 _VALUE_RE = re.compile(r"^[a-z][a-z0-9_]{2,29}$")
@@ -147,27 +150,38 @@ def validate_estimate_output(data: dict) -> bool:
     """
     try:
         jsonschema.validate(instance=data, schema=ESTIMATE_GENERATION_SCHEMA)
-    except jsonschema.ValidationError:
+    except jsonschema.ValidationError as e:
+        logger.warning(
+            "Estimate schema validation failed: %s (path=%s)",
+            e.message,
+            list(e.absolute_path),
+        )
         return False
 
+    features = data.get("features", [])
+
     # Basic sanity: features must have numeric prices
-    for feature in data.get("features", []):
+    for i, feature in enumerate(features):
         sp = feature.get("standard_price", 0)
         hp = feature.get("hybrid_price", 0)
         if not isinstance(sp, (int, float)) or not isinstance(hp, (int, float)):
+            logger.warning(
+                "Non-numeric price at features[%d] (sp=%r, hp=%r)",
+                i, sp, hp,
+            )
             return False
 
-    # 重複feature名の検出
-    names = [f.get("name", "") for f in data.get("features", [])]
-    if len(names) != len(set(names)):
-        return False
+    # 重複feature名の検出（早期returnで重複した名前を直接ログに残す）
+    seen_names: set[str] = set()
+    for f in features:
+        name = f.get("name", "")
+        if name in seen_names:
+            logger.warning("Duplicate feature name detected: %r", name)
+            return False
+        seen_names.add(name)
 
-    # 合計と内訳の整合性チェック
-    features = data.get("features", [])
-    total_cost = data.get("total_cost", {})
-    sum_standard = sum(f.get("standard_price", 0) for f in features)
-    sum_hybrid = sum(f.get("hybrid_price", 0) for f in features)
-    if total_cost.get("standard") != sum_standard or total_cost.get("hybrid") != sum_hybrid:
-        return False
+    # 合計と内訳の整合性チェックは行わない: 直後に _enforce_calculated_prices
+    # で全金額が Pricing Engine の決定的計算値に上書きされるため、LLM の
+    # 算術精度に依存して検証する意味がない（LLMは算術が苦手で頻繁に落ちる）。
 
     return True
