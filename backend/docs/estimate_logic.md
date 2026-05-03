@@ -456,10 +456,15 @@ APIキーが未設定の場合は自動的に FallbackAdapter にフォールバ
 }
 ```
 
+- 機能数: 3〜6個（プロンプトとスキーマで一致）。PoC/MVP/軽微作業のキーワード検出時は3個まで縮退。
 - リトライ: 最大3回
 - バリデーション: `validate_dynamic_questions()`
-- フォールバック: 業種別デフォルト機能リスト
+- フォールバック: 業種別デフォルト機能リスト（必ず6個返す）
 - 副作用: `step_8_categories` と `step_8_labels` をセッションに保存（`flag_modified` で JSON カラムの変更を確実に永続化）
+
+**フロント側の挙動（致命バグ対策）:**
+
+`POST /step` のレスポンスで `ai_options` が `null` または `step8_features` が空の場合、フロントは Step 8 へ進ませず `status=error` に遷移する（`estimate/app/chat/page.tsx` の `handleNext`）。ユーザーは ErrorRetry の「もう一度試す」から再試行可能で、リトライは Step 7 の `submitStep` を再実行する。これにより、バックエンド側で例外が発生して `ai_options=None` が返った場合でも、Step 8 が「その他」のみで表示される事故を防ぐ。
 
 #### challenges解析の優先ロジック
 

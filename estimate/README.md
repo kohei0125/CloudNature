@@ -146,9 +146,16 @@ estimate/
 | 1-5 | select | 業種・システム種類等の基本情報 |
 | 6 | text | 自由記述（システム概要） |
 | 7 | select | 追加設定 |
-| 8 | AI生成 | AIが入力に基づき機能候補を動的に生成 |
+| 8 | AI生成 | AIが入力に基づき機能候補を動的に生成（3〜6個 + 「その他」） |
 | 9-12 | select/multi-select | タイムライン・デバイス・予算等 |
 | 13 | contact | お名前・企業名・メールアドレス（JSON形式で保存） |
+
+### 安全装置（致命バグ対策）
+
+- **Step 8 が空にならない保証**: Step 7 → 8 遷移時、`POST /step` で AI 候補が空（バックエンド例外時）の場合は前進せず `status=error` に遷移。`useStepNavigation.canGoNext` の `isAiStepReady` で二重防御。`ErrorRetry` の「もう一度試す」で再試行可能。
+- **連打ガード**: `handleNext`/`handleSubmit` に `isAdvancingRef`/`isSubmittingRef` を、`SelectInput` の auto-advance タイマーは1本のみ保持（連打時は既存タイマーをクリア）。React の `disabled` 反映遅延によるステップ飛ばし事故を防止。
+- **Turnstile 必須化（本番）**: `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY` 設定時、トークン未取得では「送信する」ボタンを無効化し、`handleSubmit` 内でも二重チェック。これにより `/api/estimate/generate` の 403 (Turnstile token required) を防止。
+- **`/api/estimate/start` のタイムアウト**: 30秒（Cloud Run コールドスタート対策）。
 
 ## npm scripts
 
