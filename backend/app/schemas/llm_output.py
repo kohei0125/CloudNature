@@ -32,8 +32,8 @@ DYNAMIC_QUESTIONS_SCHEMA: dict = {
                     "category": {"type": "string"},
                 },
             },
-            "minItems": 5,
-            "maxItems": 7,
+            "minItems": 3,
+            "maxItems": 6,
         },
     },
 }
