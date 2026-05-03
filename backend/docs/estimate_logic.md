@@ -541,9 +541,11 @@ OpenAI APIが使えない場合のテンプレート応答:
 
 | # | チェック | 失敗条件 |
 |---|---------|---------|
-| 1 | JSONスキーマ検証 | 必須フィールド欠落、features 3〜8個でない、discussion_agenda 3〜5個でない |
+| 1 | JSONスキーマ検証 | 必須フィールド欠落、features が空、discussion_agenda 3〜5個でない |
 | 2 | 価格型検証 | `standard_price` / `hybrid_price` が数値でない |
 | 3 | **重複feature名検出** | 同名のfeatureが存在する（LLM 出力段でのみ検査。`_enforce_calculated_prices()` の label 上書きで再発する可能性は残るが、step8 ラベルは UI で重複選択できないため通常は発生しない） |
+
+> **注意:** `features` の件数上下限は意図的に設けていない（`minItems=1` のみ）。直後の `_enforce_calculated_prices()` が Pricing Engine の `calc_features` を主体に features を再構築する（不足分は category 名で補完、過剰分は切り捨て）ため、LLM 出力段で件数を強制するとユーザーが Step8 で1〜2個しか選んでいない正当ケースで毎回 fallback に落ちる事故を引き起こす。
 
 > **注意:** 旧仕様にあった「合計整合性チェック (`Σ feature.price == total_cost`)」は削除した。直後の `_enforce_calculated_prices` で全金額が Pricing Engine の決定的計算値に上書きされるため、LLM の算術精度に依存した検証は無意味で、Gemini-2.5-flash 等で頻繁に validation 失敗→3回リトライ全失敗→FallbackAdapter 走行を引き起こしていた。
 >

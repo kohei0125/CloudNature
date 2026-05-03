@@ -57,6 +57,11 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
         "summary": {"type": "string"},
         "development_model_explanation": {"type": "string"},
         "features": {
+            # 件数の上下限は意図的に設けない:
+            # _enforce_calculated_prices() が直後に Pricing Engine の calc_features を
+            # 主体に features を再構築する(不足分は category 名で補完、過剰分は切り捨て)
+            # ため、LLM 出力段で件数を強制すると、ユーザーが Step8 で1〜2個しか選んで
+            # いない正当ケースで毎回 fallback に落ちる事故を引き起こす。
             "type": "array",
             "items": {
                 "type": "object",
@@ -68,8 +73,7 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
                     "hybrid_price": {"type": "number"},
                 },
             },
-            "minItems": 3,
-            "maxItems": 8,
+            "minItems": 1,
         },
         "discussion_agenda": {
             "type": "array",
