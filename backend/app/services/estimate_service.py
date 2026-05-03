@@ -12,6 +12,7 @@ from sqlmodel import select
 from app.db import get_session
 from app.models.generated import GeneratedEstimate
 from app.schemas.llm_output import validate_dynamic_questions, validate_estimate_output
+from app.services.error_notification_service import notify_error_in_background
 from app.services.session_service import (
     get_estimate_session,
     save_session_answers,
@@ -137,6 +138,14 @@ async def generate_dynamic_questions(
     # Fallback: use the fallback adapter directly
     from app.core.llm.fallback import FallbackAdapter
 
+    notify_error_in_background(
+        session_id=session_id,
+        source="backend",
+        error_type="dynamic_questions_llm_exhausted",
+        message="動的質問生成の全リトライが失敗しFallbackAdapterに到達",
+        context={"max_retries": settings.llm_max_retries},
+    )
+
     fallback = FallbackAdapter()
     result = await fallback.generate_dynamic_questions(
         user_overview=str(context.get("challenges", "")),
@@ -226,6 +235,14 @@ async def generate_estimate(session_id: str, answers: dict) -> dict | None:
     # Fallback if all retries failed
     if result is None:
         from app.core.llm.fallback import FallbackAdapter
+
+        notify_error_in_background(
+            session_id=session_id,
+            source="backend",
+            error_type="estimate_generation_llm_exhausted",
+            message="見積もり本文生成の全リトライが失敗しFallbackAdapterに到達",
+            context={"max_retries": settings.llm_max_retries},
+        )
 
         fallback = FallbackAdapter()
         result = await fallback.generate_estimate(calculated_data=calculated_data)

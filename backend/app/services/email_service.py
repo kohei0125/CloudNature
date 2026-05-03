@@ -3,7 +3,9 @@
 import html
 import logging
 import math
+from datetime import datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import resend
 
@@ -182,5 +184,92 @@ async def send_estimate_notification(
     except Exception:
         logger.exception(
             "Failed to send notification to %s", settings.notify_email
+        )
+        return False
+
+
+async def send_error_notification(
+    session_id: str,
+    source: str,
+    error_type: str,
+    message: str = "",
+    context: dict | None = None,
+) -> bool:
+    """Send an operational error notification to the operator.
+
+    Used to surface failures detected in the estimate flow so the operator
+    can investigate quickly. PII（連絡先等）は呼び出し側が含めない前提で
+    最小限のフィールドのみ送る。
+    """
+    if not settings.resend_api_key:
+        logger.warning("Resend API key not configured, skipping error notification")
+        return False
+    if not settings.notify_email:
+        logger.info("NOTIFY_EMAIL not configured, skipping error notification")
+        return False
+
+    resend.api_key = settings.resend_api_key
+
+    occurred_at = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M:%S JST")
+    rows = [
+        ("発生時刻", occurred_at),
+        ("発生元", source),
+        ("エラー種別", error_type),
+        ("session_id", session_id or "(unknown)"),
+    ]
+    if message:
+        rows.append(("メッセージ", message[:500]))
+    for k, v in (context or {}).items():
+        if v is None or v == "":
+            continue
+        rows.append((str(k), str(v)[:500]))
+
+    table_rows = "".join(
+        f'<tr><td style="padding:8px 12px;background:#F4F2F0;font-weight:bold;'
+        f'width:30%;border-bottom:1px solid #EDE8E5;vertical-align:top;">{html.escape(k)}</td>'
+        f'<td style="padding:8px 12px;border-bottom:1px solid #EDE8E5;vertical-align:top;'
+        f'font-family:Menlo,Consolas,monospace;font-size:13px;">{html.escape(v)}</td></tr>'
+        for k, v in rows
+    )
+
+    body_html = (
+        '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#19231B;">'
+        '<h2 style="color:#B00020;margin-bottom:16px;">【CloudNature】見積もりフローでエラーを検知しました</h2>'
+        '<p style="margin-bottom:16px;">以下のエラーがバックエンド/フロントエンドで発生しました。Cloud Run / Vercel のログと併せて確認してください。</p>'
+        '<table style="width:100%;border-collapse:collapse;border-top:1px solid #EDE8E5;">'
+        + table_rows
+        + "</table>"
+        '<p style="margin-top:24px;color:#666;font-size:12px;">この通知は同一 session × エラー種別で短時間に複数回発生した場合、サーバー側で重複抑止されます。</p>'
+        "</div>"
+    )
+
+    try:
+        params: resend.Emails.SendParams = {
+            "from": settings.email_from,
+            "to": [settings.notify_email],
+            "subject": f"【CloudNature】見積もりエラー検知 [{error_type}]",
+            "html": body_html,
+        }
+        response = resend.Emails.send(params)
+        if response and response.get("id"):
+            logger.info(
+                "Error notification sent (session=%s, type=%s, id=%s)",
+                session_id,
+                error_type,
+                response["id"],
+            )
+            return True
+        logger.warning(
+            "Error notification send returned no ID (session=%s, type=%s): %s",
+            session_id,
+            error_type,
+            response,
+        )
+        return False
+    except Exception:
+        logger.exception(
+            "Failed to send error notification (session=%s, type=%s)",
+            session_id,
+            error_type,
         )
         return False

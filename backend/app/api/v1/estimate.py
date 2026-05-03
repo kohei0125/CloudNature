@@ -9,6 +9,7 @@ from fastapi import APIRouter, BackgroundTasks, HTTPException
 from app.schemas.request import (
     CreateSessionRequest,
     GenerateEstimateRequest,
+    ReportErrorRequest,
     SubmitStepRequest,
 )
 from app.schemas.response import (
@@ -16,7 +17,7 @@ from app.schemas.response import (
     SessionResponse,
     StepResponse,
 )
-from app.services import estimate_service, session_service
+from app.services import error_notification_service, estimate_service, session_service
 
 logger = logging.getLogger(__name__)
 
@@ -159,8 +160,25 @@ async def submit_step(
             ai_options = await estimate_service.generate_dynamic_questions(
                 request.session_id, request.answers
             )
-        except Exception:
+        except Exception as exc:
             logger.exception("Failed to generate dynamic questions")
+            error_notification_service.notify_error_in_background(
+                session_id=request.session_id,
+                source="backend",
+                error_type="step7_dynamic_questions_exception",
+                message=str(exc)[:500],
+                context={"step_number": 7},
+            )
+        else:
+            # 例外無しで戻ってきたが結果が空 = フォールバックも空という稀なケース
+            if not (ai_options and ai_options.get("step8_features")):
+                error_notification_service.notify_error_in_background(
+                    session_id=request.session_id,
+                    source="backend",
+                    error_type="step7_dynamic_questions_empty",
+                    message="AI動的質問生成の結果が空（FallbackAdapterも含めて）",
+                    context={"step_number": 7},
+                )
 
     return StepResponse(
         success=True,
@@ -186,9 +204,20 @@ async def generate_estimate(
     if not contact["phone"].strip() or not _PHONE_REGEX.match(contact["phone"].strip()):
         raise HTTPException(status_code=400, detail="Valid phone number is required")
 
-    result = await estimate_service.generate_estimate(
-        request.session_id, request.answers
-    )
+    try:
+        result = await estimate_service.generate_estimate(
+            request.session_id, request.answers
+        )
+    except Exception as exc:
+        logger.exception("Failed to generate estimate for session %s", request.session_id)
+        error_notification_service.notify_error_in_background(
+            session_id=request.session_id,
+            source="backend",
+            error_type="generate_estimate_exception",
+            message=str(exc)[:500],
+        )
+        raise HTTPException(status_code=500, detail="Failed to generate estimate") from exc
+
     if result:
         # セッションからstep8ラベル情報を取得してanswersにマージ（Notion表示用）
         session_data = session_service.get_estimate_session(request.session_id)
@@ -208,6 +237,41 @@ async def generate_estimate(
         return EstimateResultResponse(status="completed", estimate=result)
 
     return EstimateResultResponse(status="processing")
+
+
+@router.post("/report-error", status_code=204)
+async def report_error(request: ReportErrorRequest) -> None:
+    """Receive a client-side error report and forward it to operator email.
+
+    クライアントは `navigator.sendBeacon` で投げるため応答を待たない。
+    Resend API 往復もリクエストレイテンシに乗せず fire-and-forget で送る。
+    重複抑止はサーバー側 (error_notification_service) と
+    クライアント側 (sessionStorage) の両方で行う。
+
+    濫用対策: session_id が指定されている場合は DB に存在する有効な
+    セッションかを検証し、未知の session_id は静かに 204 を返す
+    （攻撃者が任意の session_id でメール発火することを防ぐ）。
+    session_id が空の場合は startSession 失敗等の正当ケースなのでそのまま受ける。
+    """
+    if request.session_id and session_service.get_session_cached(request.session_id) is None:
+        logger.warning(
+            "Dropping report-error for unknown session_id=%s (type=%s)",
+            request.session_id,
+            request.error_type,
+        )
+        return
+
+    error_notification_service.notify_error_in_background(
+        session_id=request.session_id,
+        source=request.source,
+        error_type=request.error_type,
+        message=request.message or "",
+        context={
+            "step_number": request.step_number,
+            "status_code": request.status_code,
+            "user_agent": request.user_agent,
+        },
+    )
 
 
 @router.get("/result/{session_id}", response_model=EstimateResultResponse)

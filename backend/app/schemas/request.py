@@ -70,3 +70,25 @@ class GenerateEstimateRequest(BaseModel):
     @classmethod
     def validate_answers(cls, v: dict[str, str | list[str]]) -> dict[str, str | list[str]]:
         return _validate_answers_dict(v)
+
+
+_ERROR_REPORT_MAX_FIELD_LEN = 500
+_ERROR_TYPE_RE = r"^[a-z0-9_]{1,50}$"
+_ERROR_SOURCE_RE = r"^[a-z0-9_-]{1,30}$"
+
+
+class ReportErrorRequest(BaseModel):
+    """Request body for client-side error reporting.
+
+    PII（連絡先・自由記述）は含めない前提。フリーテキスト型のフィールドは
+    上限長で切り詰めることでログ汚染とメール本文肥大化を防ぐ。
+    """
+
+    # session 確立前のエラー（startSession 失敗等）も受けるため空文字を許容する
+    session_id: str = Field(default="", max_length=50, pattern=r"^[a-f0-9-]*$")
+    source: str = Field(min_length=1, max_length=30, pattern=_ERROR_SOURCE_RE)
+    error_type: str = Field(min_length=1, max_length=50, pattern=_ERROR_TYPE_RE)
+    message: str | None = Field(default=None, max_length=_ERROR_REPORT_MAX_FIELD_LEN)
+    step_number: int | None = Field(default=None, ge=1, le=13)
+    status_code: int | None = Field(default=None, ge=0, le=599)
+    user_agent: str | None = Field(default=None, max_length=_ERROR_REPORT_MAX_FIELD_LEN)
