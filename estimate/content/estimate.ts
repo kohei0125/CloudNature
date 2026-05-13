@@ -139,7 +139,7 @@ export const LP_COPY = {
   // ヒーロー
   hero: {
     eyebrow: "AI Estimate Platform",
-    headingLine1: "相場の1/2でシステム開発",
+    headingLine1: "相場の最大1/3でシステム開発",
     // headingLine2: "不確実なシステム開発コストを、",
     headingLine3: "最新AI活用で1分で見積",
     description:

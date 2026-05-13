@@ -148,7 +148,8 @@ export default function HeroSection() {
               </span>
               <span className="block whitespace-nowrap">
                 <span className="text-sunset">コスト</span>を相場の
-                <span className="text-sunset">1/2</span>へ
+                <span className="text-[0.7em] font-bold text-forest/70">最大</span>
+                <span className="text-sunset">1/3</span>へ
               </span>
               <span className="block whitespace-nowrap">
                 まずは<span className="text-sunset">1分</span>で
@@ -162,7 +163,8 @@ export default function HeroSection() {
                 <span className="text-[0.8em] font-bold">システム開発</span>
                 <span className="text-[1.3em] text-sunset">コスト</span>
                 <span className="text-[0.8em] font-bold">を相場の</span>
-                <span className="text-[1.3em] text-sunset">1/2</span>
+                <span className="text-[0.7em] font-bold">最大</span>
+                <span className="text-[1.3em] text-sunset">1/3</span>
                 <span className="text-[0.8em] font-bold">へ</span>
               </span>
               <span className="block whitespace-nowrap">
@@ -174,6 +176,17 @@ export default function HeroSection() {
               </span>
             </span>
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.18, ease }}
+            className="mt-3 text-[12px] font-bold tracking-wide text-forest/55 md:text-[13px]"
+          >
+            <span className="text-[0.85em] font-bold text-forest/55">最大</span>
+            <span className="text-sunset">67%</span>
+            のコスト削減を実現
+          </motion.p>
 
           <motion.p
             initial={{ opacity: 0, y: 24 }}
