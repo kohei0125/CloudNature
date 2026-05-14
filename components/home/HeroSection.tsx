@@ -69,7 +69,7 @@ const HeroSection = () => {
       <div className="relative min-h-[600px] lg:min-h-[660px] hidden md:flex items-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src={HERO_COPY.imageSrc}
+            src={HERO_COPY.pcImageSrc}
             alt={HERO_COPY.heroImageAlt}
             fill
             priority
