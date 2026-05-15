@@ -85,7 +85,7 @@ estimate/
 │   │   ├── TextInput.tsx       # テキストエリア
 │   │   ├── EmailInput.tsx      # メール入力
 │   │   ├── SelectTextInput.tsx # 選択 + 自由記述
-│   │   └── ContactInput.tsx    # お名前・企業名・メールアドレス（信頼信号付き）
+│   │   └── ContactInput.tsx    # お名前・企業名（任意）・電話番号・メールアドレス（信頼信号付き）
 │   ├── landing/                # ランディングページ
 │   │   ├── HeroSection.tsx
 │   │   ├── BenefitsSection.tsx
@@ -148,7 +148,7 @@ estimate/
 | 7 | select | 追加設定 |
 | 8 | AI生成 | AIが入力に基づき機能候補を動的に生成（3〜6個 + 「その他」） |
 | 9-12 | select/multi-select | タイムライン・デバイス・予算等 |
-| 13 | contact | お名前・企業名・メールアドレス（JSON形式で保存） |
+| 13 | contact | お名前・企業名（任意）・電話番号・メールアドレス（JSON形式で保存） |
 
 ### 安全装置（致命バグ対策）
 

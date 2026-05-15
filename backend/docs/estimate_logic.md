@@ -585,7 +585,7 @@ result.user_input          = calculated_data.user_input      ← 保持
 
 ```
 _send_emails(estimate_data, answers)
-  ├─ 1. step_13 から連絡先抽出 (name, company, email)
+  ├─ 1. step_13 から連絡先抽出 (name, company, phone, email) ※ company は任意
   ├─ 2. Notion保存 (失敗しても続行)
   ├─ 3. 顧客メール送信 (PDF添付)
   └─ 4. 運営者通知メール送信 (PDF添付)
@@ -606,7 +606,7 @@ _send_emails(estimate_data, answers)
 |------|-----|
 | 件名 | 【CloudNature】新しいお見積もり依頼がありました |
 | 宛先 | `settings.notify_email` |
-| 内容 | 顧客名、会社名、メール、プロジェクト名、概算金額、業種 |
+| 内容 | 顧客名、会社名（任意。未入力時は「（未入力）」と表示）、電話番号、メール、プロジェクト名、概算金額、業種 |
 | 条件 | `RESEND_API_KEY` + `NOTIFY_EMAIL` 設定済み |
 
 ### 9.3.1 運営者向けエラー通知メール
@@ -654,8 +654,9 @@ _send_emails(estimate_data, answers)
 | プロパティ | 値 |
 |-----------|-----|
 | 名前 | 顧客名 |
-| 会社名 | 会社名 |
+| 会社名 | 会社名（任意。未入力時は空文字で保存され、Notion 上は空欄として表示される） |
 | メールアドレス | メールアドレス |
+| 電話番号 | 電話番号 |
 | 種別 | 「お見積もり」 |
 | ステータス | 「未対応」 |
 

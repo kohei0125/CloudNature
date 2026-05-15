@@ -110,9 +110,6 @@ export const STEP_CONFIGS: StepConfig[] = [
         if (!parsed.name || parsed.name.trim().length < 2) {
           return "お名前を2文字以上でご入力ください";
         }
-        if (!parsed.company || parsed.company.trim().length < 1) {
-          return "企業・団体名をご入力ください";
-        }
         if (!parsed.phone || parsed.phone.trim().length < 1) {
           return "電話番号をご入力ください";
         }
