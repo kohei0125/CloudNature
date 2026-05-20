@@ -222,5 +222,5 @@ export const article: UseCaseArticle = {
 <p><small><strong>監修</strong>：株式会社クラウドネイチャー（新潟市中央区上大川前通）／ AI開発・AI活用支援チーム<br />
 <strong>最終更新</strong>：2026年5月20日<br />
 本記事は、新潟市中央区を拠点にAIエージェント開発・システム開発・AI活用支援を提供する株式会社クラウドネイチャーが、FDE（Forward Deployed Engineer）市場の業界レポートと公開情報をもとに整理した戦略ガイドです。給与水準・需要動向の数値は2026年5月時点で公開されているデータに基づきます。参照した主な公開情報：FDE関連業界レポート、Palantir Technologies の公式情報、国内転職プラットフォームの職種カテゴリ動向、新潟市「企業立地ビジョン」、新潟県妙高市の対話型AIエージェント実証実験事例、NICO（公益財団法人にいがた産業創造機構）のDX支援関連情報。</small></p>`,
-  image: "/images/blog/aI_shared_FDE_strategy/Niigata_AI_Shared_FDE_Strategy-01.webp",
+  image: "/images/blog/aI_shared_FDE_strategy/thumbnail.webp",
 };
