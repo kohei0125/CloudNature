@@ -113,3 +113,191 @@ h1, h2, h3, h4, h5, h6 {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* === Editorial FAQ Section (.prose section.faq) ===
+ * Concept: Numbered Q&A column inspired by Japanese editorial magazines.
+ * Typography and whitespace carry the structure — no badges, no icons.
+ *
+ *   01    質問テキスト（明朝・forest）
+ *   ─────────────────────────  (sea hairline)
+ *         回答テキスト（ゴシック・charcoal）
+ */
+.prose section.faq {
+  margin-top: 3rem;
+  margin-bottom: 2.5rem;
+  counter-reset: faq-counter;
+  border-top: 1px solid #E5E7EB;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+/* --- Question --- */
+.prose section.faq h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0;
+  padding: 2rem 0 0.875rem;
+  border-bottom: 1.5px solid #8A9668;            /* sage hairline */
+  font-family: var(--font-inter), "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: #19231B;
+  counter-increment: faq-counter;
+}
+
+.prose section.faq h3:first-of-type {
+  padding-top: 1.5rem;
+}
+
+.prose section.faq h3::before {
+  content: "Q." counter(faq-counter, decimal-leading-zero);
+  flex-shrink: 0;
+  min-width: 3rem;
+  font-family: var(--font-inter), "Noto Sans JP", sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.05em;
+  color: #8A9668;                                /* sage */
+  line-height: 1.7;
+}
+
+/* --- Answer (first paragraph after h3) ---
+ * Uses padding-left + absolute ::before so inline elements (<strong>, <a>)
+ * stay inline within the paragraph.
+ */
+.prose section.faq h3 + p {
+  position: relative;
+  margin: 0;
+  padding: 1.25rem 0 0 4rem;                    /* 3rem label column + 1rem gap */
+  font-family: var(--font-inter), "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.95;
+  color: #3F3F46;
+  letter-spacing: 0.01em;
+}
+
+.prose section.faq h3 + p::before {
+  content: "A.";
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  font-family: var(--font-inter), "Noto Sans JP", sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  letter-spacing: 0.05em;
+  color: #8A9668;                                /* sage */
+  line-height: 1.95;
+}
+
+/* --- Continuation: additional paragraphs and lists --- */
+.prose section.faq > p:not(h3 + p),
+.prose section.faq > ul,
+.prose section.faq > ol {
+  margin: 0.75rem 0 0;
+  padding-left: 4rem;
+  font-family: var(--font-inter), "Noto Sans JP", sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.95;
+  color: #3F3F46;
+  letter-spacing: 0.01em;
+}
+
+/* --- Lists --- */
+.prose section.faq > ul,
+.prose section.faq > ol {
+  list-style-position: outside;
+}
+
+.prose section.faq > ul {
+  list-style-type: none;
+}
+
+.prose section.faq > ul > li {
+  position: relative;
+  margin: 0.4rem 0;
+  padding-left: 1.25rem;
+}
+
+.prose section.faq > ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.95rem;
+  width: 0.5rem;
+  height: 1px;
+  background-color: #8A9668;
+}
+
+.prose section.faq > ol {
+  padding-left: calc(4rem + 1.5rem);
+}
+
+.prose section.faq > ol > li {
+  margin: 0.4rem 0;
+  padding-left: 0.25rem;
+}
+
+/* --- Inline emphasis & links --- */
+.prose section.faq strong {
+  font-weight: 600;
+  color: #19231B;
+}
+
+.prose section.faq a {
+  color: #19231B;
+  text-decoration: underline;
+  text-decoration-color: #8A9668;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.prose section.faq a:hover {
+  text-decoration-color: #19231B;
+}
+
+/* --- Mobile --- */
+@media (max-width: 640px) {
+  .prose section.faq {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .prose section.faq h3 {
+    gap: 0.75rem;
+    padding: 1.5rem 0 0.75rem;
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+  .prose section.faq h3:first-of-type {
+    padding-top: 1.25rem;
+  }
+  .prose section.faq h3::before {
+    min-width: 2.5rem;
+    font-size: 0.875rem;
+  }
+  .prose section.faq h3 + p {
+    padding: 1rem 0 0 3.25rem;
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+  .prose section.faq h3 + p::before {
+    top: 1rem;
+    font-size: 0.875rem;
+  }
+  .prose section.faq > p:not(h3 + p),
+  .prose section.faq > ul {
+    padding-left: 3.25rem;
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+  .prose section.faq > ol {
+    padding-left: calc(3.25rem + 1.5rem);
+    font-size: 0.9rem;
+    line-height: 1.9;
+  }
+  .prose section.faq > ul > li::before {
+    top: 0.85rem;
+  }
+}

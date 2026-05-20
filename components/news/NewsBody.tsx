@@ -19,6 +19,7 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     source: ["src", "type"],
     a: ["href", "target", "rel"],
     blockquote: ["class"],
+    section: ["class"],
     p: ["lang", "dir"],
   },
   allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
