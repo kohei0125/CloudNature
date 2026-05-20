@@ -39,6 +39,9 @@ backend/.env
 .superset/
 .takt/
 
+# Image processing backups (e.g. watermark removal originals)
+public/**/_original/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
