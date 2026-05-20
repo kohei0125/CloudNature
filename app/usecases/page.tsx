@@ -135,7 +135,7 @@ export default function UseCasesPage() {
                 <Link
                   key={article.id}
                   href={`/usecases/${article.id}`}
-                  className="group flex gap-4 md:gap-8 py-4 md:py-8 first:pt-0 last:pb-0"
+                  className="group flex items-center gap-4 md:gap-8 py-4 md:py-8 first:pt-0 last:pb-0"
                 >
                   {/* サムネイル */}
                   <div className="relative flex-shrink-0 w-32 aspect-video md:w-72 md:aspect-video rounded-lg overflow-hidden bg-mist">
@@ -159,17 +159,17 @@ export default function UseCasesPage() {
                   </div>
 
                   {/* テキスト */}
-                  <div className="flex flex-col justify-center flex-1 min-w-0">
+                  <div className="flex flex-col flex-1 min-w-0">
                     <span className="md:hidden text-[11px] font-bold text-sage mb-1">
                       {article.category}
                     </span>
-                    <h3 className="text-forest font-bold text-[15px] md:text-lg leading-snug mb-1 md:mb-2 line-clamp-2 group-hover:text-sage transition-colors">
+                    <h3 className="text-forest font-bold text-[15px] md:text-lg leading-snug mb-1 md:mb-2 line-clamp-2 h-[2.75em] group-hover:text-sage transition-colors">
                       {article.title}
                     </h3>
                     <time className="text-[11px] md:text-sm text-gray-400">
                       {formatDateJP(article.publishedAt)}
                     </time>
-                    <p className="hidden md:block text-sm text-gray-500 leading-relaxed line-clamp-2 mt-2">
+                    <p className="hidden md:block text-sm text-gray-500 leading-relaxed line-clamp-2 h-[3.25em] mt-2">
                       {article.excerpt}
                     </p>
                     <div className="hidden md:flex items-center justify-end mt-3">
