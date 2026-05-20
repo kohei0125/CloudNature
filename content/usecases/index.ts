@@ -1,4 +1,5 @@
 import type { UseCaseArticle } from "@/types";
+import { article as aiPocMethodCostKpi } from "./ai-poc-method-cost-kpi";
 import { article as businessAutomationSmallStart } from "./business-automation-small-start";
 import { article as niigataAiSubsidyGuide2026 } from "./niigata-ai-subsidy-guide-2026";
 import { article as aiAutoSalesDelivery } from "./ai-auto-sales-delivery";
@@ -9,6 +10,7 @@ import { article as aiTaskAllocation } from "./ai-task-allocation";
 export { USECASES_SECTION, USECASES_CTA, USECASES_DETAIL } from "./_common";
 
 export const USECASES_ARTICLES: UseCaseArticle[] = [
+  aiPocMethodCostKpi,
   aiTaskAllocation,
   aiInstallationFailure,
   businessAutomationSmallStart,
