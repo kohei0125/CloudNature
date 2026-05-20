@@ -281,6 +281,7 @@ export const article: UseCaseArticle = {
 
 <h2>よくある質問（FAQ）</h2>
 
+<section class="faq">
 <h3>新潟の中小企業でも、AI PoCは小さく始められますか？</h3>
 <p>可能です。最新のLLM API や Dify などを活用すれば、<strong>2週間・40万円台のスモールスタート</strong> から取り組めます。NICO（にいがた産業創造機構）のDX総合相談やセミナーも併用すれば、PoC企画段階の不安を抑えながら進められます。</p>
 
@@ -316,6 +317,7 @@ export const article: UseCaseArticle = {
 <li><strong>条件付きで進める</strong>：スコープを修正して再PoC</li>
 </ul>
 <p>判断基準を後出しで作らないことが、組織内の納得感を保つ最大のコツです。</p>
+</section>
 
 <hr />
 <p><small>
