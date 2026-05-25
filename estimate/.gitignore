@@ -13,6 +13,12 @@ node_modules/
 # Build
 tsconfig.tsbuildinfo
 
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
 # IDE
 .idea/
 .vscode/
