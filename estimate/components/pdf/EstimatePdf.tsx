@@ -14,62 +14,79 @@ function formatPrice(price: number): string {
   return `¥${price.toLocaleString("ja-JP")}`;
 }
 
+/**
+ * 従来型開発の参考注記。ハイブリッドの方が安い場合のみ「約X%削減」を返す。
+ * standard/hybrid が不正（0以下・増加）なら参考行を出さない（null）。
+ */
+function buildReferenceNote(standard: number, hybrid: number): string | null {
+  if (standard <= 0 || hybrid <= 0 || hybrid >= standard) return null;
+  const discountRate = Math.round((1 - hybrid / standard) * 100);
+  return `ご参考：従来型開発の場合 約${formatPrice(standard)}（約${discountRate}%削減）`;
+}
+
 export default function EstimatePdf({
   estimate,
   clientName,
   date,
   documentNumber,
 }: EstimatePdfProps) {
+  const features = estimate.features ?? [];
+  const discussionAgenda = estimate.discussionAgenda ?? [];
+  const summary = estimate.summary ?? "";
+  const confidenceLabel = estimate.confidence?.rangeLabel;
+  const referenceNote = buildReferenceNote(
+    estimate.totalCost.standard,
+    estimate.totalCost.hybrid
+  );
+
+  const remarkLines = [
+    "※ 本見積書はAIによる概算であり、正式なお見積もり・機能要件ではありません。",
+    "※ 正確な費用は、無料相談にて別途お見積もりいたします。",
+    "※ 表示価格はすべて税別です。",
+  ];
+  if (estimate.confidenceNote) remarkLines.push(`※ ${estimate.confidenceNote}`);
+
   return (
     <Document>
       <Page size="A4" style={styles.page} wrap>
-        <PdfHeader date={date} documentNumber={documentNumber} />
+        <PdfHeader
+          clientName={clientName}
+          projectName={estimate.projectName}
+          date={date}
+          documentNumber={documentNumber}
+          confidenceLabel={confidenceLabel}
+        />
 
-        {/* Title bar */}
-        <View style={styles.titleBar}>
-          <Text style={styles.titleBarText}>御 見 積 書</Text>
+        {/* 合計バナー（御見積金額・税別） */}
+        <View style={styles.banner} wrap={false}>
+          <Text style={styles.bannerLabel}>御見積金額（税別）</Text>
+          <Text style={styles.bannerAmount}>
+            {formatPrice(estimate.totalCost.hybrid)}
+          </Text>
         </View>
 
-        {/* Client info + total amount */}
-        <View style={styles.clientTotalRow}>
-          <View style={styles.clientBox}>
-            <Text style={styles.clientName}>{clientName} 様</Text>
-            <Text style={styles.projectLabel}>件名:</Text>
-            <Text style={styles.projectName}>{estimate.projectName}</Text>
-          </View>
-          <View style={styles.totalBox}>
-            <Text style={styles.totalLabel}>御見積金額（税別）</Text>
-            <Text style={styles.totalAmount}>
-              {formatPrice(estimate.totalCost.hybrid)}
-            </Text>
-            <Text style={styles.totalNote}>※消費税は別途</Text>
-          </View>
-        </View>
+        {/* プロジェクト概要 */}
+        {summary ? (
+          <>
+            <Text style={styles.sectionTitle}>プロジェクト概要</Text>
+            <Text style={styles.bodyText}>{summary}</Text>
+          </>
+        ) : null}
 
-        {/* Summary */}
-        <Text style={styles.sectionTitle}>プロジェクト概要</Text>
-        <Text style={styles.bodyText}>{estimate.summary}</Text>
-
-        {/* Feature table */}
+        {/* 機能別費用明細 */}
         <Text style={styles.sectionTitle}>機能別費用明細</Text>
-        <View style={styles.tableHeader} fixed>
+        <View style={styles.tableHeader}>
           <Text style={[styles.tableHeaderText, styles.colNo]}>No</Text>
-          <Text style={[styles.tableHeaderText, styles.colFeature]}>
-            機能名
-          </Text>
+          <Text style={[styles.tableHeaderText, styles.colFeature]}>機能名</Text>
           <Text style={[styles.tableHeaderText, styles.colDetail]}>詳細</Text>
-          <Text style={[styles.tableHeaderText, styles.colStandard]}>
-            従来型開発
-          </Text>
-          <Text style={[styles.tableHeaderText, styles.colHybrid]}>
-            ハイブリッド開発
+          <Text style={[styles.tableHeaderText, styles.colAmount]}>
+            金額（税別）
           </Text>
         </View>
-        {estimate.features.map((feature, i) => (
+        {features.map((feature, i) => (
           <View
-            key={feature.name}
+            key={`${feature.name}-${i}`}
             style={i % 2 === 0 ? styles.tableRow : styles.tableRowAlt}
-            wrap={false}
           >
             <Text style={[styles.cellText, styles.colNo]}>{i + 1}</Text>
             <Text style={[styles.cellText, styles.colFeature]}>
@@ -78,68 +95,51 @@ export default function EstimatePdf({
             <Text style={[styles.cellText, styles.colDetail]}>
               {feature.detail}
             </Text>
-            <Text style={[styles.cellText, styles.colStandard]}>
-              {formatPrice(feature.standardPrice)}
-            </Text>
-            <Text style={[styles.cellText, styles.colHybrid]}>
+            <Text style={[styles.cellText, styles.colAmount]}>
               {formatPrice(feature.hybridPrice)}
             </Text>
           </View>
         ))}
-        <View style={styles.totalRow} wrap={false}>
-          <Text style={[styles.totalRowText, styles.colNo]} />
-          <Text style={[styles.totalRowText, styles.colFeature]}>
-            概算合計（税別）
-          </Text>
-          <Text style={[styles.totalRowText, styles.colDetail]} />
-          <Text style={[styles.totalRowText, styles.colStandard]}>
-            {formatPrice(estimate.totalCost.standard)}
-          </Text>
-          <Text style={[styles.totalRowText, styles.colHybrid]}>
-            {formatPrice(estimate.totalCost.hybrid)}
-          </Text>
-        </View>
 
-        {/* Cost message */}
-        {estimate.totalCost.message && (
-          <View style={styles.savingsBox} wrap={false}>
-            <Text style={styles.savingsDetail}>
-              {estimate.totalCost.message}
+        {/* 概算合計 + 従来型の参考注記（セットで改ページ保護） */}
+        <View wrap={false}>
+          <View style={styles.totalRow}>
+            <Text style={[styles.totalRowLabel, styles.colNo]} />
+            <Text style={[styles.totalRowLabel, styles.colFeature]}>
+              概算合計（税別）
+            </Text>
+            <Text style={[styles.totalRowLabel, styles.colDetail]} />
+            <Text style={[styles.totalRowAmount, styles.colAmount]}>
+              {formatPrice(estimate.totalCost.hybrid)}
             </Text>
           </View>
-        )}
-
-        {/* Discussion agenda */}
-        {estimate.discussionAgenda.map((item, i) =>
-          i === 0 ? (
-            <View key={i} wrap={false}>
-              <Text style={styles.sectionTitle}>
-                詳細お見積もりに向けた確認事項
-              </Text>
-              <View style={styles.listItem}>
-                <Text style={styles.listBullet}>1.</Text>
-                <Text style={styles.listContent}>{item}</Text>
-              </View>
-            </View>
-          ) : (
-            <View key={i} style={styles.listItem} wrap={false}>
-              <Text style={styles.listBullet}>{i + 1}.</Text>
-              <Text style={styles.listContent}>{item}</Text>
-            </View>
-          )
-        )}
-
-        {/* Disclaimer */}
-        <View style={styles.disclaimer} wrap={false}>
-          <Text>
-            ※
-            本見積書はAIによる概算であり、正式なお見積もり・機能要件ではありません。
-            {"\n"}※ 正確な費用は、無料相談にて別途お見積もりいたします。{"\n"}※
-            表示価格はすべて税別です。
-          </Text>
+          {referenceNote ? (
+            <Text style={styles.referenceNote}>{referenceNote}</Text>
+          ) : null}
         </View>
 
-        {/* Footer */}
+        {/* 確認事項 */}
+        {discussionAgenda.length > 0 ? (
+          <View>
+            <Text style={styles.sectionTitle}>
+              詳細お見積もりに向けた確認事項
+            </Text>
+            {discussionAgenda.map((item, i) => (
+              <View key={i} style={styles.listItem} wrap={false}>
+                <Text style={styles.listBullet}>{i + 1}.</Text>
+                <Text style={styles.listContent}>{item}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+
+        {/* 備考 */}
+        <View style={styles.remarksBox} wrap={false}>
+          <Text style={styles.remarksLabel}>備考</Text>
+          <Text style={styles.remarksText}>{remarkLines.join("\n")}</Text>
+        </View>
+
+        {/* フッター */}
         <View style={styles.footer} fixed>
           <Text style={styles.footerText}>
             株式会社クラウドネイチャー | cloudnature.jp
