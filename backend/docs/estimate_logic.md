@@ -600,6 +600,25 @@ _send_emails(estimate_data, answers)
 | 添付 | 概算お見積書.pdf |
 | 条件 | `RESEND_API_KEY` 設定済み、かつ step_13 に email が含まれる |
 
+### 9.2.1 お見積書PDFのフォーマット
+
+PDFは **estimate フロントエンド** の `POST /api/pdf`（`@react-pdf/renderer`）が生成し、バックエンドの `pdf_service.fetch_pdf_from_frontend` が呼び出す。レイアウトは伝統的な日本式見積書に寄せたフォーマット（`estimate/components/pdf/EstimatePdf.tsx`）:
+
+- 左上に「御見積書」、宛名、件名／有効期限／**お見積もり精度**（`confidence.range_label`）の項目欄、右に会社情報。
+- 全幅バナーに **御見積金額（税別）= ハイブリッド価格**。
+- 明細表は `No / 機能名 / 詳細 / 金額（税別）` の **単一価格列**（ハイブリッドのみ）。
+- 従来型開発価格は明細表に出さず、合計直下に **「ご参考：従来型開発の場合 約¥X（約Y%削減）」の1行**のみ（`hybrid < standard` の時だけ表示）。
+- 末尾に備考（AI概算・税別である旨の免責＋`confidence_note`）。
+- 表示は全て **税別**。消費税・数量・単価列は持たない。
+
+> **フォントの重要な制約（`estimate/components/pdf/shared/PdfFonts.ts`）:**
+> 1. `@react-pdf` は**可変フォントを埋め込めない**（本文が Helvetica にフォールバックし日本語が消える）。Regular/Bold とも **静的フォント**を使う。
+> 2. `@react-pdf` は埋め込みフォントを**内部 name で識別**するため、複数フォントの内部名が同じだとグリフが衝突し文字化けする。Regular と Bold は**一意な内部名**にリネーム済み。
+> 3. Bold は静的ラベル＋数字記号だけのサブセット。太字は `fontFamily` を `NotoSansJPBold` に切替えて適用し、**動的テキストには使わない**（サブセットに無い字は豆腐□になる）。
+> 4. フォントは `estimate/scripts/build-pdf-fonts.sh`（文字集合: `pdf-bold-glyphs.txt`）で再生成する。
+>
+> 詳細は `docs/20260526_estimate_pdf_redesign_review.md` を参照。
+
 ### 9.3 運営者通知メール
 
 | 項目 | 値 |
