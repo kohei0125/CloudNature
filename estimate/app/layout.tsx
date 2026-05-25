@@ -1,21 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
+import localFont from "next/font/local";
 import EstimateHeader from "@/components/shared/EstimateHeader";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import GtmNoscript from "@/components/shared/GtmNoscript";
 import { SITE_URL, SITE_NAME, OG_IMAGE } from "@/lib/metadata";
 import "./globals.css";
 
-const notoSansJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  weight: ["400", "700"],
+// next/font/google は fonts.gstatic.com への外部アクセスが必須で、Docker・オフライン・
+// プロキシ環境ではビルドに失敗する。フォントを自前ホストして next/font/local で読み込む。
+// woff2 は scripts/build-ui-fonts.sh で生成（Noto Sans JP 400/700, Noto Serif JP 700）。
+const notoSansJP = localFont({
+  src: [
+    { path: "./fonts/NotoSansJP-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/NotoSansJP-Bold.woff2", weight: "700", style: "normal" },
+  ],
   display: "swap",
   variable: "--font-sans",
 });
 
-const notoSerifJP = Noto_Serif_JP({
-  subsets: ["latin"],
-  weight: ["700"],
+const notoSerifJP = localFont({
+  src: [
+    { path: "./fonts/NotoSerifJP-Bold.woff2", weight: "700", style: "normal" },
+  ],
   display: "swap",
   variable: "--font-serif",
 });
