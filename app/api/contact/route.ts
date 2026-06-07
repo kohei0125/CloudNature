@@ -3,10 +3,11 @@ import { Resend } from "resend";
 import { ContactRequestBody, buildEmailHtml, buildConfirmationEmailHtml } from "./emailTemplates";
 import { CONTACT_SUBJECTS } from "@/content/contact";
 import { PHONE_REGEX } from "@/lib/utils";
+import { createRateLimiter, getClientIp } from "@/lib/rate-limit";
+import { IS_PRODUCTION } from "@/lib/site";
 import { saveContactToNotion } from "./notionService";
 
 // ローカルはクラウドフレアのチェックをスキップ
-const IS_PRODUCTION = process.env.NEXT_PUBLIC_ENV === "production";
 const CLOUDFLARE_TURNSTILE_SECRET_KEY = IS_PRODUCTION
   ? (process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY ?? "")
   : "";
@@ -14,40 +15,10 @@ const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 // --- Rate Limit (in-memory, per IP) ---
-const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
-const RATE_LIMIT_MAX = 5;
-const rateLimitMap = new Map<string, { count: number; firstRequest: number }>();
-
-function cleanupRateLimitMap() {
-  const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if (now - entry.firstRequest > RATE_LIMIT_WINDOW) {
-      rateLimitMap.delete(ip);
-    }
-  }
-}
-
-/** Returns `true` if the request is allowed, `false` if rate-limited. */
-function checkRateLimit(ip: string): boolean {
-  if (rateLimitMap.size > 100) {
-    cleanupRateLimitMap();
-  }
-
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-
-  if (!entry || now - entry.firstRequest > RATE_LIMIT_WINDOW) {
-    rateLimitMap.set(ip, { count: 1, firstRequest: now });
-    return true;
-  }
-
-  if (entry.count >= RATE_LIMIT_MAX) {
-    return false;
-  }
-
-  entry.count++;
-  return true;
-}
+const checkRateLimit = createRateLimiter({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5,
+});
 
 let _resend: Resend | null = null;
 function getResend(): Resend {
@@ -110,10 +81,7 @@ export async function POST(request: NextRequest) {
 
     // Rate limit (production only)
     if (IS_PRODUCTION) {
-      const ip =
-        request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
-        "unknown";
-      if (!checkRateLimit(ip)) {
+      if (!checkRateLimit(getClientIp(request.headers))) {
         return NextResponse.json(
           {
             error:

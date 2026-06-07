@@ -27,6 +27,16 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // リアルタイム翻訳ページのみマイクを許可（同一パスで後勝ちのため上書きされる）
+        source: "/realtime-translate",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(self), geolocation=()",
+          },
+        ],
+      },
     ];
   },
 };

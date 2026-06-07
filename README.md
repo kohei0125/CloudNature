@@ -244,6 +244,58 @@ Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新さ
 
 ---
 
+## リアルタイム翻訳ツール（/realtime-translate）
+
+OpenAI Realtime API（`gpt-realtime`）+ WebRTC による日英双方向の音声通訳ツール。
+コーポレートサイト内のページとして動作する（noindex・sitemap 除外の非公開運用）。
+
+設計書: [`docs/20260607_openai_translate.md`](docs/20260607_openai_translate.md)
+
+### 仕組み
+
+```
+ブラウザ → POST /api/realtime-translate/session（パスワード照合）
+        ← 一時トークン（ek_...、10分有効）
+ブラウザ ⇄ OpenAI Realtime API（WebRTC 直接続・音声 + 文字起こし）
+```
+
+- OpenAI API キーはサーバー側のみ。ブラウザには短命の一時トークンだけを渡す
+- 言語方向の指定は不要（instructions で日→英 / 英→日を自動判定）
+
+### 運用上の注意
+
+- **コスト**: Realtime API は音声入出力ともに従量課金で、テキスト API より高価。
+  パスワードの共有範囲に注意し、OpenAI ダッシュボードで Usage Limit の設定を推奨
+
+  | 利用量 | 月間利用時間 | 概算API費用 |
+  | --- | ---: | ---: |
+  | 個人利用 | 30分/日 | 約460円/月 |
+  | 小規模PoC | 1時間/日 | 約920円/月 |
+  | 10ユーザー | 合計10時間/日 | 約9,200円/月 |
+  | 100ユーザー | 合計100時間/日 | 約92,000円/月 |
+  | 1000ユーザー | 合計1000時間/日 | 約92万円/月 |
+- **パスワード**: 固定「クラウドネイチャー」を `app/api/realtime-translate/session/route.ts` に
+  ハードコード。変更はコード修正 + デプロイ。変更後、旧パスワードを保持しているユーザーは
+  401 を受けて自動的に再入力画面へ戻る
+- **環境変数**: `OPEN_AI_REALTIME_TRANSLATE_API_KEY`（Vercel / `.env.local`）。
+  未設定の場合、翻訳開始時に 500 エラーになる
+- **レート制限**: 本番のみ IP ごと 15 分 10 回（`lib/rate-limit.ts`）。インメモリ実装のため
+  サーバーレスではインスタンスごとに独立し、再起動でリセットされる（厳密な防御ではない）
+- **一時トークン**: 有効期限 10 分は「接続確立まで」の期限。確立済みの通話はトークン失効後も継続する
+
+### 知っておくと良いこと
+
+- **マイク許可**: `next.config.mjs` の Permissions-Policy は全ページ `microphone=()`（禁止）だが、
+  `/realtime-translate` のみ `microphone=(self)` に緩和している。新しいページでマイクを使う場合は同様の追記が必要
+- **HTTPS 必須**: `getUserMedia` はセキュアコンテキスト限定。スマホ実機での確認は本番 URL か
+  Vercel Preview を使う（`http://<LAN IP>:3000` では動かない。localhost は例外的に可）
+- **認証の持続**: パスワードは `sessionStorage` 保持（同一タブのリロードのみ有効）。
+  「戻る」ボタンかタブを閉じると再入力が必要。トークン発行のたびにサーバー側で再照合される
+- **翻訳履歴**: 最大 200 件で古いものから破棄。リロードで消え、どこにも保存されない（会話内容はサーバー・DB に残らない）
+- **通訳の挙動**: instructions で「質問に答えない・翻訳のみ」を指定しているが、LLM のため完全な保証はない
+
+---
+
 ## ドキュメント
 
 | ファイル | 内容 |
@@ -255,3 +307,5 @@ Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新さ
 | [`docs/20260212_estimate_system_design.md`](docs/20260212_estimate_system_design.md) | システム設計 |
 | [`docs/20260310_weekly_report_review.md`](docs/20260310_weekly_report_review.md) | 週次レポート機能 検証・レビュー |
 | [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) | ファネルダッシュボード GAS実装指示書 |
+| [`docs/20260607_openai_translate.md`](docs/20260607_openai_translate.md) | リアルタイム翻訳ツール 設計書 |
+| [`docs/20260607_realtime_translate_review.md`](docs/20260607_realtime_translate_review.md) | リアルタイム翻訳ツール 検証・レビュー記録 |

@@ -21,9 +21,10 @@ function useReveal() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const reveal = () => setVisible(true);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
-      setVisible(true);
+      reveal();
       return;
     }
     const io = new IntersectionObserver(
