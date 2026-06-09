@@ -10,13 +10,23 @@ import TranslatorPanel from "./TranslatorPanel";
 
 const STORAGE_KEY = "realtime-translate-password";
 
+// 【一時設定】パスワードゲートをスキップして即開始する。
+// false に戻すとパスワード入力を再び必須にできる。
+// サーバー側（API Route）はトークン発行時に固定パスワードを毎回照合するため、
+// スキップ時はその固定パスワードをクライアントから自動で渡す。
+const BYPASS_GATE = true;
+const BYPASS_PASSWORD = "クラウドネイチャー";
+
 const RealtimeTranslateApp = () => {
-  const [password, setPassword] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(
+    BYPASS_GATE ? BYPASS_PASSWORD : null
+  );
   const [gateNotice, setGateNotice] = useState<string | null>(null);
 
   // 同一タブ内の再読み込みでは再入力を不要にする
   // （パスワード自体はトークン発行のたびにサーバー側で再照合される）
   useEffect(() => {
+    if (BYPASS_GATE) return;
     const restorePassword = () => {
       const saved = sessionStorage.getItem(STORAGE_KEY);
       if (saved) {
@@ -33,7 +43,9 @@ const RealtimeTranslateApp = () => {
   };
 
   // 戻る: 保持中のパスワードを破棄し、ゲート画面で再入力を求める
+  // （ゲートスキップ中は固定パスワードを保持したままにする）
   const handleBack = () => {
+    if (BYPASS_GATE) return;
     sessionStorage.removeItem(STORAGE_KEY);
     setPassword(null);
   };
