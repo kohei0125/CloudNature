@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef, useEffect, FormEvent } from "react";
 import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -38,6 +38,13 @@ const ContactForm = () => {
 
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
+
+  // 受付完了ページ表示時はスクロール位置を最上部へ戻す
+  useEffect(() => {
+    if (submitted) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [submitted]);
 
   const validate = (field: string, value: string) => {
     if (field === "name" && !value.trim()) return "お名前を入力してください";
