@@ -3,14 +3,14 @@ import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/typ
 export const HERO_COPY = {
   imageSrc: "/images/niigata_view.jpeg",
   pcImageSrc: "/images/niigata_img.webp",
-  badge: "AI導入から運用まで伴走する開発パートナー",
-  headingLine1: "AIトランスフォーメーションで",
+  badge: "新潟のAI開発・AIエージェント開発パートナー",
+  headingLine1: "AIエージェント開発で、",
   headingLine2: "人手に代わる仕組みを",
   description:
     "AIとクラウド技術を活用し、業務の自動化・効率化を実現するソリューションを提供します。お客様のビジネスに、確かな変化を生み出します。",
   primaryCta: "最短1分でAIお見積り",
   secondaryCta: "お問い合わせ",
-  heroImageAlt: "新潟の中小企業向けAI導入支援・業務自動化パートナー クラウドネイチャー"
+  heroImageAlt: "新潟の中小企業向けAI開発・AIエージェント開発会社 クラウドネイチャー"
 };
 
 

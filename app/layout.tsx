@@ -28,12 +28,12 @@ export const metadata: Metadata = (() => {
   const isIndexable = isIndexableDeployment();
   return {
     metadataBase: new URL(CANONICAL_SITE_URL),
-    title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
+    title: "新潟のAI開発・AIエージェント開発｜株式会社クラウドネイチャー",
     description:
-      "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+      "新潟の中小企業向けAI開発会社。自律型AIエージェント開発・業務システム開発で、人手不足を仕組みから解決。費用が見える最短1分のAI見積もりも公開中。",
     openGraph: {
-      title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
-      description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+      title: "新潟のAI開発・AIエージェント開発｜株式会社クラウドネイチャー",
+      description: "新潟の中小企業向けAI開発会社。自律型AIエージェント開発・業務システム開発で、人手不足を仕組みから解決。費用が見える最短1分のAI見積もりも公開中。",
       url: CANONICAL_SITE_URL,
       siteName: "株式会社クラウドネイチャー",
       images: [
@@ -49,8 +49,8 @@ export const metadata: Metadata = (() => {
     },
     twitter: {
       card: "summary_large_image",
-      title: "株式会社クラウドネイチャー | 新潟の中小企業向けAI・業務自動化パートナー",
-      description: "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+      title: "新潟のAI開発・AIエージェント開発｜株式会社クラウドネイチャー",
+      description: "新潟の中小企業向けAI開発会社。自律型AIエージェント開発・業務システム開発で、人手不足を仕組みから解決。費用が見える最短1分のAI見積もりも公開中。",
       images: ["/images/og-img.jpg"],
     },
 
@@ -93,7 +93,7 @@ export default function RootLayout({
         url: "https://cloudnature.jp",
         logo: "https://cloudnature.jp/images/logo.png",
         description:
-          "新潟の中小企業の人手不足を、AIエージェントと堅牢なシステム開発で解決するITパートナー。",
+          "新潟の中小企業向けAI開発会社。自律型AIエージェント開発・業務システム開発で、人手不足を仕組みから解決。費用が見える最短1分のAI見積もりも公開中。",
         address: {
           "@type": "PostalAddress",
           postalCode: "951-8068",
