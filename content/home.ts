@@ -4,7 +4,7 @@ export const HERO_COPY = {
   imageSrc: "/images/niigata_view.jpeg",
   pcImageSrc: "/images/niigata_img.webp",
   badge: "新潟のAI開発・AIエージェント開発パートナー",
-  headingLine1: "AIエージェント開発で、",
+  headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
   description:
     "AIとクラウド技術を活用し、業務の自動化・効率化を実現するソリューションを提供します。お客様のビジネスに、確かな変化を生み出します。",
