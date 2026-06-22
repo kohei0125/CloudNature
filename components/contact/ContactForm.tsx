@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
 import { ESTIMATE_URL } from "@/content/common";
-import { PHONE_REGEX } from "@/lib/utils";
+import { cn, PHONE_REGEX } from "@/lib/utils";
 
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
@@ -32,6 +32,9 @@ const ContactForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileVerified, setTurnstileVerified] = useState(
+    !TURNSTILE_SITE_KEY
+  );
 
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
@@ -68,6 +71,10 @@ const ContactForm = () => {
     e.preventDefault();
     setTouched({ name: true, email: true, phone: true, message: true });
     if (!isValid) return;
+    if (!turnstileVerified) {
+      setError("セキュリティチェックの完了後に送信できます。");
+      return;
+    }
 
     setSubmitting(true);
     setError("");
@@ -99,6 +106,7 @@ const ContactForm = () => {
       setSubmitting(false);
       turnstileRef.current?.reset();
       turnstileTokenRef.current = null;
+      setTurnstileVerified(!TURNSTILE_SITE_KEY);
     }
   };
 
@@ -266,8 +274,27 @@ const ContactForm = () => {
         <Turnstile
           ref={turnstileRef}
           siteKey={TURNSTILE_SITE_KEY}
-          onSuccess={(token) => { turnstileTokenRef.current = token; }}
-          onExpire={() => { turnstileTokenRef.current = null; }}
+          onSuccess={(token) => {
+            turnstileTokenRef.current = token;
+            setTurnstileVerified(true);
+            setError("");
+          }}
+          onExpire={() => {
+            turnstileTokenRef.current = null;
+            setTurnstileVerified(false);
+          }}
+          onError={() => {
+            turnstileTokenRef.current = null;
+            setTurnstileVerified(false);
+          }}
+          onTimeout={() => {
+            turnstileTokenRef.current = null;
+            setTurnstileVerified(false);
+          }}
+          onUnsupported={() => {
+            turnstileTokenRef.current = null;
+            setTurnstileVerified(false);
+          }}
           options={{ size: "normal", theme: "light" }}
         />
       )}
@@ -276,8 +303,13 @@ const ContactForm = () => {
       <div>
         <button
           type="submit"
-          disabled={submitting}
-          className="btn-puffy btn-puffy-accent w-full py-3.5 rounded-xl text-white font-bold text-base disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
+          disabled={submitting || !turnstileVerified}
+          aria-describedby="contact-submit-note"
+          className={cn(
+            "center w-full gap-2 rounded-xl bg-teal-800 py-3.5 text-base font-bold text-white",
+            "shadow-lg shadow-teal-800/20 transition-colors hover:bg-teal-900",
+            "disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none"
+          )}
         >
           {submitting ? (
             <>
@@ -288,8 +320,10 @@ const ContactForm = () => {
             CONTACT_FORM_LABELS.submit
           )}
         </button>
-        <p className="text-xs text-gray-500 text-center mt-2">
-          {CONTACT_FORM_LABELS.submitNote}
+        <p id="contact-submit-note" className="mt-2 text-center text-xs text-gray-500" aria-live="polite">
+          {TURNSTILE_SITE_KEY && !turnstileVerified
+            ? "セキュリティチェックの完了後に送信できます。"
+            : CONTACT_FORM_LABELS.submitNote}
         </p>
       </div>
     </form>

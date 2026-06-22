@@ -13,7 +13,7 @@ export const CONTACT_FORM_LABELS: ContactFormLabels = {
   company: "会社名",
   subject: "お問い合わせ種別",
   message: "お問い合わせ内容",
-  submit: "無料で相談する（営業電話なし）",
+  submit: "無料で相談する",
   submitNote: "入力は1分で完了。2営業日以内にご返信します。",
   required: "必須",
   successTitle: "お問い合わせを受け付けました",
