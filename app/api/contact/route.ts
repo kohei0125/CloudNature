@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
 import { ContactRequestBody, buildEmailHtml, buildConfirmationEmailHtml } from "./emailTemplates";
 import { CONTACT_SUBJECTS } from "@/content/contact";
@@ -145,16 +145,23 @@ export async function POST(request: NextRequest) {
       console.error("[contact] confirmation email failed:", confirmResult.reason);
     }
 
-    // Notion保存（非同期・失敗してもレスポンスに影響しない）
-    saveContactToNotion({
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-      company: body.company,
-      subject: body.subject,
-      message: body.message,
-    }).catch((err) => {
-      console.error("[notion] Failed to save contact:", err);
+    // Notion保存（レスポンス送信後に実行・失敗してもレスポンスに影響しない）
+    // after() でレスポンス返却後も関数の寿命を延長し、保存処理を完走させる。
+    // ※ await なしの fire-and-forget だとレスポンス直後に関数が凍結され、
+    //   Notion API へのリクエストが完走できず保存に失敗する（ログにも残らない）。
+    after(async () => {
+      try {
+        await saveContactToNotion({
+          name: body.name,
+          email: body.email,
+          phone: body.phone,
+          company: body.company,
+          subject: body.subject,
+          message: body.message,
+        });
+      } catch (err) {
+        console.error("[notion] Failed to save contact:", err);
+      }
     });
 
     return NextResponse.json({ success: true });
