@@ -173,7 +173,7 @@ const NewsSection = ({ items, disableLink = false }: NewsSectionProps) => {
           {items.slice(0, 3).map((item) => {
             const mobileContent = (
               <>
-                <div className="relative flex-shrink-0 w-[90px] h-[90px] rounded overflow-hidden bg-gray-50">
+                <div className="relative flex-shrink-0 w-[110px] h-[80px] rounded overflow-hidden bg-gray-50">
                   {item.image ? (
                     <>
                       <Image
