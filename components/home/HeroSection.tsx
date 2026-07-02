@@ -1,8 +1,39 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
 import { HERO_COPY } from "@/content/home";
 import { ESTIMATE_URL } from "@/content/common";
+
+// モバイル/PC で異なるヒーロー画像をアートディレクション（<picture>）で出し分ける。
+// CSS 出し分け（2つの <Image priority>）では非表示側もダウンロード+プリロードされるため、
+// ビューポートに一致する画像のみ取得されるこの形にしている。
+// priority: LCP 要素のため loading を eager にする（getImageProps は preload <link> を
+// 注入しないため二重プリロードは発生しない）。入力は静的なので props はモジュール読込時に一度だけ算出。
+const heroImageCommon = {
+  alt: HERO_COPY.heroImageAlt,
+  fill: true,
+  sizes: "100vw",
+  priority: true,
+};
+const {
+  props: { srcSet: heroDesktopSrcSet },
+} = getImageProps({ ...heroImageCommon, src: HERO_COPY.pcImageSrc });
+const {
+  props: { srcSet: heroMobileSrcSet, alt: heroAlt, ...heroImgProps },
+} = getImageProps({ ...heroImageCommon, src: HERO_COPY.imageSrc });
+
+const HeroBackground = () => (
+  <picture>
+    <source media="(min-width: 768px)" srcSet={heroDesktopSrcSet} sizes="100vw" />
+    <img
+      {...heroImgProps}
+      alt={heroAlt}
+      srcSet={heroMobileSrcSet}
+      fetchPriority="high"
+      className="object-cover object-center"
+    />
+  </picture>
+);
 
 const HeroSection = () => {
   return (
@@ -13,28 +44,23 @@ const HeroSection = () => {
       {/* ===== モバイル: 旧デザイン（フルスクリーン画像 + テキストオーバーレイ） ===== */}
       <div className="md:hidden">
         <div className="relative overflow-hidden min-h-[calc(85svh-52px)]">
-          <Image
-            src={HERO_COPY.imageSrc}
-            alt={HERO_COPY.heroImageAlt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+          <HeroBackground />
           <div
             className="absolute inset-0 flex flex-col justify-center px-5"
             style={{ textShadow: "0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.2)" }}
           >
             <div className="max-w-2xl">
-              <p className="text-xs font-bold tracking-widest text-white/70 mb-3">
+              {/* SEO: 地域×AI開発のターゲットキーワードを含むバッジを h1 とし、
+                  ディスプレイコピーは p で表示する（見た目は従来どおり） */}
+              <h1 className="text-xs font-bold tracking-widest text-white/70 mb-3">
                 {HERO_COPY.badge}
-              </p>
+              </h1>
 
-              <h1 className="text-[clamp(1.6rem,5vw,3rem)] font-bold leading-[1.1] text-white tracking-tight text-balance mb-3">
+              <p className="text-[clamp(1.6rem,5vw,3rem)] font-bold leading-[1.1] text-white tracking-tight text-balance mb-3">
                 {HERO_COPY.headingLine1}
                 <br />
                 {HERO_COPY.headingLine2}
-              </h1>
+              </p>
 
               <p className="text-sm text-white leading-relaxed max-w-[600px] mb-6 font-medium rounded-md bg-black/10 backdrop-blur-[1px] px-3 py-2">
                 {HERO_COPY.description.replace(/\n/g, '')}
@@ -68,14 +94,7 @@ const HeroSection = () => {
       {/* ===== PC: 新デザイン ===== */}
       <div className="relative min-h-[600px] lg:min-h-[660px] hidden md:flex items-center">
         <div className="absolute inset-0 z-0">
-          <Image
-            src={HERO_COPY.pcImageSrc}
-            alt={HERO_COPY.heroImageAlt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          <HeroBackground />
         </div>
 
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white from-25% via-white/50 via-42% to-transparent to-60%" />
@@ -101,11 +120,12 @@ const HeroSection = () => {
           className="relative z-10 w-full px-10 lg:px-14 py-24 animate-hero-fade-in"
         >
           <div className="max-w-xl lg:max-w-3xl">
-            <span className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-teal-800 bg-white/90 border border-teal-200/60 rounded-full shadow-sm uppercase">
+            {/* SEO: モバイル側と同じく、キーワードを含むバッジを h1 に */}
+            <h1 className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-teal-800 bg-white/90 border border-teal-200/60 rounded-full shadow-sm uppercase">
               {HERO_COPY.badge}
-            </span>
+            </h1>
 
-            <h1 className="text-5xl lg:text-[3.2rem] font-extrabold leading-[1.25] text-gray-900 tracking-tight mb-6">
+            <p className="text-5xl lg:text-[3.2rem] font-extrabold leading-[1.25] text-gray-900 tracking-tight mb-6">
               {HERO_COPY.headingLine1}
               <br />
               {HERO_COPY.headingLine2.split("仕組み").map((part, i, arr) =>
@@ -115,7 +135,7 @@ const HeroSection = () => {
                   <span key={i}>{part}</span>
                 )
               )}
-            </h1>
+            </p>
 
             <p className="text-base text-gray-800 leading-relaxed mb-10 max-w-lg font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.15),0_0_12px_rgba(255,255,255,0.7)]">
               {HERO_COPY.description.split('\n').map((line, i, arr) => (

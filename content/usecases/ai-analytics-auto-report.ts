@@ -6,7 +6,7 @@ export const article: UseCaseArticle = {
   category: "実践ガイド",
   relatedServiceIds: ["ai-support", "ai", "dev"],
   title: "週次レポート作成を自動化する方法 | GA4・Search Console・AI配信の実践例",
-  excerpt: "毎週のアクセス分析を自動配信に置き換えた自社実践をもとに、GA4・Search Console・AIを使ったレポート自動化の進め方を解説します。",
+  excerpt: "GA4やSearch Consoleを「見る時間がない」を、週次レポートの完全自動化で解決した自社実践を公開。AIが改善アクションまで提案するレポートをメールで受け取る仕組みの作り方と、最小コストで始める手順を解説します。",
   body: `<h2>「また今週も、見られなかった」</h2>
 <p>GA4（ウェブサイトアクセス解析ツール）の管理画面を最後に開いたのは、いつですか？</p>
 <p>「やらないといけない」とわかっている。でも、管理画面にログインして、期間を設定して、数字を読み解いて、前週と比較して、スプレッドシートに転記して……。その一連の作業を思い浮かべると、つい後回しにしてしまう。</p>
@@ -45,7 +45,9 @@ export const article: UseCaseArticle = {
 </ul>
 
 <h2>実際に届くレポートの中身</h2>
-<img src="/images/tmp/auto-fannel-img.jpg" alt="週次SEO・アクセスレポートのメール画面。AIによるアクション提案、セッション数・ユーザー数・PVの前週比とスパークライン推移が表示されている" />
+<figure>
+<img src="/images/blog/ai-analytics-auto-report/auto-funnel-report.webp" alt="週次SEO・アクセスレポートのメール画面。AIによるアクション提案、セッション数・ユーザー数・PVの前週比とスパークライン推移が表示されている" width="1448" height="1382" loading="lazy" />
+</figure>
 <p>月曜の朝、受信トレイを開くと、すでにレポートが届いています。管理画面を開く必要はありません。</p>
 <p><strong>AIが提案する「今週のアクション TOP3」</strong>が最初に目に入ります。「CTRが低下しているクエリAのタイトルタグを改善」「新規流入が増えているページBの内部リンクを強化」——データを眺めるだけで終わらせないための、具体的な一手が毎週届きます。</p>
 <p><strong>GA4サマリー</strong>では、セッション数・ユーザー数・PV・直帰率・エンゲージメント率がスパークラインと前週比つきで一覧表示されます。メールを開くだけで「先週より良いか悪いか」が3秒でわかります。</p>
@@ -82,5 +84,5 @@ export const article: UseCaseArticle = {
 <p>今回ご紹介した仕組みは、特別な技術を持つ会社だからできたわけではありません。「手動で続けることが難しい業務を、仕組みで解決する」——それだけのことです。</p>
 <p>アクセス解析に限らず、「やらないといけないけど手が回らない業務」は、多くの会社に必ず存在します。</p>
 <p>まずどの業務から手をつけるべきか、無料診断で一緒に整理します。お気軽にご相談ください。</p>`,
-  image: "/images/tmp/blog_banner1.jpg"
+  image: "/images/blog/ai-analytics-auto-report/thumbnail.webp"
 };

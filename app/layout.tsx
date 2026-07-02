@@ -82,6 +82,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const postalAddress = {
+    "@type": "PostalAddress",
+    postalCode: "951-8068",
+    addressLocality: "新潟市中央区",
+    streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
+    addressRegion: "新潟県",
+    addressCountry: "JP",
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -94,30 +103,35 @@ export default function RootLayout({
         logo: "https://cloudnature.jp/images/logo.png",
         description:
           "新潟の中小企業向けAI開発会社。自律型AIエージェント開発・業務システム開発で、人手不足を仕組みから解決。費用が見える最短1分のAI見積もりも公開中。",
-        address: {
-          "@type": "PostalAddress",
-          postalCode: "951-8068",
-          addressLocality: "新潟市中央区",
-          streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
-          addressRegion: "新潟県",
-          addressCountry: "JP",
+        address: postalAddress,
+        founder: {
+          "@type": "Person",
+          name: "渡邉 浩平",
+          jobTitle: "代表取締役",
         },
+        foundingDate: "2025-11",
+        // TODO: Google Business Profile・SNS を開設したら URL を追加する（ローカルSEOの最重要施策）
         sameAs: [],
       },
       {
-        "@type": "LocalBusiness",
+        // ProfessionalService は LocalBusiness のサブタイプ（事業内容をより具体的に伝える）
+        "@type": "ProfessionalService",
         "@id": "https://cloudnature.jp/#localbusiness",
         name: "株式会社クラウドネイチャー",
         url: "https://cloudnature.jp",
         image: "https://cloudnature.jp/images/logo.png",
-        address: {
-          "@type": "PostalAddress",
-          postalCode: "951-8068",
-          addressLocality: "新潟市中央区",
-          streetAddress: "上大川前通七番町1230番地7 ストークビル鏡橋 7F",
-          addressRegion: "新潟県",
-          addressCountry: "JP",
+        description:
+          "新潟のAI開発・AIエージェント開発会社。AI導入支援から業務システム開発まで、導入から運用まで伴走します。",
+        address: postalAddress,
+        // 座標は会社ページの Google マップ埋め込み（content/company.ts）と同一地点
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 37.9215819,
+          longitude: 139.0460461,
         },
+        hasMap:
+          "https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E6%BD%9F%E7%9C%8C%E6%96%B0%E6%BD%9F%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%B8%8A%E5%A4%A7%E5%B7%9D%E5%89%8D%E9%80%9A%E4%B8%83%E7%95%AA%E7%94%BA1230%E7%95%AA%E5%9C%B07",
+        parentOrganization: { "@id": "https://cloudnature.jp/#organization" },
         areaServed: {
           "@type": "Place",
           name: "新潟県",
@@ -143,6 +157,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* JS 無効環境ではスクロール演出（初期 opacity:0）を無効化してコンテンツを可視化する */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <div className="v-stack min-h-screen font-sans text-gray-800 selection:bg-teal-600 selection:text-white">
           <HeaderWrapper />
           <main className="flex-grow">{children}</main>

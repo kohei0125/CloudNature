@@ -83,6 +83,8 @@ const ServicesSection = () => {
               <div
                 key={service.id}
                 ref={r.ref}
+                // data-reveal: JS 無効時に layout.tsx の <noscript> スタイルで初期非表示を解除する
+                data-reveal
                 className={`${cfg.cols} ${cfg.offset} group cursor-pointer flex flex-col`}
                 style={{
                   opacity: r.visible ? 1 : 0,

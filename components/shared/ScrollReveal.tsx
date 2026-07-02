@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { type ReactNode } from "react";
 
 const variantMap: Record<string, Variants> = {
@@ -40,29 +40,27 @@ const ScrollReveal = ({
   stagger = 0,
   className,
 }: ScrollRevealProps) => {
-  if (stagger > 0) {
-    return (
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
-        custom={stagger}
-        className={className}
-      >
-        {children}
-      </motion.div>
-    );
+  // 動作軽減設定時は演出を行わず即表示する
+  // （framer のインライン style は CSS の prefers-reduced-motion では打ち消せないため）
+  const shouldReduceMotion = useReducedMotion();
+  if (shouldReduceMotion) {
+    return <div className={className}>{children}</div>;
   }
 
+  // data-reveal: JS 無効時に layout.tsx の <noscript> スタイルで初期非表示を解除するためのフック
+  const isContainer = stagger > 0;
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      variants={variantMap[variant]}
-      transition={{ duration: 0.6, ease: "easeOut", delay }}
+      variants={isContainer ? containerVariants : variantMap[variant]}
+      custom={isContainer ? stagger : undefined}
+      transition={
+        isContainer ? undefined : { duration: 0.6, ease: "easeOut", delay }
+      }
       className={className}
+      data-reveal
     >
       {children}
     </motion.div>
@@ -85,6 +83,7 @@ const ScrollRevealItem = ({
       variants={variantMap[variant]}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={className}
+      data-reveal
     >
       {children}
     </motion.div>
