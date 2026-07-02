@@ -176,15 +176,6 @@ export const NEWS_ITEMS: NewsItem[] = [
     image: "/images/og-img.jpg"
   },
   {
-    id: "media-nikkei",
-    publishedAt: "2026-02-15",
-    category: "メディア",
-    title: "日経クロステックにAI見積もりシステムが掲載されました",
-    excerpt: "当社のAI見積もりシステムが、日経クロステックの「注目スタートアップ」特集に掲載されました。",
-    url: "/news/media-nikkei",
-    image: "/images/og-img.jpg"
-  },
-  {
     id: "blog-dify-tips",
     publishedAt: "2026-02-20",
     category: "ブログ",

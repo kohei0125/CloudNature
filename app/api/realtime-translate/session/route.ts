@@ -5,9 +5,6 @@ import { IS_PRODUCTION } from "@/lib/site";
 // リアルタイム翻訳: パスワード照合 + OpenAI Realtime API 一時トークン発行
 // 設計: docs/20260607_openai_translate.md
 
-// 固定パスワード（カタカナ・ハードコーディング）
-const GATE_PASSWORD = "クラウドネイチャー";
-
 const OPENAI_CLIENT_SECRETS_URL =
   "https://api.openai.com/v1/realtime/client_secrets";
 const REALTIME_MODEL = "gpt-realtime";
@@ -53,7 +50,18 @@ export async function POST(request: NextRequest) {
     }
 
     // パスワード照合（毎回サーバー側で行う）
-    if (body.password !== GATE_PASSWORD) {
+    // 未設定時は照合不能としてフェイルクローズ（誰も通さない）
+    const gatePassword = process.env.REALTIME_TRANSLATE_PASSWORD;
+    if (!gatePassword) {
+      console.error(
+        "[realtime-translate] REALTIME_TRANSLATE_PASSWORD not configured"
+      );
+      return NextResponse.json(
+        { error: "サーバーの設定が不足しています" },
+        { status: 500 }
+      );
+    }
+    if (body.password !== gatePassword) {
       return NextResponse.json(
         { error: "パスワードが正しくありません" },
         { status: 401 }

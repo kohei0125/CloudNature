@@ -2,6 +2,34 @@
 
 セキュリティ関連の修正内容と対処方法の記録。
 
+## 2026-07-02: リアルタイム翻訳のパスワードゲート必須化
+
+### 内容
+
+総合レビュー（`docs/20260702_website_comprehensive_review.md` P0-1）で、
+`/realtime-translate` が実質無認証で OpenAI Realtime API の一時トークンを
+発行できる状態を検出し、修正した。
+
+- `RealtimeTranslateApp.tsx` の `BYPASS_GATE = true` によりパスワードゲートが
+  無効化され、さらに照合用パスワードがクライアントバンドルに露出していた。
+- レート制限（IP ごと 15 分 10 回）はインメモリ実装のため、Vercel の
+  サーバーレス環境ではインスタンス間で共有されず、防御として不十分。
+- URL を知る第三者が従量課金の Realtime API セッションを開始でき、
+  請求濫用につながるリスクがあった。
+
+### 対処方法
+
+- `BYPASS_GATE` / `BYPASS_PASSWORD` を削除し、パスワード入力を必須に戻した
+  （`components/realtime-translate/RealtimeTranslateApp.tsx`）。
+- ハードコードされていた照合パスワードを環境変数
+  `REALTIME_TRANSLATE_PASSWORD` へ移行（`app/api/realtime-translate/session/route.ts`）。
+  未設定時はトークンを発行しないフェイルクローズ動作（500 を返す）。
+- **旧パスワード「クラウドネイチャー」はデプロイ済み JS バンドルに露出していたため
+  漏えい済みとして扱い、本番では必ず別の値を設定すること。**
+  Vercel: `vercel env add REALTIME_TRANSLATE_PASSWORD`（Production / Preview）。
+- 残課題（P1 以降）: レート制限の共有ストア化（Vercel KV / Upstash / WAF）、
+  またはページ自体の公開サイトからの分離。
+
 ## 2026-06-07: リアルタイム翻訳機能追加に伴う修正
 
 ### 1. Permissions-Policy のページ限定緩和
