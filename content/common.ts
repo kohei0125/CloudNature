@@ -2,6 +2,16 @@ import { NavItem } from "@/types";
 
 export const ESTIMATE_URL = "https://ai.cloudnature.jp/";
 
+/**
+ * サービスの表示順（TOP・サービス詳細ページ共通の正）。
+ * AI企業としてのポジショニングを明確にするため、AI系サービスを先頭に置く。
+ */
+export const SERVICE_ORDER: readonly string[] = ["ai-support", "ai", "dev"];
+
+/** SERVICE_ORDER に従ってサービス配列を並べるための比較関数 */
+export const byServiceOrder = (a: { id: string }, b: { id: string }) =>
+  SERVICE_ORDER.indexOf(a.id) - SERVICE_ORDER.indexOf(b.id);
+
 export const SITE_CTA = {
   primary: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/" },
   secondary: { label: "お問い合わせ・ご相談", href: "/contact" },

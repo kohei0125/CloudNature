@@ -1,4 +1,5 @@
 import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/types";
+import { byServiceOrder } from "@/content/common";
 
 export const HERO_COPY = {
   imageSrc: "/images/niigata_view.jpeg",
@@ -7,7 +8,7 @@ export const HERO_COPY = {
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを",
   description:
-    "AIとクラウド技術を活用し、業務の自動化・効率化を実現するソリューションを提供します。お客様のビジネスに、確かな変化を生み出します。",
+    "AIエージェントと生成AIを活用し、業務の自動化・効率化を実現する仕組みを提供します。お客様のビジネスに、確かな変化を生み出します。",
   primaryCta: "最短1分でAIお見積り",
   secondaryCta: "お問い合わせ",
   heroImageAlt: "新潟の中小企業向けAI開発・AIエージェント開発会社 クラウドネイチャー"
@@ -57,21 +58,8 @@ export const SERVICES_SECTION = {
   cta: "すべてのサービスを見る"
 };
 
+// 表示順は content/common.ts の SERVICE_ORDER が正（サービス詳細ページと機械的に一致させる）
 export const SERVICES: ServiceItem[] = [
-  {
-    id: "dev",
-    title: "システム開発",
-    description: "AIやクラウドを活用した業務システムの受託開発を行います。",
-    features: ["新規業務システム・Webアプリ開発", "既存システムへの機能追加・連携", "業務効率化・自動化システム"],
-    techStack: ["業務システム", "Webアプリ", "クラウド"]
-  },
-  {
-    id: "ai",
-    title: "AIエージェント開発",
-    description: "業務を自動化・効率化するAIエージェントを設計・開発します。",
-    features: ["自律思考型AIエージェントの開発", "複数SaaSを横断した業務の完全自動化", "社内独自データの学習・専用AI構築"],
-    techStack: ["業務自動化", "RAG", "業務連携"]
-  },
   {
     id: "ai-support",
     title: "AI導入・伴走支援",
@@ -84,8 +72,22 @@ export const SERVICES: ServiceItem[] = [
     techStack: ["業務分析", "AI戦略設計", "導入支援"],
     ctaUrl: "https://niigata-ai-academy.com",
     ctaLabel: "新潟AIアカデミーを見る"
+  },
+  {
+    id: "ai",
+    title: "AIエージェント開発",
+    description: "業務を自動化・効率化するAIエージェントを設計・開発します。",
+    features: ["自律思考型AIエージェントの開発", "複数SaaSを横断した業務の完全自動化", "社内独自データの学習・専用AI構築"],
+    techStack: ["業務自動化", "RAG", "業務連携"]
+  },
+  {
+    id: "dev",
+    title: "システム開発",
+    description: "AIやクラウドを活用した業務システムの受託開発を行います。",
+    features: ["新規業務システム・Webアプリ開発", "既存システムへの機能追加・連携", "業務効率化・自動化システム"],
+    techStack: ["業務システム", "Webアプリ", "クラウド"]
   }
-];
+].sort(byServiceOrder);
 
 export const CASES_SECTION = {
   eyebrow: "CASE STUDY",

@@ -15,7 +15,7 @@ export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
     challenge: "システム開発の見積もりは、要件ヒアリング・構成検討・費用算出に数日〜数週間を要するのが業界の常識。顧客は「まず概算が知りたい」のに、その段階で大きな時間コストが発生していた。",
     solution: "チャット形式の13ステップで要件をヒアリングし、AIが要件分析・機能提案・費用算出を1分以内に自動実行するシステムを自社開発。17カテゴリの価格モデルと7つの補正係数による高精度な見積もりエンジンを搭載。",
     results: [
-      "見積もり作成時間を数日→1分に短縮",
+      "見積もり作成時間を数日→1分に短縮（工数95%削減）",
       "17業務カテゴリ・8業種に対応",
       "AIハイブリッド開発で相場の40%コスト削減を実現",
       "PDF見積書の自動生成・即時メール送付"
@@ -82,7 +82,7 @@ export const CASES_INLINE_CTA = {
 
 export const CASES_CTA = {
   eyebrow: "NEXT STEP",
-  title: "平均80%の工数削減を、御社でも",
+  title: "最大95%の工数削減を、御社でも",
   description: "事例でご紹介したような成果を、御社でも実現できるか——AIが概算費用を即時算出します。",
   primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/" },
   secondaryCta: { label: "お問い合わせ・ご相談", href: "/contact" }

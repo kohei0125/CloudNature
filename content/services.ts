@@ -1,5 +1,5 @@
 import { ServiceDetail, FlowStep, PricingItem, FaqItem } from "@/types";
-import { ESTIMATE_URL } from "@/content/common";
+import { ESTIMATE_URL, byServiceOrder } from "@/content/common";
 
 export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> = {
   "ai-support": { title: "AI導入・伴走支援", path: "/services/ai-support" },
@@ -9,8 +9,8 @@ export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> =
 
 export const SERVICES_HERO = {
   eyebrow: "SOLUTIONS",
-  title: "必要な分だけ、確かな技術を",
-  description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。中小企業の現場にマッチした、実用本位のソリューションを提供します。"
+  title: "AI開発・AI導入支援を、必要な分だけ",
+  description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。新潟の中小企業の現場にマッチした、実用本位のAIソリューションを提供します。"
 };
 
 export const SERVICE_DETAILS: ServiceDetail[] = [
@@ -73,7 +73,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     externalUrl: ESTIMATE_URL,
     externalLabel: "AI見積もりを試す"
   }
-];
+].sort(byServiceOrder);
 
 export const IMPLEMENTATION_FLOW: FlowStep[] = [
   { step: 1, title: "無料ヒアリング", description: "御社の課題・要望を丁寧にお伺いし、自動化の余地を診断します。" },
