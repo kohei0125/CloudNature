@@ -137,7 +137,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease }}
-            className="mt-4 font-serif text-[clamp(1.68rem,8.2vw,2.7rem)] font-bold leading-[1.1] tracking-tight md:mt-10 md:text-[clamp(2.8rem,4vw,3.5rem)]"
+            className="mt-4 font-sans text-[clamp(1.68rem,8.2vw,2.7rem)] font-bold leading-[1.1] tracking-tight md:mt-10 md:text-[clamp(2.8rem,4vw,3.5rem)]"
           >
             <span className="block text-[0.45em] font-bold tracking-wide text-forest/40">
               AI見積もりシミュレーター
@@ -147,32 +147,28 @@ export default function HeroSection() {
                 システム開発の
               </span>
               <span className="block whitespace-nowrap">
-                <span className="text-sunset">コスト</span>を相場の
-                <span className="text-[0.7em] font-bold text-forest/70">最大</span>
-                <span className="text-sunset">1/3</span>へ
+                <span className="text-sunset">要件と概算</span>を、
               </span>
               <span className="block whitespace-nowrap">
-                まずは<span className="text-sunset">1分</span>で
+                <span className="text-sunset">AI</span>が<span className="text-sunset">最短1分</span>で
               </span>
               <span className="block whitespace-nowrap">
-                <span className="text-sunset">自動見積もり</span>から。
+                <span className="text-sunset">自動作成</span>。
               </span>
             </span>
             <span className="mt-1 hidden md:block">
               <span className="block whitespace-nowrap">
-                <span className="text-[0.8em] font-bold">システム開発</span>
-                <span className="text-[1.3em] text-sunset">コスト</span>
-                <span className="text-[0.8em] font-bold">を相場の</span>
-                <span className="text-[0.7em] font-bold">最大</span>
-                <span className="text-[1.3em] text-sunset">1/3</span>
-                <span className="text-[0.8em] font-bold">へ</span>
+                <span className="text-[0.8em] font-bold">システム開発の</span>
+                <span className="text-[1.3em] text-sunset">要件と概算</span>
+                <span className="text-[0.8em] font-bold">を、</span>
               </span>
               <span className="block whitespace-nowrap">
-                <span className="text-[0.8em] font-bold">まずは</span>
-                <span className="text-[1.3em] text-sunset">1分</span>
+                <span className="text-[1.3em] text-sunset">AI</span>
+                <span className="text-[0.8em] font-bold">が</span>
+                <span className="text-[1.3em] text-sunset">最短1分</span>
                 <span className="text-[0.8em] font-bold">で</span>
-                <span className="text-[1.3em] text-sunset">自動見積もり</span>
-                <span className="text-[0.8em] font-bold">から。</span>
+                <span className="text-[1.3em] text-sunset">自動作成</span>
+                <span className="text-[0.8em] font-bold">。</span>
               </span>
             </span>
           </motion.h1>
@@ -183,9 +179,7 @@ export default function HeroSection() {
             transition={{ duration: 0.6, delay: 0.18, ease }}
             className="mt-3 text-[12px] font-bold tracking-wide text-forest/55 md:text-[13px]"
           >
-            <span className="text-[0.85em] font-bold text-forest/55">最大</span>
-            <span className="text-sunset">67%</span>
-            のコスト削減を実現
+            要件定義・開発計画・見積もりを<span className="text-sunset">最短1分で自動生成</span>
           </motion.p>
 
           <motion.p

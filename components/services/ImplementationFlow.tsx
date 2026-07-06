@@ -5,6 +5,10 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import { IMPLEMENTATION_FLOW } from "@/content/services";
 
 const ImplementationFlow = () => {
+  // ステップ数は IMPLEMENTATION_FLOW を単一の正とし、グリッド列数・接続線の位置をここから導出する
+  // （Tailwind の動的クラスは JIT でパージされるため、算出値はインライン style で指定）
+  const stepCount = IMPLEMENTATION_FLOW.length;
+
   return (
     <section id="implementation" aria-labelledby="implementation-heading" className="py-16 md:py-24 bg-mist relative overflow-hidden">
       {/* Decorative blobs */}
@@ -16,18 +20,22 @@ const ImplementationFlow = () => {
 
         {/* Desktop: horizontal timeline */}
         <div className="hidden lg:block relative">
-          {/* Background connecting line */}
-          <div className="absolute top-6 left-[calc(100%/12)] right-[calc(100%/12)] h-px bg-forest/10" />
+          {/* Background connecting line（両端ノードの中心＝半カラム分内側に寄せる） */}
+          <div
+            className="absolute top-6 h-px bg-forest/10"
+            style={{ left: `calc(100% / ${stepCount * 2})`, right: `calc(100% / ${stepCount * 2})` }}
+          />
           {/* Animated gradient overlay */}
           <motion.div
-            className="absolute top-6 left-[calc(100%/12)] h-px bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400"
+            className="absolute top-6 h-px bg-gradient-to-r from-teal-600 via-teal-500 to-teal-400"
+            style={{ left: `calc(100% / ${stepCount * 2})` }}
             initial={{ width: 0 }}
-            whileInView={{ width: "calc(100% - 100%/6)" }}
+            whileInView={{ width: `calc(100% - 100% / ${stepCount})` }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1.5, ease: "easeOut" }}
           />
 
-          <div className="grid grid-cols-6 gap-4">
+          <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${stepCount}, minmax(0, 1fr))` }}>
             {IMPLEMENTATION_FLOW.map((item, index) => (
               <motion.div
                 key={item.step}

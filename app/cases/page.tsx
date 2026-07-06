@@ -70,6 +70,9 @@ export default function CasesPage() {
             </div>
           ))}
         </div>
+        <p className="container mx-auto px-6 mt-12 text-xs leading-relaxed text-gray-500">
+          ※削減率は特定事例の実績値です。効果は業務内容・運用状況により異なります。
+        </p>
       </section>
       <RelatedLinks
         eyebrow="SERVICES"

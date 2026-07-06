@@ -139,7 +139,7 @@ export const LP_COPY = {
   // ヒーロー
   hero: {
     eyebrow: "AI Estimate Platform",
-    headingLine1: "相場の最大1/3でシステム開発",
+    headingLine1: "AIが最短1分でシステム開発を見積もり",
     // headingLine2: "不確実なシステム開発コストを、",
     headingLine3: "最新AI活用で1分で見積",
     description:
@@ -177,7 +177,7 @@ export const LP_COPY = {
   // 選ばれる理由
   reasons: {
     eyebrow: "Why choose us",
-    title: "なぜ、当社の見積もりは「安くて正確」なのか？",
+    title: "なぜ、当社の見積もりは「速くて正確」なのか？",
     cards: [
       {
         number: "01",
@@ -198,10 +198,10 @@ export const LP_COPY = {
       {
         number: "03",
         icon: "users",
-        title: "中間マージンを排除しコストを大幅削減※1",
+        title: "要件に最適な人材を動的にアサイン",
         subtitle: "最適リソースの動的アサインメント",
         description:
-          "AI要件定義の結果に基づき、最適な人材を自動マッチング。多重下請け構造を排除し、高品質と低価格を両立します。",
+          "AI要件定義の結果に基づき、案件ごとに最適な人材を自動マッチング。多重下請け構造を排除した直接体制で、意思決定を速く・品質を高く保ちます。",
       },
     ],
   },

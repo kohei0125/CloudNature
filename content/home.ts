@@ -9,7 +9,7 @@ export const HERO_COPY = {
   headingLine2: "人手に代わる仕組みを",
   description:
     "AIエージェントと生成AIを活用し、業務の自動化・効率化を実現する仕組みを提供します。お客様のビジネスに、確かな変化を生み出します。",
-  primaryCta: "最短1分でAIお見積り",
+  primaryCta: "自社開発のAI見積もりを体験（最短1分）",
   secondaryCta: "お問い合わせ",
   heroImageAlt: "新潟の中小企業向けAI開発・AIエージェント開発会社 クラウドネイチャー"
 };
@@ -102,7 +102,7 @@ export const CASE_STUDIES: CaseStudy[] = [
     title: "AI見積もりシステムの自動連携",
     category: "製造業",
     before: "",
-    after: "AIが見積もり作業を代替することで工数を大幅に圧縮。その分をコストに還元します。",
+    after: "AIが見積もり作業を代替することで、要件確認から概算提示までのリードタイムを大幅に短縮します。",
     link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/" },
     image: "/images/meeting.jpg"
   },

@@ -106,12 +106,11 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
 ].sort(byServiceOrder);
 
 export const IMPLEMENTATION_FLOW: FlowStep[] = [
-  { step: 1, title: "無料ヒアリング", description: "御社の課題・要望を丁寧にお伺いし、自動化の余地を診断します。" },
-  { step: 2, title: "ご提案・お見積り", description: "最適な解決策と明確な費用・スケジュールをご提示します。" },
-  { step: 3, title: "設計・プロトタイプ", description: "画面設計と動くプロトタイプで、完成イメージを具体的にお見せします。" },
-  { step: 4, title: "開発・テスト", description: "定期的な進捗共有で安心。品質を確保しながら着実に開発します。" },
-  { step: 5, title: "導入・研修", description: "本番環境への導入と、現場向けの操作研修を実施します。" },
-  { step: 6, title: "運用・定着支援", description: "導入後の運用サポートも万全。トラブル対応もお任せください。" }
+  { step: 1, title: "無料相談・業務ヒアリング", description: "「お困りごと」ではなく、業務の事実を一緒に棚卸しします。" },
+  { step: 2, title: "ご提案・デモ", description: "課題に合わせた解決アプローチと概算をご提示します。" },
+  { step: 3, title: "精度検証（PoC・有償）", description: "実際の業務データで小さく検証し、効果を数値で確認します（検証費用は本開発ご契約時に全額充当）。" },
+  { step: 4, title: "本開発", description: "検証結果に基づき、本番システムを開発します。" },
+  { step: 5, title: "運用・定着支援", description: "導入後の改善・定着まで伴走します（保守・月次改善）。" }
 ];
 
 export const PRICING_APPROACH: PricingItem[] = [

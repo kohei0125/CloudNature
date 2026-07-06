@@ -10,7 +10,7 @@ import {
   Loader2,
   Calendar,
   Cpu,
-  TrendingDown,
+  TrendingUp,
   Zap,
   Clock,
 } from "lucide-react";
@@ -132,20 +132,20 @@ export default function CompletePage() {
             Why CloudNature
           </p>
           <h2 className="mt-1.5 text-center font-serif text-lg font-bold md:text-xl">
-            なぜ、ここまで安くできるのか
+            なぜ、速く正確に開発できるのか
           </h2>
 
           <div className="mt-5 v-stack gap-3">
             <AdvantageCard
               icon={<Cpu className="h-[18px] w-[18px] text-sage" />}
               title="AIが開発工程の80%を自動化"
-              description="設計・実装・テストをAIが遂行。エンジニアは要件定義とレビューに集中するため、人件費を根本から圧縮します。"
+              description="設計・実装・テストをAIが遂行。エンジニアは要件定義とレビューに集中でき、短期間で高品質に仕上げます。"
               delay={0.55}
             />
             <AdvantageCard
-              icon={<TrendingDown className="h-[18px] w-[18px] text-sunset" />}
-              title="同品質でコストダウン"
-              description="品質を落とさず開発コストだけを削減。浮いた予算は、機能追加や運用改善に投資できます。"
+              icon={<TrendingUp className="h-[18px] w-[18px] text-sunset" />}
+              title="同じ予算で、できる範囲を広げる"
+              description="AIを前提とした開発体制で、同じ予算でもより広い範囲を短期間で仕組み化。要件定義に集中し、スコープを最大化します。"
               delay={0.63}
             />
             <AdvantageCard

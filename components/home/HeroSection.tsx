@@ -120,10 +120,10 @@ const HeroSection = () => {
           className="relative z-10 w-full px-10 lg:px-14 py-24 animate-hero-fade-in"
         >
           <div className="max-w-xl lg:max-w-3xl">
-            {/* SEO: モバイル側と同じく、キーワードを含むバッジを h1 に */}
-            <h1 className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-teal-800 bg-white/90 border border-teal-200/60 rounded-full shadow-sm uppercase">
+            {/* SEO: H1 はモバイル側（mobile-first）に一本化。PC側のバッジは見た目維持のため p で表示 */}
+            <p className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-teal-800 bg-white/90 border border-teal-200/60 rounded-full shadow-sm uppercase">
               {HERO_COPY.badge}
-            </h1>
+            </p>
 
             <p className="text-5xl lg:text-[3.2rem] font-extrabold leading-[1.25] text-gray-900 tracking-tight mb-6">
               {HERO_COPY.headingLine1}
