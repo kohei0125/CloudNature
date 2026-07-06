@@ -9,7 +9,7 @@ export const HERO_COPY = {
   headingLine2: "人手に代わる仕組みを",
   description:
     "AIエージェントと生成AIを活用し、業務の自動化・効率化を実現する仕組みを提供します。お客様のビジネスに、確かな変化を生み出します。",
-  primaryCta: "自社開発のAI見積もりを体験（最短1分）",
+  primaryCta: "AI見積もりを体験（最短1分）",
   secondaryCta: "お問い合わせ",
   heroImageAlt: "新潟の中小企業向けAI開発・AIエージェント開発会社 クラウドネイチャー"
 };
