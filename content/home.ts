@@ -63,7 +63,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "ai-support",
     title: "法人向けAI導入支援",
-    tagline: "AI活用を現場に根づかせたい企業へ",
     description: "ツール導入だけで終わらせず、現場で使われる業務フローまで伴走。",
     features: [
       "ヒアリングで自動化余地を診断",
@@ -77,7 +76,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "ai",
     title: "AIエージェント開発",
-    tagline: "判断を伴うタスクをAIに任せたい企業へ",
     description: "調査・整理・判断・実行までを、人の管理下でAIが自律的に進める仕組みに。",
     features: ["自律思考型AIエージェントの開発", "複数SaaSを横断した業務の完全自動化", "社内独自データの学習・専用AI構築"],
     techStack: ["業務自動化", "RAG", "業務連携"]
@@ -85,7 +83,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "dev",
     title: "システム開発",
-    tagline: "業務に合う仕組みをつくりたい企業へ",
     description: "現場の業務に合わせたシステムを、要件整理から設計・実装まで一貫して構築。",
     features: ["新規業務システム・Webアプリ開発", "既存システムへの機能追加・連携", "業務効率化・自動化システム"],
     techStack: ["業務システム", "Webアプリ", "クラウド"]
