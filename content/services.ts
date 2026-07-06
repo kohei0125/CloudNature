@@ -9,33 +9,92 @@ export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> =
 };
 
 export const SERVICES_HERO = {
-  eyebrow: "SOLUTIONS",
-  title: "AI開発・AI導入支援を、必要な分だけ",
-  description: "大手が提案する高額パッケージではなく、本当に必要な機能だけを。新潟の中小企業の現場にマッチした、実用本位のAIソリューションを提供します。"
+  eyebrow: "SERVICE",
+  title: "つくる・任せる・定着させる。",
+  description: "お客様の課題に合わせた3つのサービス。どの段階からでも、入口があります。"
 };
 
 export const SERVICE_DETAILS: ServiceDetail[] = [
   {
+    id: "dev",
+    title: "システム開発",
+    subtitle: "System Development",
+    heading: "業務に合わせて、使えるシステムをつくる。",
+    description:
+      "現場の業務に合わせたシステムを、要件整理から設計・実装まで一貫して構築します。属人化していた業務を、再現性のある運用へと仕組み化します。",
+    pillars: [
+      {
+        label: "対象",
+        title: "業務に合うシステムをつくりたい企業",
+        description: "業務課題や改善したい流れが明確なお客様"
+      },
+      {
+        label: "ゴール",
+        title: "業務の仕組み化・運用改善",
+        description: "属人化していた業務を、再現性のある運用に変える"
+      },
+      {
+        label: "特徴",
+        title: "要件整理から設計・実装まで一貫対応",
+        description: "現場の業務を整理し、運用に耐えるシステムとして構築"
+      }
+    ],
+    techStack: ["Python", "PHP", "React", "AWS"],
+    accentColor: "secondary",
+    image: "/images/services/system_dev.png",
+    externalUrl: ESTIMATE_URL,
+    externalLabel: "AI見積もりを試す"
+  },
+  {
+    id: "ai",
+    title: "AIエージェント開発",
+    subtitle: "AI Agent Development",
+    heading: "判断を伴うタスクを、AIに任せる。",
+    description:
+      "調査・整理・判断・実行までを、人の管理下でAIが自律的に進める仕組みを構築します。業務ルールと権限設計に基づき、安全に運用できるAIエージェントを実装します。",
+    pillars: [
+      {
+        label: "対象",
+        title: "判断を伴う業務タスクをAIに任せたい企業",
+        description: "調査・整理・判断・実行を、人の手だけで回しているお客様"
+      },
+      {
+        label: "ゴール",
+        title: "人の管理下で自律的に進む業務フロー",
+        description: "依頼内容に応じてAIが情報を集め、判断し次のアクションまで進める状態に"
+      },
+      {
+        label: "特徴",
+        title: "業務ルールと権限設計に基づく構築",
+        description: "AIが担う範囲と人が確認すべき範囲を分け、安全に運用できる仕組みとして実装"
+      }
+    ],
+    techStack: ["Google ADK", "Mastra", "Dify", "n8n", "OpenAI", "Claude"],
+    accentColor: "primary",
+    image: "/images/services/ai_agent.png"
+  },
+  {
     id: "ai-support",
     title: "法人向けAI導入支援",
     subtitle: "AI Consulting & Support",
+    heading: "AIを、現場で使われる状態まで伴走する。",
     description:
-      "「何から始めればいいか分からない」——その状態から、「現場でAIが動いている」までを伴走します。まず無料診断で自動化できる業務を特定。その後は経営者向けスクールまたは法人導入伴走の2つのパスで、御社に最適なAI活用を実現します。",
-    features: [
+      "業務ごとの活用方法を整理し、AIが日常業務の中で使われ続ける体制づくりを支援します。研修だけで終わらせず、現場に合う活用ルールと運用フローまで整備します。",
+    pillars: [
       {
-        title: "無料AI診断・導入コンサルティング",
-        description:
-          "30分のヒアリングで御社の業務から「自動化できる工程」を特定。導入コストと回収期間を具体的に試算し、最適なスタート地点をご提案します。"
+        label: "対象",
+        title: "AI活用を現場に根づかせたい企業",
+        description: "ツールを導入したものの、業務で十分に活用できていないお客様"
       },
       {
-        title: "法人向けAIセミナー・研修",
-        description:
-          "にいがたAIサミットをはじめ、御社向けのカスタマイズ研修を実施。経営層から現場社員まで、レベルに合わせたプログラムで全社的なAIリテラシーを底上げします。"
+        label: "ゴール",
+        title: "現場で使われ続けるAI活用体制",
+        description: "業務ごとの活用方法を整理し、日常業務の中でAIを使える状態に"
       },
       {
-        title: "個別スクール（通学・オンライン対応）",
-        description:
-          "AI入門・業務効率化特化・AIプログラミングの3コースをプロ講師がマンツーマン指導。新潟市古町校・女池校またはZoomで受講可能。全額返金保証付き。"
+        label: "特徴",
+        title: "業務設計・教育・運用改善まで支援",
+        description: "使い方の研修だけで終わらせず、現場に合う活用ルールと運用フローまで整備"
       }
     ],
     techStack: ["AI導入診断", "法人研修", "個別スクール"],
@@ -43,36 +102,6 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     image: "/images/services/dx_support.png",
     externalUrl: "https://niigata-ai-academy.com",
     externalLabel: "新潟AIアカデミーを詳しく見る"
-  },
-  {
-    id: "ai",
-    title: "AIエージェント開発",
-    subtitle: "AI Agent Development",
-    description: "導入最短2週間。最新AIで作る「社内の物知りAI」。問い合わせ対応、マニュアル検索、見積もり作成など、今まで人がやっていた単純作業を24時間365日、AIが代行します。",
-    features: [
-      { title: "社内ナレッジAIチャット", description: "社内マニュアルやFAQをAIに学習させ、社員からの質問に即座に回答。新人教育コストを大幅に削減します。" },
-      { title: "予約・問い合わせ自動応答", description: "LINE・Webチャットからの問い合わせにAIが24時間対応。予約受付から確認メール送信まで全自動化。" },
-      { title: "SaaS間のデータ自動連携", description: "n8nを活用し、Slack・Gmail・Notion・kintoneなど各種SaaSを自動連携。データの手動転記を完全に撲滅します。" }
-    ],
-    techStack: ["Google ADK", "Mastra", "Dify", "n8n", "OpenAI", "Claude"],
-    accentColor: "primary",
-    image: "/images/services/ai_agent.png"
-  },
-  {
-    id: "dev",
-    title: "システム開発",
-    subtitle: "System Development",
-    description: "既存の業務システムはそのまま活かし、必要な機能だけを追加・連携。「全部作り直し」ではなく、コストを抑えた段階的な開発で、御社の業務効率を飛躍的に向上させます。",
-    features: [
-      { title: "既存システムとのAPI連携", description: "今お使いのシステムを壊さず、新機能をつなげます。データの二重入力をゼロにし、業務フローをシームレスに。" },
-      { title: "業務管理Webアプリ開発", description: "受発注、在庫管理、勤怠管理など、御社の業務に合わせたオーダーメイドのWebアプリを開発します。" },
-      { title: "業務効率化・自動化システム", description: "手作業で行っていたデータ入力、帳票作成、メール送信などを自動化。ヒューマンエラーを削減し、生産性を向上。" }
-    ],
-    techStack: ["Python", "PHP", "React", "AWS"],
-    accentColor: "secondary",
-    image: "/images/services/system_dev.png",
-    externalUrl: ESTIMATE_URL,
-    externalLabel: "AI見積もりを試す"
   }
 ].sort(byServiceOrder);
 
@@ -87,8 +116,8 @@ export const IMPLEMENTATION_FLOW: FlowStep[] = [
 
 export const PRICING_APPROACH: PricingItem[] = [
   { title: "明確な見積もり", description: "「作ってみないとわからない」は言いません。要件定義後に詳細な見積もりを提示し、追加費用が発生する場合は必ず事前にご相談します。" },
-  { title: "段階的な導入", description: "いきなり大規模投資をお願いすることはありません。最小限のスタートで効果を確認してから、段階的に拡張していきます。" },
-  { title: "適正価格の約束", description: "大手SIerの半額以下を目指します。高額なライセンス費用や、不要な機能への課金はありません。必要な機能だけを、適正価格でご提供します。" }
+  { title: "段階的な導入", description: "いきなり大規模な投資をお願いすることはありません。小さく始めて効果を確認しながら、段階的に対象を広げていきます。" },
+  { title: "運用定着までの伴走", description: "納品して終わりにはしません。導入後の運用・改善のご相談にも継続的に対応し、現場で使われ続ける状態を一緒に目指します。" }
 ];
 
 export const SERVICES_MID_CTA = {
@@ -166,7 +195,7 @@ export const AI_AGENT_FAQ: FaqItem[] = [
   },
   {
     question: "導入までどのくらいかかりますか？",
-    answer: "シンプルなAIチャットボットであれば最短2週間、複数SaaSを連携した業務自動化エージェントで1〜2ヶ月が目安です。ヒアリング後に具体的なスケジュールをご提案します。"
+    answer: "シンプルなAIチャットボットで2〜4週間、複数SaaSを連携した業務自動化エージェントで1〜2ヶ月が目安です。ヒアリング後に具体的なスケジュールをご提案します。"
   },
   {
     question: "AIの回答精度はどの程度ですか？",

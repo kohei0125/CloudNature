@@ -34,7 +34,7 @@ export function faqPageJsonLd(items: { question: string; answer: string }[]) {
   };
 }
 
-type ServiceJsonLdInput = Pick<ServiceDetail, "title" | "description" | "subtitle" | "features" | "image"> & { path: string };
+type ServiceJsonLdInput = Pick<ServiceDetail, "title" | "description" | "subtitle" | "pillars" | "image"> & { path: string };
 
 export function serviceJsonLd(service: ServiceJsonLdInput) {
   return {
@@ -51,12 +51,12 @@ export function serviceJsonLd(service: ServiceJsonLdInput) {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: `${service.title}のサービス内容`,
-      itemListElement: service.features.map((f) => ({
+      itemListElement: service.pillars.map((p) => ({
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: f.title,
-          description: f.description,
+          name: p.title,
+          description: p.description,
         },
       })),
     },

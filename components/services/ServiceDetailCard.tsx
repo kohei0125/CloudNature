@@ -1,37 +1,29 @@
 "use client";
 
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { SERVICE_ORDER } from "@/content/common";
 import type { ServiceDetail } from "@/types";
 
-const accentBg: Record<string, string> = {
-  primary: "bg-teal-800",
-  secondary: "bg-teal-600",
-  tertiary: "bg-teal-500",
-};
-
-const accentText: Record<string, string> = {
-  primary: "text-teal-800",
-  secondary: "text-teal-600",
-  tertiary: "text-teal-500",
-};
-
-const accentBorder: Record<string, string> = {
-  primary: "border-teal-800",
-  secondary: "border-teal-600",
-  tertiary: "border-teal-500",
+// アクセント配色（accentColor キーごとに bg / text / border をまとめて保持）
+const accents: Record<string, { bg: string; text: string; border: string }> = {
+  primary: { bg: "bg-teal-800", text: "text-teal-800", border: "border-teal-800" },
+  secondary: { bg: "bg-teal-600", text: "text-teal-600", border: "border-teal-600" },
+  tertiary: { bg: "bg-teal-500", text: "text-teal-500", border: "border-teal-500" },
 };
 
 interface ServiceDetailCardProps {
   service: ServiceDetail;
-  index: number;
 }
 
-const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
-  const isEven = index % 2 === 0;
-  const num = String(index + 1).padStart(2, "0");
+const ServiceDetailCard = ({ service }: ServiceDetailCardProps) => {
+  // 表示順（SERVICE_ORDER）を唯一の正として番号・左右交互を決める
+  const order = SERVICE_ORDER.indexOf(service.id);
+  const num = String(order + 1).padStart(2, "0");
+  const isEven = order % 2 === 0;
+  const accent = accents[service.accentColor] ?? accents.secondary;
 
   return (
     <article
@@ -53,12 +45,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
             />
           </div>
           {/* Caption-style subtitle under image on mobile */}
-          <p
-            className={cn(
-              "mt-3 text-xs font-bold tracking-widest uppercase md:hidden",
-              accentText[service.accentColor]
-            )}
-          >
+          <p className={cn("mt-3 text-xs font-bold tracking-widest uppercase md:hidden", accent.text)}>
             {service.subtitle}
           </p>
         </div>
@@ -68,18 +55,9 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
       <div className="md:w-[55%] v-stack justify-center">
         {/* Number + Subtitle (desktop) */}
         <div className="hidden md:flex items-center gap-4 mb-4">
-          <span className="text-forest/20 font-sans text-5xl font-bold leading-none">
-            {num}
-          </span>
-          <div
-            className={cn("h-px flex-1 max-w-16", accentBg[service.accentColor])}
-          />
-          <p
-            className={cn(
-              "text-xs font-bold tracking-widest uppercase",
-              accentText[service.accentColor]
-            )}
-          >
+          <span className="text-forest/20 font-sans text-5xl font-bold leading-none">{num}</span>
+          <div className={cn("h-px flex-1 max-w-16", accent.bg)} />
+          <p className={cn("text-xs font-bold tracking-widest uppercase", accent.text)}>
             {service.subtitle}
           </p>
         </div>
@@ -89,42 +67,35 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
           {num}
         </span>
 
-        <h3 className="text-2xl md:text-3xl font-sans font-bold text-forest mb-4 leading-snug">
-          {service.title}
-        </h3>
-        <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-8">
-          {service.description}
-        </p>
+        {/* サービス名 */}
+        <p className="text-sm font-medium text-gray-500 mb-2">{service.title}</p>
 
-        {/* Features — simple stacked list with accent left border */}
-        <div
-          className={cn(
-            "border-l-2 pl-5 space-y-5 mb-8",
-            accentBorder[service.accentColor]
-          )}
-        >
-          {service.features.map((feature, idx) => (
+        {/* キャッチコピー見出し */}
+        <h3 className="text-2xl md:text-3xl font-sans font-bold text-forest mb-8 leading-snug">
+          {service.heading}
+        </h3>
+
+        {/* 対象 / ゴール / 特徴 — アクセントの縦ボーダー付きリスト */}
+        <div className={cn("border-l-2 pl-5 space-y-5 mb-8", accent.border)}>
+          {service.pillars.map((pillar, idx) => (
             <motion.div
-              key={idx}
+              key={pillar.label}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.35, delay: idx * 0.08 }}
             >
-              <p className="font-bold text-forest text-sm leading-snug">
-                {feature.title}
+              <p className={cn("text-[11px] font-bold tracking-wider mb-1", accent.text)}>
+                {pillar.label}
               </p>
-              <p className="text-gray-500 text-xs leading-relaxed mt-1">
-                {feature.description}
-              </p>
+              <p className="font-bold text-forest text-sm leading-snug">{pillar.title}</p>
+              <p className="text-gray-500 text-xs leading-relaxed mt-1">{pillar.description}</p>
             </motion.div>
           ))}
         </div>
 
         {/* Tech stack — inline text */}
-        <p className="text-xs text-gray-400 tracking-wide">
-          {service.techStack.join(" / ")}
-        </p>
+        <p className="text-xs text-gray-400 tracking-wide">{service.techStack.join(" / ")}</p>
 
         {service.externalUrl && (
           <a
@@ -133,7 +104,7 @@ const ServiceDetailCard = ({ service, index }: ServiceDetailCardProps) => {
             rel="noopener noreferrer"
             className={cn(
               "mt-8 inline-flex items-center gap-2 text-sm font-bold transition-all hover:underline hover:underline-offset-4",
-              accentText[service.accentColor]
+              accent.text
             )}
           >
             {service.externalLabel}

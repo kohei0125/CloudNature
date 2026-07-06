@@ -1,11 +1,11 @@
 "use client";
 
-import { FileSearch, TrendingUp, HandCoins } from "lucide-react";
+import { FileSearch, TrendingUp, HeartHandshake } from "lucide-react";
 import { motion } from "framer-motion";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { PRICING_APPROACH } from "@/content/services";
 
-const icons = [FileSearch, TrendingUp, HandCoins];
+const icons = [FileSearch, TrendingUp, HeartHandshake];
 const accents = [
   { bg: "bg-teal-600/10", text: "text-teal-600", bar: "bg-teal-600" },
   { bg: "bg-teal-800/10", text: "text-teal-800", bar: "bg-teal-800" },
@@ -16,7 +16,7 @@ const PricingApproach = () => {
   return (
     <section id="pricing" aria-labelledby="pricing-heading" className="py-16 md:py-24 bg-white texture-grain">
       <div className="container mx-auto px-6">
-        <SectionHeader eyebrow="PRICING" title="料金の考え方" centered headingId="pricing-heading" />
+        <SectionHeader eyebrow="APPROACH" title="私たちの進め方" centered headingId="pricing-heading" />
 
         <div className="grid md:grid-cols-3 gap-4 md:gap-8">
           {PRICING_APPROACH.map((item, index) => {

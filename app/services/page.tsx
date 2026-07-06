@@ -55,7 +55,7 @@ export default function ServicesPage() {
         <div className="container mx-auto px-6 space-y-16 md:space-y-20">
           {SERVICE_DETAILS.map((service, index) => (
             <ScrollReveal key={service.id} variant="fade-up" delay={index * 0.1}>
-              <ServiceDetailCard service={service} index={index} />
+              <ServiceDetailCard service={service} />
             </ScrollReveal>
           ))}
         </div>

@@ -45,7 +45,7 @@ export default function SystemDevPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd({ ...service, path: SERVICE_PAGE_MAP[service.id].path }), faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
       />
       <PageHero
-        eyebrow="SYSTEM DEVELOPMENT"
+        eyebrow={service.subtitle}
         title={service.title}
         description={service.description}
       />
@@ -53,7 +53,7 @@ export default function SystemDevPage() {
       <section id="service-detail" className="py-16 md:py-24 bg-linen">
         <div className="container mx-auto px-6">
           <ScrollReveal variant="fade-up">
-            <ServiceDetailCard service={service} index={0} />
+            <ServiceDetailCard service={service} />
           </ScrollReveal>
         </div>
       </section>
