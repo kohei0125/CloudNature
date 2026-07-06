@@ -138,6 +138,16 @@ const ServicesSection = () => {
                       {service.title}
                     </h3>
 
+                    {/* Tagline（訴求リード） */}
+                    {service.tagline && (
+                      <p
+                        className="relative z-10 text-[13px] font-bold leading-[1.6] mb-2.5"
+                        style={{ color: isAccent ? "rgba(255,255,255,0.92)" : "#055448" }}
+                      >
+                        {service.tagline}
+                      </p>
+                    )}
+
                     {/* Description */}
                     <p
                       className="relative z-10 text-[12.5px] leading-[1.85] mb-4"

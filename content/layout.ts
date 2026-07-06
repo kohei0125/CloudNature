@@ -13,9 +13,9 @@ export const FOOTER_COPY = {
   serviceHeading: "SERVICE",
   companyHeading: "COMPANY",
   serviceLinks: [
-    { label: "AI導入・伴走支援", path: "/services/ai-support" },
-    { label: "AIエージェント開発", path: "/services/ai-agent" },
     { label: "システム開発", path: "/services/system-dev" },
+    { label: "AIエージェント開発", path: "/services/ai-agent" },
+    { label: "法人向けAI導入支援", path: "/services/ai-support" },
     { label: "AI見積もり", path: ESTIMATE_URL, external: true }
   ],
   companyLinks: [

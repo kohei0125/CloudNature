@@ -1,10 +1,11 @@
 import { ServiceDetail, FlowStep, PricingItem, FaqItem } from "@/types";
 import { ESTIMATE_URL, byServiceOrder } from "@/content/common";
 
+// キーの並びは SERVICE_ORDER に合わせる（cases ページの関連サービス一覧が Object.values 順に表示するため）
 export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> = {
-  "ai-support": { title: "AI導入・伴走支援", path: "/services/ai-support" },
-  "ai": { title: "AIエージェント開発", path: "/services/ai-agent" },
   "dev": { title: "システム開発", path: "/services/system-dev" },
+  "ai": { title: "AIエージェント開発", path: "/services/ai-agent" },
+  "ai-support": { title: "法人向けAI導入支援", path: "/services/ai-support" },
 };
 
 export const SERVICES_HERO = {
@@ -16,7 +17,7 @@ export const SERVICES_HERO = {
 export const SERVICE_DETAILS: ServiceDetail[] = [
   {
     id: "ai-support",
-    title: "AI導入・伴走支援",
+    title: "法人向けAI導入支援",
     subtitle: "AI Consulting & Support",
     description:
       "「何から始めればいいか分からない」——その状態から、「現場でAIが動いている」までを伴走します。まず無料診断で自動化できる業務を特定。その後は経営者向けスクールまたは法人導入伴走の2つのパスで、御社に最適なAI活用を実現します。",

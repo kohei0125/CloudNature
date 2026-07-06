@@ -1,6 +1,8 @@
 export interface ServiceItem {
   id: string;
   title: string;
+  /** TOPカードの訴求リード（「○○したい企業へ」）。タイトルと説明文の間に表示する */
+  tagline?: string;
   description: string;
   features: string[];
   techStack: string[];

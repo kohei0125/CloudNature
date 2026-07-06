@@ -4,9 +4,9 @@ export const ESTIMATE_URL = "https://ai.cloudnature.jp/";
 
 /**
  * サービスの表示順（TOP・サービス詳細ページ共通の正）。
- * AI企業としてのポジショニングを明確にするため、AI系サービスを先頭に置く。
+ * システム開発 → AIエージェント開発 → AI導入・伴走支援 の順で表示する。
  */
-export const SERVICE_ORDER: readonly string[] = ["ai-support", "ai", "dev"];
+export const SERVICE_ORDER: readonly string[] = ["dev", "ai", "ai-support"];
 
 /** SERVICE_ORDER に従ってサービス配列を並べるための比較関数 */
 export const byServiceOrder = (a: { id: string }, b: { id: string }) =>
