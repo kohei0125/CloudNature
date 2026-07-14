@@ -22,6 +22,12 @@ export const COMPANY_OVERVIEW: CompanyInfo[] = [
   },
 ];
 
+export const COMPANY_PROFILE_DOC = {
+  label: "会社紹介資料（PDF）",
+  description: "事業内容・サービス・実績をまとめた資料です。社内でのご検討にご活用ください。",
+  href: "/docs/cloudnature-company-profile.pdf",
+};
+
 export const REPRESENTATIVE_MESSAGE = {
   eyebrow: "MESSAGE",
   title: "代表メッセージ",

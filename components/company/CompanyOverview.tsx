@@ -1,5 +1,6 @@
+import { Download } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { COMPANY_OVERVIEW } from "@/content/company";
+import { COMPANY_OVERVIEW, COMPANY_PROFILE_DOC } from "@/content/company";
 
 const CompanyOverview = () => {
   return (
@@ -38,6 +39,22 @@ const CompanyOverview = () => {
               </div>
             ))}
           </dl>
+        </div>
+
+        {/* 会社紹介資料ダウンロード */}
+        <div className="mt-8 text-center">
+          <a
+            href={COMPANY_PROFILE_DOC.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-3 border border-forest/20 text-forest rounded-full font-bold text-sm hover:bg-forest/5 transition-colors inline-flex items-center justify-center gap-2"
+          >
+            <Download className="w-4 h-4" />
+            {COMPANY_PROFILE_DOC.label}
+          </a>
+          <p className="mt-3 text-[13px] text-forest/60">
+            {COMPANY_PROFILE_DOC.description}
+          </p>
         </div>
       </div>
     </section>
