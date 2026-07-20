@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 32" role="img" aria-labelledby="logoWhiteTitle">
+  <title id="logoWhiteTitle">CloudNature</title>
+  <path d="M13 8a7 7 0 0 0-6.9 6.02A5.5 5.5 0 0 0 7.5 25h13a5 5 0 0 0 1-9.9A7 7 0 0 0 13 8z" fill="#ffffff"/>
+  <text x="28" y="22" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="17" font-weight="700" fill="#ffffff">CloudNature</text>
+</svg>
