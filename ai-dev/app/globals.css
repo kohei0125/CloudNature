@@ -40,6 +40,12 @@ body {
   line-height: 1.7;
   color: var(--text);
   background: var(--white);
+  /* 「ツール」「設計」のような単語・熟語の途中で改行されるのを防ぐ。
+     句読点がなく収まらない場合はoverflow-wrapで折り返す。
+     break-wordは最小幅の計算に反映されずgrid/flexコンテナを押し広げてしまうため、
+     最小幅計算にも反映されるanywhereを使う */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -508,6 +514,8 @@ section { padding-block: 64px; }
   padding: 32px 24px;
   text-align: center;
   background: var(--blue-50);
+  /* hoverシャドウはタッチデバイスでは発火しないため、常時のシャドウも付けて奥行きを出す */
+  box-shadow: 0 6px 16px rgba(6, 15, 34, 0.05);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .problem-card:hover {
@@ -535,7 +543,6 @@ section { padding-block: 64px; }
   gap: 40px;
   align-items: center;
 }
-
 .check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .check-list li { padding-left: 30px; position: relative; font-size: 0.95rem; }
 .check-list li::before {
@@ -664,6 +671,7 @@ section { padding-block: 64px; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 32px clamp(20px, 3vw, 36px);
+  box-shadow: 0 8px 24px rgba(6, 15, 34, 0.05);
 }
 .panel__title {
   margin: 0 0 24px;
@@ -761,17 +769,6 @@ section { padding-block: 64px; }
   display: block;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-}
-.talk-card__caption {
-  padding: 16px 20px 18px;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-.talk-card__title {
-  display: block;
-  font-size: 0.98rem;
-  color: var(--navy-900);
-  margin-bottom: 4px;
 }
 
 /* ============ Speaker ============ */
@@ -879,9 +876,10 @@ section { padding-block: 64px; }
 .faq__item[open] .faq__question::after { transform: rotate(180deg); }
 .faq__answer { margin: 0; padding: 0 16px 14px; font-size: 0.86rem; color: var(--muted); }
 
-.form { display: grid; gap: 16px; }
+.form { display: grid; gap: 22px; }
 .form__note { font-size: 0.82rem; color: var(--muted); margin: 0 0 14px; }
-.form__textarea { height: auto; padding-block: 10px; resize: vertical; font-family: inherit; }
+/* rows属性だけだと折り返したplaceholderが下端で見切れるため、最小高さを確保する */
+.form__textarea { height: auto; min-height: 116px; padding-block: 12px; resize: vertical; font-family: inherit; }
 /* スパム対策のhoneypot: 視覚・支援技術・タブ移動のいずれからも隠す */
 .form__hp {
   position: absolute;
@@ -890,18 +888,26 @@ section { padding-block: 64px; }
   height: 1px;
   overflow: hidden;
 }
-.form__row { display: grid; gap: 6px; }
+.form__row { display: grid; gap: 8px; }
 .form__label { font-size: 0.85rem; font-weight: 700; color: var(--navy-900); }
 .form__input {
-  height: 46px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding-inline: 12px;
+  height: 50px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding-inline: 14px;
   /* 16px未満だとiOS Safariがフォーカス時に自動ズームしてしまうため16px以上を維持 */
   font-size: 1rem;
   font-family: inherit;
   background: var(--white);
   color: var(--text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+.form__input:hover { border-color: #b9c6dc; }
+.form__input:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(75, 142, 240, 0.14);
 }
 .form__consent { font-size: 0.76rem; color: var(--muted); margin: 4px 0 0; }
 .form__consent a { color: var(--blue-600); }
@@ -943,7 +949,10 @@ section { padding-block: 64px; }
 
 /* ============ Responsive ============ */
 @media (max-width: 1023px) {
+  /* ナビ(margin-inline:auto)が消えるとCTAを右へ押す要素がなくなるため、
+     CTA自身をmargin-left:autoで右端に寄せる */
   .site-header__nav { display: none; }
+  .site-header__inner .btn--header { margin-left: auto; }
   .hero__inner { grid-template-columns: 1fr; }
   .stats__list { grid-template-columns: 1fr 1fr; row-gap: 20px; }
   .stats__item { justify-content: flex-start; }
@@ -953,18 +962,58 @@ section { padding-block: 64px; }
   .comparison__grid { grid-template-columns: 1fr; }
   .agenda__grid { grid-template-columns: 1fr; }
   .talks { grid-template-columns: 1fr; }
+  /* グリッド子要素はデフォルトでmin-width:autoのため、経歴文(speaker__bio)の
+     コンテンツ幅がそのままpanel全体を押し広げ横スクロールの原因になっていた */
   .speaker__panel { grid-template-columns: 1fr; text-align: left; }
+  .speaker__panel > * { min-width: 0; }
+  .speaker__bio { max-width: 100%; }
   .speaker__photo { width: 160px; }
   .application__grid { grid-template-columns: 1fr; }
-  /* 横並びだと2×2に折り返り行をまたぐ矢印が消えるため、縦一列+下向き矢印にする */
-  .process__flow { flex-direction: column; align-items: stretch; gap: 4px; }
-  .process__step { flex-direction: row; justify-content: flex-start; text-align: left; gap: 12px; }
-  .process__arrow { align-self: center; transform: rotate(90deg); }
+  /* 横並びだと2×2に折り返り行をまたぐ矢印が消えるため、縦一列+下向き矢印にする。
+     さらにアイコンを貫くグラデーションの縦ラインを通し、単なる丸アイコンの羅列ではなく
+     一本のパイプラインとして流れが伝わるようにする */
+  .process__flow { position: relative; flex-direction: column; align-items: stretch; gap: 4px; }
+  .process__flow::before {
+    content: "";
+    position: absolute;
+    left: 29px;
+    top: 29px;
+    bottom: 29px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--blue-500), var(--blue-100) 85%, transparent);
+  }
+  .process__step {
+    position: relative;
+    z-index: 1;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 12px;
+  }
+  .process__arrow { position: relative; z-index: 1; align-self: center; transform: rotate(90deg); }
 }
 
 @media (max-width: 767px) {
+  /* デスクトップ幅に合わせた強制改行はモバイル幅では折り返し位置を歪めるため無効化し、
+     word-break: keep-all とテキスト全体で自然な位置に折り返させる */
+  .section-title__break { display: none; }
+  /* 見出しが複数行に折り返るとスパーク(✦)が左右の端で浮いて不揃いに見えるため、
+     見出しテキストを挟むように縦積みにする */
+  .section-title--sparkle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title--sparkle .spark--l,
+  .section-title--sparkle .spark--r {
+    margin: 0;
+  }
   section { padding-block: 44px; }
   .hero { padding-block: 48px; }
+  /* .benefit__artはflex:noneで縮まないため、幅の狭いモバイルではカード右端からはみ出す。
+     装飾要素なので非表示にして崩れを防ぐ */
+  .benefit__art { display: none; }
   .hero__actions .btn { width: 100%; }
   .hero__visual { display: none; }
   /* 幅100%のままだと列が潰れて文字単位で折り返るため、最小幅を確保して横スクロールさせる */

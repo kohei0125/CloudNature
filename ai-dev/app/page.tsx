@@ -175,7 +175,7 @@ export default function TrainingPage() {
               <span className="spark spark--l" aria-hidden="true">
                 ✦
               </span>
-              AIツールは導入した。しかし、顧客案件で使う準備はできていますか。
+              AIツールは導入した。しかし、顧客案件で使う準備はできていますか
               <span className="spark spark--r" aria-hidden="true">
                 ✦
               </span>
@@ -207,8 +207,8 @@ export default function TrainingPage() {
             <div className="features__panel">
               <h2 id="features-title" className="section-title">
                 必要なのは、ツールの操作法ではなく
-                <br />
-                AIを組み込んだ<em className="text-accent">開発プロセスの設計</em>です
+                <br className="section-title__break" />
+                AIを組み込んだ<em className="text-accent">開発プロセスの<span style={{ whiteSpace: "nowrap" }}>設計</span></em>です
               </h2>
               <div className="features__grid">
                 <ul className="check-list check-list--lg">
@@ -219,7 +219,7 @@ export default function TrainingPage() {
                   <li>実案件に基づく具体例とテンプレートを提供</li>
                 </ul>
                 <div className="process">
-                  <h3 className="process__title">AIを組み込んだ開発プロセス（例）</h3>
+                  <h3 className="process__title">人が判断・承認（ビジネス価値・品質・リスクを判断）</h3>
                   <ol className="process__flow">
                     {PROCESS_STEPS.flatMap((step, i) => [
                       i > 0 && (
@@ -237,7 +237,8 @@ export default function TrainingPage() {
                       </li>,
                     ])}
                   </ol>
-                  <p className="process__note">Claude Code / Codex / Claude 等の活用を組み込み</p>
+                  <p className="process__note">  <strong>AI活用レイヤー</strong>（各工程にAIが伴走・提案・自動化を支援）</p>
+                  {/* <p className="process__note">Claude Code / Codex / Claude 等の活用を組み込み</p> */}
                 </div>
               </div>
             </div>
@@ -392,6 +393,9 @@ export default function TrainingPage() {
               <h2 id="cases-title" className="section-title">
                 講演実績
               </h2>
+              <p className="section-lead">
+                エンジニア・開発責任者の方々を対象に、AIを活用した開発プロセスの設計・実践をテーマとしたセミナー登壇や、企業向けのAI研修を実施してきました。要件定義から実装・レビュー・テストまで、各工程でAIをどう組み込み、品質やセキュリティをどう担保するかを、実際のデモや現場の事例を交えて解説しています。
+              </p>
               <div className="talks">
                 <figure className="talk-card">
                   <Image
@@ -401,10 +405,6 @@ export default function TrainingPage() {
                     width={1920}
                     height={1016}
                   />
-                  <figcaption className="talk-card__caption">
-                    <strong className="talk-card__title">セミナー登壇</strong>
-                    「AI活用による開発プロセスの進化」をテーマに、エンジニア・開発責任者の方々へ講演しました。
-                  </figcaption>
                 </figure>
                 <figure className="talk-card">
                   <Image
@@ -414,10 +414,6 @@ export default function TrainingPage() {
                     width={1448}
                     height={1086}
                   />
-                  <figcaption className="talk-card__caption">
-                    <strong className="talk-card__title">企業向けAI研修</strong>
-                    AI活用の開発プロセスを、実務の流れに沿って少人数形式で解説しました。
-                  </figcaption>
                 </figure>
               </div>
             </div>
