@@ -1,14 +1,14 @@
 # エンジニア向けAI開発研修LP 設計書
 
 - 作成日: 2026-07-20
-- 対象: `training/` — AI開発研修（30分無料相談）ランディングページ
-- ステータス: 方針確定（実装未着手）
+- 対象: `ai-dev/` — AI開発研修（30分無料相談）ランディングページ
+- ステータス: 実装済み（`ai-dev/`。旧ディレクトリ名 `training/` から改名）
 
 ## 0. 確定した方針
 
 | 項目 | 決定 |
 |---|---|
-| 公開形態 | **サブドメイン `training.cloudnature.jp`**（`estimate/`＝ai.cloudnature.jp と同じ独立Vercelプロジェクト方式） |
+| 公開形態 | **サブドメイン `ai-dev.cloudnature.jp`**（`estimate/`＝ai.cloudnature.jp と同じ独立Vercelプロジェクト方式） |
 | 実装 | **Next.js**（既存の静的HTML/CSS/JSをNext.jsへ移植） |
 | フォーム送信 | **Resend でメール送信**。本体 `app/api/contact/route.ts` の**Resend送信パターンのみ流用**（Route Handler本体は専用新規実装 → §4.2） |
 | 通知先メール | **本体と共用**（`NOTIFY_EMAIL` / `EMAIL_FROM` を本体と同じ設定で使用） |
@@ -32,14 +32,14 @@
 |---|---|
 | フレームワーク | **Next.js（App Router）** — `estimate/` と同構成の独立プロジェクト |
 | 独立設定 | 専用の `package.json` / `tsconfig.json` / `next.config.mjs` / `tailwind.config.ts` |
-| ページ | `training/app/page.tsx`（RSC・静的マークアップ） |
+| ページ | `ai-dev/app/page.tsx`（RSC・静的マークアップ） |
 | スタイル | 既存 `style.css` を `app/globals.css` へ移植（CSS Custom Properties はそのまま活用） |
 | フォーム | Client Component（`"use client"`）→ Route Handler へ `fetch` POST |
-| メール送信 | `training/app/api/consultation/route.ts`（Resend） |
+| メール送信 | `ai-dev/app/api/consultation/route.ts`（Resend） |
 
 ### 2.2 静的HTML → Next.js 移植方針
 
-現状の `training/index.html` は静的マークアップのため、RSCへ素直に移植できる。
+現状の `ai-dev/index.html` は静的マークアップのため、RSCへ素直に移植できる。
 
 - `index.html` の `<body>` 内 → `app/page.tsx`（Server Component）。SVGは `class→className` 等へ機械的変換
 - `<head>` のメタ情報 → `app/layout.tsx` の `metadata` API と JSON-LD（`Organization` / `FAQPage` / `WebPage`）
@@ -52,7 +52,7 @@
 **移植で見落としがちな点（Codex指摘・要対応）**
 
 - **共有ライブラリは複製する**: 別Vercelプロジェクトのため本体の `@/lib/...` を直接参照しない。
-  `training/lib/rate-limit.ts` / `training/lib/site.ts` / `training/lib/metadata.ts` として小さく複製する。
+  `ai-dev/lib/rate-limit.ts` / `ai-dev/lib/site.ts` / `ai-dev/lib/metadata.ts` として小さく複製する。
 - **JSON-LDは `metadata` APIだけでは出力されない**: `estimate/components/shared/JsonLd.tsx` と同様の
   専用コンポーネントを用意し、`JSON.stringify(data).replace(/</g, "\\u003c")` でエスケープ。
   **FAQPageの構造化データは画面上のFAQと完全一致**させる。
@@ -66,7 +66,7 @@
 ### 2.3 想定ディレクトリ構成（移行後）
 
 ```text
-training/
+ai-dev/
 ├── package.json / tsconfig.json / next.config.mjs / tailwind.config.ts
 ├── app/
 │   ├── layout.tsx          （metadata・JSON-LD・フォント）
@@ -160,7 +160,7 @@ training/
 **配置方針（Codexレビュー2回目で確定）**
 
 - **OGP画像・JSON-LDの `logo`・ヘッダー/フッターロゴ** … 本体 `public/images/` から
-  **コピーして `training/public/images/` に固定配置**する。
+  **コピーして `ai-dev/public/images/` に固定配置**する。
   - 理由: これらは公開前ブロッカー（OGPクローラの取得・SEO）に関わり、本体のパス変更・
     削除・キャッシュの影響を受けない自己完結が必要なため。
   - 「本体サイトの画像を流用」という要件は、同一の画像ファイルを複製して使うことで満たす
@@ -169,18 +169,18 @@ training/
   参照を許容。`next/image` を使う場合は `next.config.mjs` の `images.remotePatterns` に
   本体ドメインを追加する。
 - **LP固有の画像**（`talk-seminar.webp` / `talk-training.png` / `speaker2.svg`）は
-  `training/public/` に配置してプロジェクト内で管理。
+  `ai-dev/public/` に配置してプロジェクト内で管理。
 
 ## 6. 公開URL・デプロイ設計
 
-- 新規 Vercel プロジェクトを作成、**Root Directory = `training/`**、Framework = Next.js
-- 独自ドメイン `training.cloudnature.jp` を割り当て
+- 新規 Vercel プロジェクトを作成、**Root Directory = `ai-dev/`**、Framework = Next.js
+- 独自ドメイン `ai-dev.cloudnature.jp` を割り当て
 - `estimate/`（ai.cloudnature.jp）の運用パターンを踏襲
 
 **canonical / OGP / robots / sitemap は「公開前ブロッカー（必須）」（Codex指摘で優先度を高へ）**
 
 - 現状HTMLは `https://cloudnature.jp/seminar/ai-dev` を canonical / og:url / og:image に指定 → **誤り**。
-- `SITE_URL = "https://training.cloudnature.jp"` を研修LP内に定義し、
+- `SITE_URL = "https://ai-dev.cloudnature.jp"` を研修LP内に定義し、
   **canonical・`og:url`・`og:image`・sitemap・robots・JSON-LD(WebPage) のURLを統一**する。
 - **Preview環境（`VERCEL_ENV !== "production"`）は noindex** にする（本体 `robots.ts` と同様の分岐）。
 
@@ -188,17 +188,17 @@ training/
 
 | # | 項目 | 内容 | 優先 | 状態 |
 |---|---|---|---|---|
-| 1 | Vercelドメイン設定 | `training.cloudnature.jp`（確定）のDNS/Vercelドメイン割り当て | 高 | 未着手（Vercel側の作業） |
+| 1 | Vercelドメイン設定 | `ai-dev.cloudnature.jp`（確定）のDNS/Vercelドメイン割り当て | 高 | 未着手（Vercel側の作業） |
 | 2 | Next.js移植 | `index.html`→`page.tsx` / `style.css`→`globals.css` / JS→Client Component | 高 | ✅ 完了 |
 | 3 | Resend Route Handler | `app/api/consultation/route.ts` を**専用新規実装**（Resend送信パターンのみ流用） | 高 | ✅ 完了 |
 | 4 | メールテンプレート | 研修相談用の通知/自動返信＋from/reply-to設計（§4.4） | 高 | ✅ 完了 |
 | 5 | 環境変数設定 | §4.3。**本番判定用 `NEXT_PUBLIC_ENV`/`VERCEL_ENV` を含める** | 高 | ✅ コード対応済み（Vercel側の値設定は未実施） |
 | 6 | レート制限・入力量制限 | `lib/rate-limit` 複製・IP制限・最大文字数・ボディサイズ上限（**削除しない**） | 高 | ✅ 完了（IP+メール単位の二重制限） |
 | 7 | canonical/OGP/robots/sitemap | 新サブドメインURLへ統一・Preview noindex（**公開前ブロッカー**） | 高 | ✅ 完了 |
-| 8 | 共有ライブラリ複製 | `training/lib/` に `rate-limit`/`site`/`metadata` を複製 | 中 | ✅ 完了 |
+| 8 | 共有ライブラリ複製 | `ai-dev/lib/` に `rate-limit`/`site`/`metadata` を複製 | 中 | ✅ 完了 |
 | 9 | JSON-LDコンポーネント | `estimate/` 同様の専用コンポーネント。FAQは画面と一致 | 中 | ✅ 完了 |
 | 10 | フォーム送信UX | pending/disabled/二重送信防止/`aria-live`/サンクス/GA4 CV | 中 | ✅ 完了 |
-| 11 | 画像配置 | OGP/JSON-LD logo/ヘッダー・フッターロゴを本体からコピーし `training/public/images/` へ固定配置（§5確定）。本体ロゴ更新時は追従コピー | 中 | ✅ 完了 |
+| 11 | 画像配置 | OGP/JSON-LD logo/ヘッダー・フッターロゴを本体からコピーし `ai-dev/public/images/` へ固定配置（§5確定）。本体ロゴ更新時は追従コピー | 中 | ✅ 完了 |
 | 12 | Webフォント | `Noto Sans JP` を `next/font/local` で読み込み（外部依存回避） | 中 | ✅ 完了 |
 | 13 | 計測連携 | UTM引き継ぎ（`utm_content`/`term`/`gclid` 等の拡張要否）＋GA4 | 低 | 基本のUTM4項目＋GA4は実装済み。拡張は未実施 |
 | 14 | 講師写真 | `speaker2.svg`（プレースホルダー）を実写真へ / alt文言整合 | 低 | 未着手（プレースホルダーのまま） |
@@ -206,7 +206,7 @@ training/
 
 ## 8. 実装状況（2026-07-20時点）
 
-`training/` に Next.js（App Router）プロジェクトとして実装済み。`npm run build` / `npm run lint` とも成功、
+`ai-dev/` に Next.js（App Router）プロジェクトとして実装済み。`npm run build` / `npm run lint` とも成功、
 開発サーバーでのブラウザ実機確認・フォーム送信の実地検証まで完了。
 
 ### 実装済みファイル
@@ -227,15 +227,15 @@ training/
 fulfilled のまま `{ data: null, error }` を返す仕様（例外を投げない）。ダミーAPIキーで実地検証したところ、
 `Promise.allSettled(...).status === "rejected"` のみで判定する実装（本体 `app/api/contact/route.ts` と
 同型のパターン）では、この種のAPIエラーを検知できず、実際にはメール未送信のまま `{ success: true }` を
-返してしまうことを確認した。`training/app/api/consultation/route.ts` では
+返してしまうことを確認した。`ai-dev/app/api/consultation/route.ts` では
 `notifyResult.value.error` も判定するよう修正済み。
 **本体 `app/api/contact/route.ts` にも同型の潜在バグがある可能性が高い**（本設計書のスコープ外のため未修正。
 別途対応を推奨）。
 
 ### 未実施（Vercel側の作業）
 
-- Vercelプロジェクト作成、Root Directory = `training/` の設定
-- ドメイン `training.cloudnature.jp` の割り当て
+- Vercelプロジェクト作成、Root Directory = `ai-dev/` の設定
+- ドメイン `ai-dev.cloudnature.jp` の割り当て
 - 環境変数の設定（`RESEND_API_KEY` / `EMAIL_FROM` / `NOTIFY_EMAIL` / `NEXT_PUBLIC_ENV=production` 等）
 - 本番デプロイ後の実メール送信確認
 
@@ -253,8 +253,8 @@ CLAUDE.md の規約に従い、実装着手前に Codex と対話レビューを
 
 ### 重大度 中（本文へ反映済み）
 
-- 共有ライブラリは `@/lib` 直接参照でなく `training/lib/` へ複製（§2.2）
-- 本体画像の絶対URL参照はパス変更/キャッシュ/OGP取得のリスク → OGP・ロゴは `training/public/images/` 固定配置を推奨（§5）
+- 共有ライブラリは `@/lib` 直接参照でなく `ai-dev/lib/` へ複製（§2.2）
+- 本体画像の絶対URL参照はパス変更/キャッシュ/OGP取得のリスク → OGP・ロゴは `ai-dev/public/images/` 固定配置を推奨（§5）
 - from/reply-to・件名設計を追加（通知は `replyTo:申込者`、自動返信は `replyTo:窓口`、本文にUTM）（§4.4）
 - フォーム送信UX（pending/disabled/二重送信防止/`aria-live`/サンクス/GA4）を明記（§2.2）
 - JSON-LDは `metadata` API だけでは出力されない → 専用コンポーネント、FAQは画面と一致（§2.2）
@@ -273,9 +273,22 @@ CLAUDE.md の規約に従い、実装着手前に Codex と対話レビューを
 | §0の「Resend実装を流用」が§4.2と不整合（中） | §0を「Resend送信パターンのみ流用」に統一 |
 | 同一メール連投抑制が「検討」止まり（中） | **必須**へ格上げ（15分/2回の例示。Turnstile非導入の代替） |
 | 入力量制限に具体値がない（中） | 上限値を明記: name/company/role 100字・email 254字・topic 2000字・ボディ32KB（`request.json()` 前に判定） |
-| 画像方針が二重方針のまま（中） | **決定**: OGP/JSON-LD logo/ヘッダー・フッターロゴは本体からコピーして `training/public/images/` 固定配置。その他のみ本体絶対URL許容 |
+| 画像方針が二重方針のまま（中） | **決定**: OGP/JSON-LD logo/ヘッダー・フッターロゴは本体からコピーして `ai-dev/public/images/` 固定配置。その他のみ本体絶対URL許容 |
 | §4.2の「§2.4参照」が存在しない（低） | §2.2参照に修正 |
 | JSON-LD対象が§2.2と§6でずれ（低） | §2.2に `WebPage` を追記して統一 |
 | GA4イベント名未定（低） | CVイベント名を `generate_lead` に固定 |
 
 上記の反映をもって、本設計書で実装に着手する。
+
+## 11. ディレクトリ名の変更（2026-07-20）
+
+実装・検証まで完了した後、ディレクトリ名を `training/` から `ai-dev/` に変更した。
+サブドメイン・パッケージ名・ドメイン参照も含めて全体を統一している（元の静的LPの
+`canonical` が `cloudnature.jp/seminar/ai-dev` だったことに揃える形）。
+
+- ディレクトリ: `training/` → `ai-dev/`（`git mv` で履歴を保持）
+- コンテンツファイル: `content/training.tsx` → `content/ai-dev.tsx`
+- `CANONICAL_SITE_URL`: `https://training.cloudnature.jp` → `https://ai-dev.cloudnature.jp`
+- `package.json` の `name`: `cloudnature-training` → `cloudnature-ai-dev`
+- メールテンプレート・GA4コメント内のドメイン参照も同様に更新
+- `npm run build` / `npm run lint` とも新しいパスで再検証済み

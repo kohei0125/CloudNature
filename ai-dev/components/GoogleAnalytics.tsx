@@ -23,7 +23,7 @@ export default function GoogleAnalytics() {
     );
   }
 
-  // 本番の training.cloudnature.jp は shared GA4 へ統一し、非本番だけ env で上書きする。
+  // 本番の ai-dev.cloudnature.jp は shared GA4 へ統一し、非本番だけ env で上書きする。
   if (!GA_ID) return null;
 
   return (

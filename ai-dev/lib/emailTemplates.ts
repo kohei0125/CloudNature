@@ -63,7 +63,7 @@ export function buildNotificationEmailHtml(body: ConsultationRequestBody): strin
       }
     </div>
     <div style="background-color: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e8f0fd;">
-      <p style="margin: 0; font-size: 12px; color: #888888;">このメールは training.cloudnature.jp（AI開発研修 無料相談フォーム）から自動送信されました。</p>
+      <p style="margin: 0; font-size: 12px; color: #888888;">このメールは ai-dev.cloudnature.jp（AI開発研修 無料相談フォーム）から自動送信されました。</p>
     </div>
   </div>
 </body>
@@ -101,7 +101,7 @@ export function buildConfirmationEmailHtml(body: ConsultationRequestBody): strin
     </div>
     <div style="background-color: #f8f9fa; padding: 24px 32px; border-top: 1px solid #e8f0fd;">
       <p style="margin: 0 0 8px 0; font-size: 12px; color: #888888;">
-        ※ このメールは training.cloudnature.jp（AI開発研修 無料相談フォーム）より自動送信されております。
+        ※ このメールは ai-dev.cloudnature.jp（AI開発研修 無料相談フォーム）より自動送信されております。
       </p>
       <p style="margin: 0; font-size: 12px; color: #888888;">
         ※ お心当たりのない場合は、誠に恐れ入りますが本メールを破棄していただきますようお願いいたします。

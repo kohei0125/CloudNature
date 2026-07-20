@@ -12,7 +12,7 @@ import {
   organizationJsonLd,
   webPageJsonLd,
   faqPageJsonLd,
-} from "@/content/training";
+} from "@/content/ai-dev";
 
 export default function TrainingPage() {
   return (
