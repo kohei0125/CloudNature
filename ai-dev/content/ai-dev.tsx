@@ -21,42 +21,41 @@ export const FAQ_ITEMS = [
   },
 ];
 
-export const PROBLEM_CARDS: { title: string; text: string; icon: ReactNode }[] = [
+export const PROBLEM_CARDS: {
+  num: string;
+  color: "blue" | "green" | "indigo";
+  title: string;
+  headline: string;
+  items: string[];
+  image: string;
+  imageAlt: string;
+}[] = [
   {
+    num: "01",
+    color: "blue",
     title: "現場の課題",
-    text: "どの工程でAIを使えば効果的か分からない。試してはいるが、属人化して再現性がない。チームへの展開方法が定まっていない。",
-    icon: (
-      <>
-        <path d="M4 7h16M4 12h16M4 17h16" />
-        <circle cx="9" cy="7" r="2" fill="#f2f6fe" />
-        <circle cx="15" cy="12" r="2" fill="#f2f6fe" />
-        <circle cx="7.5" cy="17" r="2" fill="#f2f6fe" />
-      </>
-    ),
+    headline: "どの工程で使うか、現場で定まっていない",
+    items: ["試してはいるが属人化して再現性がない", "チームへの展開方法が定まっていない"],
+    image: "/images/problem-01.png",
+    imageAlt: "開発ツールやダッシュボードが中央のハブにつながる、AI活用の現場を表したイラスト",
   },
   {
+    num: "02",
+    color: "green",
     title: "品質・信頼の課題",
-    text: "生成されたコードの品質にばらつきがある。レビューやテストの基準が曖昧。納品品質と説明責任に不安が残る。",
-    icon: (
-      <>
-        <path d="M12 3l7.5 3.2v5.1c0 4.6-3.1 7.7-7.5 9.7-4.4-2-7.5-5.1-7.5-9.7V6.2z" />
-        <path d="M9 11.8l2.2 2.2 3.8-3.8" />
-      </>
-    ),
+    headline: "AI生成コードを、安心して納品できない",
+    items: ["レビューやテストの基準が曖昧", "納品品質と説明責任に不安が残る"],
+    image: "/images/problem-02.png",
+    imageAlt: "チェックマーク付きのシールドやコードレビュー、品質チェックを表したイラスト",
   },
   {
+    num: "03",
+    color: "indigo",
     title: "組織・顧客の課題",
-    text: "情報漏えいやセキュリティリスクが心配。顧客への説明や合意形成が難しい。社内ルールや教育が追いついていない。",
-    icon: (
-      <>
-        <circle cx="12" cy="7.5" r="3" />
-        <path d="M6.8 20c0-2.9 2.3-5.2 5.2-5.2s5.2 2.3 5.2 5.2" />
-        <circle cx="4.9" cy="9.5" r="2.2" />
-        <path d="M1.5 18.5c0-2.3 1.5-4.1 3.6-4.6" />
-        <circle cx="19.1" cy="9.5" r="2.2" />
-        <path d="M22.5 18.5c0-2.3-1.5-4.1-3.6-4.6" />
-      </>
-    ),
+    headline: "顧客への説明も社内ルールも追いつかない",
+    items: ["情報漏えいやセキュリティリスクが心配", "社内ルールや教育が追いついていない"],
+    image: "/images/problem-03.png",
+    imageAlt: "打ち合わせをするチームと、顧客企業との合意形成のすれ違いを表したイラスト",
   },
 ];
 

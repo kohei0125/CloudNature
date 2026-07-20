@@ -8,7 +8,7 @@ export const OG_IMAGE = {
   url: "/images/og-image.png",
   width: 1200,
   height: 630,
-  alt: "CloudNature",
+  alt: "CloudNature AI開発研修 — Claude Code / Codexを顧客案件で活かす開発プロセス設計",
 } as const;
 
 export const MAIN_SITE_URL = "https://cloudnature.jp";

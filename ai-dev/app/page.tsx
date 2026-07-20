@@ -2,6 +2,8 @@ import Image from "next/image";
 import HeaderScrollEffect from "@/components/HeaderScrollEffect";
 import ScrollReveal from "@/components/ScrollReveal";
 import ConsultationForm from "@/components/ConsultationForm";
+import ProblemCarouselNav from "@/components/ProblemCarouselNav";
+import CheckCircleIcon from "@/components/CheckCircleIcon";
 import JsonLd from "@/components/JsonLd";
 import { MAIN_SITE_URL } from "@/lib/metadata";
 import {
@@ -185,18 +187,42 @@ export default function TrainingPage() {
               <br />
               ツール個別の使い方ではなく、開発プロセス全体の設計が必要です。
             </p>
-            <div className="card-grid card-grid--3">
-              {PROBLEM_CARDS.map((card) => (
-                <article className="problem-card" key={card.title}>
-                  <span className="problem-card__icon" aria-hidden="true">
-                    <svg className="ico" viewBox="0 0 24 24">
-                      {card.icon}
-                    </svg>
-                  </span>
-                  <h3 className="problem-card__title">{card.title}</h3>
-                  <p className="problem-card__text">{card.text}</p>
-                </article>
-              ))}
+            <div className="problem__carousel">
+              <div className="card-grid card-grid--3 problem__track" id="problem-track">
+                {PROBLEM_CARDS.map((card) => (
+                  <article className={`problem-card problem-card--${card.color}`} key={card.title}>
+                    <div className="problem-card__visual">
+                      <Image
+                        className="problem-card__img"
+                        src={card.image}
+                        alt={card.imageAlt}
+                        width={1448}
+                        height={1086}
+                        sizes="(max-width: 767px) 84vw, (max-width: 1023px) 90vw, 380px"
+                      />
+                    </div>
+                    <span className="problem-card__num" aria-hidden="true">
+                      {card.num}
+                    </span>
+                    <h3 className="problem-card__title">{card.title}</h3>
+                    <p className="problem-card__headline">{card.headline}</p>
+                    <ul className="problem-card__list">
+                      {card.items.map((item) => (
+                        <li key={item}>
+                          <span className="problem-card__check" aria-hidden="true">
+                            <CheckCircleIcon />
+                          </span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </article>
+                ))}
+              </div>
+              <ProblemCarouselNav
+                items={PROBLEM_CARDS.map((c) => ({ num: c.num, color: c.color }))}
+                trackId="problem-track"
+              />
             </div>
           </div>
         </section>
@@ -250,19 +276,9 @@ export default function TrainingPage() {
           <div className="container">
             <h2 id="comparison-title" className="section-title">
               <span className="badge-check" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="11" fill="currentColor" stroke="none" />
-                  <path
-                    d="M7.5 12.5l3 3 6-6"
-                    fill="none"
-                    stroke="#fff"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <CheckCircleIcon />
               </span>
-              ツール紹介で終わらない。顧客案件で使うところから逆算します。
+              ツール紹介で終わらない 顧客案件で使うところから逆算します 
             </h2>
             <div className="comparison__grid">
               <div className="table-wrap">
@@ -439,15 +455,23 @@ export default function TrainingPage() {
                 <p className="speaker__name">
                   渡邉 浩平 <span className="speaker__name-en" translate="no">/ Kohei Watanabe</span>
                 </p>
-                <p className="speaker__role">株式会社クラウドネイチャー 代表</p>
-                <p className="speaker__bio">
-                  新潟のIT企業でキャリアをスタートし、その後独立し数十万人が毎日使うサービスの開発や大手企業のシステム構築に携わる。約10年の開発経験をもとに、2026年4月に株式会社クラウドネイチャーを設立。AI見積もりSaaS「ミツモリAI」をはじめとする自社プロダクト開発、受託システム開発、企業向けAI研修・セミナー登壇を手がける。
+                <p className="speaker__role">
+                  株式会社クラウドネイチャー 代表 / にいがたAIビジネス株式会社 CTO
                 </p>
+                <div className="speaker__bio">
+                  <p>
+                    SIerでソフトウェア開発の実務経験を積んだのち独立。
+                    スタートアップから大手企業まで数多くの開発現場で、エンジニアに加えテックリードやPMとして幅広く担当。
+                  </p>
+                  <p>
+                    現在は株式会社クラウドネイチャーの代表、にいがたAIビジネス株式会社のCTOを務め、AIを活用したシステム開発や自社AIプロダクトの企画・開発・運営、企業向けAI研修を手がけています。
+                  </p>
+                </div>
               </div>
               <ul className="speaker__facts">
-                <li>開発経験：約8年（SIer・フリーランス）</li>
-                <li>自社AIプロダクト「ミツモリAI」開発・運営</li>
-                <li>AI導入の実践ガイド記事を多数執筆</li>
+                <li>開発経験：約10年（SIer・フリーランス）</li>
+                <li>5社以上の開発現場・30件以上のプロジェクトに参画</li>
+                <li>自社AIプロダクトサービス開発・運営</li>
                 <li>企業向けAI研修・セミナー登壇（NAB主催セミナー等）</li>
               </ul>
             </div>
@@ -472,7 +496,7 @@ export default function TrainingPage() {
                     </tr>
                     <tr>
                       <th scope="row">形式</th>
-                      <td>オンライン（Zoom）</td>
+                      <td>オンライン（Google Meet）</td>
                     </tr>
                     <tr>
                       <th scope="row">所要時間</th>
@@ -481,14 +505,6 @@ export default function TrainingPage() {
                     <tr>
                       <th scope="row">費用</th>
                       <td>無料</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">ご相談対象</th>
-                      <td>経営者 / CTO / 開発責任者 / 研修ご担当者</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">研修の受講対象</th>
-                      <td>エンジニア / PM / テックリード</td>
                     </tr>
                     <tr>
                       <th scope="row">ご準備</th>
@@ -509,7 +525,10 @@ export default function TrainingPage() {
                 <div className="faq">
                   {FAQ_ITEMS.map((item) => (
                     <details className="faq__item" key={item.question}>
-                      <summary className="faq__question">Q. {item.question}</summary>
+                      <summary className="faq__question">
+                        <span className="faq__q">Q.</span>
+                        <span className="faq__q-text">{item.question}</span>
+                      </summary>
                       <p className="faq__answer">{item.answer}</p>
                     </details>
                   ))}

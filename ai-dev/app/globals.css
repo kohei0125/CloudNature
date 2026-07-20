@@ -23,6 +23,9 @@ html { scroll-behavior: smooth; color-scheme: light; }
   --blue-50: #f2f6fe;
   --orange-500: #f97b16;
   --orange-600: #e05f00;
+  /* 課題カード／ページネーションで共有するアクセントカラー（blueは--blue-600を流用） */
+  --accent-green: #2f9e5b;
+  --accent-indigo: #5a63d6;
   --white: #ffffff;
   --text: #16233d;
   --muted: #5a6b85;
@@ -509,26 +512,125 @@ section { padding-block: 64px; }
 
 /* ============ Problem ============ */
 .problem-card {
+  /* 課題ごとのアクセントカラー（modifierで上書き） */
+  --accent: var(--blue-600);
+  --accent-soft: #e8f1fc;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px 24px;
-  text-align: center;
-  background: var(--blue-50);
+  border-radius: 16px;
+  padding: 16px 20px 24px;
+  background: var(--white);
   /* hoverシャドウはタッチデバイスでは発火しないため、常時のシャドウも付けて奥行きを出す */
   box-shadow: 0 6px 16px rgba(6, 15, 34, 0.05);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+.problem-card--green  { --accent: var(--accent-green);  --accent-soft: #e9f6ee; }
+.problem-card--indigo { --accent: var(--accent-indigo); --accent-soft: #ecedfb; }
 .problem-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(6, 15, 34, 0.10);
+  box-shadow: 0 16px 34px rgba(6, 15, 34, 0.10);
 }
-.problem-card__icon { display: flex; justify-content: center; margin-bottom: 16px; color: var(--blue-500); }
-.problem-card__icon .ico { width: 46px; height: 46px; stroke-width: 1.4; }
-.problem-card__title { margin: 0 0 10px; font-size: 1.05rem; color: var(--navy-900); }
-.problem-card__text { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.problem-card__visual {
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--accent-soft);
+  background: var(--accent-soft);
+  margin-bottom: 20px;
+}
+.problem-card__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.problem-card__num {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.problem-card__title { margin: 4px 0 12px; font-size: 1.05rem; color: var(--navy-900); }
+.problem-card__headline {
+  margin: 0 0 16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--accent);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: var(--accent);
+}
+.problem-card__list {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 10px;
+}
+.problem-card__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.9rem;
+  color: var(--text);
+  text-align: left;
+}
+.problem-card__check { flex: none; width: 18px; height: 18px; color: var(--accent); margin-top: 1px; }
+.problem-card__check svg { width: 100%; height: 100%; display: block; }
 
 .card-grid { display: grid; gap: 20px; }
 .card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+/* スワイプ誘導＋ページネーション（モバイルのみ表示） */
+.problem__nav { display: none; }
+.problem__hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0 14px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.problem__hint-icon { display: inline-flex; color: var(--blue-500); }
+.problem__hint-icon svg {
+  width: 22px; height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.problem__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.problem__dots-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+.problem__dots-num.is-active { opacity: 1; color: var(--accent); }
+.problem__dots-line {
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background-color 0.2s ease;
+}
+.problem__dots-line.is-active { background: var(--accent); }
+/* アクティブなカードのアクセントカラーをコンテナに設定（カードと同じトークンを共有） */
+.problem__dots--blue   { --accent: var(--blue-600); }
+.problem__dots--green  { --accent: var(--accent-green); }
+.problem__dots--indigo { --accent: var(--accent-indigo); }
 
 /* ============ Features ============ */
 .features { padding-block: 24px 64px; }
@@ -544,7 +646,14 @@ section { padding-block: 64px; }
   align-items: center;
 }
 .check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
-.check-list li { padding-left: 30px; position: relative; font-size: 0.95rem; }
+.check-list li {
+  padding-left: 30px;
+  position: relative;
+  font-size: 0.95rem;
+  /* グローバルのkeep-allだと「設計」などの熟語が途中で割れるため、
+     和文を文節単位で折り返す（対応ブラウザのみ。非対応環境は従来動作にフォールバック） */
+  word-break: auto-phrase;
+}
 .check-list li::before {
   content: "✔";
   position: absolute;
@@ -788,7 +897,9 @@ section { padding-block: 64px; }
 .speaker__name { margin: 0 0 2px; font-size: 1.4rem; font-weight: 700; color: var(--navy-900); }
 .speaker__name-en { font-size: 1rem; color: var(--muted); font-weight: 500; }
 .speaker__role { margin: 0 0 14px; font-size: 0.9rem; font-weight: 700; color: var(--blue-600); }
-.speaker__bio { margin: 0; font-size: 0.9rem; color: var(--muted); max-width: 56ch; }
+.speaker__bio { font-size: 0.9rem; color: var(--muted); max-width: 62ch; word-break: auto-phrase; }
+.speaker__bio p { margin: 0 0 12px; line-height: 1.75; }
+.speaker__bio p:last-child { margin-bottom: 0; }
 .speaker__facts {
   list-style: none;
   margin: 0;
@@ -863,7 +974,19 @@ section { padding-block: 64px; }
   color: var(--navy-900);
   list-style: none;
   position: relative;
+  display: flex;
+  gap: 7px;
   padding: 14px 40px 14px 16px;
+}
+/* 「Q.」を固定ラベルにし、質問文を隣のカラムで折り返させる（Q.だけが単独行にならないように） */
+.faq__q { flex: none; color: var(--blue-600); }
+.faq__q-text {
+  flex: 1;
+  min-width: 0;
+  /* グローバルのkeep-allだと空白のない長い和文がはみ出して任意位置で割れるため、
+     禁則処理に沿った標準の和文改行に戻す */
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 .faq__question::-webkit-details-marker { display: none; }
 .faq__question::after {
@@ -967,7 +1090,8 @@ section { padding-block: 64px; }
   .speaker__panel { grid-template-columns: 1fr; text-align: left; }
   .speaker__panel > * { min-width: 0; }
   .speaker__bio { max-width: 100%; }
-  .speaker__photo { width: 160px; }
+  /* 1カラム化した際、写真は左右中央に配置する（本文は左寄せのまま） */
+  .speaker__photo { width: 160px; justify-self: center; }
   .application__grid { grid-template-columns: 1fr; }
   /* 横並びだと2×2に折り返り行をまたぐ矢印が消えるため、縦一列+下向き矢印にする。
      さらにアイコンを貫くグラデーションの縦ラインを通し、単なる丸アイコンの羅列ではなく
@@ -994,6 +1118,23 @@ section { padding-block: 64px; }
 }
 
 @media (max-width: 767px) {
+  /* 課題の3カードを横スワイプのカルーセルに。両隣がのぞくpeek表示にして
+     続きがある（スワイプできる）ことを示す。コンテナ余白を相殺して画面端まで使う */
+  .problem__track {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin-inline: -24px;
+    padding-inline: 24px;
+    scroll-padding-inline: 24px;
+    scrollbar-width: none;
+  }
+  .problem__track::-webkit-scrollbar { display: none; }
+  .problem-card { flex: 0 0 84%; scroll-snap-align: center; }
+  .problem__nav { display: flex; flex-direction: column; align-items: center; }
+
   /* デスクトップ幅に合わせた強制改行はモバイル幅では折り返し位置を歪めるため無効化し、
      word-break: keep-all とテキスト全体で自然な位置に折り返させる */
   .section-title__break { display: none; }
