@@ -724,7 +724,9 @@ section { padding-block: 64px; }
   gap: 20px;
   align-items: stretch;
 }
-.table-wrap { overflow-x: auto; }
+/* overflow-x単独だとoverflow-yがautoに計算され縦にもスクロールしてしまうため、
+   横スクロール専用にしてタッチ時の縦ずれ・スクロール連鎖を防ぐ（課題カルーセルと同様） */
+.table-wrap { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; }
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
@@ -1124,6 +1126,14 @@ section { padding-block: 64px; }
     display: flex;
     gap: 14px;
     overflow-x: auto;
+    /* overflow-xだけをautoにするとoverflow-yがautoに計算され、
+       カルーセルが縦にもスクロール（タッチで上下にずれる）してしまう。
+       明示的にhiddenにして横スクロール専用にする */
+    overflow-y: hidden;
+    /* 縦スワイプはページスクロール、横スワイプのみカルーセルに割り当てる */
+    touch-action: pan-x;
+    /* 横スワイプがページ本体へ連鎖（ラバーバンド）して画面ごと左右にずれるのを防ぐ */
+    overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     margin-inline: -24px;
