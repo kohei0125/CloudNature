@@ -42,6 +42,9 @@ backend/.env
 # Image processing backups (e.g. watermark removal originals)
 public/**/_original/
 
+# Working files (slides, image originals, etc.)
+tmp/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

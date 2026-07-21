@@ -1,4 +1,5 @@
 import type { UseCaseArticle } from "@/types";
+import { article as aiDevelopmentBottleneckShift } from "./ai-development-bottleneck-shift";
 import { article as niigataAiDevelopmentCompanyGuide } from "./niigata-ai-development-company-guide";
 import { article as niigataFdeSharedAiDevelopment } from "./niigata-fde-shared-ai-development";
 import { article as aiPocMethodCostKpi } from "./ai-poc-method-cost-kpi";
@@ -12,6 +13,7 @@ import { article as aiTaskAllocation } from "./ai-task-allocation";
 export { USECASES_SECTION, USECASES_CTA, USECASES_DETAIL } from "./_common";
 
 export const USECASES_ARTICLES: UseCaseArticle[] = [
+  aiDevelopmentBottleneckShift,
   niigataAiDevelopmentCompanyGuide,
   niigataFdeSharedAiDevelopment,
   aiPocMethodCostKpi,
