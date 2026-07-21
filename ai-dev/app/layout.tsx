@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import GtmNoscript from "@/components/GtmNoscript";
+import ClarityAnalytics from "@/components/ClarityAnalytics";
 import { SITE_URL, SITE_NAME, OG_IMAGE } from "@/lib/metadata";
 import { isIndexableDeployment } from "@/lib/site";
 import "./globals.css";
@@ -64,6 +65,7 @@ export default function TrainingLayout({
       <body>
         <GoogleAnalytics />
         <GtmNoscript />
+        <ClarityAnalytics />
         {children}
       </body>
     </html>

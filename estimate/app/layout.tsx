@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import EstimateHeader from "@/components/shared/EstimateHeader";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import GtmNoscript from "@/components/shared/GtmNoscript";
+import ClarityAnalytics from "@/components/shared/ClarityAnalytics";
 import { SITE_URL, SITE_NAME, OG_IMAGE } from "@/lib/metadata";
 import "./globals.css";
 
@@ -96,6 +97,7 @@ export default function EstimateLayout({
       <body>
         <GoogleAnalytics />
         <GtmNoscript />
+        <ClarityAnalytics />
         <div className="min-h-screen font-sans selection:bg-blue-200">
           <EstimateHeader />
           {children}
