@@ -1160,8 +1160,8 @@ section { padding-block: 64px; }
        カルーセルが縦にもスクロール（タッチで上下にずれる）してしまう。
        明示的にhiddenにして横スクロール専用にする */
     overflow-y: hidden;
-    /* 縦スワイプはページスクロール、横スワイプのみカルーセルに割り当てる */
-    touch-action: pan-x;
+    /* 横スワイプはカルーセル、縦スワイプはページスクロールとして扱えるよう両方向のパンを許可する */
+    touch-action: pan-x pan-y;
     /* 横スワイプがページ本体へ連鎖（ラバーバンド）して画面ごと左右にずれるのを防ぐ */
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
