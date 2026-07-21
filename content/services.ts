@@ -1,5 +1,5 @@
 import { ServiceDetail, FlowStep, PricingItem, FaqItem } from "@/types";
-import { ESTIMATE_URL, byServiceOrder } from "@/content/common";
+import { ESTIMATE_URL, AI_DEV_URL, byServiceOrder } from "@/content/common";
 
 // キーの並びは SERVICE_ORDER に合わせる（cases ページの関連サービス一覧が Object.values 順に表示するため）
 export const SERVICE_PAGE_MAP: Record<string, { title: string; path: string }> = {
@@ -42,8 +42,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     techStack: ["Python", "PHP", "React", "AWS"],
     accentColor: "secondary",
     image: "/images/services/system_dev.png",
-    externalUrl: ESTIMATE_URL,
-    externalLabel: "AI見積もりを試す"
+    externalLinks: [{ url: ESTIMATE_URL, label: "AI見積もりを試す" }]
   },
   {
     id: "ai",
@@ -100,8 +99,10 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     techStack: ["AI導入診断", "法人研修", "個別スクール"],
     accentColor: "tertiary",
     image: "/images/services/dx_support.png",
-    externalUrl: "https://niigata-ai-academy.com",
-    externalLabel: "新潟AIアカデミーを詳しく見る"
+    externalLinks: [
+      { url: "https://niigata-ai-academy.com", label: "新潟AIアカデミーを詳しく見る" },
+      { url: AI_DEV_URL, label: "AI開発研修（Claude Code / Codex）を見る" }
+    ]
   }
 ].sort(byServiceOrder);
 

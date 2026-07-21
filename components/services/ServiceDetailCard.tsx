@@ -97,19 +97,24 @@ const ServiceDetailCard = ({ service }: ServiceDetailCardProps) => {
         {/* Tech stack — inline text */}
         <p className="text-xs text-gray-400 tracking-wide">{service.techStack.join(" / ")}</p>
 
-        {service.externalUrl && (
-          <a
-            href={service.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "mt-8 inline-flex items-center gap-2 text-sm font-bold transition-all hover:underline hover:underline-offset-4",
-              accent.text
-            )}
-          >
-            {service.externalLabel}
-            <ExternalLink className="w-4 h-4" />
-          </a>
+        {service.externalLinks && service.externalLinks.length > 0 && (
+          <div className="mt-8 v-stack gap-3 items-start">
+            {service.externalLinks.map((link) => (
+              <a
+                key={link.url}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "inline-flex items-center gap-2 text-sm font-bold transition-all hover:underline hover:underline-offset-4",
+                  accent.text
+                )}
+              >
+                {link.label}
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            ))}
+          </div>
         )}
       </div>
     </article>

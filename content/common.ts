@@ -1,6 +1,7 @@
 import { NavItem } from "@/types";
 
 export const ESTIMATE_URL = "https://ai.cloudnature.jp/";
+export const AI_DEV_URL = "https://ai-dev.cloudnature.jp/";
 
 /**
  * サービスの表示順（TOP・サービス詳細ページ共通の正）。

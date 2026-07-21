@@ -31,8 +31,7 @@ export interface ServiceDetail {
   techStack: string[];
   accentColor: string;
   image?: string;
-  externalUrl?: string;
-  externalLabel?: string;
+  externalLinks?: { url: string; label: string }[];
 }
 
 export interface FlowStep {
