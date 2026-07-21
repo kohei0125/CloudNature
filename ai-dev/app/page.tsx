@@ -177,7 +177,7 @@ export default function TrainingPage() {
               <span className="spark spark--l" aria-hidden="true">
                 ✦
               </span>
-              AIツールは導入した。しかし、顧客案件で使う準備はできていますか
+              AIツールは導入した。しかし、顧客案件で使える開発組織にはなっていない。
               <span className="spark spark--r" aria-hidden="true">
                 ✦
               </span>
