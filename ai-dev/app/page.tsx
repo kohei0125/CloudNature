@@ -56,7 +56,7 @@ export default function TrainingPage() {
         <section className="hero" aria-labelledby="hero-title">
           <div className="container hero__inner">
             <div className="hero__content">
-              <p className="hero__badge">受託開発・SIer・IT企業の経営者 / CTO / 開発責任者向け</p>
+              <p className="hero__badge">受託開発会社・SIer・SES企業の経営者 / CTO / 開発責任者向け</p>
               <h1 id="hero-title" className="hero__title">
                 Claude Code / Codexを
                 <br />
@@ -188,9 +188,19 @@ export default function TrainingPage() {
               ツール個別の使い方ではなく、開発プロセス全体の設計が必要です。
             </p>
             <div className="problem__carousel">
-              <div className="card-grid card-grid--3 problem__track" id="problem-track">
-                {PROBLEM_CARDS.map((card) => (
-                  <article className={`problem-card problem-card--${card.color}`} key={card.title}>
+              <div
+                className="card-grid card-grid--3 problem__track"
+                id="problem-track"
+                role="group"
+                aria-label="3つの課題"
+                tabIndex={0}
+              >
+                {PROBLEM_CARDS.map((card, i) => (
+                  <article
+                    className={`problem-card problem-card--${card.color}`}
+                    key={card.title}
+                    aria-label={`3つの課題の${i + 1}番目：${card.title}`}
+                  >
                     <div className="problem-card__visual">
                       <Image
                         className="problem-card__img"
@@ -220,7 +230,7 @@ export default function TrainingPage() {
                 ))}
               </div>
               <ProblemCarouselNav
-                items={PROBLEM_CARDS.map((c) => ({ num: c.num, color: c.color }))}
+                items={PROBLEM_CARDS.map((c) => ({ num: c.num, color: c.color, title: c.title }))}
                 trackId="problem-track"
               />
             </div>
@@ -246,23 +256,23 @@ export default function TrainingPage() {
                 </ul>
                 <div className="process">
                   <h3 className="process__title">人が判断・承認（ビジネス価値・品質・リスクを判断）</h3>
-                  <ol className="process__flow">
+                  <div className="process__flow" role="list">
                     {PROCESS_STEPS.flatMap((step, i) => [
                       i > 0 && (
-                        <li className="process__arrow" aria-hidden="true" key={`arrow-${i}`}>
+                        <span className="process__arrow" aria-hidden="true" key={`arrow-${i}`}>
                           →
-                        </li>
+                        </span>
                       ),
-                      <li className="process__step" key={i}>
+                      <div className="process__step" role="listitem" key={i}>
                         <span className="process__icon" aria-hidden="true">
                           <svg className="ico" viewBox="0 0 24 24">
                             {step.icon}
                           </svg>
                         </span>
                         <span className="process__label">{step.label}</span>
-                      </li>,
+                      </div>,
                     ])}
-                  </ol>
+                  </div>
                   <p className="process__note">  <strong>AI活用レイヤー</strong>（各工程にAIが伴走・提案・自動化を支援）</p>
                   {/* <p className="process__note">Claude Code / Codex / Claude 等の活用を組み込み</p> */}
                 </div>
@@ -322,11 +332,12 @@ export default function TrainingPage() {
               </div>
               <aside className="compare-cta">
                 <p className="compare-cta__copy">
-                  貴社に合う研修構成が
+                  30分で、
+
                   <br />
-                  <span className="marker">30分の無料相談</span>
+                  <span className="marker">貴社に合うAI研修の</span>
                   <br />
-                  分かります
+                  方向性を整理します
                 </p>
                 <a className="btn btn--primary btn--large btn--block" href="#form">
                   30分無料相談を申し込む <span aria-hidden="true">›</span>
@@ -407,7 +418,7 @@ export default function TrainingPage() {
           <div className="container">
             <div className="cases__panel">
               <h2 id="cases-title" className="section-title">
-                講演実績
+                AI研修・セミナー実績
               </h2>
               <p className="section-lead">
                 エンジニア・開発責任者の方々を対象に、AIを活用した開発プロセスの設計・実践をテーマとしたセミナー登壇や、企業向けのAI研修を実施してきました。要件定義から実装・レビュー・テストまで、各工程でAIをどう組み込み、品質やセキュリティをどう担保するかを、実際のデモや現場の事例を交えて解説しています。
@@ -471,8 +482,9 @@ export default function TrainingPage() {
               <ul className="speaker__facts">
                 <li>開発経験：約10年（SIer・フリーランス）</li>
                 <li>5社以上の開発現場・30件以上のプロジェクトに参画</li>
-                <li>自社AIプロダクトサービス開発・運営</li>
+                <li>自社AIプロダクトの企画・開発・運営</li>
                 <li>企業向けAI研修・セミナー登壇（NAB主催セミナー等）</li>
+                <li>にいがたAIビジネス株式会社 CTOを兼任</li>
               </ul>
             </div>
           </div>
