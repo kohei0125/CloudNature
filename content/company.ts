@@ -9,6 +9,7 @@ export const COMPANY_HERO = {
 
 export const COMPANY_OVERVIEW: CompanyInfo[] = [
   { label: "会社名", value: "株式会社クラウドネイチャー" },
+  { label: "設立", value: "2026年4月" },
   { label: "代表者", value: "代表取締役 渡邉 浩平" },
   { label: "所在地", value: "〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F" },
   {

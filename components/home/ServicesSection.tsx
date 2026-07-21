@@ -157,20 +157,21 @@ const ServicesSection = () => {
                 </Link>
 
                 {/* External CTA (AI support only) */}
-                {service.ctaUrl && (
+                {service.ctaLinks?.map((link) => (
                   <Link
-                    href={service.ctaUrl}
+                    key={link.url}
+                    href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-[11px] font-bold mt-3 ml-1 transition-colors duration-300 group/link"
                     style={{ color: "#055448" }}
                   >
                     <span className="border-b border-transparent group-hover/link:border-current transition-colors duration-300">
-                      {service.ctaLabel}
+                      {link.label}
                     </span>
                     <ArrowRight className="w-3 h-3 group-hover/link:translate-x-0.5 transition-transform duration-300" />
                   </Link>
-                )}
+                ))}
               </div>
             );
           })}

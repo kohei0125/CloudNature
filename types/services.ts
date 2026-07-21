@@ -4,8 +4,7 @@ export interface ServiceItem {
   description: string;
   features: string[];
   techStack: string[];
-  ctaUrl?: string;
-  ctaLabel?: string;
+  ctaLinks?: { url: string; label: string }[];
 }
 
 /** サービス詳細の3本柱（対象 / ゴール / 特徴） */

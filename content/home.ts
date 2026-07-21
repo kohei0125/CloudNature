@@ -1,5 +1,5 @@
 import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/types";
-import { byServiceOrder } from "@/content/common";
+import { AI_DEV_URL, byServiceOrder } from "@/content/common";
 
 export const HERO_COPY = {
   imageSrc: "/images/niigata_view.jpeg",
@@ -70,8 +70,10 @@ export const SERVICES: ServiceItem[] = [
       "経営者・社員向けAIセミナー・研修の実施"
     ],
     techStack: ["業務分析", "AI戦略設計", "導入支援"],
-    ctaUrl: "https://niigata-ai-academy.com",
-    ctaLabel: "新潟AIアカデミーを見る"
+    ctaLinks: [
+      { url: "https://niigata-ai-academy.com", label: "新潟AIアカデミーを見る" },
+      { url: AI_DEV_URL, label: "AI開発研修（Claude Code / Codex）を見る" }
+    ]
   },
   {
     id: "ai",
@@ -143,7 +145,7 @@ export const NEWS_CATEGORY_COLORS: Record<NewsCategory, string> = {
 export const NEWS_ITEMS: NewsItem[] = [
   {
     id: "company-established",
-    publishedAt: "2025-11-01",
+    publishedAt: "2026-04-01",
     category: "お知らせ",
     title: "株式会社クラウドネイチャーを設立しました",
     excerpt: "新潟の中小企業のDX・AI活用を支援するため、株式会社クラウドネイチャーを設立いたしました。",

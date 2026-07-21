@@ -110,7 +110,7 @@ export default function RootLayout({
           name: "渡邉 浩平",
           jobTitle: "代表取締役",
         },
-        foundingDate: "2025-11",
+        foundingDate: "2026-04",
         // TODO: Google Business Profile・SNS を開設したら URL を追加する（ローカルSEOの最重要施策）
         sameAs: [],
       },
