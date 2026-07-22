@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
 import {
   ConsultationRequestBody,
@@ -8,6 +8,7 @@ import {
 import { createRateLimiter, getClientIp } from "@/lib/rate-limit";
 import { IS_PRODUCTION } from "@/lib/site";
 import { MAX_SHORT_FIELD_LENGTH, MAX_EMAIL_LENGTH, MAX_TOPIC_LENGTH } from "@/lib/validation";
+import { saveConsultationToNotion } from "./notionService";
 
 const MAX_BODY_BYTES = 32 * 1024; // 32KB
 
@@ -160,6 +161,18 @@ export async function POST(request: NextRequest) {
     if (confirmError) {
       console.error("[consultation] confirmation email failed:", confirmError);
     }
+
+    // Notion保存（レスポンス送信後に実行・失敗してもレスポンスに影響しない）
+    // after() でレスポンス返却後も関数の寿命を延長し、保存処理を完走させる。
+    // ※ await なしの fire-and-forget だとレスポンス直後に関数が凍結され、
+    //   Notion API へのリクエストが完走できず保存に失敗する（ログにも残らない）。
+    after(async () => {
+      try {
+        await saveConsultationToNotion(body);
+      } catch (err) {
+        console.error("[notion] Failed to save consultation:", err);
+      }
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
