@@ -74,6 +74,104 @@ h1, h2, h3, h4, h5, h6 {
   background: #055448;
 }
 
+/* Grain texture overlay */
+.texture-grain {
+  position: relative;
+}
+
+.texture-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Liquid Glass Effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+/* Puffy/Tactile Button */
+.btn-puffy {
+  background-color: theme('colors.forest');
+  color: white;
+  box-shadow:
+    0px 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0px 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-puffy:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0px 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0px 4px 6px -2px rgba(0, 0, 0, 0.1),
+    inset 0px 1px 0px rgba(255, 255, 255, 0.15);
+}
+
+.btn-puffy:active {
+  transform: translateY(1px);
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-puffy-accent {
+  background-color: theme('colors.sunset');
+}
+
+/* Organic Blob Animation */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(80px, -120px) scale(1.2);
+  }
+
+  66% {
+    transform: translate(-60px, 60px) scale(0.8);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 12s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+/* Mobile performance simplifications */
+@media (max-width: 767px) {
+  /* 重いノイズオーバーレイはモバイルで無効化 */
+  .texture-grain::before {
+    display: none;
+  }
+
+  /* ガラス効果を軽量化し、シャドウも浅くする */
+  .glass-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+}
+
 /* Shared Button Styles */
 @layer components {
   .btn-primary {
