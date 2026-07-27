@@ -1,8 +1,10 @@
-"""notion_service.save_estimate_to_notion の children ブロック構築テスト。"""
+"""notion_service の見積もり保存ロジックのユニットテスト。"""
 
 from unittest.mock import MagicMock, patch
 
-from app.services.notion_service import save_estimate_to_notion
+import pytest
+
+from app.services.notion_service import build_follow_up_message_text, save_estimate_to_notion
 
 
 def _base_args(**overrides):
@@ -38,6 +40,46 @@ def _heading_texts(children: list[dict]) -> list[str]:
     ]
 
 
+class TestBuildFollowUpMessageText:
+    """follow_up_message + 宛名 + お打ち合わせ依頼の定型文を組み立てるユニットテスト。"""
+
+    def test_empty_input_returns_empty_string(self):
+        assert build_follow_up_message_text("") == ""
+
+    def test_whitespace_only_input_returns_empty_string(self):
+        assert build_follow_up_message_text("   \n  ") == ""
+
+    def test_appends_meeting_request_boilerplate_without_signature(self):
+        text = build_follow_up_message_text("課題への言及メッセージ")
+
+        assert "課題への言及メッセージ" in text
+        assert "お打ち合わせの機会をいただくことは可能でしょうか" in text
+        assert "情報収集の段階ということでしたら" in text
+        assert "株式会社クラウドネイチャー" not in text
+        assert "渡邉" not in text
+
+    def test_strips_surrounding_whitespace_from_llm_output(self):
+        text = build_follow_up_message_text("  課題への言及メッセージ  \n", name="山田太郎")
+
+        assert "課題への言及メッセージ\n\n" in text
+        assert "課題への言及メッセージ  " not in text
+
+    @pytest.mark.parametrize(
+        ("name", "company", "expected_prefix"),
+        [
+            ("山田太郎", "テスト株式会社", "テスト株式会社\n山田太郎 様\n\n"),
+            ("山田太郎", "", "山田太郎 様\n\n"),
+            ("", "", "ご担当者様\n\n"),
+        ],
+    )
+    def test_greeting_prefix(self, name, company, expected_prefix):
+        text = build_follow_up_message_text(
+            "課題への言及メッセージ", name=name, company=company
+        )
+
+        assert text.startswith(f"{expected_prefix}課題への言及メッセージ")
+
+
 class TestFollowUpMessageSection:
     def test_present_when_follow_up_message_set(self):
         children = _run_and_capture_children(
@@ -59,6 +101,9 @@ class TestFollowUpMessageSection:
         body_text = body_block["paragraph"]["rich_text"][0]["text"]["content"]
         assert "課題への言及メッセージ" in body_text
         assert "お打ち合わせの機会をいただくことは可能でしょうか" in body_text
+        # 冒頭に会社名・お名前（contact由来）が入り、署名は含まれないこと
+        assert body_text.startswith("テスト株式会社\n山田太郎 様\n\n課題への言及メッセージ")
+        assert "渡邉" not in body_text
 
     def test_absent_when_follow_up_message_missing(self):
         children = _run_and_capture_children({})

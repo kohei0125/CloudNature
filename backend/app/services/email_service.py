@@ -15,33 +15,10 @@ logger = logging.getLogger(__name__)
 
 TEMPLATE_DIR = Path(__file__).resolve().parent.parent / "templates"
 
-# お打ち合わせ依頼の定型文（LLM生成のfollow_up_messageに続けて使用）。
-# クライアントへは自動送信せず、担当者が手動でメール送信する際の文面として
-# Notionに保存する（notion_service.save_estimate_to_notion 参照）。
-_MEETING_REQUEST_TEXT = (
-    "つきましては、一度オンラインにてお打ち合わせの機会をいただくことは可能でしょうか。\n\n"
-    "また、現段階では情報収集の段階ということでしたら、その旨お知らせいただけますと幸いです。\n\n"
-    "何卒よろしくお願いいたします。\n\n"
-    "株式会社クラウドネイチャー\n"
-    "渡邉"
-)
-
 
 def _load_template(name: str) -> str:
     """Load an HTML email template by filename."""
     return (TEMPLATE_DIR / name).read_text(encoding="utf-8")
-
-
-def build_follow_up_message_text(follow_up_message: str) -> str:
-    """LLM生成のfollow_up_messageに、お打ち合わせ依頼の定型文を続けた完全な本文を組み立てる。
-
-    担当者が手動でクライアントへ送信する際にそのまま使える文面として、
-    Notionページへ保存する（notion_service.save_estimate_to_notion 参照）。
-    """
-    message = follow_up_message.strip() if follow_up_message else ""
-    if not message:
-        return ""
-    return f"{message}\n\n{_MEETING_REQUEST_TEXT}"
 
 
 def _format_price(price: int) -> str:

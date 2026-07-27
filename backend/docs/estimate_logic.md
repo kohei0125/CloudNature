@@ -530,7 +530,7 @@ LLMAdapter (抽象基底)
 - リトライ: 最大3回
 - バリデーション: `validate_estimate_output()`
 - フォールバック: 業種別テンプレート見積もり
-- `follow_up_message`: `user_input.step_4`（課題・要望）を踏まえてLLMが生成する、クライアント宛の個人的なメッセージ本文（挨拶・自己紹介・署名・お打ち合わせ依頼文言は含まない）。クライアントへの自動送信メールには使用せず、`email_service.build_follow_up_message_text()` でお打ち合わせ依頼の定型文と結合したうえで **Notionページの最下部にのみ保存**する（9.4節参照）。担当者はこのNotion保存文面を元に手動でメールを送信する想定。自動送信メール（`estimate_email.html`）側には「後ほど担当者より改めてご連絡のメールをお送りする」旨の固定文言のみ表示する。
+- `follow_up_message`: `user_input.step_4`（課題・要望）を踏まえてLLMが生成する、クライアント宛の個人的なメッセージ本文（挨拶・自己紹介・署名・お打ち合わせ依頼文言は含まない）。クライアントへの自動送信メールには使用せず、`notion_service.build_follow_up_message_text()` で冒頭の宛名（会社名・お名前、`contact`由来）とお打ち合わせ依頼の定型文（署名なし）を結合したうえで **Notionページの最下部にのみ保存**する（9.4節参照）。担当者はこのNotion保存文面を元に手動でメールを送信する想定。自動送信メール（`estimate_email.html`）側には「後ほど担当者より改めてご連絡のメールをお送りする」旨の固定文言のみ表示する。
 
 ### 6.5 FallbackAdapter
 
@@ -699,9 +699,11 @@ PDFは **estimate フロントエンド** の `POST /api/pdf`（`@react-pdf/rend
 | ステータス | 「未対応」 |
 
 ページ本文（`children`）の最後尾には「送付メール文面」セクションを追加する。
-`estimate_data.follow_up_message`（LLM生成の個人的なメッセージ）に、
-お打ち合わせ依頼の定型文（固定文言・`email_service._MEETING_REQUEST_TEXT`）を続けたテキストを
-`email_service.build_follow_up_message_text()` で組み立てて1つの段落ブロックとして保存する。
+`notion_service.build_follow_up_message_text()` で以下を結合し、1つの段落ブロックとして保存する:
+1. 冒頭の宛名（`contact.company` があれば1行目に会社名、続けて `contact.name 様`。名前未入力時は「ご担当者様」）
+2. `estimate_data.follow_up_message`（LLM生成の、課題を踏まえた個人的なメッセージ）
+3. お打ち合わせ依頼の定型文（固定文言・`notion_service._MEETING_REQUEST_TEXT`。署名は含めない）
+
 このテキストはクライアントへ自動送信はされず、担当者が内容を確認・調整のうえ手動でメール送信する想定。
 
 **条件:** `NOTION_API_KEY` と `NOTION_DATABASE_ID` の両方が設定済みであること。どちらかが空の場合は早期リターンし、ログに記録する。
