@@ -4,7 +4,7 @@ import EstimateHeader from "@/components/shared/EstimateHeader";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import GtmNoscript from "@/components/shared/GtmNoscript";
 import ClarityAnalytics from "@/components/shared/ClarityAnalytics";
-import { SITE_URL, SITE_NAME, OG_IMAGE } from "@/lib/metadata";
+import { SITE_URL, SITE_NAME, PRODUCT_NAME, OG_IMAGE } from "@/lib/metadata";
 import "./globals.css";
 
 // next/font/google は fonts.gstatic.com への外部アクセスが必須で、Docker・オフライン・
@@ -38,11 +38,11 @@ export const metadata: Metadata = {
   title: {
     default:
       "新潟のシステム開発・AI導入見積もり｜最短1分で自動算出【CloudNature】",
-    template: "%s | CloudNature AI見積もり",
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "新潟の中小企業向けにAIを活用したシステム開発を提供。AI見積もりシミュレーターで、Webアプリ・AIエージェント・業務自動化の概算費用を最短1分で無料算出。要件定義から開発計画までをAIが自動生成し、補助金活用のご提案も可能です。",
+  description: `新潟の中小企業向けにAIを活用したシステム開発を提供。AI見積もりツール「${PRODUCT_NAME}」で、Webアプリ・AIエージェント・業務自動化の概算費用を最短1分で無料算出。要件定義から開発計画までをAIが自動生成し、補助金活用のご提案も可能です。`,
   keywords: [
+    PRODUCT_NAME,
     "AI見積もり",
     "AI導入",
     "システム開発 見積もり",
@@ -65,15 +65,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title:
       "新潟のシステム開発・AI導入見積もり｜最短1分で自動算出【CloudNature】",
-    description:
-      "新潟の中小企業向けAI見積もりシミュレーター。Webアプリ・AIエージェント・業務自動化の概算費用を最短1分で無料算出。",
+    description: `新潟の中小企業向けAI見積もりツール「${PRODUCT_NAME}」。Webアプリ・AIエージェント・業務自動化の概算費用を最短1分で無料算出。`,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "新潟のシステム開発・AI導入見積もり｜最短1分で自動算出",
-    description:
-      "新潟の中小企業向けAI見積もりシミュレーター。概算費用を最短1分で無料算出。",
+    description: `新潟の中小企業向けAI見積もりツール「${PRODUCT_NAME}」。概算費用を最短1分で無料算出。`,
     images: [OG_IMAGE.url],
   },
   alternates: {

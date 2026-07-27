@@ -53,11 +53,11 @@ test.describe("Landing page (/)", () => {
     await faqHeading.scrollIntoViewIfNeeded();
 
     // Click first FAQ question
-    const firstQuestion = page.getByText("AI見積もりの精度はどの程度ですか？");
+    const firstQuestion = page.getByText("ミツモリAIの精度はどの程度ですか？");
     await firstQuestion.click();
 
     // Answer should become visible
-    const firstAnswer = page.getByText("本サービスのAI見積もりは概算です");
+    const firstAnswer = page.getByText("本サービス「ミツモリAI」の見積もりは概算です");
     await expect(firstAnswer).toBeVisible();
 
     // Click again to close

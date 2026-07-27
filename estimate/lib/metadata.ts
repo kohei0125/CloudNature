@@ -1,12 +1,14 @@
 export const SITE_URL = "https://ai.cloudnature.jp";
 
-export const SITE_NAME = "CloudNature AI見積もり";
+export const PRODUCT_NAME = "ミツモリAI";
+
+export const SITE_NAME = `CloudNature ${PRODUCT_NAME}`;
 
 export const OG_IMAGE = {
   url: "/images/og-img.jpg",
   width: 1200,
   height: 630,
-  alt: "CloudNature AI見積もりシミュレーター",
+  alt: SITE_NAME,
 } as const;
 
 export const POSTAL_ADDRESS = {

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/landing/HeroSection";
 import JsonLd from "@/components/shared/JsonLd";
-import { SITE_URL, POSTAL_ADDRESS } from "@/lib/metadata";
+import { SITE_URL, SITE_NAME, PRODUCT_NAME, POSTAL_ADDRESS } from "@/lib/metadata";
 import { LP_COPY } from "@/content/estimate";
 
 const BenefitsSection = dynamic(
@@ -45,7 +45,7 @@ export default function EstimatePage() {
   const webApplication = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "CloudNature AI見積もりシミュレーター",
+    name: SITE_NAME,
     url: SITE_URL,
     description:
       "AIエージェントがシステム開発の要件をヒアリングし、概算見積もりと開発計画書を最短1分で自動生成する無料ツール。新潟県の中小企業のAI導入・業務自動化を支援。",
@@ -70,7 +70,7 @@ export default function EstimatePage() {
   const howTo = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    name: "AI見積もりシミュレーターの使い方",
+    name: `${PRODUCT_NAME}の使い方`,
     description:
       "AIチャットに質問形式で答えるだけで、システム開発の概算見積もりを自動生成できます。",
     totalTime: "PT1M",

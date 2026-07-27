@@ -115,9 +115,7 @@ export default function CompletePage() {
         >
           <Mail className="mt-0.5 h-5 w-5 shrink-0 text-sage" />
           <p className="text-[0.8125rem] leading-relaxed text-forest/65">
-            概算お見積もりの結果をメールに送信しました。
-            <br className="sm:hidden" />
-            正式なお見積もりは無料相談にてご案内いたします。
+            ミツモリAIによる概算お見積もりの結果をメールに送信しました。
           </p>
         </motion.div>
 
@@ -138,8 +136,8 @@ export default function CompletePage() {
           <div className="mt-5 v-stack gap-3">
             <AdvantageCard
               icon={<Cpu className="h-[18px] w-[18px] text-sage" />}
-              title="AIが開発工程の80%を自動化"
-              description="設計・実装・テストをAIが遂行。エンジニアは要件定義とレビューに集中でき、短期間で高品質に仕上げます。"
+              title="AIが開発の大部分を支援"
+              description="設計・実装・テストの多くをAIが支援し、エンジニアは要件定義とレビューに集中。仕組み化により、短期間で高品質に仕上げます。"
               delay={0.55}
             />
             <AdvantageCard
@@ -150,8 +148,8 @@ export default function CompletePage() {
             />
             <AdvantageCard
               icon={<Zap className="h-[18px] w-[18px] text-amber-500" />}
-              title="納期も最短1/3に短縮"
-              description="AIの並列処理で、通常3ヶ月の開発が最短1ヶ月。スピードが求められるプロジェクトに最適です。"
+              title="開発期間を大幅に短縮"
+              description="AIによる並列処理を活用し、開発スピードを最大化。従来より短い期間での構築を目指せます。"
               delay={0.71}
             />
           </div>
@@ -202,8 +200,6 @@ export default function CompletePage() {
         {/* ── Disclaimer ── */}
         <p className="mt-4 text-center text-[0.6875rem] leading-relaxed text-forest/35">
           ※ 本見積もりはAIによる概算であり、法的拘束力はありません。
-          <br />
-          正式なお見積もりは無料相談にてご案内いたします。
         </p>
       </div>
     </div>

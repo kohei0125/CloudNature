@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { LP_COPY } from "@/content/estimate";
+import { PRODUCT_NAME } from "@/lib/metadata";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 const { hero, simulator, disclaimers } = LP_COPY;
@@ -140,7 +141,7 @@ export default function HeroSection() {
             className="mt-4 font-sans text-[clamp(1.68rem,8.2vw,2.7rem)] font-bold leading-[1.1] tracking-tight md:mt-10 md:text-[clamp(2.8rem,4vw,3.5rem)]"
           >
             <span className="block text-[0.45em] font-bold tracking-wide text-forest/40">
-              AI見積もりシミュレーター
+              {PRODUCT_NAME}
             </span>
             <span className="mt-2 grid gap-1 md:hidden">
               <span className="block whitespace-nowrap">

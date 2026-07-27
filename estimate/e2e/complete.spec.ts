@@ -35,9 +35,9 @@ test.describe("Complete page (/complete)", () => {
 
     // Advantage cards
     await expect(
-      page.getByText("AIが開発工程の80%を自動化")
+      page.getByText("AIが開発の大部分を支援")
     ).toBeVisible();
-    await expect(page.getByText("納期も最短1/3に短縮")).toBeVisible();
+    await expect(page.getByText("開発期間を大幅に短縮")).toBeVisible();
 
     // CTA: booking link
     await expect(
@@ -79,7 +79,7 @@ test.describe("Complete page (/complete)", () => {
     await page.goto("/complete");
 
     await expect(
-      page.getByRole("link", { name: "TOPページにもどる" })
+      page.getByRole("link", { name: "お見積もりTOPにもどる" })
     ).toBeVisible();
   });
 
