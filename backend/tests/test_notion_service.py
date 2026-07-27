@@ -49,14 +49,16 @@ class TestBuildFollowUpMessageText:
     def test_whitespace_only_input_returns_empty_string(self):
         assert build_follow_up_message_text("   \n  ") == ""
 
-    def test_appends_meeting_request_boilerplate_without_signature(self):
+    def test_includes_intro_and_meeting_request_without_trailing_signature(self):
         text = build_follow_up_message_text("課題への言及メッセージ")
 
         assert "課題への言及メッセージ" in text
+        assert "お世話になります" in text
+        assert "株式会社クラウドネイチャーの渡邉と申します" in text
         assert "お打ち合わせの機会をいただくことは可能でしょうか" in text
         assert "情報収集の段階ということでしたら" in text
-        assert "株式会社クラウドネイチャー" not in text
-        assert "渡邉" not in text
+        # 末尾に署名（会社名・氏名の繰り返し）が付かないこと
+        assert text.endswith("何卒よろしくお願いいたします。")
 
     def test_strips_surrounding_whitespace_from_llm_output(self):
         text = build_follow_up_message_text("  課題への言及メッセージ  \n", name="山田太郎")
@@ -65,19 +67,26 @@ class TestBuildFollowUpMessageText:
         assert "課題への言及メッセージ  " not in text
 
     @pytest.mark.parametrize(
-        ("name", "company", "expected_prefix"),
+        ("name", "company", "expected_greeting"),
         [
-            ("山田太郎", "テスト株式会社", "テスト株式会社\n山田太郎 様\n\n"),
-            ("山田太郎", "", "山田太郎 様\n\n"),
-            ("", "", "ご担当者様\n\n"),
+            ("山田太郎", "テスト株式会社", "テスト株式会社\n山田太郎 様"),
+            ("山田太郎", "", "山田太郎 様"),
+            ("", "", "ご担当者様"),
         ],
     )
-    def test_greeting_prefix(self, name, company, expected_prefix):
+    def test_greeting_prefix(self, name, company, expected_greeting):
         text = build_follow_up_message_text(
             "課題への言及メッセージ", name=name, company=company
         )
 
-        assert text.startswith(f"{expected_prefix}課題への言及メッセージ")
+        expected_prefix = (
+            f"{expected_greeting}\n\n"
+            "お世話になります。\n"
+            "株式会社クラウドネイチャーの渡邉と申します。\n\n"
+            "このたびは弊社のミツモリAIをご利用いただき、ありがとうございました。\n\n"
+            "課題への言及メッセージ"
+        )
+        assert text.startswith(expected_prefix)
 
 
 class TestFollowUpMessageSection:
@@ -101,9 +110,15 @@ class TestFollowUpMessageSection:
         body_text = body_block["paragraph"]["rich_text"][0]["text"]["content"]
         assert "課題への言及メッセージ" in body_text
         assert "お打ち合わせの機会をいただくことは可能でしょうか" in body_text
-        # 冒頭に会社名・お名前（contact由来）が入り、署名は含まれないこと
-        assert body_text.startswith("テスト株式会社\n山田太郎 様\n\n課題への言及メッセージ")
-        assert "渡邉" not in body_text
+        # 冒頭に会社名・お名前（contact由来）+ 定型の挨拶文が入り、末尾に署名は付かないこと
+        assert body_text.startswith(
+            "テスト株式会社\n山田太郎 様\n\n"
+            "お世話になります。\n"
+            "株式会社クラウドネイチャーの渡邉と申します。\n\n"
+            "このたびは弊社のミツモリAIをご利用いただき、ありがとうございました。\n\n"
+            "課題への言及メッセージ"
+        )
+        assert body_text.endswith("何卒よろしくお願いいたします。")
 
     def test_absent_when_follow_up_message_missing(self):
         children = _run_and_capture_children({})

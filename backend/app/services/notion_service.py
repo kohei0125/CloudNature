@@ -6,6 +6,13 @@ logger = logging.getLogger(__name__)
 
 _notion_client = None
 
+# 冒頭の宛名に続けて使用する定型の挨拶文（自己紹介・利用御礼）。
+_INTRO_TEXT = (
+    "お世話になります。\n"
+    "株式会社クラウドネイチャーの渡邉と申します。\n\n"
+    "このたびは弊社のミツモリAIをご利用いただき、ありがとうございました。"
+)
+
 # お打ち合わせ依頼の定型文（LLM生成のfollow_up_messageに続けて使用）。
 # クライアントへは自動送信せず、担当者が手動でメール送信する際の文面として
 # Notionに保存する（save_estimate_to_notion 参照）。署名は含めない。
@@ -19,8 +26,8 @@ _MEETING_REQUEST_TEXT = (
 def build_follow_up_message_text(
     follow_up_message: str, name: str = "", company: str = ""
 ) -> str:
-    """冒頭の宛名（会社名・お名前）+ LLM生成のfollow_up_message + お打ち合わせ依頼の
-    定型文を結合した完全な本文を組み立てる。
+    """冒頭の宛名（会社名・お名前）+ 定型の挨拶文 + LLM生成のfollow_up_message +
+    お打ち合わせ依頼の定型文を結合した完全な本文を組み立てる。
 
     担当者が手動でクライアントへ送信する際にそのまま使える文面として、
     Notionページへ保存する（save_estimate_to_notion 参照）。
@@ -34,7 +41,7 @@ def build_follow_up_message_text(
     name_line = f"{name} 様" if name else "ご担当者様"
     greeting = f"{company}\n{name_line}" if company else name_line
 
-    return f"{greeting}\n\n{message}\n\n{_MEETING_REQUEST_TEXT}"
+    return f"{greeting}\n\n{_INTRO_TEXT}\n\n{message}\n\n{_MEETING_REQUEST_TEXT}"
 
 INDUSTRY_LABELS = {
     "manufacturing": "製造業",
