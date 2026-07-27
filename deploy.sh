@@ -25,8 +25,8 @@ BACKEND_DIR="${BACKEND_DIR:-backend}"
 #    環境変数で上書き可能（例: FRONTEND_URL=... ./deploy.sh）
 # ---------------------------------------------------------------------------
 LLM_PROVIDER="${LLM_PROVIDER:-gemini}"
-OPENAI_MODEL="${OPENAI_MODEL:-gpt-4.1-nano}"
-GEMINI_MODEL="${GEMINI_MODEL:-gemini-2.5-flash}"
+OPENAI_MODEL="${OPENAI_MODEL:-gpt-5.4-nano}"
+GEMINI_MODEL="${GEMINI_MODEL:-gemini-3.5-flash-lite}"
 LLM_MAX_RETRIES="${LLM_MAX_RETRIES:-3}"
 LLM_TIMEOUT="${LLM_TIMEOUT:-30}"
 FRONTEND_URL="${FRONTEND_URL:-https://ai.cloudnature.jp}"

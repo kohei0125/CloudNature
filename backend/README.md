@@ -8,7 +8,7 @@ AI見積もりシステムのバックエンドAPI。ユーザーの入力を受
 - **FastAPI** — WebAPI フレームワーク
 - **SQLModel** (SQLAlchemy) — ORM
 - **SQLite** — データベース（開発環境）
-- **OpenAI API** (gpt-4o) — LLM
+- **Google Gemini API** (gemini-3.5-flash-lite) / **OpenAI API** (gpt-5.4-nano) — LLM（切替・自動フェイルオーバー可能）
 - **Resend** — メール送信
 - **Pydantic v2** — バリデーション + 設定管理
 
@@ -52,7 +52,7 @@ uvicorn app.main:app --reload --port 8000
 | 変数 | 説明 | デフォルト |
 |------|------|-----------|
 | `OPENAI_API_KEY` | OpenAI API キー | `""` (未設定時はフォールバック) |
-| `OPENAI_MODEL` | 使用モデル | `gpt-4o` |
+| `OPENAI_MODEL` | 使用モデル | `gpt-5.4-nano` |
 | `LLM_MAX_RETRIES` | LLM リトライ回数 | `3` |
 | `LLM_TIMEOUT` | LLM タイムアウト (秒) | `30` |
 | `RESEND_API_KEY` | Resend API キー | `""` (未設定時はメール送信スキップ) |

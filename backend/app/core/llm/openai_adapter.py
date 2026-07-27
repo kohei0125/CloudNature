@@ -20,7 +20,7 @@ def _load_prompt(filename: str) -> str:
 
 
 class OpenAIAdapter(LLMAdapter):
-    """LLM adapter using OpenAI API (gpt-4o)."""
+    """LLM adapter using OpenAI API."""
 
     def __init__(self, settings: Settings) -> None:
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)

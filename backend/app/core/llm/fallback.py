@@ -480,6 +480,20 @@ class FallbackAdapter(LLMAdapter):
         else:
             project_name = f"{industry_label}向け業務管理システム" if industry_label else "業務管理システム開発プロジェクト"
 
+        # --- follow_up_message 生成 ---
+        if challenges and len(challenges) >= 10:
+            follow_up_message = (
+                f"「{challenges[:40]}{'…' if len(challenges) > 40 else ''}」というご要望を拝見いたしました。\n\n"
+                "本見積もりはご入力いただいた情報に基づく概算でございますため、"
+                "現在の運用状況や具体的なご懸念について、もう少し詳しくお伺いできればと存じます。"
+            )
+        else:
+            follow_up_message = (
+                "ご入力いただいた情報をもとに、概算のお見積もりを作成いたしました。\n\n"
+                "本見積もりはご入力いただいた情報に基づく概算でございますため、"
+                "実際のご事情を伺ったうえで、あらためて提案を整理させていただければと存じます。"
+            )
+
         # --- summary 生成 ---
         if intent_label:
             summary = (
@@ -534,4 +548,5 @@ class FallbackAdapter(LLMAdapter):
                 f"本概算の精度は{confidence.get('range_label', '±30%')}です。"
                 "詳細ヒアリングにて精度を向上いたします。"
             ),
+            "follow_up_message": follow_up_message,
         }

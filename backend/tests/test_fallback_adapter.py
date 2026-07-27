@@ -211,3 +211,35 @@ class TestFallbackGenerateEstimate:
         })
 
         assert "人材管理" in result["summary"]
+
+    @pytest.mark.asyncio
+    async def test_follow_up_message_reflects_challenge(self):
+        """step_4の内容がfollow_up_messageに反映される。"""
+        adapter = FallbackAdapter()
+        result = await adapter.generate_estimate({
+            "user_input": {
+                "step_2": "manufacturing",
+                "step_4": "人材管理システムを構築したい",
+                "step_8": [],
+            },
+            "features": [],
+            "total_standard": 0,
+            "total_hybrid": 0,
+            "confidence": {"range_label": "±30%", "level": "medium"},
+        })
+
+        assert "人材管理" in result["follow_up_message"]
+
+    @pytest.mark.asyncio
+    async def test_follow_up_message_present_without_challenge(self):
+        """step_4が空でもfollow_up_messageは非空文字列を返す。"""
+        adapter = FallbackAdapter()
+        result = await adapter.generate_estimate({
+            "user_input": {"step_2": "manufacturing", "step_4": "", "step_8": []},
+            "features": [],
+            "total_standard": 0,
+            "total_hybrid": 0,
+            "confidence": {"range_label": "±30%", "level": "medium"},
+        })
+
+        assert result["follow_up_message"]

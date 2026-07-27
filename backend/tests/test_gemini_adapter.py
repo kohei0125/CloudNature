@@ -175,25 +175,69 @@ class TestGenerateEstimate:
 
 
 class TestFactory:
-    def test_gemini_provider(self):
+    def test_gemini_provider_alone(self):
+        """secondary(OpenAI)キーが無ければ GeminiAdapter を単独で返す。"""
         with patch("app.core.llm.gemini_adapter.genai"):
             from app.core.llm.factory import create_llm_adapter
             from app.core.llm.gemini_adapter import GeminiAdapter
 
             adapter = create_llm_adapter(
-                _make_settings(llm_provider="gemini", gemini_api_key="key")
+                _make_settings(
+                    llm_provider="gemini", gemini_api_key="key", openai_api_key=""
+                )
             )
             assert isinstance(adapter, GeminiAdapter)
 
-    def test_openai_provider(self):
+    def test_openai_provider_alone(self):
+        """secondary(Gemini)キーが無ければ OpenAIAdapter を単独で返す。"""
         with patch("app.core.llm.openai_adapter.AsyncOpenAI"):
             from app.core.llm.factory import create_llm_adapter
             from app.core.llm.openai_adapter import OpenAIAdapter
 
             adapter = create_llm_adapter(
-                _make_settings(llm_provider="openai", openai_api_key="key")
+                _make_settings(
+                    llm_provider="openai", openai_api_key="key", gemini_api_key=""
+                )
             )
             assert isinstance(adapter, OpenAIAdapter)
+
+    def test_gemini_provider_with_both_keys_chains_to_openai(self):
+        """両プロバイダのキーが揃っていれば ChainAdapter(primary=Gemini, secondary=OpenAI) を返す。"""
+        with patch("app.core.llm.gemini_adapter.genai"), patch(
+            "app.core.llm.openai_adapter.AsyncOpenAI"
+        ):
+            from app.core.llm.chain import ChainAdapter
+            from app.core.llm.factory import create_llm_adapter
+            from app.core.llm.gemini_adapter import GeminiAdapter
+            from app.core.llm.openai_adapter import OpenAIAdapter
+
+            adapter = create_llm_adapter(
+                _make_settings(
+                    llm_provider="gemini", gemini_api_key="key", openai_api_key="key"
+                )
+            )
+            assert isinstance(adapter, ChainAdapter)
+            assert isinstance(adapter.primary, GeminiAdapter)
+            assert isinstance(adapter.secondary, OpenAIAdapter)
+
+    def test_openai_provider_with_both_keys_chains_to_gemini(self):
+        """LLM_PROVIDER=openai の場合は primary=OpenAI, secondary=Gemini になる。"""
+        with patch("app.core.llm.gemini_adapter.genai"), patch(
+            "app.core.llm.openai_adapter.AsyncOpenAI"
+        ):
+            from app.core.llm.chain import ChainAdapter
+            from app.core.llm.factory import create_llm_adapter
+            from app.core.llm.gemini_adapter import GeminiAdapter
+            from app.core.llm.openai_adapter import OpenAIAdapter
+
+            adapter = create_llm_adapter(
+                _make_settings(
+                    llm_provider="openai", openai_api_key="key", gemini_api_key="key"
+                )
+            )
+            assert isinstance(adapter, ChainAdapter)
+            assert isinstance(adapter.primary, OpenAIAdapter)
+            assert isinstance(adapter.secondary, GeminiAdapter)
 
     def test_fallback_provider(self):
         from app.core.llm.factory import create_llm_adapter
@@ -202,12 +246,25 @@ class TestFactory:
         adapter = create_llm_adapter(_make_settings(llm_provider="fallback"))
         assert isinstance(adapter, FallbackAdapter)
 
-    def test_gemini_without_key_falls_back(self):
+    def test_gemini_without_key_falls_back_to_openai(self):
+        """primary(Gemini)キーが無く secondary(OpenAI)キーがあれば OpenAIAdapter を単独で使う。"""
+        with patch("app.core.llm.openai_adapter.AsyncOpenAI"):
+            from app.core.llm.factory import create_llm_adapter
+            from app.core.llm.openai_adapter import OpenAIAdapter
+
+            adapter = create_llm_adapter(
+                _make_settings(
+                    llm_provider="gemini", gemini_api_key="", openai_api_key="key"
+                )
+            )
+            assert isinstance(adapter, OpenAIAdapter)
+
+    def test_no_keys_falls_back_to_template(self):
         from app.core.llm.factory import create_llm_adapter
         from app.core.llm.fallback import FallbackAdapter
 
         adapter = create_llm_adapter(
-            _make_settings(llm_provider="gemini", gemini_api_key="")
+            _make_settings(llm_provider="gemini", gemini_api_key="", openai_api_key="")
         )
         assert isinstance(adapter, FallbackAdapter)
 
@@ -215,5 +272,7 @@ class TestFactory:
         from app.core.llm.factory import create_llm_adapter
         from app.core.llm.fallback import FallbackAdapter
 
-        adapter = create_llm_adapter(_make_settings(llm_provider="unknown"))
+        adapter = create_llm_adapter(
+            _make_settings(llm_provider="unknown", gemini_api_key="", openai_api_key="")
+        )
         assert isinstance(adapter, FallbackAdapter)

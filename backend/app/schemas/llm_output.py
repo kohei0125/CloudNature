@@ -51,6 +51,7 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
         "discussion_agenda",
         "total_cost",
         "confidence_note",
+        "follow_up_message",
     ],
     "properties": {
         "project_name": {"type": "string"},
@@ -91,6 +92,7 @@ ESTIMATE_GENERATION_SCHEMA: dict = {
             },
         },
         "confidence_note": {"type": "string"},
+        "follow_up_message": {"type": "string"},
     },
 }
 
@@ -187,5 +189,12 @@ def validate_estimate_output(data: dict) -> bool:
     # 合計と内訳の整合性チェックは行わない: 直後に _enforce_calculated_prices
     # で全金額が Pricing Engine の決定的計算値に上書きされるため、LLM の
     # 算術精度に依存して検証する意味がない（LLMは算術が苦手で頻繁に落ちる）。
+
+    # follow_up_message が空文字・空白のみの場合は不合格とし、リトライ→
+    # FallbackAdapter（常に非空文字を返す）に委ねる。空のままだと
+    # Notionの「送付メール文面」セクションが無言でスキップされてしまうため。
+    if not data.get("follow_up_message", "").strip():
+        logger.warning("follow_up_message is empty or whitespace-only")
+        return False
 
     return True

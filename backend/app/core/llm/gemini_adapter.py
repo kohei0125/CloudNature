@@ -60,7 +60,6 @@ class GeminiAdapter(LLMAdapter):
                 contents=user_content,
                 config=types.GenerateContentConfig(
                     system_instruction=system_prompt,
-                    temperature=0.7,
                     response_mime_type="application/json",
                 ),
             ),
@@ -92,7 +91,6 @@ class GeminiAdapter(LLMAdapter):
                 contents=json.dumps(user_message, ensure_ascii=False),
                 config=types.GenerateContentConfig(
                     system_instruction=system_prompt,
-                    temperature=0.5,
                     response_mime_type="application/json",
                 ),
             ),

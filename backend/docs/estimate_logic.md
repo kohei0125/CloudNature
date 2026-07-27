@@ -33,7 +33,7 @@ FastAPI (Cloud Run / asia-northeast1)
   └── /health              ← ヘルスチェック
   │
   ├── Pricing Engine (決定的価格計算)
-  ├── Google Gemini API (gemini-2.5-flash) / OpenAI API (切替可能)
+  ├── Google Gemini API (gemini-3.5-flash-lite) / OpenAI API (gpt-5.4-nano) （切替・自動フェイルオーバー可能）
   ├── Neon PostgreSQL (セッション・見積もり保存)
   ├── Resend API (メール送信)
   └── Notion API (案件記録)
@@ -419,18 +419,35 @@ step_4 + step_12 のフリーテキストからNFRキーワードを検出し、
 LLMAdapter (抽象基底)
   ├── GeminiAdapter   ← LLM_PROVIDER=gemini (デフォルト)
   ├── OpenAIAdapter   ← LLM_PROVIDER=openai
+  ├── ChainAdapter    ← primary/secondary 両方のAPIキーがある場合
+  │     ├─ primary   = LLM_PROVIDER で指定した方
+  │     └─ secondary = もう一方（primaryが実行時エラーで失敗した場合のみ呼ばれる）
   └── FallbackAdapter ← API Key未設定時 / LLM_PROVIDER=fallback
 ```
 
-`create_llm_adapter(settings)` で `LLM_PROVIDER` に基づき自動選択。
-APIキーが未設定の場合は自動的に FallbackAdapter にフォールバックする。
+`create_llm_adapter(settings)` で `LLM_PROVIDER` に基づき primary プロバイダを選択する。
+
+- **Gemini/OpenAI 両方のAPIキーが設定されている場合**: `ChainAdapter` を返す。
+  `generate_dynamic_questions` / `generate_estimate` は primary（`LLM_PROVIDER` で指定した方）を
+  まず呼び出し、例外が発生した場合のみ secondary（もう一方のプロバイダ）へフェイルオーバーする
+  （例: `LLM_PROVIDER=gemini` 時、Geminiがエラーになれば自動的にOpenAIを使用。逆も同様）。
+  secondary も失敗した場合はその例外がそのまま呼び出し元へ伝播し、
+  `estimate_service.py` 側の既存リトライ（最大 `LLM_MAX_RETRIES` 回、primary→secondaryの
+  組で1試行）→ 全滅時 FallbackAdapter という流れに合流する。
+- **どちらか一方のみAPIキーがある場合**: そのプロバイダのアダプターを単独で使用する（フェイルオーバーなし）。
+- **どちらのAPIキーも無い場合**: FallbackAdapter（テンプレート応答）を使用する。
 
 ### 6.2 2回のAI呼び出し
 
-| 回 | メソッド | タイミング | temperature | プロンプト | 目的 |
-|----|---------|----------|------------|----------|------|
-| 第1回 | `generate_dynamic_questions` | Step 7完了時 | 0.7 | dynamic_questions.txt | 機能候補の提案 |
-| 第2回 | `generate_estimate` | 見積もり生成時 | 0.5 | estimate_generation.txt | 提案文書のテキスト生成 |
+| 回 | メソッド | タイミング | temperature (OpenAI) | temperature (Gemini) | プロンプト | 目的 |
+|----|---------|----------|----------------------|----------------------|----------|------|
+| 第1回 | `generate_dynamic_questions` | Step 7完了時 | 0.7 | 未指定（モデルデフォルト） | dynamic_questions.txt | 機能候補の提案 |
+| 第2回 | `generate_estimate` | 見積もり生成時 | 0.5 | 未指定（モデルデフォルト） | estimate_generation.txt | 提案文書のテキスト生成 |
+
+> **注意:** `gemini-3.5-flash-lite`以降のGeminiモデルは `temperature`/`top_p`/`top_k` が非推奨であり、
+> 将来的に指定するとHTTP 400になる（[公式ドキュメント](https://ai.google.dev/gemini-api/docs/whats-new-gemini-3.5)）。
+> そのため `GeminiAdapter` ではこれらのサンプリングパラメータを一切渡さない。
+> OpenAI (`gpt-5.4-nano`) は引き続きサポートしているため `OpenAIAdapter` 側は temperature を指定する。
 
 ### 6.3 第1回: 動的質問生成
 
@@ -505,13 +522,15 @@ APIキーが未設定の場合は自動的に FallbackAdapter にフォールバ
   ],
   "discussion_agenda": ["確認事項1", ...],
   "total_cost": { "standard": 0, "hybrid": 0, "message": "金額比較文" },
-  "confidence_note": "精度説明"
+  "confidence_note": "精度説明",
+  "follow_up_message": "課題を踏まえた個人的なメッセージ（150〜250文字、2段落）"
 }
 ```
 
 - リトライ: 最大3回
 - バリデーション: `validate_estimate_output()`
 - フォールバック: 業種別テンプレート見積もり
+- `follow_up_message`: `user_input.step_4`（課題・要望）を踏まえてLLMが生成する、クライアント宛の個人的なメッセージ本文（挨拶・自己紹介・署名・お打ち合わせ依頼文言は含まない）。クライアントへの自動送信メールには使用せず、`email_service.build_follow_up_message_text()` でお打ち合わせ依頼の定型文と結合したうえで **Notionページの最下部にのみ保存**する（9.4節参照）。担当者はこのNotion保存文面を元に手動でメールを送信する想定。自動送信メール（`estimate_email.html`）側には「後ほど担当者より改めてご連絡のメールをお送りする」旨の固定文言のみ表示する。
 
 ### 6.5 FallbackAdapter
 
@@ -679,6 +698,12 @@ PDFは **estimate フロントエンド** の `POST /api/pdf`（`@react-pdf/rend
 | 種別 | 「お見積もり」 |
 | ステータス | 「未対応」 |
 
+ページ本文（`children`）の最後尾には「送付メール文面」セクションを追加する。
+`estimate_data.follow_up_message`（LLM生成の個人的なメッセージ）に、
+お打ち合わせ依頼の定型文（固定文言・`email_service._MEETING_REQUEST_TEXT`）を続けたテキストを
+`email_service.build_follow_up_message_text()` で組み立てて1つの段落ブロックとして保存する。
+このテキストはクライアントへ自動送信はされず、担当者が内容を確認・調整のうえ手動でメール送信する想定。
+
 **条件:** `NOTION_API_KEY` と `NOTION_DATABASE_ID` の両方が設定済みであること。どちらかが空の場合は早期リターンし、ログに記録する。
 
 > **注意:** コーポレートサイト（`app/api/contact/`）のお問い合わせフォームからも同じNotionデータベースにレコードが追加される（種別=「お問い合わせ」）。こちらはVercel側の環境変数で管理する。
@@ -699,9 +724,9 @@ _format_price(1_200_000) → "120万円"   # math.ceil(price / 10000)
 |--------|----------|------|
 | `LLM_PROVIDER` | `"gemini"` | LLMプロバイダ選択 (`"gemini"` / `"openai"` / `"fallback"`) |
 | `GEMINI_API_KEY` | `""` | Google Gemini APIキー。`LLM_PROVIDER=gemini` 時に必須 |
-| `GEMINI_MODEL` | `"gemini-2.5-flash"` | 使用するGeminiモデル |
+| `GEMINI_MODEL` | `"gemini-3.5-flash-lite"` | 使用するGeminiモデル |
 | `OPENAI_API_KEY` | `""` | OpenAI APIキー。`LLM_PROVIDER=openai` 時に必須 |
-| `OPENAI_MODEL` | `"gpt-4.1-nano"` | 使用するOpenAIモデル |
+| `OPENAI_MODEL` | `"gpt-5.4-nano"` | 使用するOpenAIモデル |
 | `LLM_MAX_RETRIES` | `3` | LLMリトライ回数 |
 | `LLM_TIMEOUT` | `45` | LLMリクエストタイムアウト（秒） |
 | `RESEND_API_KEY` | `""` | Resend APIキー。未設定時メール無効 |

@@ -301,6 +301,17 @@ def save_estimate_to_notion(
         children.append(_paragraph(f"Q: {question}"))
         children.append(_paragraph(f"A: {display}"))
 
+    # 送付メール文面（担当者が手動でクライアントへ送信する際の下書き文面）
+    from app.services.email_service import build_follow_up_message_text
+
+    follow_up_text = build_follow_up_message_text(
+        estimate_data.get("follow_up_message", "")
+    )
+    if follow_up_text:
+        children.append(_divider())
+        children.append(_heading2("送付メール文面"))
+        children.append(_paragraph(follow_up_text))
+
     properties: dict = {
         "名前": {"title": [{"text": {"content": contact.get("name", "")}}]},
         "会社名": {

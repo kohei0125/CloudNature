@@ -9,9 +9,9 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     openai_api_key: str = ""
-    openai_model: str = "gpt-4.1-nano"
+    openai_model: str = "gpt-5.4-nano"
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-3.5-flash-lite"
     llm_provider: str = "gemini"  # "gemini" | "openai" | "fallback"
     llm_max_retries: int = 2
     llm_timeout: int = 45
