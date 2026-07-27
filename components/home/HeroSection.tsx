@@ -137,7 +137,7 @@ const HeroSection = () => {
               )}
             </p>
 
-            <p className="text-base text-gray-800 leading-relaxed mb-10 max-w-lg font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.15),0_0_12px_rgba(255,255,255,0.7)]">
+            <p className="text-base text-gray-800 leading-relaxed mb-10 max-w-xl font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.15),0_0_12px_rgba(255,255,255,0.7)]">
               {HERO_COPY.description.split('\n').map((line, i, arr) => (
                 <span key={i}>
                   {line}

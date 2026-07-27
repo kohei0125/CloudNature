@@ -2,9 +2,9 @@ import { CompanyInfo } from "@/types";
 
 export const COMPANY_HERO = {
   eyebrow: "COMPANY",
-  title: "企業情報",
+  title: "AIを、経営のど真ん中へ。",
   description:
-    "新潟から、中小企業の未来を変えるテクノロジーを。クラウドネイチャーは、AI・システム開発で現場の課題を解決する伴走型パートナーです。",
+    "クラウドネイチャーは、AIを自らの経営にも深く取り入れる会社です。営業・提案・開発・情報整理・意思決定まで、会社のあらゆる仕事をAIとともに再設計。その実践から得た知見を、企業へ届けます。",
 };
 
 export const COMPANY_OVERVIEW: CompanyInfo[] = [

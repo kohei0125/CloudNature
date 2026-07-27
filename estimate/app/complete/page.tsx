@@ -166,17 +166,17 @@ export default function CompletePage() {
             type="button"
             onClick={handleViewPdf}
             disabled={pdfLoading}
-            className="mt-3 inline-flex items-center gap-1.5 text-[0.8125rem] font-bold text-sage transition-colors hover:text-sage/80 disabled:opacity-50"
+            className="btn-puffy mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold disabled:opacity-50 md:text-base"
           >
             {pdfLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-[18px] w-[18px] animate-spin" />
             ) : (
-              <FileText className="h-4 w-4" />
+              <FileText className="h-[18px] w-[18px]" />
             )}
-            PDFを表示する
+            お見積もりを確認する
           </button>
           {pdfError && (
-            <p className="mt-1.5 text-xs text-red-500">
+            <p className="mt-2 text-center text-xs text-red-500">
               PDFの表示に失敗しました。時間をおいて再度お試しください。
             </p>
           )}
