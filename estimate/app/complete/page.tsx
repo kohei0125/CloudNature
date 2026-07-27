@@ -13,10 +13,12 @@ import {
   TrendingUp,
   Zap,
   Clock,
+  FileText,
 } from "lucide-react";
 import { load, clear } from "@/lib/sessionStorage";
 import { parseContact } from "@/lib/utils";
 import { TOTAL_STEPS } from "@/lib/stepConfig";
+import { reportError } from "@/lib/errorReporter";
 import type { EstimateSession, GeneratedEstimate } from "@/types/estimate";
 
 /* ------------------------------------------------------------------ */
@@ -32,11 +34,17 @@ function formatPrice(price: number): string {
 export default function CompletePage() {
   const [estimate, setEstimate] = useState<GeneratedEstimate | null>(null);
   const [clientName, setClientName] = useState("");
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
 
   useEffect(() => {
     function loadData() {
       const session = load<EstimateSession>("session");
+      if (session?.sessionId) {
+        setSessionId(session.sessionId);
+      }
       if (session?.answers) {
         const raw = session.answers[TOTAL_STEPS];
         if (typeof raw === "string") {
@@ -58,6 +66,40 @@ export default function CompletePage() {
     }
     loadData();
   }, []);
+
+  async function handleViewPdf() {
+    if (pdfLoading) return;
+    setPdfLoading(true);
+    setPdfError(false);
+    try {
+      const res = await fetch("/api/pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          estimate,
+          clientName: clientName || "お客様",
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`PDF generation failed with status ${res.status}`);
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      window.open(url, "_blank");
+      window.gtag?.("event", "view_estimate_pdf");
+      // Revoke once the new tab has had time to load the blob
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } catch (error) {
+      reportError({
+        sessionId,
+        errorType: "complete_pdf_view_failed",
+        message: error instanceof Error ? error.message : String(error),
+      });
+      setPdfError(true);
+    } finally {
+      setPdfLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -111,12 +153,33 @@ export default function CompletePage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="mt-7 flex items-start gap-3 rounded-2xl border border-forest/[.06] bg-white px-5 py-4"
+          className="mt-7 rounded-2xl border border-forest/[.06] bg-white px-5 py-4"
         >
-          <Mail className="mt-0.5 h-5 w-5 shrink-0 text-sage" />
-          <p className="text-[0.8125rem] leading-relaxed text-forest/65">
-            ミツモリAIによる概算お見積もりの結果をメールに送信しました。
-          </p>
+          <div className="flex items-start gap-3">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0 text-sage" />
+            <p className="text-[0.8125rem] leading-relaxed text-forest/65">
+              ミツモリAIによる概算お見積もりの結果をメールに送信しました。
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleViewPdf}
+            disabled={pdfLoading}
+            className="mt-3 inline-flex items-center gap-1.5 text-[0.8125rem] font-bold text-sage transition-colors hover:text-sage/80 disabled:opacity-50"
+          >
+            {pdfLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <FileText className="h-4 w-4" />
+            )}
+            PDFを表示する
+          </button>
+          {pdfError && (
+            <p className="mt-1.5 text-xs text-red-500">
+              PDFの表示に失敗しました。時間をおいて再度お試しください。
+            </p>
+          )}
         </motion.div>
 
         {/* ── Why so cheap ── */}
