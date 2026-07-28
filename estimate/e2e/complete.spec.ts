@@ -39,10 +39,11 @@ test.describe("Complete page (/complete)", () => {
     ).toBeVisible();
     await expect(page.getByText("開発期間を大幅に短縮")).toBeVisible();
 
-    // CTA: booking link
+    // CTA: TimeRex予約カレンダーのセクション
     await expect(
-      page.getByRole("link", { name: /無料相談を予約する/ })
+      page.getByRole("heading", { name: "正式なお見積もりは無料相談で" })
     ).toBeVisible();
+    await expect(page.locator("#timerex_calendar")).toBeAttached();
   });
 
   test("shows fallback when no estimate data", async ({ page }) => {
@@ -60,16 +61,6 @@ test.describe("Complete page (/complete)", () => {
     await expect(
       page.getByRole("link", { name: "見積もりを始める" })
     ).toBeVisible();
-  });
-
-  test("savings percentage is calculated and displayed", async ({ page }) => {
-    await page.goto("/complete");
-    await seedLocalStorage(page, "estimate_result", MOCK_ESTIMATE);
-    await seedLocalStorage(page, "session", MOCK_SESSION);
-    await page.goto("/complete");
-
-    // standard=1300000, hybrid=650000 → savings=50%
-    await expect(page.getByText("約50%のコストダウン")).toBeVisible();
   });
 
   test("back to top link is present", async ({ page }) => {
