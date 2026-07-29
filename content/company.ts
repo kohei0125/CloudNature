@@ -21,7 +21,8 @@ const HERO_IMAGES = {
 /** ヒーロー：見出し＋説明＋フルワイド画像 */
 export const COMPANY_HERO = {
   eyebrow: "COMPANY",
-  title: "AIを、経営のど真ん中へ",
+  // \n は折り返し候補位置。inline-block 分割で描画するため、収まる幅では1行のまま
+  title: "AIを、\n経営のど真ん中へ",
   description:
     "クラウドネイチャーは、自社の経営と業務にAIを実装しながら、その知見を企業の現場へ届ける新潟の開発会社です。構想だけで終わらせず、システム開発・AIエージェント開発・導入支援を通じて、実際に使われるところまで伴走します。",
   image: HERO_IMAGES.main, // ← `.main` を `.sub` に変えると人物あり版に切り替え
@@ -30,7 +31,8 @@ export const COMPANY_HERO = {
 /** OUR PURPOSE：存在意義 */
 export const COMPANY_PURPOSE = {
   eyebrow: "OUR PURPOSE",
-  title: "一部の先進企業だけのものにしない",
+  // \n は折り返し候補位置。inline-block 分割で描画するため、収まる幅（PC）では1行のまま
+  title: "一部の先進企業だけの\nものにしない",
   paragraphs: [
     "AIの導入が進まない理由は、技術がないからだけではありません。",
     "どの業務に使うのか、既存の仕事とどう接続するのか、誰が運用するのかが整理されていないことが、多くの企業にとっての障壁です。",

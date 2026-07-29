@@ -19,7 +19,12 @@ const CompanyPurpose = () => {
           id="purpose-heading"
           className="mb-8 text-[clamp(1.5rem,4.5vw,2.25rem)] font-bold leading-[1.4] text-forest"
         >
-          {COMPANY_PURPOSE.title}
+          {/* \n 区切りの各セグメントを inline-block にし、折り返しは区切り位置でのみ起こす */}
+          {COMPANY_PURPOSE.title.split("\n").map((segment, i) => (
+            <span key={i} className="inline-block">
+              {segment}
+            </span>
+          ))}
         </h2>
         <div className="mx-auto max-w-2xl space-y-2 text-[15px] leading-[1.95] text-forest/70">
           {COMPANY_PURPOSE.paragraphs.map((paragraph, i) => (

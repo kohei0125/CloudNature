@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
-import SectionHeader from "@/components/shared/SectionHeader";
 import {
   COMPANY_MAP,
   COMPANY_OVERVIEW,
@@ -20,11 +19,16 @@ const CompanyOverview = () => {
         <div className="grid items-center gap-12 md:grid-cols-[1fr_0.75fr] lg:gap-16">
           {/* 左：見出し＋テーブル＋会社紹介資料 */}
           <div>
-            <SectionHeader
-              eyebrow={COMPANY_OVERVIEW_HEADING.eyebrow}
-              title={COMPANY_OVERVIEW_HEADING.title}
-              headingId="overview-heading"
-            />
+            {/* 共有 SectionHeader はモバイルで中央寄せになるため、
+                他の企業情報セクションと揃えて常に左揃えの手組みにする */}
+            <div className="mb-8 md:mb-12">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-teal-800">
+                {COMPANY_OVERVIEW_HEADING.eyebrow}
+              </p>
+              <h2 id="overview-heading" className="text-2xl font-bold text-forest md:text-3xl">
+                {COMPANY_OVERVIEW_HEADING.title}
+              </h2>
+            </div>
 
             <dl className="border border-forest/10">
               {COMPANY_OVERVIEW.map((item, i) => (

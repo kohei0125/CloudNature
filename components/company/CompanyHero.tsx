@@ -39,7 +39,12 @@ const CompanyHero = () => {
             id="company-hero-heading"
             className="mb-6 text-[clamp(2rem,6vw,3.25rem)] font-bold leading-[1.2] tracking-tight text-forest"
           >
-            {COMPANY_HERO.title}
+            {/* \n 区切りの各セグメントを inline-block にし、折り返しは区切り位置でのみ起こす */}
+            {COMPANY_HERO.title.split("\n").map((segment, i) => (
+              <span key={i} className="inline-block">
+                {segment}
+              </span>
+            ))}
           </h1>
           <p className="max-w-xl text-[15px] leading-[1.9] text-gray-600">
             {COMPANY_HERO.description}
