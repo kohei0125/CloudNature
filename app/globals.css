@@ -180,6 +180,10 @@ h1, h2, h3, h4, h5, h6 {
   .btn-outline {
     @apply inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-bold border border-teal-800 text-teal-800 hover:bg-teal-50 transition-colors;
   }
+  /* フォレスト系のソフトなアウトラインピル（InlineCta の副ボタン・資料DLボタン等） */
+  .btn-outline-forest {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-bold text-sm border border-forest/20 text-forest hover:bg-forest/5 transition-colors;
+  }
   .btn-carousel {
     @apply w-10 h-10 flex items-center justify-center rounded-full transition-colors;
   }

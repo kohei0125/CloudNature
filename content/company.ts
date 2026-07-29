@@ -1,26 +1,99 @@
 import { CompanyInfo } from "@/types";
 
+/**
+ * ヒーロー画像の候補。
+ * COMPANY_HERO.image の参照先を `HERO_IMAGES.main` / `HERO_IMAGES.sub` に
+ * 書き換えるだけでヒーローの画像を切り替えられる。
+ */
+const HERO_IMAGES = {
+  /** メイン: 人物なしのオフィス */
+  main: {
+    src: "/images/company/office-hero.webp",
+    alt: "観葉植物と大きな窓のある明るいオフィスの会議スペース",
+  },
+  /** サブ: 3人で打ち合わせをする人物あり版 */
+  sub: {
+    src: "/images/company/office-hero-sub.webp",
+    alt: "観葉植物のある明るいオフィスで、ノートパソコンを囲んで打ち合わせをする3人のスタッフ",
+  },
+};
+
+/** ヒーロー：見出し＋説明＋フルワイド画像 */
 export const COMPANY_HERO = {
   eyebrow: "COMPANY",
-  title: "AIを、経営のど真ん中へ。",
+  title: "AIを、経営のど真ん中へ",
   description:
-    "クラウドネイチャーは、AIを自らの経営にも深く取り入れる会社です。営業・提案・開発・情報整理・意思決定まで、会社のあらゆる仕事をAIとともに再設計。その実践から得た知見を、企業へ届けます。",
+    "クラウドネイチャーは、自社の経営と業務にAIを実装しながら、その知見を企業の現場へ届ける新潟の開発会社です。構想だけで終わらせず、システム開発・AIエージェント開発・導入支援を通じて、実際に使われるところまで伴走します。",
+  image: HERO_IMAGES.main, // ← `.main` を `.sub` に変えると人物あり版に切り替え
+};
+
+/** OUR PURPOSE：存在意義 */
+export const COMPANY_PURPOSE = {
+  eyebrow: "OUR PURPOSE",
+  title: "一部の先進企業だけのものにしない",
+  paragraphs: [
+    "AIの導入が進まない理由は、技術がないからだけではありません。",
+    "どの業務に使うのか、既存の仕事とどう接続するのか、誰が運用するのかが整理されていないことが、多くの企業にとっての障壁です。",
+    "私たちは、企業ごとの業務や組織に向き合い、AIを現場で機能する仕組みに変えていきます。",
+  ],
+};
+
+/** AI WORKSPACE：社内のAI活用基盤 */
+export const COMPANY_WORKSPACE = {
+  eyebrow: "AI WORKSPACE",
+  title: "AIとともに働く日常",
+  description:
+    "特定のツールに依存せず、業務ごとに最適なAIを選び、組み合わせ、仕組みとして定着させています。",
+  diagramLabel: "業務を支える主なAIツール",
+  image: {
+    src: "/images/company/ai-workspace.webp",
+    alt: "CloudNature AI Workspaceを中心に、Notion・Claude・ChatGPT・GCP・GitHub・Slackなどの社内AIツールがつながる構成図",
+    width: 1672,
+    height: 941,
+  },
+};
+
+/** 代表メッセージ */
+export const COMPANY_MESSAGE = {
+  eyebrow: "MESSAGE",
+  title: "テクノロジーを、\n現場で使われる力に",
+  name: "渡邉 浩平",
+  role: "代表取締役",
+  image: {
+    src: "/images/company/office-message.webp",
+    alt: "窓辺のデスクに置かれたノートパソコンと観葉植物",
+  },
+  paragraphs: [
+    "新潟のIT企業でキャリアを始め、その後、東京・大阪の企業を中心に、大規模サービスや業務システムの開発に携わってきました。",
+    "開発の現場に立ち続ける中で感じたのは、優れた技術があっても、それだけでは企業の仕事は変わらないということです。業務を理解し、既存の仕組みと接続し、現場で使われる状態までつくる必要があります。",
+    "AIも同じです。導入すること自体ではなく、営業・開発・管理・意思決定といった日々の仕事を、実際に前へ進めることに価値があります。",
+    "クラウドネイチャーは、自社でもAIを徹底的に活用しながら、そこで得た知見をお客様の業務に合わせて実装します。新潟から、AIを経営の当たり前にする会社を増やしていきます。",
+  ],
+};
+
+/** 会社概要（左: テーブル / 右: 日本地図） */
+export const COMPANY_OVERVIEW_HEADING = {
+  eyebrow: "COMPANY INFO",
+  title: "会社概要",
 };
 
 export const COMPANY_OVERVIEW: CompanyInfo[] = [
   { label: "会社名", value: "株式会社クラウドネイチャー" },
-  { label: "代表者", value: "代表取締役 渡邉 浩平" },
-  { label: "所在地", value: "〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F" },
+  { label: "代表者", value: "渡邉 浩平" },
   {
-    label: "事業内容",
-    value:
-      "AIエージェント開発 / 業務システム開発 / AI活用支援 / Webアプリケーション開発",
+    label: "所在地",
+    value: "〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F",
   },
-  {
-    label: "主要技術",
-    value: "Next.js / TypeScript / React / Python / AWS / Google Cloud / Claude / OpenAI",
-  },
+  { label: "事業内容", value: "システム開発 / AIエージェント開発 / AI導入伴走支援" },
 ];
+
+/** 会社概要の右側に表示するドットマップ（スクリプト生成SVG、新潟にアクセント。PCのみ表示） */
+export const COMPANY_MAP = {
+  src: "/images/company/japan-dots.svg",
+  alt: "新潟県新潟市の位置を示す日本のドットマップ",
+  width: 640,
+  height: 711,
+};
 
 export const COMPANY_PROFILE_DOC = {
   label: "会社紹介資料（PDF）",
@@ -28,39 +101,12 @@ export const COMPANY_PROFILE_DOC = {
   href: "/docs/cloudnature-company-profile.pdf",
 };
 
-export const REPRESENTATIVE_MESSAGE = {
-  eyebrow: "MESSAGE",
-  title: "代表メッセージ",
-  name: "渡邉 浩平",
-  role: "代表取締役",
-  paragraphs: [
-    "「テクノロジーの恩恵を、すべての企業へ。」",
-    "新潟のIT企業からキャリアをスタートし、その後は独立して東京・大阪の企業を中心に、数十万人が毎日使うサービスの開発や大手企業のシステム構築に携わってきました。約8年間、開発の現場に立ち続ける中で確信したのは、AIが企業の経営を根本から変える力を持つということです。",
-    "AIやシステムの力は、まだ全ての企業に届いているわけではありません。もっとできることがあるはず。そして、どこよりもAIを使いこなす会社へ。その想いを胸に、クラウドネイチャーを立ち上げました。",
-  ]
-};
-
-export const COMPANY_ACCESS = {
-  eyebrow: "ACCESS",
-  title: "アクセス",
-  postalCode: "〒951-8068",
-  address: "新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F",
-  description: "新潟駅万代口より徒歩20分",
-  mapEmbedUrl:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3147.378727701607!2d139.04604607589036!3d37.92158187194876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5ff4c9f21b684e13%3A0x1ab254c8d8886f9f!2z44CSOTUxLTgwNjgg5paw5r2f55yM5paw5r2f5biC5Lit5aSu5Yy65LiK5aSn5bed5YmN6YCa77yX55Wq55S677yR77yS77yT77yQ4oiS77yX!5e0!3m2!1sja!2sjp!4v1772406451398!5m2!1sja!2sjp",
-};
-
-export const COMPANY_MID_CTA = {
-  text: "CloudNatureに相談してみませんか？",
-  primaryLabel: "無料でAI見積もり",
-  secondaryLabel: "お問い合わせ・ご相談",
-};
-
+/** 下部CTA */
 export const COMPANY_CTA = {
   eyebrow: "GET STARTED",
   title: "まずはお気軽にご相談ください",
   description:
-    "AIが概算費用を即時算出。または30分の無料ヒアリングで、御社の課題に最適な解決策をご提案します。",
-  primaryCta: { label: "無料でAI見積もり", href: "https://ai.cloudnature.jp/" },
-  secondaryCta: { label: "お問い合わせ・ご相談", href: "/contact" },
+    "AIの活用方法や開発のご相談など、お気軽にお問い合わせください。御社の課題に合わせて、最適な進め方をご提案します。",
+  primaryCta: { label: "お問い合わせ", href: "/contact" },
+  secondaryCta: { label: "サービスを見る", href: "/services" },
 };

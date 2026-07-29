@@ -1,60 +1,75 @@
+import Image from "next/image";
 import { Download } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { COMPANY_OVERVIEW, COMPANY_PROFILE_DOC } from "@/content/company";
+import {
+  COMPANY_MAP,
+  COMPANY_OVERVIEW,
+  COMPANY_OVERVIEW_HEADING,
+  COMPANY_PROFILE_DOC,
+} from "@/content/company";
 
+// 会社概要。左に見出し＋2カラムのテーブル、右に新潟をマークした日本のドットマップを配置する。
 const CompanyOverview = () => {
   return (
-    <section id="overview" aria-labelledby="overview-heading" className="py-16 md:py-24 bg-mist texture-grain relative overflow-hidden">
-      {/* Decorative blobs */}
-      <div className="absolute top-20 -left-32 w-80 h-80 bg-cloud rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none" />
-      <div className="absolute bottom-20 -right-32 w-80 h-80 bg-sage rounded-full mix-blend-multiply filter blur-3xl opacity-15 pointer-events-none" />
+    <section
+      id="overview"
+      aria-labelledby="overview-heading"
+      className="bg-white py-16 md:py-24 texture-grain"
+    >
+      <div className="container mx-auto max-w-6xl px-6">
+        <div className="grid items-center gap-12 md:grid-cols-[1fr_0.75fr] lg:gap-16">
+          {/* 左：見出し＋テーブル＋会社紹介資料 */}
+          <div>
+            <SectionHeader
+              eyebrow={COMPANY_OVERVIEW_HEADING.eyebrow}
+              title={COMPANY_OVERVIEW_HEADING.title}
+              headingId="overview-heading"
+            />
 
-      <div className="container mx-auto px-6 max-w-3xl relative z-10">
-        <SectionHeader
-          eyebrow="OVERVIEW"
-          title="会社概要"
-          centered
-          headingId="overview-heading"
-        />
+            <dl className="border border-forest/10">
+              {COMPANY_OVERVIEW.map((item, i) => (
+                <div
+                  key={item.label}
+                  className={`grid grid-cols-[6.5rem_1fr] gap-x-4 px-5 py-4 md:grid-cols-[8rem_1fr] md:gap-x-6 md:px-7 ${
+                    i > 0 ? "border-t border-forest/10" : ""
+                  }`}
+                >
+                  <dt className="text-[13px] font-bold leading-relaxed text-teal-800 md:text-sm">
+                    {item.label}
+                  </dt>
+                  <dd className="text-[13px] leading-relaxed text-forest/80 md:text-sm">
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
 
-        <div className="glass-card rounded-2xl overflow-hidden">
-          {/* Top accent gradient */}
-          <div className="h-[2px] bg-gradient-to-r from-sage/10 via-sage/50 to-sage/10" />
-
-          <dl className="divide-y divide-forest/[0.06]">
-            {COMPANY_OVERVIEW.map((item) => (
-              <div
-                key={item.label}
-                className="group relative grid grid-cols-1 md:grid-cols-[11rem_1fr] transition-colors duration-300 hover:bg-white/50"
+            {/* 会社紹介資料ダウンロード */}
+            <div className="mt-8 text-center">
+              <a
+                href={COMPANY_PROFILE_DOC.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline-forest"
               >
-                {/* Animated left accent */}
-                <div className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full bg-sage scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top" />
+                <Download className="h-4 w-4" />
+                {COMPANY_PROFILE_DOC.label}
+              </a>
+              <p className="mt-3 text-[13px] text-forest/60">{COMPANY_PROFILE_DOC.description}</p>
+            </div>
+          </div>
 
-                <dt className="px-7 pt-5 pb-1 md:py-6 text-[13px] font-bold text-sage">
-                  {item.label}
-                </dt>
-                <dd className="px-7 pb-5 md:py-6 md:pl-0 text-[15px] text-forest/75 leading-relaxed">
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        {/* 会社紹介資料ダウンロード */}
-        <div className="mt-8 text-center">
-          <a
-            href={COMPANY_PROFILE_DOC.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 border border-forest/20 text-forest rounded-full font-bold text-sm hover:bg-forest/5 transition-colors inline-flex items-center justify-center gap-2"
-          >
-            <Download className="w-4 h-4" />
-            {COMPANY_PROFILE_DOC.label}
-          </a>
-          <p className="mt-3 text-[13px] text-forest/60">
-            {COMPANY_PROFILE_DOC.description}
-          </p>
+          {/* 右：新潟をマークした日本のドットマップ（PCのみ表示） */}
+          <div className="mx-auto hidden w-full max-w-[380px] md:block">
+            <Image
+              src={COMPANY_MAP.src}
+              alt={COMPANY_MAP.alt}
+              width={COMPANY_MAP.width}
+              height={COMPANY_MAP.height}
+              unoptimized
+              className="h-auto w-full"
+            />
+          </div>
         </div>
       </div>
     </section>

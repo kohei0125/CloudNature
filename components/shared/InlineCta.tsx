@@ -29,7 +29,7 @@ const InlineCta = ({ title, primaryLabel, secondaryLabel }: InlineCtaProps) => {
           </a>
           <Link
             href="/contact"
-            className="px-6 py-3 border border-forest/20 text-forest rounded-full font-bold text-sm hover:bg-forest/5 transition-colors inline-flex items-center justify-center gap-2"
+            className="btn-outline-forest"
           >
             {secondaryLabel}
           </Link>

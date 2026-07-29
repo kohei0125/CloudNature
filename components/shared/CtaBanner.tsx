@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import type { ReactNode } from "react";
 
 interface CtaBannerProps {
   eyebrow?: string;
@@ -9,13 +10,23 @@ interface CtaBannerProps {
   secondaryCta?: { label: string; href: string };
   /** section に付与する id（複数配置時の衝突回避用） */
   id?: string;
+  /**
+   * 背景装飾。コンテンツ背面・クリック透過・はみ出しクリップは本コンポーネントが担保するため、
+   * 呼び出し側は装飾要素の配置（bottom/right 等）とサイズ・色だけを指定すればよい。
+   */
+  bottomDecoration?: ReactNode;
 }
 
-const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id = "cta-banner" }: CtaBannerProps) => {
+const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id = "cta-banner", bottomDecoration }: CtaBannerProps) => {
   const headingId = `${id}-heading`;
   return (
     <section id={id} aria-labelledby={headingId} className="py-16 md:py-24 bg-forest text-white relative overflow-hidden texture-grain">
       <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#8A9668,transparent_25%),radial-gradient(circle_at_80%_70%,#80CBC4,transparent_25%),radial-gradient(circle_at_50%_50%,#C8E8FF,transparent_30%)]"></div>
+      {bottomDecoration ? (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          {bottomDecoration}
+        </div>
+      ) : null}
 
       <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
         {eyebrow ? (

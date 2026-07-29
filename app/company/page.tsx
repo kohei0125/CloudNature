@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { COMPANY_HERO, COMPANY_CTA, COMPANY_MID_CTA } from "@/content/company";
-import PageHero from "@/components/shared/PageHero";
+import { COMPANY_CTA } from "@/content/company";
+import CompanyHero from "@/components/company/CompanyHero";
+import CompanyPurpose from "@/components/company/CompanyPurpose";
+import CompanyWorkspace from "@/components/company/CompanyWorkspace";
+import CompanyMessage from "@/components/company/CompanyMessage";
 import CompanyOverview from "@/components/company/CompanyOverview";
-import RepresentativeMessage from "@/components/company/RepresentativeMessage";
-import AccessSection from "@/components/company/AccessSection";
+import SkylineArt from "@/components/company/SkylineArt";
 import CtaBanner from "@/components/shared/CtaBanner";
-import InlineCta from "@/components/shared/InlineCta";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 
@@ -40,42 +41,36 @@ export default function CompanyPage() {
   const breadcrumb = breadcrumbJsonLd([{ name: "企業情報", path: "/company" }]);
 
   return (
-    <div className="w-full bg-cream">
+    <div className="w-full bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
-      <PageHero
-        eyebrow={COMPANY_HERO.eyebrow}
-        title={COMPANY_HERO.title}
-        description={COMPANY_HERO.description}
-      />
+
+      <CompanyHero />
+
       <ScrollReveal>
-        <RepresentativeMessage />
+        <CompanyPurpose />
+      </ScrollReveal>
+      <ScrollReveal>
+        <CompanyWorkspace />
+      </ScrollReveal>
+      <ScrollReveal>
+        <CompanyMessage />
       </ScrollReveal>
       <ScrollReveal>
         <CompanyOverview />
       </ScrollReveal>
 
-      <section id="company-info" className="py-8 bg-white">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <InlineCta
-            title={COMPANY_MID_CTA.text}
-            primaryLabel={COMPANY_MID_CTA.primaryLabel}
-            secondaryLabel={COMPANY_MID_CTA.secondaryLabel}
-          />
-        </div>
-      </section>
-
-      <ScrollReveal>
-        <AccessSection />
-      </ScrollReveal>
       <CtaBanner
         eyebrow={COMPANY_CTA.eyebrow}
         title={COMPANY_CTA.title}
         description={COMPANY_CTA.description}
         primaryCta={COMPANY_CTA.primaryCta}
         secondaryCta={COMPANY_CTA.secondaryCta}
+        bottomDecoration={
+          <SkylineArt className="absolute bottom-0 right-0 h-auto w-[440px] max-w-full text-white/[0.12] sm:w-[560px]" />
+        }
       />
     </div>
   );
