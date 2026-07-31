@@ -15,12 +15,14 @@ export default function FooterSection() {
           <div className="md:col-span-2">
             <div className="mb-6">
               <a href="https://cloudnature.jp" rel="noopener noreferrer">
+                {/* SVG は余白なしのため、旧 PNG（余白込み h-10/h-12）と見た目が同じサイズになる高さに調整 */}
                 <Image
-                  src="/images/cloudnature.png"
+                  src="/images/cloudnature_logo_horizontal_white.svg"
                   alt="CloudNature"
-                  width={215}
-                  height={50}
-                  className="h-10 w-auto object-contain brightness-0 invert md:h-12"
+                  width={258}
+                  height={45}
+                  className="h-8 w-auto object-contain md:h-9"
+                  unoptimized
                 />
               </a>
             </div>

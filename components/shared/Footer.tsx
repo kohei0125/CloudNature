@@ -10,13 +10,15 @@ const Footer = () => {
           {/* Left: Logo + Description + Legal */}
           <div>
             <div className="mb-4">
+              {/* SVG は余白なしのため、旧 PNG（余白込み h-9/h-10）と見た目が同じサイズになる高さに調整 */}
               <Image
-                src="/images/cloudnature_white.png"
+                src="/images/cloudnature_logo_horizontal_white.svg"
                 alt={HEADER_COPY.brand}
-                width={180}
-                height={50}
-                className="object-contain h-9 md:h-10 w-auto"
+                width={258}
+                height={45}
+                className="object-contain h-7 md:h-8 w-auto"
                 priority={false}
+                unoptimized
               />
             </div>
             <p className="text-teal-200/70 text-sm leading-relaxed mb-6">

@@ -31,13 +31,15 @@ const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onC
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex justify-between items-center h-14 md:h-[56px]">
         <Link href="/" className="flex items-center">
+          {/* SVG は余白なしのため、旧 PNG（余白込み h-8/h-10）と見た目が同じサイズになる高さに調整 */}
           <Image
-            src="/images/cloudnature.png"
+            src="/images/cloudnature_logo_horizontal_color.svg"
             alt={HEADER_COPY.brand}
-            width={180}
-            height={50}
-            className="h-8 w-auto object-contain md:h-10"
+            width={258}
+            height={45}
+            className="h-6 w-auto object-contain md:h-8"
             priority
+            unoptimized
           />
         </Link>
 

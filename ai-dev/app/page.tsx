@@ -30,12 +30,14 @@ export default function TrainingPage() {
       <HeaderScrollEffect>
         <div className="container site-header__inner">
           <a className="site-header__logo" href={MAIN_SITE_URL}>
+            {/* globals.css の img{height:auto} により width が表示幅。旧 PNG と同じ幅を保ち、高さのみ SVG の比率に合わせる */}
             <Image
-              src="/images/logo-white.png"
+              src="/images/cloudnature_logo_horizontal_white.svg"
               alt="CloudNature"
               width={130}
-              height={30}
+              height={23}
               priority
+              unoptimized
             />
           </a>
           <nav className="site-header__nav" aria-label="ページ内メニュー">
@@ -579,7 +581,13 @@ export default function TrainingPage() {
       <footer className="site-footer">
         <div className="container site-footer__inner">
           <a className="site-footer__logo" href={MAIN_SITE_URL}>
-            <Image src="/images/logo-white.png" alt="CloudNature" width={122} height={28} />
+            <Image
+              src="/images/cloudnature_logo_horizontal_white.svg"
+              alt="CloudNature"
+              width={122}
+              height={21}
+              unoptimized
+            />
           </a>
           <nav className="site-footer__links" aria-label="サイト情報">
             <a href={`${MAIN_SITE_URL}/company`}>会社概要</a>

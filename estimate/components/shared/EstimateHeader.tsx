@@ -46,13 +46,15 @@ export default function EstimateHeader() {
     >
       <div className="container mx-auto flex items-center px-6">
         <a href="https://cloudnature.jp" rel="noopener noreferrer">
+          {/* SVG は余白なしのため、旧 PNG（余白込み h-10/h-12）と見た目が同じサイズになる高さに調整 */}
           <Image
-            src="/images/cloudnature.png"
+            src="/images/cloudnature_logo_horizontal_color.svg"
             alt="CloudNature"
-            width={215}
-            height={50}
-            className={`h-10 w-auto object-contain transition-all duration-300 md:h-12 ${shouldUseWhiteLogo ? "brightness-0 invert" : ""}`}
+            width={258}
+            height={45}
+            className={`h-8 w-auto object-contain transition-all duration-300 md:h-9 ${shouldUseWhiteLogo ? "brightness-0 invert" : ""}`}
             priority
+            unoptimized
           />
         </a>
         <nav
