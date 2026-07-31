@@ -21,6 +21,10 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     blockquote: ["class"],
     section: ["class"],
     p: ["lang", "dir"],
+    // 記事内の目次（nav.toc）からアンカーリンクで飛べるようにする
+    nav: ["class", "aria-label"],
+    h2: ["id"],
+    h3: ["id"],
   },
   allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
 };

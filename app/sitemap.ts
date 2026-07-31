@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
 import { getAllNewsForSitemap } from "@/lib/microcms";
 import { CANONICAL_SITE_URL as BASE_URL } from "@/lib/site";
-import { USECASES_ARTICLES } from "@/content/usecases";
+import { USECASES_ARTICLES, getArticleDate } from "@/content/usecases";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // USECASES_ARTICLES は更新日の降順なので、先頭がそのまま一覧ページの最終更新日になる
+  const latestUsecaseDate = getArticleDate(USECASES_ARTICLES[0]);
+
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: "2026-02-27", changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/services`, lastModified: "2026-03-29", changeFrequency: "monthly", priority: 0.9 },
@@ -14,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/company`, lastModified: "2026-02-06", changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/contact`, lastModified: "2026-02-06", changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/news`, lastModified: "2026-02-27", changeFrequency: "weekly", priority: 0.8 },
-    { url: `${BASE_URL}/usecases`, lastModified: "2026-03-27", changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE_URL}/usecases`, lastModified: latestUsecaseDate, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/privacy`, lastModified: "2025-11-01", changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/security`, lastModified: "2025-11-01", changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/terms`, lastModified: "2025-11-01", changeFrequency: "yearly", priority: 0.3 },
@@ -36,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const usecasesRoutes: MetadataRoute.Sitemap = USECASES_ARTICLES.map((article) => ({
     url: `${BASE_URL}/usecases/${article.id}`,
-    lastModified: article.publishedAt,
+    lastModified: getArticleDate(article),
     changeFrequency: "monthly",
     priority: 0.7,
   }));

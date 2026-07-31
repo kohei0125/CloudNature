@@ -7,7 +7,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { USECASES_SECTION, USECASES_ARTICLES } from "@/content/usecases";
+import { USECASES_SECTION, USECASES_ARTICLES, getArticleDate } from "@/content/usecases";
 import { formatDateJP } from "@/lib/utils";
 
 const CasesCarouselSection = () => {
@@ -116,7 +116,7 @@ const CasesCarouselSection = () => {
                             {article.category}
                           </span>
                           <time className="text-[10px] text-gray-400">
-                            {formatDateJP(article.publishedAt)}
+                            {formatDateJP(getArticleDate(article))}
                           </time>
                         </div>
                         <h3 className="text-gray-900 font-bold leading-snug line-clamp-2 text-sm group-hover:text-teal-700 transition-colors mb-1">
@@ -194,7 +194,7 @@ const CasesCarouselSection = () => {
                           {article.category}
                         </span>
                         <time className="text-[10px] text-gray-400">
-                          {formatDateJP(article.publishedAt)}
+                          {formatDateJP(getArticleDate(article))}
                         </time>
                       </div>
                       <h3 className="text-gray-900 font-bold text-sm leading-snug line-clamp-2">

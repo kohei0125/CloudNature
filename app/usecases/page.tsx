@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import CtaBanner from "@/components/shared/CtaBanner";
-import { USECASES_ARTICLES, USECASES_SECTION, USECASES_CTA } from "@/content/usecases";
+import { USECASES_ARTICLES, USECASES_SECTION, USECASES_CTA, getArticleDate } from "@/content/usecases";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
@@ -33,7 +33,7 @@ const categories = Array.from(
 );
 
 const archiveYears = Array.from(
-  new Set(USECASES_ARTICLES.map((a) => new Date(a.publishedAt).getFullYear()))
+  new Set(USECASES_ARTICLES.map((a) => new Date(getArticleDate(a)).getFullYear()))
 ).sort((a, b) => b - a);
 
 export default function UseCasesPage() {
@@ -167,7 +167,7 @@ export default function UseCasesPage() {
                       {article.title}
                     </h3>
                     <time className="text-[11px] md:text-sm text-gray-400">
-                      {formatDateJP(article.publishedAt)}
+                      {formatDateJP(getArticleDate(article))}
                     </time>
                     <p className="hidden md:block text-sm text-gray-500 leading-relaxed line-clamp-2 h-[3.25em] mt-2">
                       {article.excerpt}

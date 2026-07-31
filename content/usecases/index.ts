@@ -12,6 +12,17 @@ import { article as aiTaskAllocation } from "./ai-task-allocation";
 
 export { USECASES_SECTION, USECASES_CTA, USECASES_DETAIL } from "./_common";
 
+/**
+ * 記事の「更新日」。大幅リライトした記事は updatedAt、それ以外は公開日を使う。
+ * 一覧の並び順・日付表示・sitemap の lastModified を、この1箇所に揃える。
+ */
+export function getArticleDate(
+  article: Pick<UseCaseArticle, "publishedAt" | "updatedAt">,
+): string {
+  return article.updatedAt ?? article.publishedAt;
+}
+
+/** 更新日の新しい順。TOP のカルーセルと /usecases 一覧が共通で参照する */
 export const USECASES_ARTICLES: UseCaseArticle[] = [
   aiDevelopmentBottleneckShift,
   niigataAiDevelopmentCompanyGuide,
@@ -23,4 +34,4 @@ export const USECASES_ARTICLES: UseCaseArticle[] = [
   niigataAiSubsidyGuide2026,
   aiAutoSalesDelivery,
   aiAnalyticsAutoReport,
-];
+].sort((a, b) => (getArticleDate(a) < getArticleDate(b) ? 1 : -1));

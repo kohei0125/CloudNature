@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Script from "next/script";
 import { ArrowLeft } from "lucide-react";
-import { USECASES_ARTICLES, USECASES_CTA, USECASES_DETAIL, USECASES_SECTION } from "@/content/usecases";
+import { USECASES_ARTICLES, USECASES_CTA, USECASES_DETAIL, USECASES_SECTION, getArticleDate } from "@/content/usecases";
 import CtaBanner from "@/components/shared/CtaBanner";
 import NewsBody from "@/components/news/NewsBody";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
@@ -69,7 +69,7 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
     headline: article.title,
     description: article.excerpt,
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
+    dateModified: getArticleDate(article),
     articleSection: article.category,
     inLanguage: "ja",
     author: {
@@ -111,9 +111,17 @@ const UseCaseDetailPage = async ({ params }: PageProps) => {
             <span className="text-[11px] md:text-xs font-bold px-2.5 py-0.5 rounded-full bg-teal-800/20 text-teal-800">
               {article.category}
             </span>
-            <time className="text-xs md:text-sm text-gray-400 font-medium">
+            <time dateTime={article.publishedAt} className="text-xs md:text-sm text-gray-400 font-medium">
               {formatDateJP(article.publishedAt)}
             </time>
+            {article.updatedAt && (
+              <time
+                dateTime={article.updatedAt}
+                className="text-xs md:text-sm text-gray-400 font-medium"
+              >
+                （最終更新：{formatDateJP(article.updatedAt)}）
+              </time>
+            )}
           </div>
 
           <h1 className="text-xl md:text-[clamp(1.25rem,4vw,2.5rem)] font-sans font-bold text-forest leading-tight mb-5 md:mb-8">

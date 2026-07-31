@@ -1,4 +1,4 @@
-import type { MicroCMSListResponse, MicroCMSNewsArticle } from "@/types/microcms";
+import { normalizeNewsArticle, type MicroCMSListResponse, type MicroCMSNewsArticle, type NewsArticle } from "@/types/microcms";
 
 const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN;
 const API_KEY = process.env.MICROCMS_API_KEY;
@@ -38,8 +38,8 @@ export async function getNewsList(params?: {
   limit?: number;
   offset?: number;
   category?: string;
-}): Promise<MicroCMSListResponse<MicroCMSNewsArticle>> {
-  const empty: MicroCMSListResponse<MicroCMSNewsArticle> = {
+}): Promise<MicroCMSListResponse<NewsArticle>> {
+  const empty: MicroCMSListResponse<NewsArticle> = {
     contents: [],
     totalCount: 0,
     offset: 0,
@@ -57,14 +57,14 @@ export async function getNewsList(params?: {
   }
 
   const res = await fetchAPI<MicroCMSListResponse<MicroCMSNewsArticle>>("/news", query);
-  return res ?? empty;
+  if (!res) return empty;
+  return { ...res, contents: res.contents.map(normalizeNewsArticle) };
 }
 
 /** contentId で記事1件を取得（GET /api/v1/news/{id}） */
-export async function getNewsArticle(
-  id: string,
-): Promise<MicroCMSNewsArticle | null> {
-  return fetchAPI<MicroCMSNewsArticle>(`/news/${id}`);
+export async function getNewsArticle(id: string): Promise<NewsArticle | null> {
+  const res = await fetchAPI<MicroCMSNewsArticle>(`/news/${id}`);
+  return res ? normalizeNewsArticle(res) : null;
 }
 
 /** ビルド時用: 全 contentId をページネーションで取得 */

@@ -10,7 +10,7 @@ import NewsBody from "@/components/news/NewsBody";
 import type { NewsCategory } from "@/types";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { formatDateJP } from "@/lib/utils";
-import type { MicroCMSNewsArticle } from "@/types/microcms";
+import type { NewsArticle } from "@/types/microcms";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -28,7 +28,7 @@ export async function generateStaticParams() {
   }
 }
 
-function buildFallbackArticle(slug: string): MicroCMSNewsArticle | null {
+function buildFallbackArticle(slug: string): NewsArticle | null {
   const item = NEWS_ITEMS.find((newsItem) => newsItem.id === slug);
   if (!item) return null;
 
@@ -57,7 +57,7 @@ function buildFallbackArticle(slug: string): MicroCMSNewsArticle | null {
   };
 }
 
-async function getArticleWithFallback(slug: string): Promise<MicroCMSNewsArticle | null> {
+async function getArticleWithFallback(slug: string): Promise<NewsArticle | null> {
   const article = await getNewsArticle(slug);
   return article ?? buildFallbackArticle(slug);
 }
