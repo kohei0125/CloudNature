@@ -1,70 +1,60 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { USECASES_SECTION, USECASES_ARTICLES, getArticleDate } from "@/content/usecases";
 import { formatDateJP } from "@/lib/utils";
 
-const CasesCarouselSection = () => {
-  /* --- PC carousel --- */
-  const pcPlugins = useRef([Autoplay({ delay: 5000, stopOnInteraction: true })]);
-  const [pcRef, pcApi] = useEmblaCarousel(
-    { loop: true, align: "start", slidesToScroll: 1 },
-    pcPlugins.current
+type EmblaApi = ReturnType<typeof useEmblaCarousel>[1];
+
+/**
+ * Embla の現在位置と総枚数を購読する。
+ * 外部ストアからの読み取りなので useSyncExternalStore を使い、
+ * effect 内で setState してマウント時に再レンダーを重ねるのを避ける。
+ */
+function useEmblaState(api: EmblaApi) {
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      if (!api) return () => {};
+      api.on("select", onChange);
+      api.on("reInit", onChange);
+      return () => {
+        api.off("select", onChange);
+        api.off("reInit", onChange);
+      };
+    },
+    [api],
   );
-  const [pcIndex, setPcIndex] = useState(0);
-  const [pcCount, setPcCount] = useState(0);
+
+  const index = useSyncExternalStore(
+    subscribe,
+    () => api?.selectedScrollSnap() ?? 0,
+    () => 0,
+  );
+  const count = useSyncExternalStore(
+    subscribe,
+    () => api?.scrollSnapList().length ?? 0,
+    () => 0,
+  );
+
+  return { index, count };
+}
+
+const CasesCarouselSection = () => {
+  /* --- PC carousel（自動スクロールなし。矢印とスワイプで操作する） --- */
+  const [pcRef, pcApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 });
+  const { index: pcIndex, count: pcCount } = useEmblaState(pcApi);
 
   const pcPrev = useCallback(() => pcApi?.scrollPrev(), [pcApi]);
   const pcNext = useCallback(() => pcApi?.scrollNext(), [pcApi]);
 
-  const onPcSelect = useCallback(() => {
-    if (!pcApi) return;
-    setPcIndex(pcApi.selectedScrollSnap());
-  }, [pcApi]);
-
-  useEffect(() => {
-    if (!pcApi) return;
-    setPcCount(pcApi.scrollSnapList().length);
-    onPcSelect();
-    pcApi.on("select", onPcSelect);
-    pcApi.on("reInit", onPcSelect);
-    return () => {
-      pcApi.off("select", onPcSelect);
-      pcApi.off("reInit", onPcSelect);
-    };
-  }, [pcApi, onPcSelect]);
-
-  /* --- モバイル carousel --- */
-  const spPlugins = useRef([Autoplay({ delay: 4000, stopOnInteraction: true })]);
-  const [spRef, spApi] = useEmblaCarousel(
-    { loop: true, align: "center", slidesToScroll: 1 },
-    spPlugins.current
-  );
-  const [spIndex, setSpIndex] = useState(0);
-  const [spCount, setSpCount] = useState(0);
-
-  const onSpSelect = useCallback(() => {
-    if (!spApi) return;
-    setSpIndex(spApi.selectedScrollSnap());
-  }, [spApi]);
-
-  useEffect(() => {
-    if (!spApi) return;
-    setSpCount(spApi.scrollSnapList().length);
-    onSpSelect();
-    spApi.on("select", onSpSelect);
-    spApi.on("reInit", onSpSelect);
-    return () => {
-      spApi.off("select", onSpSelect);
-      spApi.off("reInit", onSpSelect);
-    };
-  }, [spApi, onSpSelect]);
+  /* --- モバイル carousel（自動スクロールなし。スワイプとドットで操作する） --- */
+  const [spRef, spApi] = useEmblaCarousel({ loop: true, align: "center", slidesToScroll: 1 });
+  const { index: spIndex, count: spCount } = useEmblaState(spApi);
 
   return (
     <section id="usecases" aria-labelledby="usecases-heading" className="bg-white py-12 md:py-16 overflow-hidden">
