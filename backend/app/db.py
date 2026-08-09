@@ -42,6 +42,12 @@ def _run_migrations() -> None:
             conn.execute(text("DROP TABLE step_answers"))
             logger.info("Migration: dropped step_answers table")
 
+        # Drop weekly report tables if they still exist (週次レポート機能は廃止済み)
+        for table in ("weekly_report_log", "weekly_metrics"):
+            if table in existing_tables:
+                conn.execute(text(f"DROP TABLE {table}"))
+                logger.info("Migration: dropped %s table", table)
+
 
 def create_db_and_tables() -> None:
     """Create all database tables from SQLModel metadata and run migrations."""

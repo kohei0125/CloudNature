@@ -9,7 +9,6 @@ CloudNature コーポレートサイト・AI見積もりシステム・AI開発�
 ├── estimate/        AI見積もりフロントエンド (Next.js) → ai.cloudnature.jp
 ├── ai-dev/          AI開発研修LP (Next.js)          → ai-dev.cloudnature.jp
 ├── backend/         見積もりAPI (FastAPI)           → Cloud Run
-├── gas/             ファネルダッシュボード (Google Apps Script)
 ├── docs/            設計書・TODO
 └── docker-compose.yml  ローカル開発用
 ```
@@ -107,11 +106,8 @@ API_KEY=                               # Vercel → backend 間認証（ロー�
 LLM_PROVIDER=gemini                    # "gemini" | "openai" | "fallback"
 GEMINI_API_KEY=<your-key>
 OPENAI_API_KEY=<your-key>
-RESEND_API_KEY=<your-key>              # 週次レポートメール送信に使用
-REPORT_EMAIL=                          # 週次レポート送信先メールアドレス
-GOOGLE_SERVICE_ACCOUNT_JSON=           # ローカル開発用（Cloud RunではADC）
-GSC_SITE_URL=sc-domain:cloudnature.jp  # Search Console ドメインプロパティ
-GA4_PROPERTY_ID=properties/XXXXXXXXX   # GA4 プロパティID
+RESEND_API_KEY=<your-key>              # 見積もり結果・エラー通知メール送信に使用
+NOTIFY_EMAIL=info@cloudnature.jp       # 運用者向け通知の送信先
 ```
 
 ### estimate/.env.local
@@ -182,9 +178,7 @@ IMAGE_TAG=v1.2.0 ./deploy.sh
 `deploy.sh` は以下を自動実行します:
 
 1. Cloud Build で `backend/` の Docker イメージをビルド＆プッシュ
-2. ダイジェスト指定で Cloud Run にデプロイ（タグの不整合を防止）
-3. 環境変数・Secret Manager 参照を一括設定
-4. Cloud Scheduler ジョブ（週次レポート）の作成・更新
+2. ダイジェスト指定で Cloud Run にデプロイ（タグの不整合を防止）— 環境変数・Secret Manager 参照もここで一括設定
 
 | 環境変数 | デフォルト値 | 説明 |
 |---|---|---|
@@ -192,7 +186,6 @@ IMAGE_TAG=v1.2.0 ./deploy.sh
 | `GCP_REGION` | `asia-northeast1` | Cloud Run リージョン |
 | `SERVICE_NAME` | `backend` | Cloud Run サービス名 |
 | `IMAGE_TAG` | git short hash | イメージタグ |
-| `SCHEDULER_SCHEDULE` | `0 10 * * 1` | 週次レポートの cron 式（デフォルト: 毎週月曜 10:00 JST） |
 
 シークレット（`API_KEY`, `OPENAI_API_KEY`, `RESEND_API_KEY`, `DATABASE_URL`）は GCP Secret Manager から自動参照されます。
 
@@ -231,38 +224,7 @@ cd ai-dev && npm run lint && npm run build
 - **cross-domain**: GA4 管理画面で手動設定済み
 - **ローカル開発**: `estimate` は `NEXT_PUBLIC_ENV!=production` かつ `NEXT_PUBLIC_GA_ID` が空なら計測タグは出力されない
 
-### 週次レポート
-
-バックエンドが GA4 Data API + Search Console API からデータを取得し、Resend 経由でメール送信する。
-
-- **テストコマンド**
-※weekly_report_logテーブルに同じyear_weekのレコードがない場合のみ実行される
-`gcloud scheduler jobs run weekly-report --project video-gen-demo --location asia-northeast1`
-
-- **スケジュール**: Cloud Scheduler → `POST /api/v1/reports/weekly`（毎週月曜 10:00 JST）
-- **認証**: Cloud Scheduler → Cloud Run は OIDC トークン（IAM `roles/run.invoker`）。`X-API-Key` チェックはスキップ
-- **送信先**: 環境変数 `REPORT_EMAIL` に設定したアドレス
-- **冪等性**: `year_week` 単位で重複送信を防止（DB に `WeeklyReportLog` で記録）
-- **サイト別（hostName）セクション**: cloudnature.jp / ai.cloudnature.jp ごとのセッション・ユーザー・PV・前週比を表示
-- **閲覧ページ別 Top**: `hostName` + `pagePath` の2次元で集計（2サイトの同一パスが合算されない）
-- **本番ホスト絞り込み**: `PRODUCTION_HOSTS`（`ga4_service.py`）で localhost や `*.vercel.app` を除外
-- **GSC host分離**: 現時点ではスコープ外（`sc-domain:cloudnature.jp` はサブドメインを含むが、ai.cloudnature.jp の検索流入はほぼないため将来課題）
-
-Scheduler ジョブは `deploy.sh` のステップ 3 で自動作成・更新される。手動実行: `gcloud scheduler jobs run weekly-report --project video-gen-demo --location asia-northeast1`
-
-関連コード: `backend/app/services/ga4_service.py`, `backend/app/tasks/weekly_report.py`, `backend/app/templates/weekly_report_email.html`
-
-### ファネルダッシュボード（Google Spreadsheet）
-
-週次データを Google Spreadsheet に蓄積し、チャートで可視化する。GAS が GA4 / GSC API から直接データを取得する方式（バックエンドとは独立）。
-
-- **GASコード**: `gas/funnel_dashboard.js`（Apps Script の `コード.gs` にコピペ）
-- **設定ファイル**: `gas/appsscript.json`
-- **スケジュール**: 毎週月曜 10:30 JST（メール送信の30分後）
-- **シート構成**: 週次サマリー / チャネル別 / 検索キーワード Top10 / 閲覧ページ Top10 / キーイベント詳細 / チャート
-- **メールリンク**: 環境変数 `FUNNEL_SPREADSHEET_URL` を設定すると週次メールのフッターにリンクが表示される
-
-セットアップ手順・設計詳細は [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) を参照。
+> **廃止（2026-08-09）**: 週次SEO・アクセスレポートのメール配信と、GAS によるファネルダッシュボード（Google Spreadsheet 週次集計）は削除済み。Cloud Scheduler ジョブ `weekly-report` と Neon の `weekly_report_log` / `weekly_metrics` テーブルも削除済み。アクセス数の確認は GA4 / Search Console の管理画面で直接行う。
 
 ---
 
@@ -354,8 +316,8 @@ OpenAI Realtime API（`gpt-realtime`）+ WebRTC による日英双方向の音�
 | [`docs/20260216_estimate_strategy.md`](docs/20260216_estimate_strategy.md) | 見積もりシステム戦略 |
 | [`docs/20260216_estimate_top_design.md`](docs/20260216_estimate_top_design.md) | 見積もり UI/UX 設計 |
 | [`docs/20260212_estimate_system_design.md`](docs/20260212_estimate_system_design.md) | システム設計 |
-| [`docs/20260310_weekly_report_review.md`](docs/20260310_weekly_report_review.md) | 週次レポート機能 検証・レビュー |
-| [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) | ファネルダッシュボード GAS実装指示書 |
+| [`docs/20260310_weekly_report_review.md`](docs/20260310_weekly_report_review.md) | 週次レポート機能 検証・レビュー（**廃止済み機能の記録**） |
+| [`docs/20260322_spreadsheet_funnel_design.md`](docs/20260322_spreadsheet_funnel_design.md) | ファネルダッシュボード GAS実装指示書（**廃止済み機能の記録**） |
 | [`docs/20260607_openai_translate.md`](docs/20260607_openai_translate.md) | リアルタイム翻訳ツール 設計書 |
 | [`docs/20260607_realtime_translate_review.md`](docs/20260607_realtime_translate_review.md) | リアルタイム翻訳ツール 検証・レビュー記録 |
 | [`docs/20260720_ai-dev_lp_design.md`](docs/20260720_ai-dev_lp_design.md) | AI開発研修LP 設計・レビュー記録 |
