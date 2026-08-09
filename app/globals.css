@@ -411,9 +411,11 @@ h1, h2, h3, h4, h5, h6 {
  * 30rem 以上の領域があるデスクトップでは見た目は変わらない。
  */
 .prose .table-scroll {
-  margin: 1rem 0;
+  margin: 1.5rem 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(25, 35, 27, 0.16);
+  border-radius: 10px;
   /* スクロール可能なことを伝える両端の影。白い覆い（local）が影（scroll）を隠し、
      スクロールできるときだけ影が現れる。記事本文が白背景である前提。 */
   background:
@@ -426,19 +428,50 @@ h1, h2, h3, h4, h5, h6 {
 
 .prose .table-scroll > table {
   margin: 0;
+  width: 100%;
   min-width: 30rem;
+  border-collapse: collapse;
 }
 
-/* 行間を広げ、上揃えにして、折り返しても各セルの先頭を追いやすくする */
+/* Tailwind Typography は先頭・末尾セルの左右パディングを 0 にするため、
+   枠線を付けると文字が枠に貼り付いてしまう。ここで全セルに余白を戻す。 */
 .prose .table-scroll th,
 .prose .table-scroll td {
+  padding: 0.75rem 1rem;
   line-height: 1.6;
   vertical-align: top;
+  border-bottom: 1px solid rgba(25, 35, 27, 0.1);
+}
+
+/* 列の区切り。行が長い表でも横方向に目線を追いやすくする */
+.prose .table-scroll th + th,
+.prose .table-scroll td + td {
+  border-left: 1px solid rgba(25, 35, 27, 0.07);
+}
+
+.prose .table-scroll thead th {
+  background: #f5f7f4;
+  border-bottom-color: rgba(25, 35, 27, 0.18);
+  font-size: 0.95em;
+}
+
+/* prose の tr 罫線と二重にならないようにする */
+.prose .table-scroll tbody tr {
+  border-bottom: 0;
+}
+
+.prose .table-scroll tbody tr:last-child th,
+.prose .table-scroll tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 @media (min-width: 768px) {
   .prose .table-scroll {
-    margin: 1.5rem 0;
+    margin: 2rem 0;
+  }
+  .prose .table-scroll th,
+  .prose .table-scroll td {
+    padding: 0.875rem 1.125rem;
   }
 }
 
