@@ -404,6 +404,44 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* === Article Tables (.prose .table-scroll) ===
+ * NewsBody が <table> をこのラッパーで囲む。
+ * スマホ幅では列が潰れて「最大1／億円」のように金額が途中で折り返されるため、
+ * 表に最小幅を持たせ、収まらない場合だけ横スクロールさせる。
+ * 30rem 以上の領域があるデスクトップでは見た目は変わらない。
+ */
+.prose .table-scroll {
+  margin: 1rem 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* スクロール可能なことを伝える両端の影。白い覆い（local）が影（scroll）を隠し、
+     スクロールできるときだけ影が現れる。記事本文が白背景である前提。 */
+  background:
+    linear-gradient(to right, #ffffff 30%, rgba(255, 255, 255, 0)) left / 2rem 100% no-repeat,
+    linear-gradient(to left, #ffffff 30%, rgba(255, 255, 255, 0)) right / 2rem 100% no-repeat,
+    radial-gradient(farthest-side at 0 50%, rgba(25, 35, 27, 0.12), transparent) left / 0.75rem 100% no-repeat,
+    radial-gradient(farthest-side at 100% 50%, rgba(25, 35, 27, 0.12), transparent) right / 0.75rem 100% no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+
+.prose .table-scroll > table {
+  margin: 0;
+  min-width: 30rem;
+}
+
+/* 行間を広げ、上揃えにして、折り返しても各セルの先頭を追いやすくする */
+.prose .table-scroll th,
+.prose .table-scroll td {
+  line-height: 1.6;
+  vertical-align: top;
+}
+
+@media (min-width: 768px) {
+  .prose .table-scroll {
+    margin: 1.5rem 0;
+  }
+}
+
 /* === Article Table of Contents (.prose nav.toc) ===
  * 雑誌の目次のように、罫線と余白で構造を作る（カード・角丸・装飾連番は使わない）。
  * ただし「ここが目次」「各行はリンク」が一目で分かる強さは残す。

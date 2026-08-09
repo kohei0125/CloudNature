@@ -1,6 +1,6 @@
 ---
 name: usecase-article-creation
-description: CloudNature の /usecases 配下に SEO 記事を新規作成するための体系的な手順。資料調査 → 記事ファイル作成 → EEAT 強化 → トーン精査 → スマホ可読性最適化 → 画像最適化 → HTML 属性正規化 → Vercel React/デザイン準拠 → ブラウザ実機確認の順で進める。ブログ記事、ユースケース記事、AI 関連の解説記事を作成・改修する際に使用する。
+description: CloudNature の /usecases 配下に SEO 記事を新規作成するための体系的な手順。資料調査 → 記事ファイル作成 → EEAT 強化 → トーン精査 → 認知的負荷の低減（スマホ可読性）→ 画像最適化 → HTML 属性正規化 → Vercel React/デザイン準拠 → ブラウザ実機確認の順で進める。ブログ記事、ユースケース記事、AI 関連の解説記事を作成・改修する際に使用する。
 ---
 
 # CloudNature ユースケース記事作成スキル
@@ -17,7 +17,7 @@ Phase 3  index.ts へ登録
 Phase 4  型チェック・lint
 Phase 5  EEAT 強化
 Phase 6  AI 特有トーンの精査
-Phase 7  スマホ可読性の最適化
+Phase 7  認知的負荷の低減（スマホ可読性）
 Phase 8  画像準備（ウォーターマーク除去・最適化）
 Phase 9  画像の本文組み込み
 Phase 10 HTML 属性の正規化
@@ -258,31 +258,87 @@ Google の品質評価基準に沿って次の要素を組み込む。
 
 その他、長い伸ばし棒や過度な太字も間引く。
 
-## Phase 7: スマホ可読性の最適化
+## Phase 7: 認知的負荷の低減（スマホ可読性）
 
-「ぶつ切り」と「文字詰まり」の中間を狙う。
+**判断基準は「スマホで読んだときに、読み進めるのがつらくないか」。**
+文字が延々と続く記事は、内容が正しくても離脱される。ここは仕上げではなく必須フェーズとして扱う。
 
-- 1 段落 ＝ 2〜4 文（1 トピック）
-- 関連する文は同じ段落に
-- トピックが変わる時に段落を分ける
-- リスト・テーブル・図版を多用して塊を分割
+### 7.1 段落
 
-### `NewsBody.tsx` の prose 拡張（必要な場合）
+- **1 段落 ＝ 2〜3 文・スマホで 2〜4 行**（目安 120 字前後）
+- 200 字を超える段落は分割の合図。「〜です。さらに〜」で続けず、いったん切る
+- 関連する文は同じ段落に。トピックが変わったら必ず段落を分ける
+- 逆に 1 文だけの段落を連発しない（ぶつ切りも読みにくい）
 
-`components/news/NewsBody.tsx` の className に以下が含まれていることを確認。なければ追加：
+書いたあとに機械的に確認する：
+
+```bash
+# 200 字を超える <p> を洗い出す（分割候補）
+grep -o '<p>[^<]\{200,\}' content/usecases/<slug>.ts
+```
+
+### 7.2 リスト化する（最も効果が大きい）
+
+**「AとBとC」「〜であり、〜であり」と列挙している文は、ほぼすべてリストにできる。**
+
+| 段落のままだと重い内容 | 置き換え |
+|---|---|
+| 金額・補助率・件数・締切などのスペック | `<ul>` の「**項目**：値」形式 |
+| 手順・時系列 | `<ol>` またはテーブル |
+| 条件・要件が 3 つ以上 | `<ul>` |
+| 「AはX、BはY、CはZ」の対応関係 | テーブル |
+| 関連記事への導線が 2 本以上 | `<ul>` の「用途 → リンク」形式 |
+
+### 7.3 見出しで区切る
+
+- **`<h2>` セクションが画面 3 スクロール分を超えたら `<h3>` を入れる**
+- `<h3>` は「読者の問い」か「結論」で書く（例：「補助上限は『通常』と『特例適用時』を分けて見る」）。「概要」「詳細」のような無意味な見出しは置かない
+- 見出しの前後の余白は `NewsBody.tsx` が大きめに確保している（7.5）。記事側で `<br />` を使って余白を作らない
+
+### 7.4 リスト項目・テーブルセル
+
+- **リスト項目が 80 字を超えるなら**「**見出し**」＋ `<br />` ＋ 説明文の 2 段構成にする
+- 補足や例外は `<li>` に詰め込まず、リストの後に `<p><small>※ 〜</small></p>` で出す
+- テーブルのセル内で**数値が途中で折り返されない**ようにする（「大幅賃上げ特例で最大1／億円」は NG）。ラベルと数値の間に `<br />` を入れて改行位置を自分で決める
+- テーブルは `NewsBody.tsx` が `.table-scroll` で囲み、最小幅 30rem を確保したうえで横スクロールさせる。記事側の対応は不要
+
+### 7.5 `NewsBody.tsx` の prose 設定（現行値）
+
+`components/news/NewsBody.tsx` の className。変更する場合は、他の記事にも影響することを踏まえる：
 
 ```
 prose-p:text-[15px] md:prose-p:text-base
 prose-p:leading-7 md:prose-p:leading-8
 prose-p:my-3 md:prose-p:my-4
-prose-h2:mt-8 prose-h2:mb-3 md:prose-h2:mt-12 md:prose-h2:mb-4
-prose-h3:mt-6 prose-h3:mb-2 md:prose-h3:mt-8 md:prose-h3:mb-3
+prose-h2:mt-14 prose-h2:mb-5 md:prose-h2:mt-20 md:prose-h2:mb-7
+prose-h3:mt-10 prose-h3:mb-3 md:prose-h3:mt-14 md:prose-h3:mb-4
 prose-figure:my-4 md:prose-figure:my-6
 prose-figcaption:text-xs md:prose-figcaption:text-sm prose-figcaption:mt-2
-prose-table:text-[13px] md:prose-table:text-sm prose-table:my-4
+prose-table:text-[13px] md:prose-table:text-sm
 prose-img:my-4 md:prose-img:my-6
 prose-li:my-1
 ```
+
+見出し前後の余白は意図的に大きく取っている（セクションの切れ目を一目で分かるようにするため）。
+表の余白は `app/globals.css` の `.table-scroll` が持つので、`prose-table:my-*` は指定しない。
+
+### 7.6 目視で確認する
+
+Phase 12 のブラウザ確認を待たず、この時点で狭い幅でのレンダリングを見る。
+ヘッドレス Chrome はウィンドウ幅を約 600px 未満にクランプするため、**600px を「狭い幅」の代用**として使う：
+
+```bash
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$CHROME" --headless=new --disable-gpu --hide-scrollbars \
+  --window-size=600,16000 --run-all-compositor-stages-before-draw \
+  --virtual-time-budget=25000 \
+  --screenshot=full.png "http://localhost:3000/usecases/<slug>"
+# 縦に長いので分割して確認する
+magick full.png -crop 600x2400+0+2400 +repage seg1.png
+```
+
+見るポイント：**文字だけの塊が 2 スクロール以上続いていないか**、数値が途中で折り返されていないか、
+セクションの切れ目が分かるか。
 
 ## Phase 8: 画像準備
 
@@ -458,6 +514,11 @@ node .claude/skills/usecase-article-creation/scripts/screenshot.cjs \
 □ 過度な実績主張（具体クライアント事例の捏造）なし
 □ 監修クレジット + 最終更新日 + 出典の透明性ブロックあり
 □ FAQ 3 問以内（多くしすぎない）
+□ 200 字を超える段落がない（`grep -o '<p>[^<]\{200,\}'` が 0 件）
+□ 列挙している内容がリスト・テーブルになっている
+□ 長い h2 セクションに h3 が入っている
+□ テーブル内で数値が途中で折り返されていない
+□ 狭い幅（600px）で、文字だけの塊が 2 スクロール以上続いていない
 □ AI 見積もり / 無料相談への CTA を 2 箇所以上
 □ 内部リンク 5 本以上（関連記事・サービス）
 □ モバイル・デスクトップ両方で目視確認済み
