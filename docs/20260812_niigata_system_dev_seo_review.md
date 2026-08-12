@@ -156,32 +156,83 @@
 第1版では `/services/system-dev` の Impressions と平均順位を主KPIにしていたが、
 これは事業成果と直結しない。**主KPIをファネル指標に変更する。**
 
-### 5-1. 主要評価指標
+### 5-0. 現状の計測実装（コード実測 2026-08-12）
 
-| # | 指標 | 測定元 | 備考 |
+KPI名を実装と突き合わせるため、先に既存のGA4イベントを整理する。
+
+| イベント | 発火タイミング | 実装箇所 |
+| --- | --- | --- |
+| `estimate_start` | セッション作成成功時（＝チャット開始） | `estimate/hooks/useEstimateApi.ts:55` |
+| `estimate_step`（`step_number`・`step_type`） | **各ステップの回答送信が成功した後**（コード上のコメントも「ステップ完了イベント」） | `estimate/app/chat/page.tsx:160` |
+| `estimate_step_freetext` | Step 4 完了時 | `estimate/app/chat/page.tsx:166` |
+| `estimate_step_ai_features` | Step 8 完了時 | `estimate/app/chat/page.tsx:172` |
+| `generate_lead` | 見積もり生成成功時 | `estimate/app/chat/page.tsx:198` |
+| `view_estimate_complete` | 完了画面の表示時 | `estimate/app/complete/page.tsx:36` |
+| `view_estimate_pdf` | 完了画面からPDFを開いた時 | `estimate/components/complete/EmailNotice.tsx:43` |
+
+**重要**: ステップの「表示」「着手」を示すイベントは存在しない。`estimate_step` は回答送信後に発火するため、
+現状測れるのは **Step N 完了** であって Step N 到達ではない。
+
+### 5-1. 主要評価指標（実装に合わせて定義）
+
+| # | 指標 | 測定元 | 現状の可否 |
 | --- | --- | --- | --- |
-| 1 | `ai.cloudnature.jp` の対象クエリでの **Impressions・平均順位・CTR** | GSC（Ahrefs project_id 10203764） | 基準値: 13クエリ / 102imp / 0click / 48.57位 |
-| 2 | **AI見積もり開始率** | GA4（`G-BKHWKEZ26E`） | ランディング到達 → Step 1 着手 |
-| 3 | **各ステップの離脱率** | GA4 | Step 1〜13 の各段階 |
-| 4 | **Step 13 到達率** | GA4 / バックエンド | 連絡先入力画面への到達 |
-| 5 | **見積もり完了率** | バックエンド（見積もり生成・メール送信） | Step 13 通過 → 完了画面 |
-| 6 | **無料相談予約率** | TimeRex | 完了画面 → 予約確定 |
-| 7 | **商談化率** | Notion（案件レコード） | 予約 → 実施 |
-| 8 | **受注率** | Notion / 社内管理 | 商談 → 受注 |
+| 1 | `ai.cloudnature.jp` の対象クエリでの **Impressions・平均順位・CTR** | GSC（Ahrefs project_id 10203764） | ✅ 測定可。基準値: 13クエリ / 102imp / 0click / 48.57位 |
+| 2 | **AI見積もり開始率** | GA4 `estimate_start` ÷ ランディングのセッション数 | ✅ 測定可 |
+| 3 | **各ステップの完了率・離脱率** | GA4 `estimate_step` の `step_number` 分布 | ⚠️ **完了ベースでのみ算出可**。「表示したが未回答で離脱」は現状分離できない |
+| 4 | **Step 13 完了率**（連絡先の入力完了） | GA4 `estimate_step`（`step_number = 13`） | ✅ 測定可。※「Step 13 到達（＝画面表示）」は測れないため、近似として `step_number = 12` の完了を使う |
+| 5 | **見積もり完了率** | GA4 `generate_lead` / `view_estimate_complete` | ✅ 測定可 |
+| 6 | **無料相談予約率** | TimeRex 管理画面 | ⚠️ **GA4では測定不可**。予約完了時のイベント送信を実装していないため、TimeRex側の実績と突き合わせる運用が必要 |
+| 7 | **商談化率** | Notion（案件レコード） | ✅ 運用で測定 |
+| 8 | **受注率** | Notion / 社内管理 | ✅ 運用で測定 |
+
+#### 計測を厳密にするために必要な追加実装（未実施・提案）
+
+- **ステップ表示イベント**（例: `estimate_step_view`）を各ステップの描画時に発火させる。
+  これがないと「Step N を見て離脱した」人数が取れず、真の離脱率が出せない。
+- **TimeRex 予約完了イベント**の送信（TimeRexのコールバック or GTMトリガー）。
+  現状は完了画面までしかGA4で追えない。
+- **CTAの配置識別イベント**。`/services/system-dev` にはAI見積もりへの導線が4箇所あり
+  （ヒーロー / サービス詳細カード / ご相談の入口 / 末尾バナー）、現状はどれが押されたか区別できない。
+  クリック時に配置名（`hero` / `detail_card` / `entry_card` / `bottom_banner`）を伴うイベントを送れば、
+  効いていない導線を根拠を持って整理できる。
 
 ### 5-2. 補助指標（事業成果の判断材料としては従属）
 
 - 検索結果でどちらのURLが表示されたか（着地URLの分布）
 - `/services/system-dev` の Impressions・平均順位・CTR
-- `/services/system-dev` → `ai.cloudnature.jp` の遷移数・遷移率（GA4クロスドメイン計測）
+- `/services/system-dev` → `ai.cloudnature.jp` の遷移数・遷移率（同一GA4プロパティ内のサブドメイン間遷移として計測）
 
 **着地URLがどちらであるかは、それ自体を目標にしない。** 最終的に評価するのは 2〜8 のファネル指標である。
 
+### 5-4. KPI定義を修正した経緯（2026-08-12・レビュー指摘）
+
+第2版の初稿では、KPIを「Step 1 着手」「Step 13 到達率」と書き、GA4測定IDをai側 `G-BKHWKEZ26E` としていた。
+いずれもレビューで実装との不一致を指摘され、コードと本番配信HTMLで確認して修正した。
+
+| 誤り | 実際 |
+| --- | --- |
+| ai側のGA4測定IDは `G-BKHWKEZ26E` | 本体と同じ `G-1CF4H5GXSM` を共有（2026-04時点では別IDだったが、その後統一された） |
+| 「Step 1 着手」「Step 13 到達率」を測る | `estimate_step` は回答送信後に発火するため、測れるのは「Step N **完了**」 |
+
+原因は、2026-04時点の古い情報を現況確認せずに前提にしたこと。GA4/計測まわりは
+**実装コードと本番配信HTMLの両方で現況を確認してから書く**。
+
 ### 5-3. 計測上の注意
 
-- 本体（`G-1CF4H5GXSM`）とai（`G-BKHWKEZ26E`）は**GA4測定IDが別**。
-  遷移を追う際は `cookie_domain: '.cloudnature.jp'` によるクロスドメイン計測の設定を前提に、
-  本体側のGA4画面だけを見て「サブドメインが計測されない」と判断しないこと。
+- **本体と ai は同一のGA4測定ID `G-1CF4H5GXSM` を共有している**（2026-08-12 実測）。
+  - コード: `estimate/components/shared/GoogleAnalytics.tsx:7` が
+    `SHARED_GA_ID = "G-1CF4H5GXSM"` を持ち、本番（`NEXT_PUBLIC_ENV === "production"`）では
+    env の `NEXT_PUBLIC_GA_ID` ではなくこの共有IDを使う。非本番のみ env で上書きする設計。
+  - 本番配信HTML: `cloudnature.jp` / `ai.cloudnature.jp` のいずれも `G-1CF4H5GXSM` のみを含み、
+    GTMコンテナ（`GTM-`）は両サイトとも検出されなかった。
+  - したがってファネルは**1つのGA4プロパティ内で追える**。本体側とai側で別プロパティを見比べる必要はない。
+  - 補足: `NEXT_PUBLIC_GTM_ID` が設定されるとGTM経由に切り替わり、実際の測定IDはGTMの設定次第になる。
+    計測がおかしい時は、まず本番配信中のHTMLで実際のタグを確認すること。
+  - ai側の本番設定には `cookie_domain: '.cloudnature.jp'` が付与される実装になっている
+    （`GoogleAnalytics.tsx` の `gtag('config', ...)`）。ただしこのスクリプトは
+    `strategy="afterInteractive"` でクライアント側に注入されるため、初期HTMLのgrepでは確認できない。
+    実際の付与状況はブラウザの開発者ツールで確認する。
 - インデックス更新の反映には数週間かかる。短期の数値変動で結論を出さない。
 
 ---
