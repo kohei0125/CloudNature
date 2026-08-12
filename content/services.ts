@@ -115,7 +115,7 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
 export const SYSTEM_DEV_HERO = {
   eyebrow: "System Development",
   title: "新潟のシステム開発",
-  description: "新潟市中央区を拠点に、受発注管理・在庫管理・勤怠管理といった業務システムを、要件整理から設計・実装・運用まで一貫して開発します。既存のシステムを使い続けたまま、必要な部分から段階的に仕組み化できます。",
+  description: "新潟市中央区を拠点に、受発注管理・在庫管理・勤怠管理といった業務システムを、要件整理から設計・実装・運用まで一貫して開発します。既存の環境を活かし、業務への影響を抑えながら、必要な部分から段階的に仕組み化していきます。",
 };
 
 /**
@@ -130,7 +130,7 @@ export const SYSTEM_DEV_SCOPE: ServiceScopeItem[] = [
   },
   {
     title: "既存システムとの連携",
-    description: "いまお使いのシステムを止めずに、必要な機能だけを足します。連携できる範囲は下のFAQに記載しています。"
+    description: "いまの環境を活かし、業務への影響を抑えながら必要な機能を足す方法を検討します。連携できる範囲は下のFAQに記載しています。"
   },
   {
     title: "Webアプリケーション開発",
@@ -162,7 +162,7 @@ export const SYSTEM_DEV_ENTRY_POINTS: ServiceScopeItem[] = [
   },
   {
     title: "既存システムは残したい",
-    description: "全部を作り直す前提では考えません。いまの仕組みを活かしたまま、連携や部分開発で足りない部分だけを補う進め方もご提案します。"
+    description: "全部を作り直す前提では考えません。いまの仕組みをどこまで活かせるかを確認したうえで、連携や部分開発で足りない部分を補う進め方もご提案します。"
   },
   {
     title: "まず予算感だけ知りたい",
