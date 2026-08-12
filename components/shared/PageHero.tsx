@@ -1,7 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
+import SmartLink from "@/components/shared/SmartLink";
+import type { LinkItem } from "@/types";
 
 // 入場アニメーション（eyebrow → title → description の順に delay をずらす）
 const reveal = (delay = 0) => ({
@@ -24,9 +27,11 @@ interface PageHeroProps {
   bgColor?: string;
   /** section に付与する id */
   id?: string;
+  /** ファーストビューに置く主要導線。外部URLなら SmartLink が別タブで開く */
+  cta?: LinkItem;
 }
 
-const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id, cta }: PageHeroProps) => {
   return (
     <section id={id} className="pt-32 pb-16 relative overflow-hidden texture-grain" style={{ backgroundColor: bgColor }}>
       {heroBlobs}
@@ -55,6 +60,18 @@ const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id }: Page
           >
             {description}
           </motion.p>
+        ) : null}
+        {cta ? (
+          <motion.div {...reveal(0.3)} className="mt-8" data-reveal>
+            {/* InlineCta の主要ボタンと同じサイズ・見た目に揃える（CTAの寸法を増やさない） */}
+            <SmartLink
+              href={cta.href}
+              className="btn-puffy btn-puffy-accent px-6 py-3 rounded-full font-bold text-sm text-white inline-flex items-center justify-center gap-2"
+            >
+              {cta.label}
+              <ArrowRight className="w-4 h-4" />
+            </SmartLink>
+          </motion.div>
         ) : null}
       </div>
     </section>

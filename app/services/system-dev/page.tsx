@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import { PAGE_META } from "@/content/common";
-import { SERVICE_DETAILS, SYSTEM_DEV_FAQ, SERVICES_BOTTOM_CTA, SERVICE_PAGE_MAP } from "@/content/services";
+import {
+  SERVICE_DETAILS,
+  SYSTEM_DEV_FAQ,
+  SYSTEM_DEV_HERO,
+  SYSTEM_DEV_SCOPE,
+  SYSTEM_DEV_ENTRY_POINTS,
+  SERVICES_BOTTOM_CTA,
+  SERVICE_PAGE_MAP,
+} from "@/content/services";
 import PageHero from "@/components/shared/PageHero";
 import ServiceDetailCard from "@/components/services/ServiceDetailCard";
+import ServiceCardGrid from "@/components/services/ServiceCardGrid";
+import ImplementationFlow from "@/components/services/ImplementationFlow";
 import ServicesFaq from "@/components/services/ServicesFaq";
 import CtaBanner from "@/components/shared/CtaBanner";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
@@ -45,9 +55,10 @@ export default function SystemDevPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd({ ...service, path: SERVICE_PAGE_MAP[service.id].path }), faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
       />
       <PageHero
-        eyebrow={service.subtitle}
-        title={service.title}
-        description={service.description}
+        eyebrow={SYSTEM_DEV_HERO.eyebrow}
+        title={SYSTEM_DEV_HERO.title}
+        description={SYSTEM_DEV_HERO.description}
+        cta={SYSTEM_DEV_HERO.cta}
       />
 
       <section id="service-detail" className="py-16 md:py-24 bg-linen">
@@ -57,6 +68,22 @@ export default function SystemDevPage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <ServiceCardGrid
+        id="scope"
+        eyebrow="SCOPE"
+        title="対応する開発領域"
+        items={SYSTEM_DEV_SCOPE}
+      />
+
+      <ImplementationFlow />
+
+      <ServiceCardGrid
+        id="entry"
+        eyebrow="START"
+        title="ご相談の入口"
+        items={SYSTEM_DEV_ENTRY_POINTS}
+      />
 
       <ServicesFaq items={SYSTEM_DEV_FAQ} />
 
