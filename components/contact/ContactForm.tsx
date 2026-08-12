@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect, FormEvent } from "react";
-import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { useState, useRef, FormEvent } from "react";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
-import { ESTIMATE_URL } from "@/content/common";
 import { cn, PHONE_REGEX } from "@/lib/utils";
+import { trackLead } from "@/lib/analytics";
 
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
@@ -20,6 +20,7 @@ const TURNSTILE_SITE_KEY = IS_PRODUCTION
   : "";
 
 const ContactForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,7 +31,6 @@ const ContactForm = () => {
   });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [turnstileVerified, setTurnstileVerified] = useState(
     !TURNSTILE_SITE_KEY
@@ -38,13 +38,6 @@ const ContactForm = () => {
 
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
-
-  // 受付完了ページ表示時はスクロール位置を最上部へ戻す
-  useEffect(() => {
-    if (submitted) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [submitted]);
 
   const validate = (field: string, value: string) => {
     if (field === "name" && !value.trim()) return "お名前を入力してください";
@@ -83,6 +76,16 @@ const ContactForm = () => {
       return;
     }
 
+    // 失敗時のみ再送信できる状態に戻す。成功時は遷移するまで submitting を維持して
+    // 二重送信（＝generate_lead の二重計上）を防ぐ
+    const failAndReset = (message: string) => {
+      setError(message);
+      setSubmitting(false);
+      turnstileRef.current?.reset();
+      turnstileTokenRef.current = null;
+      setTurnstileVerified(!TURNSTILE_SITE_KEY);
+    };
+
     setSubmitting(true);
     setError("");
     try {
@@ -98,56 +101,27 @@ const ContactForm = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "送信に失敗しました。しばらく経ってから再度お試しください。");
+        failAndReset(data.error || "送信に失敗しました。しばらく経ってから再度お試しください。");
         return;
       }
 
+      // 既存イベント。レポートを壊さないよう送信を継続する
       window.gtag?.("event", "contact_submit", {
         form_type: "contact",
         subject: formData.subject,
       });
-      setSubmitted(true);
+      // 週次KPI「Organic経由の問い合わせ件数」の集計対象。
+      // subject は固定の選択肢なので個人情報は含まれない
+      trackLead({
+        leadType: "contact_form",
+        leadLocation: "/contact",
+        inquirySubject: formData.subject,
+      });
+      router.push("/contact/thanks");
     } catch {
-      setError("送信に失敗しました。しばらく経ってから再度お試しください。");
-    } finally {
-      setSubmitting(false);
-      turnstileRef.current?.reset();
-      turnstileTokenRef.current = null;
-      setTurnstileVerified(!TURNSTILE_SITE_KEY);
+      failAndReset("送信に失敗しました。しばらく経ってから再度お試しください。");
     }
   };
-
-  if (submitted) {
-    return (
-      <div className="bg-white rounded-2xl p-8 md:p-12 border border-gray-200 text-center">
-        <CheckCircle className="w-16 h-16 text-sage mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-forest mb-2">
-          {CONTACT_FORM_LABELS.successTitle}
-        </h3>
-        <p className="text-gray-600 leading-relaxed mb-6">
-          {CONTACT_FORM_LABELS.successMessage}
-        </p>
-        <div className="v-stack sm:h-stack gap-3 justify-center">
-          <Link
-            href="/cases"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-mist text-forest font-bold rounded-full hover:bg-gray-200 transition-colors text-sm"
-          >
-            {CONTACT_FORM_LABELS.successCta}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <a
-            href={ESTIMATE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 btn-puffy btn-puffy-accent rounded-full font-bold text-sm text-white"
-          >
-            {CONTACT_FORM_LABELS.estimateCta}
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
-      </div>
-    );
-  }
 
   const requiredBadge = <span className="text-teal-800 text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>;
 
