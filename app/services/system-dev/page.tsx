@@ -58,6 +58,7 @@ export default function SystemDevPage() {
         eyebrow={SYSTEM_DEV_HERO.eyebrow}
         title={SYSTEM_DEV_HERO.title}
         description={SYSTEM_DEV_HERO.description}
+        cta={SYSTEM_DEV_HERO.cta}
       />
 
       <section id="service-detail" className="py-16 md:py-24 bg-linen">

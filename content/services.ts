@@ -108,14 +108,20 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
 
 /**
  * /services/system-dev のヒーローコピー（SERVICES_HERO などと同じ形）。
+ *
+ * このページの役割は「会社・サービスの信頼形成」と「AI見積もり（ai.cloudnature.jp）への送客」。
+ * 費用・見積もり・相場を主題とする検索意図は ai.cloudnature.jp が受けるため、
+ * ここでは「システム開発会社」「対応領域」「保守」寄りの語で構成し、
+ * 費用そのものの訴求は CTA からの送客に寄せる。
+ *
  * SERVICE_DETAILS[dev].title（=「システム開発」）はナビ・JSON-LD の name・関連リンクで
  * 共有されているため変更せず、このページの H1 だけを別に持つ。
- * 「新潟 × システム開発」クエリの受け皿として、H1 に地域名を含めるのが目的。
  */
 export const SYSTEM_DEV_HERO = {
   eyebrow: "System Development",
-  title: "新潟のシステム開発",
+  title: "新潟のシステム開発会社",
   description: "新潟市中央区を拠点に、受発注管理・在庫管理・勤怠管理といった業務システムを、要件整理から設計・実装・運用まで一貫して開発します。既存の環境を活かし、業務への影響を抑えながら、必要な部分から段階的に仕組み化していきます。",
+  cta: { label: "無料でAI見積もり", href: ESTIMATE_URL },
 };
 
 /**
@@ -166,7 +172,8 @@ export const SYSTEM_DEV_ENTRY_POINTS: ServiceScopeItem[] = [
   },
   {
     title: "まず予算感だけ知りたい",
-    description: "発注前に概算だけ把握したい場合は、無料のAI見積もりで質問に答えるだけで概算費用を確認できます。"
+    description: "発注前に概算だけ把握したい場合は、無料のAI見積もりをご利用ください。業務内容や規模についての質問に答えると、概算費用と内訳をその場でご確認いただけます。",
+    link: { label: "無料でAI見積もり", href: ESTIMATE_URL }
   }
 ];
 

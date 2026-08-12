@@ -44,8 +44,19 @@ export interface PricingItem {
   description: string;
 }
 
+/**
+ * ラベル付きリンク。外部/内部の出し分けは href を見て SmartLink が行うため、
+ * データ側に external フラグは持たせない（types/cases.ts の link と同じ形）。
+ */
+export interface LinkItem {
+  label: string;
+  href: string;
+}
+
 /** サービス詳細ページのリストセクション（対応領域・相談の入口など）の1項目 */
 export interface ServiceScopeItem {
   title: string;
   description: string;
+  /** カードから次のアクションへ直接進ませたい場合のリンク（AI見積もりへの送客など） */
+  link?: LinkItem;
 }

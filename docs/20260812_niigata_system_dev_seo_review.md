@@ -1,33 +1,83 @@
-# 「新潟 システム開発」系クエリの着地URL是正 検証ドキュメント
+# 「新潟 × システム開発」検索流入の役割分担 検証ドキュメント
 
-作成日: 2026-08-12
+作成日: 2026-08-12 / 方針改訂: 2026-08-12（同日・第2版）
 
-## 1. 検証目的
+> **重要**: 本ドキュメントは第1版で前提を誤っていた。§0 に経緯を残したうえで、
+> 第2版として目的・原因分析・KPI・結論を書き直している。
 
-GSC 実測（2026-07-09〜08-05）で、受注に最も近い「新潟 × システム開発」系クエリの着地URLが
-コーポレートサイトのサービスページではなく **見積もりツールのサブドメイン `ai.cloudnature.jp`** に
-なっている。この着地URLを `/services/system-dev` に寄せる。
+---
 
-KPI: `/services/system-dev` の Impressions と平均順位（Organic Clicks 総量ではない）。
+## 0. 方針改訂の経緯（第1版 → 第2版）
 
-### 前提データ（ユーザー提供・GSC実測 直近28日）
+### 0-1. 第1版の前提と、それが誤りだった理由
 
-| クエリ | Impressions | 平均順位 | Googleが返しているURL |
+| # | 第1版の前提 | 実際 | 誤りと判明した理由 |
 | --- | --- | --- | --- |
-| 新潟 システム 開発 | 21 | 21.33 | ai.cloudnature.jp/ |
-| システム開発 新潟 | 12 | 17.75 | ai.cloudnature.jp/ |
-| 新潟 システム開発 | 6 | 17.83 | ai.cloudnature.jp/ |
-| アプリ開発会社 新潟 | 3 | 54.67 | cloudnature.jp/ |
+| 1 | `ai.cloudnature.jp` は問い合わせフォームを持たない | **持つ**。Step 13 で氏名・電話番号・メールアドレスを必須取得している（`estimate/lib/stepConfig.ts:103-125`、電話・メールは正規表現で検証） | 「サイト内にHTMLの問い合わせフォームが無い」ことを「連絡先を取得できない」と読み違えた。実際はチャット形式の見積もりフロー自体が連絡先取得フォームを兼ねている |
+| 2 | `ai.cloudnature.jp` に露出が集中すると商談にならない | **商談導線が揃っている**。Notion保存（`backend/app/services/notion_service.py`）、運営者通知メール（`backend/app/api/v1/estimate.py` の `send_estimate_notification`）、見積もりメール送信、完了画面のTimeRex予約カレンダー（`estimate/components/complete/BookingSection.tsx`）、問い合わせフォームへのリンク | 「クリック0件」という結果だけを見て、ページの構造的欠陥と結論づけた。実際は順位が低い（平均48.57位）ためクリックに至っていないだけで、到達後のファネルは機能する設計になっている |
+| 3 | 代表URLを `ai.cloudnature.jp` から `/services/system-dev` へ移すこと自体が望ましい | **望ましくない**。費用・見積もり検討層は `ai.cloudnature.jp` が受けるほうが、そのまま見積もり開始→連絡先取得→予約まで進む | 前提1・2が誤っていたため、「受注に近いページ＝コーポレートのサービスページ」と決めつけた |
+| 4 | `ai.cloudnature.jp` への内部リンク集中は問題 | **一律には問題ではない**。主要CVページへ内部リンクを集めること自体は設計として妥当 | 同上 |
 
-- `ai.cloudnature.jp`: 13クエリ / 102imp / 0click / 平均48.57位
-- `/services/system-dev`: GSC 上位ページ15件に出現せず
+### 0-2. 見直した理由
+
+事業側の想定導線が次のとおりであることを確認した。
+
+1. 検索ユーザーを `https://ai.cloudnature.jp/` に誘導
+2. 無料AI見積もりを利用してもらう
+3. 氏名・会社名・電話番号・メールアドレスを取得
+4. 概算見積もりをメール送信
+5. 完了画面の予約カレンダー・問い合わせ導線から商談化
+
+つまり `ai.cloudnature.jp` は「露出を奪っている競合ページ」ではなく、**この事業の主要コンバージョンページ**である。
+したがって目的は「代表URLの奪還」ではなく、**2つのURLの役割を分け、検索流入と商談数の両方を伸ばすこと**に改める。
+
+### 0-3. 第1版のうち維持する事実
+
+前提は誤っていたが、以下の**実測事実そのものは有効**であり、第2版でも根拠として使う。
+
+- 技術的な阻害要因（noindex・canonical誤指定・robotsブロック・sitemap欠落）は両サイトとも無い
+- `/services/system-dev` は改修前、可視テキスト約1,448文字と薄く、h1に「新潟」を含んでいなかった
+- 同ページへの記事本文内リンクは1本のみだった
+- GSC上、`/services` 配下4ページはいずれも記録に現れていない
+
+---
+
+## 1. 目的（第2版）
+
+検索結果の代表URLを機械的に `/services/system-dev` へ移すことではなく、
+**2つのURLの役割を分けたうえで、検索流入と商談数を伸ばすこと**。
+
+### 1-1. 役割分担
+
+| | `ai.cloudnature.jp` | `/services/system-dev` |
+| --- | --- | --- |
+| **役割** | 見積もり・費用検討層の獲得／無料AI見積もりの開始・完了／無料相談予約・商談化 | 会社・サービスの信頼形成／対応領域・進め方・保守内容の説明／**AI見積もりへの送客** |
+| **想定クエリ** | 新潟 システム開発 / システム開発 新潟 / システム開発 見積もり / システム開発 費用 / システム開発 相場 / 業務システム 見積もり | クラウドネイチャー システム開発 / 新潟 システム開発会社 / システム開発会社 比較 / 業務システム開発会社 / システム開発 対応領域 / システム開発 保守 |
+| **ゴール** | 見積もり完了・予約獲得 | 信頼形成 → 見積もりツールへの送客 |
+
+`/services/system-dev` は本体ドメインからAI見積もりページへ内部リンクを供給する役割も担う。
+
+### 1-2. やらないこと（禁止事項）
+
+- `ai.cloudnature.jp` を noindex にしない
+- クロスドメイン canonical を設定しない
+- 301リダイレクトを行わない
+- `/services/system-dev` を削除しない
+- どちらか一方へSEO評価を無理に統合しない
+- 実績数値・導入企業名・料金・対応能力を創作しない
+- 「検索順位が上がる」「代表URLが移る」と断定しない
+- GSCの匿名化データを実際のゼロと断定しない
+
+---
 
 ## 2. 対象範囲
 
 - `cloudnature.jp`（本体）: `app/services/system-dev/`, `content/services.ts`, `content/common.ts`,
-  `content/usecases/*.ts`, `app/sitemap.ts`
+  `content/usecases/*.ts`, `components/`, `types/`, `app/sitemap.ts`
 - `ai.cloudnature.jp`（`estimate/`）: **調査のみ。設定変更しない**
 - canonical / noindex / 301 / URL変更: **実装しない。提案の文章のみ**
+
+---
 
 ## 3. 現状調査の結果（リポジトリ + 本番実サイト実測）
 
@@ -35,183 +85,243 @@ KPI: `/services/system-dev` の Impressions と平均順位（Organic Clicks 総
 
 | 項目 | cloudnature.jp | ai.cloudnature.jp |
 | --- | --- | --- |
-| 実体 | Next.js（本体 `app/`） | Next.js（`estimate/`、別Vercelプロジェクト） |
-| canonical | `https://cloudnature.jp/services/system-dev`（自己参照） | `https://ai.cloudnature.jp`（自己参照） |
+| canonical | 自己参照（正常） | 自己参照（正常） |
 | robots meta | `index, follow` | 指定なし（= index可） |
-| robots.txt | Allow: /、学習系botのみ Disallow | Allow: /（`/api/`・`/complete` のみ Disallow） |
-| sitemap | 本体13静的URL + news + usecases（system-dev 含む） | `/` と `/chat` の2URLのみ |
+| robots.txt | Allow: /（学習系botのみ Disallow） | Allow: /（`/api/`・`/complete` のみ Disallow） |
+| sitemap | 本体13静的URL + news + usecases | `/` と `/chat` の2URL |
 
-→ 技術的な阻害要因（noindex・canonical誤指定・robots ブロック・sitemap 欠落）は**いずれも無い**。
-   両サイトとも正常にインデックス可能な状態。
+→ 技術的な阻害要因は**いずれも無い**。両サイトとも正常にインデックス可能。
 
-### 3-1b. Ahrefs 連携GSCでの独立確認（2026-07-09〜08-05・全ページ）
+### 3-2. `ai.cloudnature.jp` のコンバージョンファネル（実装確認済み）
 
-Ahrefs MCP の `gsc-pages`（project_id 10203766）で同期間の**全ページ**（15件）を取得した結果:
+| # | 段階 | 実装 |
+| --- | --- | --- |
+| 1 | ランディング | `estimate/app/page.tsx` |
+| 2 | 見積もりチャット開始 | `estimate/app/chat/` 全13ステップ（`lib/stepConfig.ts`） |
+| 3 | 連絡先取得 | **Step 13**（`type: "contact"`, `required: true`）氏名・電話番号・メールアドレスを検証つきで必須取得 |
+| 4 | 保存・通知 | Notion保存（`backend/app/services/notion_service.py`）、運営者通知メール（`send_estimate_notification`） |
+| 5 | 見積もりメール | 完了画面 `EmailNotice` + バックエンドから送信 |
+| 6 | 商談化 | 完了画面の **TimeRex予約カレンダー**（約30分・オンライン）+ `cloudnature.jp/contact` へのリンク |
 
-- `/services/system-dev` は**リストに1件も出現しない**（= 当該期間の記録上インプレッション0）
-- さらに `/services`・`/services/ai-agent`・`/services/ai-support` も**1件も出現しない**
-  → 問題は system-dev 単独ではなく、**サービスページ群が丸ごと検索露出を持っていない**
-- `ai.cloudnature.jp/` は 13キーワード / 102imp / 0click / 平均48.57位（ユーザー提供値と一致）
-- 露出上位は `/cases`（45imp）、`/usecases/*`（67・54・36imp…）で、**記事群が流入の主体**
+**このファネルが、システム開発案件の主要な商談入口である。**
 
-※GSCは低ボリュームのクエリ・ページを匿名化・除外することがあるため、
-　「記録上0」は実際の露出が厳密に0であることまでは保証しない。
-
-### 3-2. `<title>` の実測（本番HTML）
+### 3-3. `<title>` の実測
 
 | URL | title |
 | --- | --- |
-| `ai.cloudnature.jp/` | **新潟のシステム開発**・AI導入見積もり｜最短1分で自動算出【CloudNature】 |
-| `/services/system-dev` | 新潟の**業務**システム開発・既存システム連携 \| 株式会社クラウドネイチャー |
+| `ai.cloudnature.jp/` | 新潟のシステム開発・AI導入見積もり｜最短1分で自動算出【CloudNature】 |
+| `/services/system-dev`（改修後） | 新潟のシステム開発**会社**｜業務システム・既存システム連携 \| 株式会社クラウドネイチャー |
 
-`ai.cloudnature.jp` は `keywords` に `"新潟 システム開発"` を明示的に含む（`estimate/app/layout.tsx`）。
+改修後は、ai側が「システム開発（費用・見積もり）」、本体側が「システム開発**会社**（対応領域・保守）」と、
+狙う語を分けている。
 
-### 3-3. `/services/system-dev` のページ実態（本番HTML実測）
+### 3-4. GSC 実測（2026-07-09〜08-05 / Ahrefs連携・全ページ15件）
 
-- h1: `システム開発`（**「新潟」を含まない**）
-- 見出し構成: h1 → h3（キャッチコピー）→ h2「よくあるご質問」→ h2「関連する事例・コンテンツ」→ h2 CTA
-- 可視テキスト量: **約1,448文字**（ヘッダー・フッター込み）
-- 「新潟」出現数 4（大半がヘッダー/フッター/FAQ由来）、「システム開発」出現数 4
-- 本文の実体は `ServiceDetailCard` 1枚（対象/ゴール/特徴の3項目）+ FAQ5件のみ
-
-### 3-4. 内部リンク（サイト内の票の集まり方）
-
-| 宛先 | 本文内コンテキストリンク数 |
-| --- | --- |
-| `ai.cloudnature.jp`（見積もりツール） | ヘッダーナビ + 全ページの primary CTA + 記事本文内 15箇所以上 |
-| `/services/system-dev` | **記事本文内はわずか1箇所**（`niigata-ai-development-company-guide.ts`）+ フッター + TOPカード |
-
-`relatedServiceIds` に `"dev"` を持つ記事は10本中4本のみ。
-
-## 4. `/services/system-dev` が地域クエリで出てこない原因（仮説）
-
-いずれも断定ではなく**可能性**として記載する。GSCの当該クエリのURL単位データからは因果を確定できない。
-
-| # | 仮説 | 根拠 | 確度 |
+| ページ | Imp | Clicks | 平均順位 |
 | --- | --- | --- | --- |
-| 1 | 当該クエリの**代表URL選択で `/services/system-dev` が負けている**。ai側の方が適合シグナルが強く、Googleがそちらを返している | ai側は title 先頭が「新潟のシステム開発」で前方一致。system-dev 側は h1 に「新潟」が無く、title も「業務」が割り込む | 高 |
-| 2 | `/services/system-dev` のコンテンツが薄く、クエリに対する情報充足度が不足している | 可視テキスト約1,448文字、実質 h3 見出し1本 + FAQ のみ。「新潟 システム開発」上位は会社概要・対応領域・進め方を持つ厚いページが一般的 | 高 |
-| 3 | サイト内リンクの評価が `ai.cloudnature.jp` に集中し、`/services/system-dev` に集まっていない | 本文内リンク数が 15+ 対 1 | 中 |
-| 4 | ai側がサブドメインの**ホームページ**であり、内部リンクも集中しているため、下層ページより選ばれやすい | 全ページの primary CTA + ヘッダーナビが ai 宛 | 中 |
-| 5 | `/services/system-dev` に対する累積評価が不足している | 同期間の GSC 全ページリスト（15件）に出現せず、記録上インプレッション0。さらに `/services` 配下3ページすべてが同様（※GSCの匿名化により実際の露出が厳密に0とは限らない） | 中 |
-| 6 | 「新潟 システム開発」の検索意図が「会社を探す」であり、サービス説明ページよりトップページ的なURLが選ばれやすい | 「アプリ開発会社 新潟」の着地が `cloudnature.jp/`（トップ）である点と整合 | 中 |
+| `ai.cloudnature.jp/` | 102 | 0 | 48.57 |
+| `/cases` | 45 | 1 | 11.16 |
+| `/usecases/ai-analytics-auto-report` | 67 | 0 | 37.27 |
+| `/usecases/ai-installation-failure` | 54 | 0 | 15.69 |
+| `/services` 配下4ページ | — | — | リストに出現せず |
 
-**補足（Codex レビューでの修正点）**: 当初は `estimate/app/layout.tsx` の `meta keywords` に
-`"新潟 システム開発"` が入っていることを根拠に挙げていたが、`meta keywords` は Google の
-ランキング要因としてほぼ機能しないため根拠から外した。また「同一サイト内カニバリ」という表現も、
-実態は「2URLが同時に強い」のではなく「`/services/system-dev` が候補URLとして育っておらず、
-代表URLとして選ばれていない」状態のため、表現を改めた。
+対象クエリの着地URLは `ai.cloudnature.jp/` （新潟 システム 開発 21imp/21.33位、システム開発 新潟 12imp/17.75位、
+新潟 システム開発 6imp/17.83位）。
 
-**構造上の問題**: 結果として、問い合わせフォームを持たない `ai.cloudnature.jp` に露出が集中し、
-「順位が上がっても商談にならない」構造になっている点は変わらない。
+**読み替え**: これは「奪われている」のではなく、**主要CVページが対象クエリで既に露出を得ている**状態である。
+課題は着地URLの付け替えではなく、**平均48.57位という順位の低さ**（＝クリックに至っていないこと）にある。
 
-## 5. 確認項目リスト（実装後に検証する）
+※GSCは低ボリュームのクエリ・ページを匿名化・除外することがあるため、リストに出現しないことをもって
+　露出が実際にゼロであると断定はできない。
 
-- [ ] `/services/system-dev` の h1 に「新潟」+「システム開発」が含まれる
-- [ ] title が「新潟のシステム開発」で始まる（ai側と同等の前方一致を確保）
-- [ ] 可視テキスト量が実測で有意に増えている（対象領域・進め方・費用の考え方・FAQ）
-- [ ] 追記した記述に、実績数値・料金・導入企業名の**新規の創作**が無い
-- [ ] FAQ 追加分が FAQPage JSON-LD と可視テキストで一致している
-- [ ] `/usecases/` 記事から `/services/system-dev` への本文内リンクが増えている
-- [ ] `relatedServiceIds` に `"dev"` を追加した記事で、記事下部「関連するサービス」に
-      システム開発が出る
-- [ ] `npm run build` / `npm run lint -- --max-warnings=0` が通る
-- [ ] canonical / noindex / 301 / URL 変更を**一切していない**
+---
 
-## 6. Codex レビュー結果（gpt-5.4 / read-only）
+## 4. 現状の課題（第2版の整理）
 
-着手前の診断とプランをレビューさせ、以下を反映した。
+| # | 課題 | 状況 | 確度 |
+| --- | --- | --- | --- |
+| 1 | `ai.cloudnature.jp` の対象クエリでの**順位が低くクリックに至っていない** | 平均48.57位 / CTR 0% | 実測 |
+| 2 | `/services/system-dev` が「会社を探す」意図に応えられる情報量を持っていなかった | 改修前 約1,448文字、h1「システム開発」のみ | 実測 |
+| 3 | 本体ドメインから `ai.cloudnature.jp` への送客が、CTAバナー中心で文脈依存の導線が薄かった | サービス詳細ページのFV付近にCTAが無かった | 実測 |
+| 4 | 2ページが同じ語（新潟 システム開発）で正面から競合しうる | ai側title先頭が「新潟のシステム開発」、本体側も同語だった | 可能性 |
 
-| # | Codex の指摘 | 反映内容 |
+課題4について、本改修では本体側のh1・titleを「システム開発**会社**」に寄せ、
+費用・見積もり語の訴求はai側に残す形で棲み分けを図っている。ただし
+**これで代表URLの選ばれ方が変わると断定はできない**（Googleの判断であり、検証は事後の実測による）。
+
+---
+
+## 5. KPI（ファネル基準・第2版で全面変更）
+
+第1版では `/services/system-dev` の Impressions と平均順位を主KPIにしていたが、
+これは事業成果と直結しない。**主KPIをファネル指標に変更する。**
+
+### 5-1. 主要評価指標
+
+| # | 指標 | 測定元 | 備考 |
+| --- | --- | --- | --- |
+| 1 | `ai.cloudnature.jp` の対象クエリでの **Impressions・平均順位・CTR** | GSC（Ahrefs project_id 10203764） | 基準値: 13クエリ / 102imp / 0click / 48.57位 |
+| 2 | **AI見積もり開始率** | GA4（`G-BKHWKEZ26E`） | ランディング到達 → Step 1 着手 |
+| 3 | **各ステップの離脱率** | GA4 | Step 1〜13 の各段階 |
+| 4 | **Step 13 到達率** | GA4 / バックエンド | 連絡先入力画面への到達 |
+| 5 | **見積もり完了率** | バックエンド（見積もり生成・メール送信） | Step 13 通過 → 完了画面 |
+| 6 | **無料相談予約率** | TimeRex | 完了画面 → 予約確定 |
+| 7 | **商談化率** | Notion（案件レコード） | 予約 → 実施 |
+| 8 | **受注率** | Notion / 社内管理 | 商談 → 受注 |
+
+### 5-2. 補助指標（事業成果の判断材料としては従属）
+
+- 検索結果でどちらのURLが表示されたか（着地URLの分布）
+- `/services/system-dev` の Impressions・平均順位・CTR
+- `/services/system-dev` → `ai.cloudnature.jp` の遷移数・遷移率（GA4クロスドメイン計測）
+
+**着地URLがどちらであるかは、それ自体を目標にしない。** 最終的に評価するのは 2〜8 のファネル指標である。
+
+### 5-3. 計測上の注意
+
+- 本体（`G-1CF4H5GXSM`）とai（`G-BKHWKEZ26E`）は**GA4測定IDが別**。
+  遷移を追う際は `cookie_domain: '.cloudnature.jp'` によるクロスドメイン計測の設定を前提に、
+  本体側のGA4画面だけを見て「サブドメインが計測されない」と判断しないこと。
+- インデックス更新の反映には数週間かかる。短期の数値変動で結論を出さない。
+
+---
+
+## 6. 現在の差分の再評価（残す / 修正する / 戻す）
+
+判断基準: ①信頼形成に役立つか ②ai側と検索意図・内容が過度に重複しないか ③AI見積もりへの送客につながるか
+④SEOを優先しすぎて不自然でないか ⑤提供できる内容を超えた断定がないか
+
+| 変更 | 判断 | 理由 |
 | --- | --- | --- |
-| 1 | `meta keywords` を根拠に挙げるのは弱い。Google はほぼ見ていない | §4 の仮説1から keywords を根拠から外し、title 前方一致・トップページ性・内部リンク集中に置き換えた |
-| 2 | 「カニバリ」ではなく「代表URL選択で `/services/system-dev` が負けている」が正確 | §4 の表現を修正 |
-| 3 | H1 だけ専用化しても中途半端。ページ固有の本文・見出し群まで作るべき | `SYSTEM_DEV_SCOPE`（対応する開発領域6項目）と `SYSTEM_DEV_ENTRY_POINTS`（ご相談の入口3項目）をこのページ専用に新設 |
-| 4 | `ImplementationFlow` / `PricingApproach` のそのまま再掲は固有情報が増えず効果は限定的 | `PricingApproach` の再掲は取りやめ。`ImplementationFlow` は直接着地したユーザーへの導線価値があるため残し、代わりに固有セクション2本を主軸にした |
-| 5 | FAQ 追加は慎重に。既存 `SYSTEM_DEV_FAQ` に価格目安・即日訪問など強い事実主張があり、面積を広げやすい | SEO目的の地域FAQ増設はやめ、実際の商談障壁に絞って2件のみ追加（いずれも既存の公開情報の範囲内で、新しい事実主張なし） |
-| 6 | 効きやすい順は title/H1/固有本文 > 本文内リンク > relatedServiceIds > FAQ | この優先順で実装した |
-| 7 | 完全一致アンカー `新潟のシステム開発` は1〜2本まで。残りは分散 | 完全一致は1本のみ。他は「システム開発」「業務システム開発」「業務に合うシステム開発」に分散 |
-| 8 | title 変更リスクは中だが、現状主着地でないため取りに行く価値が上回る。ただし `業務システム`・`既存システム連携` は後半に残すこと | 主KWを前方に出しつつ後半に両方を残した |
-| 9 | ローカルSEOの事業者シグナルが薄い（`app/layout.tsx` の `sameAs` が空、GBP未整備） | §8 の「人間が判断すべきこと」に追加 |
-| 10 | クロスドメイン canonical は非推奨（ページ内容が重複ではないため） | §8 で「採用しない案」として明記 |
+| `title` を「新潟のシステム開発**会社**｜業務システム・既存システム連携」に変更 | **残す** | 「新潟 システム開発会社」「業務システム開発会社」という割り当てクエリに合致。「会社」を含むことでai側（費用・見積もり）と語が分かれる |
+| h1「システム開発」→「新潟のシステム開発」 | **修正** | 「新潟のシステム開発」はai側と正面から競合する語。**「新潟のシステム開発会社」に変更**し、会社探し意図に寄せた |
+| meta description 冒頭「新潟のシステム開発会社。」 | **修正** | キーワードを置いただけの断片文で不自然だった。「新潟市を拠点に、業務に合わせたシステム開発を行う株式会社クラウドネイチャー。」という一文に書き換え、後半も対応領域・保守の説明に寄せた |
+| 「対応する開発領域」6項目 | **残す** | 「システム開発 対応領域」クエリに直接対応。信頼形成に寄与し、ai側（費用算出）と内容が重複しない |
+| 「導入の流れ」の掲載 | **残す** | 「進め方」の説明は信頼形成の中核。直接着地したユーザーがハブpage を経由せず把握できる |
+| 「ご相談の入口」3項目 | **残す＋強化** | 「まず予算感だけ知りたい」カードに **AI見積もりへの直接リンクを追加**（③送客の主要導線） |
+| FAQ「システム開発とAIエージェント開発の使い分け」 | **残す** | 切り分け支援＝信頼形成。ai側と重複しない |
+| 断定表現の緩和（3箇所 + 既存FAQ 3箇所） | **残す** | ⑤に該当。既存システムの構成・API公開状況によっては実現できないため |
+| 記事からの内部リンク8本 | **残す（意図別に整理）** | §6-1 参照 |
+| `relatedServiceIds` に "dev" 追加（4記事） | **残す** | 信頼形成の補助導線 |
+| — | **新規** | **FVのAI見積もりCTA**を追加（③送客） |
 
-## 7. 実装結果（2026-08-12）
+**戻した変更はない。** 第1版の変更のうち、h1 と meta description の2点を修正し、送客導線を新規追加した。
 
-ブランチ: `seo/system-dev-local-intent`（未マージ・未デプロイ）
+### 6-1. 内部リンクの検索意図別の使い分け
 
-### 7-1. `/services/system-dev` の強化
+方針: 費用・見積もり・予算感が主題 → `ai.cloudnature.jp` ／ 対応領域・開発体制・会社選びが主題 → `/services/system-dev`
+
+| 記事・箇所 | 主題 | リンク先 | アンカー |
+| --- | --- | --- | --- |
+| niigata-ai-development-company-guide（まとめ） | 会社選び | **system-dev** | 新潟のシステム開発会社としての対応領域 |
+| niigata-ai-development-company-guide（冒頭・既存） | サービスの切り分け | system-dev | システム開発 |
+| niigata-ai-development-company-guide（費用の見方・既存） | 費用 | **ai** | 無料のAI見積もりツール |
+| niigata-fde-shared-ai-development | 提供体制 | system-dev | システム開発 |
+| ai-development-bottleneck-shift（まとめ） | 提供体制 | system-dev | 業務システム開発 |
+| ai-development-bottleneck-shift（費用感・既存） | 費用 | **ai** | AI見積もりシステム |
+| niigata-ai-subsidy-guide-2026（FAQ 自社用システム） | 補助金の対象範囲 | system-dev | 業務システム開発 |
+| niigata-ai-subsidy-guide-2026（相談導線） | 提供体制 | system-dev | システム開発 |
+| niigata-ai-subsidy-guide-2026（費用感・既存） | 費用 | **ai** | AI見積もりシステム |
+| business-automation-small-start（末尾） | 対応領域 | system-dev | 業務システム開発 |
+| ai-poc-method-cost-kpi（本開発移行） | 進め方 | system-dev | システム開発 |
+| ai-poc-method-cost-kpi（費用・既存） | 費用 | **ai** | AI見積もりシステム |
+| ai-task-allocation（次のステップ） | 対応領域 | system-dev | 業務に合うシステム開発 |
+
+費用が主題の箇所は既存の ai 宛リンク（記事全体で15本以上）がそのまま担っており、
+今回の追加分はすべて「対応領域・体制・会社選び・進め方」が主題の箇所に置いている。
+アンカーテキストは分散させ、完全一致の多用を避けている。
+
+---
+
+## 7. 実装内容（2026-08-12）
+
+ブランチ: `seo/system-dev-local-intent`（未マージ・未デプロイ） / PR #3
 
 | ファイル | 変更 |
 | --- | --- |
-| `content/common.ts` | `PAGE_META.servicesSystemDev.title` を「新潟のシステム開発会社｜業務システム・既存システム連携 \| 株式会社クラウドネイチャー」に変更。description の先頭に「新潟のシステム開発会社。」を追加 |
-| `content/services.ts` | `SYSTEM_DEV_HERO`（H1・リード文）、`SYSTEM_DEV_SCOPE`（6項目）、`SYSTEM_DEV_ENTRY_POINTS`（3項目）を新設。`SYSTEM_DEV_FAQ` に1件追加 |
-| `components/services/ServiceCardGrid.tsx` | 新規。見出し+説明カードを並べるセクション（同ページ内で2回使用） |
-| `types/services.ts` | `ServiceScopeItem` 型を追加（content と component で共有） |
-| `app/services/system-dev/page.tsx` | H1 を `SYSTEM_DEV_HERO` に差し替え、`ServiceCardGrid`×2 と `ImplementationFlow` を追加 |
-| `app/sitemap.ts` | `/services/system-dev` の `lastModified` を 2026-08-12 に更新 |
+| `content/common.ts` | `PAGE_META.servicesSystemDev` の title / description を役割分担に合わせて調整。意図の割り当てをコメントで明記 |
+| `content/services.ts` | `SYSTEM_DEV_HERO`（h1「新潟のシステム開発会社」+ FVのCTA）、`SYSTEM_DEV_SCOPE`（6項目）、`SYSTEM_DEV_ENTRY_POINTS`（3項目・見積もりへの直リンク付き）、`SYSTEM_DEV_FAQ` に1件追加。既存FAQを含む断定表現の緩和 |
+| `types/services.ts` | `ServiceScopeItem`（`link?` を含む）を追加 |
+| `components/services/ServiceCardGrid.tsx` | 新規。見出し+説明カードのグリッド。任意でカードから次アクションへのリンクを描画 |
+| `components/shared/PageHero.tsx` | 任意の `cta` prop を追加（他ページは未指定のため影響なし） |
+| `app/services/system-dev/page.tsx` | FVのCTA、`ServiceCardGrid`×2、`ImplementationFlow` を追加 |
+| `app/sitemap.ts` | `/services/system-dev` の `lastModified` を更新 |
+| `content/usecases/*.ts`（7本） | 検索意図別の内部リンクと `relatedServiceIds` |
 
-`service.title`（=「システム開発」）は変更していない。ナビ・パンくず・`Service` JSON-LD の `name`・
-関連リンクのラベルで共有されているため。
+### 7-1. AI見積もりへの導線（改修後）
 
-### 7-2. 内部リンク
-
-`/usecases/` 記事の本文内に `/services/system-dev` へのコンテキストリンクを7箇所追加（追加前は本文内1箇所のみ）。
-
-| 記事 | 箇所 | アンカーテキスト |
+| 位置 | 形式 | ラベル |
 | --- | --- | --- |
-| `niigata-ai-development-company-guide` | まとめの締め | **新潟のシステム開発**（完全一致・全体で1本のみ） |
-| `niigata-ai-development-company-guide` | 冒頭のサービス切り分け（既存） | システム開発 |
-| `niigata-fde-shared-ai-development` | 提供サービスの列挙 | システム開発 |
-| `ai-development-bottleneck-shift` | まとめの締め | 業務システム開発 |
-| `niigata-ai-subsidy-guide-2026` | FAQ「自社用の業務システム」 | 業務システム開発 |
-| `niigata-ai-subsidy-guide-2026` | 相談セクションのサービス列挙 | システム開発 |
-| `business-automation-small-start` | 末尾の相談導線 | 業務システム開発 |
-| `ai-poc-method-cost-kpi` | 本開発移行の相談導線 | システム開発 |
-| `ai-task-allocation` | 次のステップのリスト | 業務に合うシステム開発 |
+| ファーストビュー | ボタン（新規） | 無料でAI見積もり |
+| サービス詳細カード内 | テキストリンク（既存） | AI見積もりを試す |
+| ご相談の入口「まず予算感だけ知りたい」 | カード内リンク（新規） | 無料でAI見積もりを試す |
+| ページ末尾 CTAバナー | ボタン（既存） | 無料でAI見積もり |
 
-`relatedServiceIds` に `"dev"` を追加（記事下部「関連するサービス」に露出）:
-`business-automation-small-start` / `ai-poc-method-cost-kpi` / `niigata-ai-subsidy-guide-2026` / `ai-task-allocation`。
-システム開発との関連が薄い `ai-installation-failure` / `ai-auto-sales-delivery` には追加していない。
+セクション境界ごとに1つで、形式も分けている。押し売り感を避けるため、
+記事中でよく使う `InlineCta` の追加配置は行っていない。
 
-### 7-3. 確認項目の結果
+---
+
+## 8. 検証結果
 
 | 項目 | 結果 |
 | --- | --- |
-| H1 に「新潟」+「システム開発」 | ✅ `新潟のシステム開発` |
-| title が「新潟のシステム開発」で始まる | ✅ |
-| 可視テキスト量 | ✅ 約1,448 → **約2,866文字**（+98%）※ビルド済みHTML実測 |
-| 「新潟」出現数 | ✅ 4 → 8 |
-| 「システム開発」出現数 | ✅ 4 → 7 |
-| 新規の事実創作なし | ✅ 実績数値・料金・導入企業名の新規記述なし。追記内容はすべて既存の公開コンテンツの範囲 |
-| FAQ と FAQPage JSON-LD の一致 | ✅ 同一の `SYSTEM_DEV_FAQ` を両方に渡している |
-| 記事からの本文内リンク | ✅ 1 → 8箇所（本文内）+ 関連サービス欄 |
-| `npm run build` | ✅ 成功（8+ルート、静的生成） |
-| `npx eslint --max-warnings=0`（変更ファイル） | ✅ No issues found |
-| ブラウザ実機確認 | ✅ `next start` + Chrome でデスクトップ表示を確認（グリッド・タイムラインとも正常） |
-| canonical / noindex / 301 / URL 変更 | ✅ 一切していない |
-| `ai.cloudnature.jp`（`estimate/`）の変更 | ✅ 一切していない |
+| `npx tsc --noEmit` | ✅ エラーなし |
+| `npm run lint`（変更ファイル / `--max-warnings=0`） | ✅ No issues found |
+| `npm run build` | ✅ 成功（46ページ静的生成） |
+| h1 | ✅ 「新潟のシステム開発会社」 |
+| title | ✅ 「新潟のシステム開発会社｜業務システム・既存システム連携 \| 株式会社クラウドネイチャー」 |
+| meta description | ✅ 「新潟市を拠点に、業務に合わせたシステム開発を行う株式会社クラウドネイチャー。…」（自然な一文） |
+| 可視テキスト量 | ✅ 約1,448 → 約2,900文字 |
+| FAQPage 構造化データと可視テキストの一致 | ✅ `/services`5件・`/services/system-dev`6件すべて一致（プログラム照合） |
+| デスクトップCTA導線 | ✅ ブラウザ実機で4箇所すべて確認 |
+| モバイルCTA（タップ領域・幅） | ✅ FVボタン 188×48px、カードリンク 170×44px。いずれも375px幅に収まり、44pxのタップ領域を満たす（当初カードリンクが20pxだったため `py-3` を追加して修正） |
+| 断定表現の残存 | ✅ 「活かしたまま」「壊さず」「止めずに」「使い続けたまま」いずれもサイト全体で0件 |
+| 事実の創作 | ✅ 実績数値・料金・導入企業名・対応能力の新規記述なし |
+| canonical / noindex / 301 / URL変更 | ✅ 一切なし |
+| `ai.cloudnature.jp`（`estimate/`）の変更 | ✅ 一切なし |
 
-### 7-4. `/simplify` レビュー（4観点の並列レビュー）と対応
+### 8-1. `/simplify` レビュー（4観点並列）と対応
 
 | 指摘 | 対応 |
 | --- | --- |
-| 新セクションが手書きの framer-motion を持ち、共有 `ScrollReveal` の `useReducedMotion` と `data-reveal`（JS無効時の表示解除）を両方スキップしていた | **修正**。`ScrollReveal` でラップし、コンポーネント自体を `"use client"` からサーバーコンポーネントへ変更 |
-| `columns` prop が全呼び出し元で未使用（デッドコード）。`(index % 3)` のstagger計算も3列前提のハードコード | **修正**。prop ごと削除 |
-| `bgClass` prop は常に既定値と同じ `bg-white`。加えてカードの `bg-white/70` は `bg-mist` 上のカードからのコピーで、白背景上では意味がない | **修正**。prop を削除し、カードを `bg-white border-forest/10` に変更 |
-| `{title; description}` 型が4箇所で重複宣言 | **修正**。`types/services.ts` に `ServiceScopeItem` を追加して共有 |
-| `SYSTEM_DEV_PAGE = { h1, lead }` はコードベース唯一の命名。他のページコピーは全て `{ eyebrow, title, description }` | **修正**。`SYSTEM_DEV_HERO` にリネームし形を統一 |
-| コンポーネント名 `ServiceScope` が用途の片方（対応領域）しか表していない | **修正**。`ServiceCardGrid` にリネーム |
-| 新規セクションとFAQで同じ主張が2〜3回繰り返されている（保守条件・SaaS一覧・スモールスタート） | **修正**。カードから重複部分を削り「詳細はFAQ」に集約。重複していた新規FAQ1件を削除（追加は2件→1件） |
-| `ServiceDetail` に `pageH1`/`pageLead` を追加して3サービスページで共通化すべき（reuse観点） | **見送り**。altitude観点のレビューが逆の結論を出しており、そちらの根拠（`/services` 自身を含む全ページが個別の `*_HERO` 定数を持つ既存慣習。共通化するとナビ・JSON-LD・`SERVICE_PAGE_MAP` の3消費者に「どちらのtitleか」の曖昧さが入る）の方が実コードに即しているため |
-| `PricingApproach` を新コンポーネント経由に統合すべき | **見送り**。今回の差分の範囲外で、既存ページの見た目に影響するため |
-| `ServiceCardGrid` を `components/shared/` へ移すべき | **見送り**。現状の利用はサービス詳細ページのみで、`components/services/` の分類に合致 |
+| 外部/内部リンクの出し分けは `components/home/CasesSection.tsx` の `SmartLink` が既に実装済み。新規コードが同じ分岐を再実装している | **修正**。`components/shared/SmartLink.tsx` へ切り出し、`CasesSection`・`ServiceCardGrid`・`PageHero`・`CtaBanner` で共用 |
+| `external?: boolean` は href から導出できる冗長なデータ。`types/cases.ts` の `link` にもフラグは無い | **修正**。`external` を廃止し、`SmartLink` が `href` を見て判定。共有型 `LinkItem` を `types/services.ts` に追加 |
+| `PageHero` のCTAが「puffyピル」クラスの5つ目のコピーで、パディングだけ違う新サイズを増やしている | **修正**。`InlineCta` と同じ `px-6 py-3` に揃え、新しい寸法を増やさないようにした |
+| カードのリンクが `gap-1.5 hover:gap-2.5` で、`SectionHeader` の同じ見た目のリンク（`gap-2 hover:gap-3`）と挙動が違う | **修正**。`gap-2 hover:gap-3` に統一 |
+| 別サイトへ出るリンクなのに内部リンクと見分けがつかない。同ページの `ServiceDetailCard` は `ExternalLink` アイコンを使っている | **修正**。外部リンク時は `ExternalLink` アイコンに切り替え |
+| 同一ページで同じ遷移先に3種類のラベル（WCAG 3.2.4 Consistent Identification） | **修正**。ヒーロー・カード・下部バナーを「無料でAI見積もり」に統一 |
+| `CtaBanner` だけ `ESTIMATE_URL` を同一タブで開き、他の全導線（HeroSection・InlineCta・ServiceDetailCard・記事本文）と挙動が違う | **修正**。`SmartLink` 経由にし、サイト全体でAI見積もりへの導線が別タブ＋`rel="noopener noreferrer"` に揃った（**サイト全体の挙動変更のため要確認事項**） |
+| `content/usecases/ai-task-allocation.ts:27` の既存リンクに `target`/`rel` が無い（`content/` 内で唯一の例外） | **修正**。他と揃えた |
+| `PrimaryCtaLink` を抽出して `InlineCta`・`CtaBanner`・`ContactForm`・`LegalDocument` を全て置き換えるべき | **見送り**。今回の差分の範囲外で、影響が広い |
+| `ServiceDetail` に `hero` フィールドを追加して3サービスページを共通化すべき | **見送り**。第1回レビューでは逆に「各ページが個別の `*_HERO` 定数を持つのがこのコードベースの慣習」と指摘されており、他2ページの要件が出るまでは早すぎる |
+| Service JSON-LD の `description` と可視リード文が異なる | **見送り**。`/services` ハブが同じ `@id` で `service.description` を出力しており、片方だけ変えると同一 `@id` に別内容が並ぶため悪化する |
+| `:focus-visible` のスタイルがリポジトリ全体で未定義 | **見送り**。全インタラクティブ要素に影響する全体施策のため、別途対応（§9に記録） |
 
-### 7-5. 実装中に観測した既存の論点（今回は未対応）
+### 8-2. モバイル検証の制約
 
-- `ImplementationFlow` はデスクトップ用タイムラインとモバイル用リストを両方DOMに出すため、
-  同じ h3 が2組出力される。`/services` で既にそうなっている既存挙動であり、今回の追加で
-  新たに発生した問題ではない。修正すると `/services` にも影響するため範囲外とした。
+Chrome拡張の `resize_window` はウィンドウサイズの変更が実際のビューポートに反映されなかったため
+（`window.innerWidth` が 1698 のまま）、**表示の目視によるモバイル確認はできていない**。
+代わりに、各CTA要素の実測サイズ（幅・高さ）を取得し、375px幅の想定コンテンツ領域に収まるか、
+タップ領域が44px以上かをプログラムで検証した。レイアウト自体は既存の
+`InlineCta`（本番稼働中）と同一のクラス構成であり、`btn-puffy` 系CSSに幅指定は無い。
 
-## 8. 人間が判断すべきこと（実装していない・提案のみ）
+---
 
-§ 別掲。完了報告の「経営判断が必要な論点」を参照。
+## 9. 既存の論点（今回は未対応）
+
+- `ImplementationFlow` はデスクトップ用タイムラインとモバイル用リストを両方DOMに出すため、同じ h3 が2組出力される。
+  `/services` で既にそうなっている既存挙動であり、今回の追加で発生した問題ではない。
+- `app/layout.tsx` の Organization JSON-LD の `sameAs` が空配列のまま（コード内に
+  「Google Business Profile・SNSを開設したらURLを追加する（ローカルSEOの最重要施策）」というTODOあり）。
+- `estimate/` から本体へのアウトバウンドリンクは トップ・`/company`・`/cases`・`/contact` のみで、
+  `/services` 配下へのリンクは無い。
+- `app/globals.css` に `:focus-visible` の指定が一切なく、キーボード操作時のフォーカス表示はブラウザ既定に依存している。
+  全インタラクティブ要素に関わるため、サイト全体の施策として別途検討する。
+- `ESTIMATE_URL` 定数がありながら `content/common.ts:17`・`content/cases.ts`・`content/home.ts` は
+  同じURLをハードコードしており、`app/llms.txt/route.ts` は `/chat` という別パスを指している。
+  定数を唯一の正にする掃除は今回の範囲外。
+
+## 10. 人間が判断すべきこと（実装していない・提案のみ）
+
+完了報告の「経営判断が必要な論点」を参照。

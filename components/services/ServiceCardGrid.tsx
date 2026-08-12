@@ -1,4 +1,6 @@
+import { ArrowRight, ExternalLink } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import SmartLink, { isExternalHref } from "@/components/shared/SmartLink";
 import { ScrollReveal } from "@/components/shared/ScrollReveal";
 import type { ServiceScopeItem } from "@/types";
 
@@ -28,17 +30,32 @@ const ServiceCardGrid = ({ id, eyebrow, title, items }: ServiceCardGridProps) =>
 
         <ScrollReveal variant="fade-up">
           <ul className="grid gap-4 md:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <li
-                key={item.title}
-                className="rounded-2xl bg-white border border-forest/10 shadow-sm p-6 md:p-7"
-              >
-                <h3 className="font-bold text-forest text-base md:text-lg mb-2 leading-snug">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
-              </li>
-            ))}
+            {items.map((item) => {
+              // 別サイト（AI見積もり）へ出るリンクは ServiceDetailCard と同じ ExternalLink アイコンで示す
+              const Icon = item.link && isExternalHref(item.link.href) ? ExternalLink : ArrowRight;
+
+              return (
+                <li
+                  key={item.title}
+                  className="rounded-2xl bg-white border border-forest/10 shadow-sm p-6 md:p-7"
+                >
+                  <h3 className="font-bold text-forest text-base md:text-lg mb-2 leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                  {item.link ? (
+                    // py-3 はモバイルのタップ領域（44px）を確保するためのもの
+                    <SmartLink
+                      href={item.link.href}
+                      className="mt-2 py-3 inline-flex items-center gap-2 text-sm font-bold text-teal-800 hover:gap-3 transition-all"
+                    >
+                      {item.link.label}
+                      <Icon className="w-4 h-4 flex-shrink-0" />
+                    </SmartLink>
+                  ) : null}
+                </li>
+              );
+            })}
           </ul>
         </ScrollReveal>
       </div>

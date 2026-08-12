@@ -4,14 +4,8 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import SmartLink from "@/components/shared/SmartLink";
 import { CASES_SECTION, CASE_STUDIES } from "@/content/home";
-
-const SmartLink = ({ href, className, children }: { href: string; className: string; children: React.ReactNode }) =>
-  href.startsWith('http') ? (
-    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}</a>
-  ) : (
-    <Link href={href} className={className}>{children}</Link>
-  );
 
 const CasesSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
