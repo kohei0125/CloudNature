@@ -1,3 +1,5 @@
+import type { LinkItem } from "./services";
+
 export interface CaseStudy {
   id: string;
   title: string;
@@ -5,7 +7,7 @@ export interface CaseStudy {
   before: string;
   after: string;
   image: string;
-  link?: { label: string; href: string };
+  link?: LinkItem;
 }
 
 export interface CaseStudyDetail {
@@ -17,7 +19,7 @@ export interface CaseStudyDetail {
   solution: string;
   results: string[];
   quote?: { text: string; author: string; role: string };
-  link?: { label: string; href: string };
+  link?: LinkItem;
   image: string;
   imageMobile?: string;
   relatedServiceIds?: string[];

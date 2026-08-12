@@ -18,6 +18,7 @@ import { useSessionPersistence } from "@/hooks/useSessionPersistence";
 import { useEstimateApi } from "@/hooks/useEstimateApi";
 import { save } from "@/lib/sessionStorage";
 import { reportError } from "@/lib/errorReporter";
+import { trackLead } from "@/lib/analytics";
 import ChatErrorBoundary from "@/components/chat/ChatErrorBoundary";
 import ProgressBar from "@/components/chat/ProgressBar";
 import QuestionBubble from "@/components/chat/QuestionBubble";
@@ -195,9 +196,16 @@ function ChatPageContent() {
       turnstileRef.current?.reset();
       setTurnstileToken(null);
       if (result?.estimate) {
+        // Google広告の主コンバージョン（入札最適化対象）としてインポート済み。
+        // 意味が変わるため、このイベントには見積もり完了以外を相乗りさせないこと
+        // （docs/20260410_google_ads_setup_guide.md:59-67）
         window.gtag?.("event", "generate_lead", {
           session_id: stateRef.current.sessionId,
         });
+        // 全サイト共通の週次KPI「Organic経由の問い合わせ件数」の集計対象。
+        // イベント名とパラメータは3サイトで揃える必要があるためヘルパー経由で送る。
+        // 設計: docs/20260812_organic_inquiry_tracking_review.md
+        trackLead();
         save("estimate_result", result.estimate);
         router.push("/complete");
       }

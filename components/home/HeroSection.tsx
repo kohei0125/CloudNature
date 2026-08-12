@@ -2,7 +2,7 @@ import { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
 import { HERO_COPY } from "@/content/home";
-import { ESTIMATE_URL } from "@/content/common";
+import EstimateCtaLink from "@/components/shared/EstimateCtaLink";
 
 // モバイル/PC で異なるヒーロー画像をアートディレクション（<picture>）で出し分ける。
 // CSS 出し分け（2つの <Image priority>）では非表示側もダウンロード+プリロードされるため、
@@ -67,17 +67,15 @@ const HeroSection = () => {
               </p>
 
               <div className="flex flex-col gap-3" style={{ textShadow: "none" }}>
-                <a
-                  href={ESTIMATE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <EstimateCtaLink
+                  ctaLocation="hero"
                   className="w-full px-8 py-3 rounded-full font-bold center gap-3 text-white group bg-teal-700 shadow-lg shadow-teal-800/30 hover:shadow-teal-800/50 transition-all"
                 >
                   {HERO_COPY.primaryCta}
                   <div className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
                     <ArrowRight className="w-4 h-4" />
                   </div>
-                </a>
+                </EstimateCtaLink>
                 <Link
                   href="/contact"
                   className="w-full px-8 py-3 bg-white/90 text-gray-800 rounded-full font-bold hover:bg-white transition-colors center gap-2 group"

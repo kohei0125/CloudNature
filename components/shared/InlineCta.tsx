@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ESTIMATE_URL } from "@/content/common";
+import EstimateCtaLink from "@/components/shared/EstimateCtaLink";
 
 interface InlineCtaProps {
   title: string;
@@ -18,15 +18,13 @@ const InlineCta = ({ title, primaryLabel, secondaryLabel }: InlineCtaProps) => {
       <div className="relative z-10">
         <p className="font-bold text-forest mb-6">{title}</p>
         <div className="v-stack sm:h-stack gap-3 justify-center">
-          <a
-            href={ESTIMATE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <EstimateCtaLink
+            ctaLocation="inline"
             className="btn-puffy btn-puffy-accent px-6 py-3 rounded-full font-bold text-sm text-white inline-flex items-center justify-center gap-2"
           >
             {primaryLabel}
             <ArrowRight className="w-4 h-4" />
-          </a>
+          </EstimateCtaLink>
           <Link
             href="/contact"
             className="btn-outline-forest"

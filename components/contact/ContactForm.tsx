@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect, FormEvent } from "react";
-import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { useState, useRef, FormEvent } from "react";
+import { CheckCircle, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
-import { ESTIMATE_URL } from "@/content/common";
 import { cn, PHONE_REGEX } from "@/lib/utils";
+import { trackLead, trackLegacyContactSubmit } from "@/lib/analytics";
 
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
@@ -20,6 +20,7 @@ const TURNSTILE_SITE_KEY = IS_PRODUCTION
   : "";
 
 const ContactForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,7 +31,7 @@ const ContactForm = () => {
   });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState("");
   const [turnstileVerified, setTurnstileVerified] = useState(
     !TURNSTILE_SITE_KEY
@@ -38,13 +39,6 @@ const ContactForm = () => {
 
   const turnstileRef = useRef<TurnstileInstance | null>(null);
   const turnstileTokenRef = useRef<string | null>(null);
-
-  // 受付完了ページ表示時はスクロール位置を最上部へ戻す
-  useEffect(() => {
-    if (submitted) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  }, [submitted]);
 
   const validate = (field: string, value: string) => {
     if (field === "name" && !value.trim()) return "お名前を入力してください";
@@ -83,6 +77,16 @@ const ContactForm = () => {
       return;
     }
 
+    // 失敗時のみ再送信できる状態に戻す。成功時は遷移するまで submitting を維持して
+    // 二重送信（＝inquiry_submit の二重計上）を防ぐ
+    const failAndReset = (message: string) => {
+      setError(message);
+      setSubmitting(false);
+      turnstileRef.current?.reset();
+      turnstileTokenRef.current = null;
+      setTurnstileVerified(!TURNSTILE_SITE_KEY);
+    };
+
     setSubmitting(true);
     setError("");
     try {
@@ -98,53 +102,48 @@ const ContactForm = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "送信に失敗しました。しばらく経ってから再度お試しください。");
+        failAndReset(data.error || "送信に失敗しました。しばらく経ってから再度お試しください。");
         return;
       }
 
-      window.gtag?.("event", "contact_submit", {
-        form_type: "contact",
-        subject: formData.subject,
+      // 既存イベント。レポートと広告の補助コンバージョンを壊さないよう送信を継続する
+      trackLegacyContactSubmit(formData.subject);
+      // 週次KPI「Organic経由の問い合わせ件数」の集計対象。
+      // subject は固定の選択肢なので個人情報は含まれない
+      trackLead({
+        leadType: "contact_form",
+        leadLocation: "/contact",
+        inquirySubject: formData.subject,
       });
-      setSubmitted(true);
+
+      // 遷移前に成功を確定させる。遷移が失敗しても受付完了が伝わるようにするため
+      // （遷移が成功すればこの表示は一瞬も見えない）
+      setSucceeded(true);
+      // replace にして履歴に /contact を残さない。push だと戻るボタンで
+      // 空のフォームに戻れてしまい、同じ問い合わせを二重送信できる
+      router.replace("/contact/thanks");
     } catch {
-      setError("送信に失敗しました。しばらく経ってから再度お試しください。");
-    } finally {
-      setSubmitting(false);
-      turnstileRef.current?.reset();
-      turnstileTokenRef.current = null;
-      setTurnstileVerified(!TURNSTILE_SITE_KEY);
+      failAndReset("送信に失敗しました。しばらく経ってから再度お試しください。");
     }
   };
 
-  if (submitted) {
+  // 送信は成功したが /contact/thanks への遷移がまだ完了していない状態のフォールバック。
+  // 通常は一瞬で置き換わるが、遷移が失敗した場合でも「受け付けた」ことが必ず伝わるようにする
+  // （以前ここが無く、遷移失敗時は「送信中...」のまま固まって再送信を誘発していた）
+  if (succeeded) {
     return (
-      <div className="bg-white rounded-2xl p-8 md:p-12 border border-gray-200 text-center">
+      <div
+        role="status"
+        aria-live="polite"
+        className="bg-white rounded-2xl p-8 md:p-12 border border-gray-200 text-center"
+      >
         <CheckCircle className="w-16 h-16 text-sage mx-auto mb-4" />
         <h3 className="text-xl font-bold text-forest mb-2">
           {CONTACT_FORM_LABELS.successTitle}
         </h3>
-        <p className="text-gray-600 leading-relaxed mb-6">
+        <p className="text-gray-600 leading-relaxed">
           {CONTACT_FORM_LABELS.successMessage}
         </p>
-        <div className="v-stack sm:h-stack gap-3 justify-center">
-          <Link
-            href="/cases"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-mist text-forest font-bold rounded-full hover:bg-gray-200 transition-colors text-sm"
-          >
-            {CONTACT_FORM_LABELS.successCta}
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-          <a
-            href={ESTIMATE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 btn-puffy btn-puffy-accent rounded-full font-bold text-sm text-white"
-          >
-            {CONTACT_FORM_LABELS.estimateCta}
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
       </div>
     );
   }

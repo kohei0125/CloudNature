@@ -48,11 +48,20 @@ export default function SystemDevPage() {
     { name: service.title, path: "/services/system-dev" },
   ]);
 
+  // description はヒーローのものに差し替える。SERVICE_DETAILS の description は
+  // このページのどこにも描画されず（ServiceDetailCard が使うのは subtitle/heading/pillars/techStack）、
+  // そのまま出すと構造化データが可視コンテンツを表していない状態になるため
+  const serviceSchema = serviceJsonLd({
+    ...service,
+    description: SYSTEM_DEV_HERO.description,
+    path: SERVICE_PAGE_MAP[service.id].path,
+  });
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceJsonLd({ ...service, path: SERVICE_PAGE_MAP[service.id].path }), faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumb, serviceSchema, faqPageJsonLd(SYSTEM_DEV_FAQ)]) }}
       />
       <PageHero
         eyebrow={SYSTEM_DEV_HERO.eyebrow}

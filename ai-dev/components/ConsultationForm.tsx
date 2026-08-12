@@ -3,12 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { MAIN_SITE_URL } from "@/lib/metadata";
 import { MAX_SHORT_FIELD_LENGTH, MAX_EMAIL_LENGTH, MAX_TOPIC_LENGTH } from "@/lib/validation";
-
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-  }
-}
+import { trackLead } from "@/lib/analytics";
 
 type Status = "idle" | "pending" | "success" | "error";
 
@@ -79,8 +74,7 @@ export default function ConsultationForm() {
 
       setStatus("success");
       form.reset();
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: "generate_lead" });
+      trackLead();
     } catch {
       setStatus("error");
       setErrorMessage(GENERIC_ERROR_MESSAGE);

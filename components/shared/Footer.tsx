@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import SmartLink from "@/components/shared/SmartLink";
 import { HEADER_COPY, FOOTER_COPY } from "@/content/layout";
 
 const Footer = () => {
@@ -42,14 +43,14 @@ const Footer = () => {
               {FOOTER_COPY.serviceLinks.map((link) => (
                 <li key={link.label}>
                   {link.external ? (
-                    <a
+                    // SmartLink 経由にすることで、AI見積もりへの導線は estimate_cta_click が発火する
+                    <SmartLink
                       href={link.path}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      ctaLocation="nav"
                       className="hover:text-white transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </SmartLink>
                   ) : (
                     <Link href={link.path} className="hover:text-white transition-colors">
                       {link.label}

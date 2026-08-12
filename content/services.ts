@@ -42,7 +42,8 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
     techStack: ["Python", "PHP", "React", "AWS"],
     accentColor: "secondary",
     image: "/images/services/system_dev.png",
-    externalLinks: [{ url: ESTIMATE_URL, label: "AI見積もりを試す" }]
+    // ラベルは同一ページ内の他のAI見積もり導線と揃える（WCAG 3.2.4 Consistent Identification）
+    externalLinks: [{ url: ESTIMATE_URL, label: "無料でAI見積もり" }]
   },
   {
     id: "ai",
@@ -148,7 +149,8 @@ export const SYSTEM_DEV_SCOPE: ServiceScopeItem[] = [
   },
   {
     title: "AIを組み込んだ開発",
-    description: "つくったシステムに、文章生成や判断の補助といったAIの機能を組み込みます。判断を伴うタスク自体を任せたい場合は、AIエージェント開発としてご相談ください。"
+    description: "つくったシステムに、文章生成や判断の補助といったAIの機能を組み込みます。判断を伴うタスク自体を任せたい場合は、AIエージェント開発としてご相談ください。",
+    link: { label: "AIエージェント開発を見る", href: "/services/ai-agent" }
   },
   {
     title: "リリース後の保守・運用",
