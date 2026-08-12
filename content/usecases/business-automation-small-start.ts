@@ -4,7 +4,7 @@ export const article: UseCaseArticle = {
   id: "business-automation-small-start",
   publishedAt: "2026-04-04",
   category: "実践ガイド",
-  relatedServiceIds: ["ai-support", "ai"],
+  relatedServiceIds: ["ai-support", "ai", "dev"],
   title:
     "業務自動化の始め方｜まず1業務だけ、2週間で動くものを作る",
   excerpt:
@@ -210,6 +210,7 @@ export const article: UseCaseArticle = {
 
 <h2>「最初の1業務」が決まらない場合は</h2>
 <p>「自動化したい気持ちはあるけど、どの業務から手をつけていいか分からない」——それが一番多い悩みです。</p>
-<p>株式会社クラウドネイチャーでは、<strong>無料相談（30分・オンライン対応）</strong>で、御社の業務の中から「最短で効果が出る1業務」を一緒に特定します。まずは30分だけ、現状の業務フローを教えてください。 <a href="/contact">無料相談のお申し込みはこちら</a></p>`,
+<p>株式会社クラウドネイチャーでは、<strong>無料相談（30分・オンライン対応）</strong>で、御社の業務の中から「最短で効果が出る1業務」を一緒に特定します。まずは30分だけ、現状の業務フローを教えてください。 <a href="/contact">無料相談のお申し込みはこちら</a></p>
+<p>ツールの組み合わせでは足りず、業務に合わせて作り込む必要がある場合は、<a href="/services/system-dev">業務システム開発</a> で要件整理から設計・実装までご一緒します。</p>`,
   image: "/images/blog/business-automation/thumbnail.webp",
 };

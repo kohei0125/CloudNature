@@ -5,7 +5,7 @@ export const article: UseCaseArticle = {
   publishedAt: "2026-04-04",
   updatedAt: "2026-08-09",
   category: "実践ガイド",
-  relatedServiceIds: ["ai-support", "ai"],
+  relatedServiceIds: ["ai-support", "ai", "dev"],
   title:
     "新潟の中小企業がAI導入で使える補助金ガイド【2026年版】",
   excerpt:
@@ -201,7 +201,7 @@ export const article: UseCaseArticle = {
 
 <section class="faq">
 <h3>「自社用の業務システムを作りたい」場合でも補助金は使えますか？</h3>
-<p>はい。条件を満たせば、自社向けの業務システム開発にも活用できる制度があります。</p>
+<p>はい。条件を満たせば、自社向けの<a href="/services/system-dev">業務システム開発</a>にも活用できる制度があります。</p>
 <p>代表的なのが<strong>中小企業省力化投資補助金の「一般型」</strong>です。公式サイトでも「個別現場の設備や事業内容に合わせた設備導入・システム構築」が対象とされており、対象経費にシステム構築費・外注費・クラウドサービス利用費が含まれます。人手不足の解消に向けた事業計画であることが前提です。AIを使った新しい仕組みの開発・実証なら、新潟県の「AI活用実証補助金」も選択肢になります（申請主体はAI開発者）。</p>
 <p>一方、デジタル化・AI導入補助金は事務局に登録されたITツールの導入が基本なので、ゼロからつくる個別開発とは性質が異なります。</p>
 <p>大事なのは「システムを作りたいから補助金を探す」のではなく、<strong>解決したい業務課題に合わせて制度と開発内容を設計する</strong>ことです。「この業務を自動化したい」「この作業時間を減らしたい」という段階から、使える補助金を含めて一緒に検討できます。</p>
@@ -225,7 +225,7 @@ export const article: UseCaseArticle = {
 
 <h2 id="contact">どの補助金が使えるか分からない場合は</h2>
 <p>「うちの業務にはどの補助金が合うのか」「自社の課題がAI実証のテーマになるのか」。まずはそこから整理するのが一番の近道です。</p>
-<p>株式会社クラウドネイチャーは、新潟で<a href="/services/ai-agent">AIエージェント開発</a>と<a href="/services/ai-support">法人向けAI導入支援</a>を行っています。</p>
+<p>株式会社クラウドネイチャーは、新潟で<a href="/services/ai-agent">AIエージェント開発</a>・<a href="/services/system-dev">システム開発</a>・<a href="/services/ai-support">法人向けAI導入支援</a>を行っています。</p>
 <p>補助金の対象になりそうか、通常の受託開発で進めるべきか、まずは小さく実証すべきか。業務課題の整理から一緒に検討しますので、<a href="/contact">無料相談（30分・オンライン対応）</a>をご利用ください。</p>
 <ul>
 <li>概算費用を先に知りたい → <a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">AI見積もり</a></li>

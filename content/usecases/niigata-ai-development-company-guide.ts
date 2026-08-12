@@ -186,7 +186,7 @@ export const article: UseCaseArticle = {
 <img src="/images/blog/niigata_ai_dev_company/Niigata_AI_Selection_Blueprint-14.webp" alt="比較の基準を持って次のステップへ進むことを示すイラスト。自社の条件で概算とブレ幅を知る無料AI見積もりと、課題の整理から相談できるお問い合わせ・無料相談の2つの入口を案内" width="1600" height="893" loading="lazy" />
 <figcaption>比較の基準を持った状態で、無料AI見積もりか無料相談から次のステップへ進む</figcaption>
 </figure>
-<p>まず自社の条件で概算を知りたい方は <a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">無料AI見積もり</a> を、課題の整理から相談したい方は <a href="/contact">お問い合わせ・無料相談</a> をご利用ください。比較の基準を持った状態で、最適なパートナー選びを進めていきましょう。</p>
+<p>まず自社の条件で概算を知りたい方は <a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">無料AI見積もり</a> を、課題の整理から相談したい方は <a href="/contact">お問い合わせ・無料相談</a> をご利用ください。AIに限らず業務システムそのものの構築を検討している場合は、<a href="/services/system-dev">新潟のシステム開発</a> のページに対応領域と進め方をまとめています。比較の基準を持った状態で、最適なパートナー選びを進めていきましょう。</p>
 
 <section class="faq">
 <h2>よくある質問（FAQ）</h2>

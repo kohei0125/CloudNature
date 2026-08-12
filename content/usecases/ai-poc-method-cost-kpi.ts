@@ -4,7 +4,7 @@ export const article: UseCaseArticle = {
   id: "ai-poc-method-cost-kpi",
   publishedAt: "2026-05-20",
   category: "実践ガイド",
-  relatedServiceIds: ["ai-support", "ai"],
+  relatedServiceIds: ["ai-support", "ai", "dev"],
   title:
     "新潟企業のためのAI PoC完全ガイド｜進め方・費用の目安・KPI設計を実例で解説",
   excerpt:
@@ -278,6 +278,7 @@ export const article: UseCaseArticle = {
 <h2>新潟でのAI PoC相談・無料見積もり</h2>
 <p>「自社のAI PoCはどの規模・どの費用で始められるか」を知りたい方は、<a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">AI見積もりシステム</a> で <strong>最短1分で概算費用</strong> をご確認いただけます。</p>
 <p>より具体的なPoC設計や補助金活用、本開発移行のご相談は、<a href="/contact">30分の無料相談</a> でお受けしています。新潟市内であれば対面でのお打ち合わせも可能です。まずは現状の業務を30分だけ教えてください。</p>
+<p>PoCの先にある本開発をどう進めるかは、<a href="/services/system-dev">システム開発</a> のページに対応領域と進め方をまとめています。</p>
 
 <h2>よくある質問（FAQ）</h2>
 

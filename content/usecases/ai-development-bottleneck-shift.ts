@@ -97,7 +97,7 @@ export const article: UseCaseArticle = {
 <h2>まとめ｜制約は消えずに、移動する</h2>
 <p>講演の締めくくりの言葉は「制約は消えずに、移動する」でした。実装のボトルネックが解消されると、判断や保守という次のボトルネックが現れる。大事なのは、速くなった部分を最大化することではなく、<strong>次に詰まる場所を見据えて、仕事の組み替えを始めること</strong>です。</p>
 <p>そしてこの変化は、身軽な中小企業にこそ追い風です。作れなかったシステムが作れるようになり、意思決定の速さがそのまま競争力になります。</p>
-<p>クラウドネイチャーは、新潟を拠点に<a href="/services/ai-agent">AIエージェント開発</a>・システム開発・AI導入支援を行っています。「どの業務から手をつけるべきか」の整理からご一緒しますので、<a href="/contact">無料相談</a>までお気軽にどうぞ。概算費用を先に知りたい方は<a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">AI見積もり</a>をご利用ください。</p>
+<p>クラウドネイチャーは、新潟を拠点に<a href="/services/ai-agent">AIエージェント開発</a>・<a href="/services/system-dev">業務システム開発</a>・AI導入支援を行っています。「どの業務から手をつけるべきか」の整理からご一緒しますので、<a href="/contact">無料相談</a>までお気軽にどうぞ。概算費用を先に知りたい方は<a href="https://ai.cloudnature.jp/" target="_blank" rel="noopener noreferrer">AI見積もり</a>をご利用ください。</p>
 
 <h2>よくある質問（FAQ）</h2>
 

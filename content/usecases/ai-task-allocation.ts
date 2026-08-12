@@ -4,7 +4,7 @@ export const article: UseCaseArticle = {
   id: "ai-task-allocation",
   publishedAt: "2026-04-14",
   category: "経営戦略",
-  relatedServiceIds: ["ai-support", "ai"],
+  relatedServiceIds: ["ai-support", "ai", "dev"],
   title:
     "AIエージェント vs 人間｜中小企業が今すぐ使える業務仕分け判断基準",
   excerpt:
@@ -175,6 +175,7 @@ export const article: UseCaseArticle = {
 <p>株式会社クラウドネイチャーは、新潟を拠点に中小企業のAI導入・業務自動化を支援しています。まずは30分、御社の業務を「AI側」と「人間側」に仕分けしてみませんか？</p>
 <ul>
 <li>経営者自身がAIを学びたい方 → <a href="/services/ai-support">AI導入支援サービスの詳細</a></li>
+<li>仕分けした業務を仕組みに落としたい方 → <a href="/services/system-dev">業務に合うシステム開発</a></li>
 <li>自社の課題を個別に相談したい方 → <a href="/contact">無料相談のお申し込み</a></li>
 </ul>`,
   image: "/images/blog/ai-task-allocation/thumbnail.webp",

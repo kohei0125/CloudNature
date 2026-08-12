@@ -1,4 +1,4 @@
-import { ServiceDetail, FlowStep, PricingItem, FaqItem } from "@/types";
+import { ServiceDetail, FlowStep, PricingItem, FaqItem, ServiceScopeItem } from "@/types";
 import { ESTIMATE_URL, AI_DEV_URL, byServiceOrder } from "@/content/common";
 
 // キーの並びは SERVICE_ORDER に合わせる（cases ページの関連サービス一覧が Object.values 順に表示するため）
@@ -106,6 +106,70 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
   }
 ].sort(byServiceOrder);
 
+/**
+ * /services/system-dev のヒーローコピー（SERVICES_HERO などと同じ形）。
+ * SERVICE_DETAILS[dev].title（=「システム開発」）はナビ・JSON-LD の name・関連リンクで
+ * 共有されているため変更せず、このページの H1 だけを別に持つ。
+ * 「新潟 × システム開発」クエリの受け皿として、H1 に地域名を含めるのが目的。
+ */
+export const SYSTEM_DEV_HERO = {
+  eyebrow: "System Development",
+  title: "新潟のシステム開発",
+  description: "新潟市中央区を拠点に、受発注管理・在庫管理・勤怠管理といった業務システムを、要件整理から設計・実装・運用まで一貫して開発します。既存のシステムを使い続けたまま、必要な部分から段階的に仕組み化できます。",
+};
+
+/**
+ * /services/system-dev の「対応する開発領域」。
+ * 記載内容は既存の公開情報（SYSTEM_DEV_FAQ・SERVICES_FAQ・PAGE_META・SERVICE_DETAILS）の
+ * 範囲に収め、新しい実績数値・料金・社名を持ち込まないこと。
+ */
+export const SYSTEM_DEV_SCOPE: ServiceScopeItem[] = [
+  {
+    title: "業務システム開発",
+    description: "受発注管理・在庫管理・勤怠管理など、既製のパッケージに業務を合わせづらい領域を、現場の流れに合わせてオーダーメイドで構築します。"
+  },
+  {
+    title: "既存システムとの連携",
+    description: "いまお使いのシステムを止めずに、必要な機能だけを足します。連携できる範囲は下のFAQに記載しています。"
+  },
+  {
+    title: "Webアプリケーション開発",
+    description: "社内で使う管理画面から、お客様や受講者が使う画面まで、ブラウザから利用できるアプリケーションとして開発します。"
+  },
+  {
+    title: "業務自動化ツールの開発",
+    description: "転記・集計・帳票づくりのように、人手で繰り返している作業を切り出して自動化します。1つの業務から小さく始められます。"
+  },
+  {
+    title: "AIを組み込んだ開発",
+    description: "つくったシステムに、文章生成や判断の補助といったAIの機能を組み込みます。判断を伴うタスク自体を任せたい場合は、AIエージェント開発としてご相談ください。"
+  },
+  {
+    title: "リリース後の保守・運用",
+    description: "つくって終わりにせず、月額の保守契約で運用を継続して担当します。対応範囲は下のFAQに記載しています。"
+  }
+];
+
+/**
+ * /services/system-dev の「ご相談の入口」。
+ * 「要件が固まっていないと相談できない」という商談前の心理的な壁を外すのが目的。
+ * 内容は IMPLEMENTATION_FLOW・SYSTEM_DEV_FAQ・見積もりツールの既存の説明の範囲に収める。
+ */
+export const SYSTEM_DEV_ENTRY_POINTS: ServiceScopeItem[] = [
+  {
+    title: "要件がまだ固まっていない",
+    description: "仕様書がない状態で構いません。まずは業務の流れと、時間がかかっている工程を一緒に棚卸しするところから始めます。"
+  },
+  {
+    title: "既存システムは残したい",
+    description: "全部を作り直す前提では考えません。いまの仕組みを活かしたまま、連携や部分開発で足りない部分だけを補う進め方もご提案します。"
+  },
+  {
+    title: "まず予算感だけ知りたい",
+    description: "発注前に概算だけ把握したい場合は、無料のAI見積もりで質問に答えるだけで概算費用を確認できます。"
+  }
+];
+
 export const IMPLEMENTATION_FLOW: FlowStep[] = [
   { step: 1, title: "無料相談・業務ヒアリング", description: "「お困りごと」ではなく、業務の事実を一緒に棚卸しします。" },
   { step: 2, title: "ご提案・デモ", description: "課題に合わせた解決アプローチと概算をご提示します。" },
@@ -204,6 +268,10 @@ export const AI_AGENT_FAQ: FaqItem[] = [
 ];
 
 export const SYSTEM_DEV_FAQ: FaqItem[] = [
+  {
+    question: "システム開発とAIエージェント開発は、どちらに相談すればいいですか？",
+    answer: "業務の流れそのものを仕組み化したい場合はシステム開発、調査・整理・判断・実行といった人が担ってきたタスクをAIに任せたい場合はAIエージェント開発が適しています。どちらに当てはまるか分からない段階でもご相談ください。業務内容をお伺いしたうえで、必要な範囲の切り分けからご一緒します。"
+  },
   {
     question: "既存のシステムを活かしたまま開発できますか？",
     answer: "はい。API連携やデータベース連携で、今お使いのシステムを壊さず新機能を追加できます。「全部作り直し」ではなく、必要な部分だけを段階的に開発する方針です。"

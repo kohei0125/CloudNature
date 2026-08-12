@@ -43,3 +43,9 @@ export interface PricingItem {
   title: string;
   description: string;
 }
+
+/** サービス詳細ページのリストセクション（対応領域・相談の入口など）の1項目 */
+export interface ServiceScopeItem {
+  title: string;
+  description: string;
+}
