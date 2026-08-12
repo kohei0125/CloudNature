@@ -9,9 +9,9 @@ export const CASES_HERO = {
 export const CASE_STUDY_DETAILS: CaseStudyDetail[] = [
   {
     id: "ai-estimate",
-    title: "AI見積もりシステムの自社開発",
+    title: "AI見積もりシステム",
     category: "自社プロダクト × AI",
-    client: "株式会社CloudNature（自社プロダクト）",
+    client: "自社プロダクト",
     challenge: "システム開発の見積もりは、要件ヒアリング・構成検討・費用算出に数日〜数週間を要するのが業界の常識。顧客は「まず概算が知りたい」のに、その段階で大きな時間コストが発生していた。",
     solution: "チャット形式の13ステップで要件をヒアリングし、AIが要件分析・機能提案・費用算出を1分以内に自動実行するシステムを自社開発。17カテゴリの価格モデルと7つの補正係数による高精度な見積もりエンジンを搭載。",
     results: [
