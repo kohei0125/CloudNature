@@ -30,7 +30,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const article = findArticle(slug);
   if (!article) return {};
 
-  const title = `${article.title} | ${USECASES_SECTION.title} | クラウドネイチャー`;
+  // セクション名を挟むとGoogleの表示幅（全角30文字前後）で記事タイトルが途切れるため、ブランド名のみ付与する
+  const title = `${article.title} | クラウドネイチャー`;
 
   return {
     title,

@@ -3,7 +3,7 @@ import { ESTIMATE_URL } from "@/content/common";
 export const USECASES_SECTION = {
   eyebrow: "AI GUIDES",
   title: "AI導入のヒント・実践ガイド",
-  description: "AI導入のヒントや業務自動化の活用術を、業種別・課題別にわかりやすく解説。「何から始めればいいか分からない」方のための実践ガイドです。",
+  description: "AI導入の失敗パターン、業務自動化の始め方、補助金の活用まで、AI活用のヒントを業種別・課題別にわかりやすく解説。「何から始めればいいか分からない」中小企業の方のための実践ガイドです。",
   cta: { label: "ガイドをもっと見る", href: "/usecases" }
 };
 
