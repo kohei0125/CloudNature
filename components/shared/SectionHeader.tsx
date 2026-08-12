@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { LinkItem } from "@/types";
 
 interface SectionHeaderProps {
   eyebrow: string;
   title: string;
-  cta?: { label: string; href: string };
+  cta?: LinkItem;
   centered?: boolean;
   darkMode?: boolean;
   headingId?: string;

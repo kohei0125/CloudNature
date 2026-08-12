@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import SmartLink from "@/components/shared/SmartLink";
 import { SERVICE_ORDER } from "@/content/common";
 import type { ServiceDetail } from "@/types";
 
@@ -100,11 +101,11 @@ const ServiceDetailCard = ({ service }: ServiceDetailCardProps) => {
         {service.externalLinks && service.externalLinks.length > 0 && (
           <div className="mt-8 v-stack gap-3 items-start">
             {service.externalLinks.map((link) => (
-              <a
+              // SmartLink 経由にすることで、AI見積もりへの導線は estimate_cta_click が発火する
+              <SmartLink
                 key={link.url}
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                ctaLocation="detail_card"
                 className={cn(
                   "inline-flex items-center gap-2 text-sm font-bold transition-all hover:underline hover:underline-offset-4",
                   accent.text
@@ -112,7 +113,7 @@ const ServiceDetailCard = ({ service }: ServiceDetailCardProps) => {
               >
                 {link.label}
                 <ExternalLink className="w-4 h-4" />
-              </a>
+              </SmartLink>
             ))}
           </div>
         )}

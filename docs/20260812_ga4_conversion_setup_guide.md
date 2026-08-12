@@ -20,7 +20,7 @@ SEO Weekly Metrics の **SEO Inquiries（Organic経由の問い合わせ件数�
 | イベント | 発火タイミング | サイト |
 | --- | --- | --- |
 | **`inquiry_submit`** | 問い合わせ・見積もり・相談の**送信成功時** | 全サイト共通（今回追加） |
-| `estimate_cta_click` | AI見積もりへの導線クリック時 | cloudnature.jp（今回追加） |
+| `estimate_cta_click` | AI見積もりへの導線クリック時（サイト内の全導線） | cloudnature.jp（今回追加） |
 
 `inquiry_submit` のパラメータ:
 
@@ -29,6 +29,23 @@ SEO Weekly Metrics の **SEO Inquiries（Organic経由の問い合わせ件数�
 | `lead_type` | `contact_form`（通常問い合わせ）/ `ai_estimate`（AI見積もり）/ `training_consultation`（AI研修LP）/ `academy_consultation`（AIアカデミー） |
 | `lead_location` | 発火元のパス |
 | `inquiry_subject` | 問い合わせ種別セレクトの値（固定選択肢） |
+
+`estimate_cta_click` の `cta_location`（どの導線が効いているかの分離に使う）:
+
+| 値 | 配置 |
+| --- | --- |
+| `hero` | TOPページのファーストビュー |
+| `page_hero` | 下層ページのファーストビュー（例: /services/system-dev） |
+| `detail_card` | サービス詳細カードの外部リンク |
+| `entry_card` | 「ご相談の入口」カード |
+| `inline` | 記事本文中のCTA |
+| `bottom_banner` | ページ下部のCTAバナー |
+| `contact_thanks` | お問い合わせ完了ページ |
+| `nav` | フッターのナビゲーション |
+| `other` | 配置が未指定のまま計測されたもの（本来は出ない想定） |
+
+> 📌 `other` が集計に出てきたら、新しく追加したCTAで `ctaLocation` の指定を忘れている。
+> 該当箇所に配置ラベルを追加すること。
 
 > ⚠️ **既存イベントには触らないこと**
 > `generate_lead`（見積もり完了）と `contact_submit`（お問い合わせ）は

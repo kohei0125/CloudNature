@@ -10,8 +10,9 @@ import EstimateCtaLink from "@/components/shared/EstimateCtaLink";
  * 送信成功時に `/contact` からリダイレクトされる。コンバージョン地点を一意なURLとして
  * 識別できるようにするためのページで、検索結果には出さない（noindex）。
  *
- * 重要: GA4のコンバージョンは「このURLの到達」ではなくイベント `generate_lead` を正とする。
+ * 重要: GA4のコンバージョンは「このURLの到達」ではなくイベント `inquiry_submit` を正とする。
  * 直接アクセスやリロードで件数が水増しされるのを避けるため。
+ * （`generate_lead` は Google広告の見積もり完了コンバージョン専用で、この導線では発火しない）
  */
 export const metadata: Metadata = {
   title: `${CONTACT_FORM_LABELS.successTitle}｜株式会社クラウドネイチャー`,

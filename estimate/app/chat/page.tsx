@@ -18,6 +18,7 @@ import { useSessionPersistence } from "@/hooks/useSessionPersistence";
 import { useEstimateApi } from "@/hooks/useEstimateApi";
 import { save } from "@/lib/sessionStorage";
 import { reportError } from "@/lib/errorReporter";
+import { trackLead } from "@/lib/analytics";
 import ChatErrorBoundary from "@/components/chat/ChatErrorBoundary";
 import ProgressBar from "@/components/chat/ProgressBar";
 import QuestionBubble from "@/components/chat/QuestionBubble";
@@ -202,12 +203,9 @@ function ChatPageContent() {
           session_id: stateRef.current.sessionId,
         });
         // 全サイト共通の週次KPI「Organic経由の問い合わせ件数」の集計対象。
-        // lead_type でコーポレートの通常問い合わせ（contact_form）と区別する。
+        // イベント名とパラメータは3サイトで揃える必要があるためヘルパー経由で送る。
         // 設計: docs/20260812_organic_inquiry_tracking_review.md
-        window.gtag?.("event", "inquiry_submit", {
-          lead_type: "ai_estimate",
-          lead_location: "/chat",
-        });
+        trackLead();
         save("estimate_result", result.estimate);
         router.push("/complete");
       }

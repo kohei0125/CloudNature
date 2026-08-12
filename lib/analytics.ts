@@ -29,8 +29,20 @@
  */
 export type LeadType = "contact_form";
 
-/** AI見積もりへの導線の配置。どのCTAが効いているかを分離するために使う。 */
-export type EstimateCtaLocation = "hero" | "inline" | "contact_thanks";
+/**
+ * AI見積もりへの導線の配置。どのCTAが効いているかを分離するために使う。
+ * 値を増やしたら docs/20260812_ga4_conversion_setup_guide.md の一覧も更新すること。
+ */
+export type EstimateCtaLocation =
+  | "hero" // TOPページのファーストビュー
+  | "page_hero" // 下層ページのファーストビュー（PageHero）
+  | "detail_card" // サービス詳細カードの外部リンク
+  | "entry_card" // 「ご相談の入口」カード（ServiceCardGrid）
+  | "inline" // 記事本文中の InlineCta
+  | "bottom_banner" // ページ下部の CtaBanner
+  | "contact_thanks" // お問い合わせ完了ページ
+  | "nav" // ヘッダー・フッターのナビゲーション
+  | "other"; // 上記以外（配置が未指定のまま計測されたもの）
 
 type LeadParams = {
   leadType: LeadType;
@@ -41,26 +53,26 @@ type LeadParams = {
 };
 
 /**
- * gtag.js / GTM のどちらの構成でもイベントが届くように送信する。
- * 現在は gtag.js 直挿し構成だが、`NEXT_PUBLIC_GTM_ID` を設定して GTM に
- * 切り替えた場合でも欠損しないようフォールバックを持たせている。
+ * GTM を使う構成かどうか。`components/shared/GoogleAnalytics.tsx` と同じ判定にする。
  *
- * フォールバックの `dataLayer.push({ event })` は GTM 形式のため gtag.js では
- * 解釈されない。ただしこのヘルパーはフォーム送信成功後（＝ユーザー操作 + 通信往復の後）
- * にしか呼ばれず、その時点では afterInteractive の gtag.js 初期化が完了していて
- * `window.gtag` が存在するため、gtag.js 構成でこの分岐に入ることは実質ない。
+ * gtag.js と GTM は排他で、GTM 構成でも GA4 タグが読み込まれた時点で `window.gtag` が
+ * 定義される。そのため `window.gtag` の有無で分岐すると、GTM 起動の前後で送信経路が
+ * 変わり同じイベントが一部のユーザーでしか計測されない。判定は実行時ではなく
+ * ビルド時の環境変数で行い、経路を決定的にする。
  */
+const USE_GTM = Boolean(process.env.NEXT_PUBLIC_GTM_ID);
+
 function sendEvent(name: string, params: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
 
   try {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", name, params);
+    if (USE_GTM) {
+      window.dataLayer = window.dataLayer ?? [];
+      window.dataLayer.push({ event: name, ...params });
       return;
     }
 
-    window.dataLayer = window.dataLayer ?? [];
-    window.dataLayer.push({ event: name, ...params });
+    window.gtag?.("event", name, params);
   } catch {
     // 計測の失敗でフォーム送信やページ遷移を妨げない
   }
@@ -81,6 +93,15 @@ export function trackLead({
     lead_location: leadLocation,
     ...(inquirySubject ? { inquiry_subject: inquirySubject } : {}),
   });
+}
+
+/**
+ * 既存の `contact_submit`（Google広告の補助コンバージョン）。
+ * 送信経路と名前を変えると広告側の計測が壊れるため、パラメータも含めて従来のまま送る。
+ * 計測の失敗が送信完了フローを止めないよう、必ずこのヘルパー経由で呼ぶこと。
+ */
+export function trackLegacyContactSubmit(subject: string): void {
+  sendEvent("contact_submit", { form_type: "contact", subject });
 }
 
 /** AI見積もり（ai.cloudnature.jp）への導線クリック。CV到達の診断用。 */

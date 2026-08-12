@@ -47,6 +47,7 @@ const ServiceCardGrid = ({ id, eyebrow, title, items }: ServiceCardGridProps) =>
                     // py-3 はモバイルのタップ領域（44px）を確保するためのもの
                     <SmartLink
                       href={item.link.href}
+                      ctaLocation="entry_card"
                       className="mt-2 py-3 inline-flex items-center gap-2 text-sm font-bold text-teal-800 hover:gap-3 transition-all"
                     >
                       {item.link.label}

@@ -1,13 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import SmartLink from "@/components/shared/SmartLink";
 import type { ReactNode } from "react";
+import type { LinkItem } from "@/types";
 
 interface CtaBannerProps {
   eyebrow?: string;
   title: string;
   description: string;
-  primaryCta: { label: string; href: string };
-  secondaryCta?: { label: string; href: string };
+  primaryCta: LinkItem;
+  secondaryCta?: LinkItem;
   /** section に付与する id（複数配置時の衝突回避用） */
   id?: string;
   /**
@@ -39,9 +40,11 @@ const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id =
           {description}
         </p>
         <div className="v-stack sm:h-stack gap-4 justify-center">
-          {/* SmartLink 経由。AI見積もり（別ドメイン）はサイト全体の慣習どおり別タブで開く */}
+          {/* SmartLink 経由。AI見積もり（別ドメイン）はサイト全体の慣習どおり別タブで開き、
+              かつ estimate_cta_click を bottom_banner として計測する */}
           <SmartLink
             href={primaryCta.href}
+            ctaLocation="bottom_banner"
             className="btn-puffy btn-puffy-accent px-8 py-4 rounded-full font-bold inline-flex items-center justify-center gap-2 shadow-lg shadow-teal-800/20 hover:shadow-teal-800/40 transition-all"
           >
             {primaryCta.label}
@@ -50,6 +53,7 @@ const CtaBanner = ({ eyebrow, title, description, primaryCta, secondaryCta, id =
           {secondaryCta ? (
             <SmartLink
               href={secondaryCta.href}
+              ctaLocation="bottom_banner"
               className="px-8 py-4 border border-white/30 text-white rounded-full font-bold hover:bg-white/10 transition-colors inline-flex items-center justify-center gap-2"
             >
               {secondaryCta.label}

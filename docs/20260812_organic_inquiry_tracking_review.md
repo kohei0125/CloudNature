@@ -76,7 +76,7 @@ SEO Weekly Metrics の **SEO Inquiries（Organic経由の問い合わせ件数�
 | `estimate_step` | ai.cloudnature.jp | `estimate/app/chat/page.tsx:160` | 変更なし |
 | `estimate_step_freetext` | ai.cloudnature.jp | `estimate/app/chat/page.tsx:166` | 変更なし |
 | `estimate_step_ai_features` | ai.cloudnature.jp | `estimate/app/chat/page.tsx:172` | 変更なし |
-| `generate_lead` | ai.cloudnature.jp | `estimate/app/chat/page.tsx:198` | **パラメータ追加**（イベント名は維持） |
+| `generate_lead` | ai.cloudnature.jp | `estimate/app/chat/page.tsx:198` | **変更なし**（広告の主コンバージョンのため） |
 | `view_estimate_complete` | ai.cloudnature.jp | `estimate/app/complete/page.tsx:36` | 変更なし |
 | `view_estimate_pdf` | ai.cloudnature.jp | `estimate/components/complete/EmailNotice.tsx:43` | 変更なし |
 | `generate_lead`（dataLayer） | ai-dev.cloudnature.jp | `ai-dev/components/ConsultationForm.tsx:83` | **不具合修正** |
@@ -155,7 +155,7 @@ SEO Weekly Metrics の **SEO Inquiries（Organic経由の問い合わせ件数�
 | ai-dev.cloudnature.jp | インライン完了表示 | LP単一ページ構成のため据え置き。イベントで識別 |
 
 `/contact/thanks` への直接アクセス（bot・リロード）でCV数が水増しされないよう、
-**コンバージョンはURL到達ではなくイベント `generate_lead` を正とする**。URLは人が funnel を追うための目印。
+**コンバージョンはURL到達ではなくイベント `inquiry_submit` を正とする**。URLは人が funnel を追うための目印。
 
 ---
 
@@ -210,7 +210,40 @@ SEO Weekly Metrics の **SEO Inquiries（Organic経由の問い合わせ件数�
 - `submitted` state 削除による未使用変数・不正なsetStateなし。Turnstileのリセット処理も維持
 - 3サイトとも同一測定ID + 本番で `.cloudnature.jp` Cookie を使用しており、サブドメイン計測の前提は妥当
 
-## 残課題（本タスクでは未対応）
+## /code-review（xhigh）の指摘と対応
+
+ワークフロー型コードレビュー（46エージェント / 38件検証 → 15件に集約）を実施。
+※ レビューのベースがローカル `main`（PR #3 マージ前）だったため、PR #3 範囲の指摘も含まれる。
+
+### 本タスク由来の指摘（すべて対応済み）
+
+| # | 指摘 | 対応 |
+| --- | --- | --- |
+| 1 | `EstimateCtaLink` を3箇所にしか適用しておらず、content 由来の見積もりCTA6箇所（PageHero・ServiceCardGrid・CtaBanner・ServiceDetailCard・Footer）が `estimate_cta_click` 未発火 | **`SmartLink` 側で一元的に委譲**するよう変更。`href === ESTIMATE_URL` なら `EstimateCtaLink` を描画するため、content にCTAを増やしても計測漏れが起きない。配置は `ctaLocation` で指定し、未指定は `other` として可視化 |
+| 2 | サンクスページ・フォーム・設計書の3箇所が、実際には送信されない `generate_lead` を「コンバージョンの正」と記載 | 3箇所とも `inquiry_submit` に修正。設計書の「パラメータ追加」も実装（変更なし）に合わせて修正 |
+| 3 | 成功時に `submitting` を解除しないため、遷移失敗時にフォームが「送信中...」で固着し再送信を誘発 | 遷移前に `succeeded` を立て、受付完了メッセージを描画するフォールバックを追加。遷移が成功すれば表示されない |
+| 4 | `contact_submit` の `window.gtag` 呼び出しが try 内で未保護。計測側の例外が送信成功をユーザー向けの失敗に変える | `trackLegacyContactSubmit` に切り出し、内部で try/catch。イベント名・パラメータは従来のまま |
+| 5 | `router.push` のため戻るボタンで空フォームに戻れ再送信できる | `router.replace` に変更し履歴に `/contact` を残さない |
+| 6 | ai-dev の `generate_lead`（dataLayer push）削除は、Vercel 側で GTM が有効な場合に既存コンバージョンを無言で停止させうる | 後方互換として従来の push を復活させ、`inquiry_submit` と併送する構成にした |
+| 7 | `window.gtag` の有無で分岐する GTM フォールバックが、GTM 構成では到達せず、起動タイミングで経路が変わる | 判定を実行時の `window.gtag` からビルド時の `NEXT_PUBLIC_GTM_ID` に変更し、経路を決定的にした（3サイト共通） |
+| 8 | `inquiry_submit` の定義が estimate/ だけ生の `window.gtag` で三重管理 | `estimate/lib/analytics.ts` を追加し、3サイトともヘルパー経由に統一 |
+| 15 | `CtaBanner` の SmartLink 化で `rel="noreferrer"` が付き、ai.cloudnature.jp への Referer が抑止される | `EstimateCtaLink` の rel を `noopener` のみに変更（自社サブドメイン向け）。Cookie 非共有環境でも流入元を維持 |
+
+### PR #3 範囲の指摘（併せて対応）
+
+| # | 指摘 | 対応 |
+| --- | --- | --- |
+| 10 | `/services/system-dev` の Service JSON-LD の `description` がページ本文に存在しない | 構造化データの description をヒーローの実表示テキストに差し替え |
+| 11 | 同一ページで同じ遷移先のCTAラベルが不統一（WCAG 3.2.4）。4箇所中1箇所が未修正 | `SERVICE_DETAILS` のラベルを「無料でAI見積もり」に統一 |
+| 12 | 「AIを組み込んだ開発」がAIエージェント開発へ誘導しているのにリンクがない | `/services/ai-agent` への `link` を追加 |
+| 13 | `SmartLink` の JSDoc が `isExternalHref` に付いてしまっている | JSDoc を `SmartLink` の直上に戻した |
+| 14 | 新設 `LinkItem` 型が既存の同形状（cases.ts・CtaBanner・SectionHeader）を再利用していない | 4箇所から `LinkItem` を参照するよう統一 |
+
+### 見送った指摘
+
+| # | 指摘 | 見送った理由 |
+| --- | --- | --- |
+| 9 | sitemap の `lastModified` 更新漏れ。`/services` と、内部リンクを追加した usecase 記事7本が古い日付のまま | **`/services` のみ対応した。** usecase 7本は見送り。`content/usecases/index.ts` の規約が「大幅リライトした記事は `updatedAt`、それ以外は公開日」と定めており、内部リンク1本の追加でこれを立てると、一覧の並び順が7本まとめて先頭に来るうえ、ユーザーに見える「更新日」が実態と合わなくなる。SEO上の再クロール促進と、日付表示の正確さ・記事一覧の秩序はトレードオフのため、運用判断として残す |
 
 | # | 内容 | 理由 |
 | --- | --- | --- |

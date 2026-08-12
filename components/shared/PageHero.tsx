@@ -66,6 +66,7 @@ const PageHero = ({ eyebrow, title, description, bgColor = "#FAFAFA", id, cta }:
             {/* InlineCta の主要ボタンと同じサイズ・見た目に揃える（CTAの寸法を増やさない） */}
             <SmartLink
               href={cta.href}
+              ctaLocation="page_hero"
               className="btn-puffy btn-puffy-accent px-6 py-3 rounded-full font-bold text-sm text-white inline-flex items-center justify-center gap-2"
             >
               {cta.label}

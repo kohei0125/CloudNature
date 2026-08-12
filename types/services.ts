@@ -46,7 +46,10 @@ export interface PricingItem {
 
 /**
  * ラベル付きリンク。外部/内部の出し分けは href を見て SmartLink が行うため、
- * データ側に external フラグは持たせない（types/cases.ts の link と同じ形）。
+ * データ側に external フラグは持たせない。
+ *
+ * 同じ形を各所でインライン定義せず、この型を参照すること
+ * （CaseStudy.link・CaseStudyDetail.link・CtaBanner・SectionHeader が参照している）。
  */
 export interface LinkItem {
   label: string;

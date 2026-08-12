@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useRef, FormEvent } from "react";
-import { Loader2 } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { TurnstileInstance } from "@marsidev/react-turnstile";
 import { CONTACT_FORM_LABELS, CONTACT_SUBJECTS } from "@/content/contact";
 import { cn, PHONE_REGEX } from "@/lib/utils";
-import { trackLead } from "@/lib/analytics";
+import { trackLead, trackLegacyContactSubmit } from "@/lib/analytics";
 
 const Turnstile = dynamic(
   () => import("@marsidev/react-turnstile").then((mod) => mod.Turnstile),
@@ -31,6 +31,7 @@ const ContactForm = () => {
   });
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState("");
   const [turnstileVerified, setTurnstileVerified] = useState(
     !TURNSTILE_SITE_KEY
@@ -77,7 +78,7 @@ const ContactForm = () => {
     }
 
     // 失敗時のみ再送信できる状態に戻す。成功時は遷移するまで submitting を維持して
-    // 二重送信（＝generate_lead の二重計上）を防ぐ
+    // 二重送信（＝inquiry_submit の二重計上）を防ぐ
     const failAndReset = (message: string) => {
       setError(message);
       setSubmitting(false);
@@ -105,11 +106,8 @@ const ContactForm = () => {
         return;
       }
 
-      // 既存イベント。レポートを壊さないよう送信を継続する
-      window.gtag?.("event", "contact_submit", {
-        form_type: "contact",
-        subject: formData.subject,
-      });
+      // 既存イベント。レポートと広告の補助コンバージョンを壊さないよう送信を継続する
+      trackLegacyContactSubmit(formData.subject);
       // 週次KPI「Organic経由の問い合わせ件数」の集計対象。
       // subject は固定の選択肢なので個人情報は含まれない
       trackLead({
@@ -117,11 +115,38 @@ const ContactForm = () => {
         leadLocation: "/contact",
         inquirySubject: formData.subject,
       });
-      router.push("/contact/thanks");
+
+      // 遷移前に成功を確定させる。遷移が失敗しても受付完了が伝わるようにするため
+      // （遷移が成功すればこの表示は一瞬も見えない）
+      setSucceeded(true);
+      // replace にして履歴に /contact を残さない。push だと戻るボタンで
+      // 空のフォームに戻れてしまい、同じ問い合わせを二重送信できる
+      router.replace("/contact/thanks");
     } catch {
       failAndReset("送信に失敗しました。しばらく経ってから再度お試しください。");
     }
   };
+
+  // 送信は成功したが /contact/thanks への遷移がまだ完了していない状態のフォールバック。
+  // 通常は一瞬で置き換わるが、遷移が失敗した場合でも「受け付けた」ことが必ず伝わるようにする
+  // （以前ここが無く、遷移失敗時は「送信中...」のまま固まって再送信を誘発していた）
+  if (succeeded) {
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        className="bg-white rounded-2xl p-8 md:p-12 border border-gray-200 text-center"
+      >
+        <CheckCircle className="w-16 h-16 text-sage mx-auto mb-4" />
+        <h3 className="text-xl font-bold text-forest mb-2">
+          {CONTACT_FORM_LABELS.successTitle}
+        </h3>
+        <p className="text-gray-600 leading-relaxed">
+          {CONTACT_FORM_LABELS.successMessage}
+        </p>
+      </div>
+    );
+  }
 
   const requiredBadge = <span className="text-teal-800 text-xs ml-2">{CONTACT_FORM_LABELS.required}</span>;
 
