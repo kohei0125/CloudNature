@@ -1,6 +1,7 @@
 import type { UseCaseArticle, UseCaseCard } from "@/types";
 // import の順序は下の USECASES_ARTICLES の並び（＝表示順）に合わせている
 import { article as aiEstimateAutomation } from "./ai-estimate-automation";
+import { article as howToBuildAiAgent } from "./how-to-build-ai-agent";
 import { article as aiPocMethodCostKpi } from "./ai-poc-method-cost-kpi";
 import { article as niigataAiSubsidyGuide2026 } from "./niigata-ai-subsidy-guide-2026";
 import { article as aiDevelopmentBottleneckShift } from "./ai-development-bottleneck-shift";
@@ -30,6 +31,7 @@ export function getArticleDate(
  */
 export const USECASES_ARTICLES: UseCaseArticle[] = [
   aiEstimateAutomation,
+  howToBuildAiAgent,
   aiPocMethodCostKpi,
   niigataAiSubsidyGuide2026,
   aiDevelopmentBottleneckShift,
