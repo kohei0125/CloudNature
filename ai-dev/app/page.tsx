@@ -469,7 +469,7 @@ export default function TrainingPage() {
                   渡邉 浩平 <span className="speaker__name-en" translate="no">/ Kohei Watanabe</span>
                 </p>
                 <p className="speaker__role">
-                  株式会社クラウドネイチャー 代表 / にいがたAIビジネス株式会社 CTO
+                  株式会社クラウドネイチャー 代表 / にいがたAIビジネス株式会社 外部CTO
                 </p>
                 <div className="speaker__bio">
                   <p>
@@ -477,7 +477,7 @@ export default function TrainingPage() {
                     スタートアップから大手企業まで数多くの開発現場で、エンジニアに加えテックリードやPMとして幅広く担当。
                   </p>
                   <p>
-                    現在は株式会社クラウドネイチャーの代表、にいがたAIビジネス株式会社のCTOを務め、AIを活用したシステム開発や自社AIプロダクトの企画・開発・運営、企業向けAI研修を手がけています。
+                    現在は株式会社クラウドネイチャーの代表、にいがたAIビジネス株式会社の外部CTOを務め、AIを活用したシステム開発や自社AIプロダクトの企画・開発・運営、企業向けAI研修を手がけています。
                   </p>
                 </div>
               </div>
@@ -486,7 +486,7 @@ export default function TrainingPage() {
                 <li>5社以上の開発現場・30件以上のプロジェクトに参画</li>
                 <li>自社AIプロダクトの企画・開発・運営</li>
                 <li>企業向けAI研修・セミナー登壇（NAB主催セミナー等）</li>
-                <li>にいがたAIビジネス株式会社 CTOを兼任</li>
+                <li>にいがたAIビジネス株式会社 外部CTOを兼任</li>
               </ul>
             </div>
           </div>
