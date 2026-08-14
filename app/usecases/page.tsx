@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 import PageHero from "@/components/shared/PageHero";
 import CtaBanner from "@/components/shared/CtaBanner";
-import { USECASES_ARTICLES, USECASES_SECTION, USECASES_CTA, getArticleDate } from "@/content/usecases";
+import { USECASES_ARTICLES, USECASES_CARDS, USECASES_SECTION, USECASES_CTA, getArticleDate } from "@/content/usecases";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 import { formatDateJP } from "@/lib/utils";
@@ -131,7 +131,7 @@ export default function UseCasesPage() {
 
             {/* 記事一覧 */}
             <div className="flex-1 divide-y divide-gray-100">
-              {USECASES_ARTICLES.map((article) => (
+              {USECASES_CARDS.map((article) => (
                 <Link
                   key={article.id}
                   href={`/usecases/${article.id}`}
@@ -167,7 +167,7 @@ export default function UseCasesPage() {
                       {article.title}
                     </h3>
                     <time className="text-[11px] md:text-sm text-gray-400">
-                      {formatDateJP(getArticleDate(article))}
+                      {formatDateJP(article.date)}
                     </time>
                     <p className="hidden md:block text-sm text-gray-500 leading-relaxed line-clamp-2 h-[3.25em] mt-2">
                       {article.excerpt}

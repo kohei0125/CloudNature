@@ -44,6 +44,8 @@ public/**/_original/
 
 # Working files (slides, image originals, etc.)
 tmp/
+# 記事用の画像素材（生成元のPNG等）。公開する画像は public/images/ に WebP で置く
+draft/img/
 
 # Editor directories and files
 .vscode/*

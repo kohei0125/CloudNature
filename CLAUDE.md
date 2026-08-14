@@ -70,3 +70,9 @@ Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護�
 - `tsconfig.json`（ルート）の `exclude` に `estimate` が含まれる — 型チェックは各サブプロジェクト単位
 - シークレット（API_KEY, OPENAI_API_KEY, RESEND_API_KEY, DATABASE_URL）は GCP Secret Manager で管理
 - **リファクタリング・ロジック変更・バグ修正など、軽微な変更（新機能やコンポーネントの単純な追加など）以外の作業を行った場合は、最後に `/simplify` を実行してレビューを行うこと**
+
+---
+
+## ナレッジベース参照(自動蓄積)
+
+作業開始前に `~/ai-knowledge/projects/CloudNature.md` を必ず読むこと。過去のセッションから抽出した、このプロジェクト固有の学び(バグ・設計判断・注意点)が記録されている。

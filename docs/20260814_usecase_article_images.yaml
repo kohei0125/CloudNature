@@ -1,0 +1,316 @@
+# /usecases 記事内 挿入画像 仕様書
+#
+# 対象: 2026-08-13〜14 に作成・改稿した3記事
+# 目的: 「どの位置に、何を伝える画像を入れるか」だけを定義する。
+#       構図・イラストの中身は作り手の裁量。
+#
+# 進め方:
+#   1. 画像を生成する
+#   2. WebP に変換して articles[].dir に置く
+#      magick "input.png" -resize 1600x\> -quality 85 -strip "NN-name.webp"
+#   3. insert_after の見出しの直後に <figure> を差し込む（Claude Code 側で実施可）
+
+version: 3
+created: "2026-08-14"
+
+# ==========================================================================
+# 2種類を使い分ける
+# ==========================================================================
+types:
+
+  message:
+    説明: 短い言葉＋イラストだけ。読む負荷をかけず、セクションの入口で息をつがせる。これを基本にする。
+    サイズ: 1600x600
+    構成: 左に短い言葉、右にイラスト。白背景。余白を広くとる。
+    言葉: 1行・10〜16文字程度。文章にしない。
+    参考: 「失敗したケース」「役割を限定」のような、言葉とイラストだけのもの
+
+  diagram:
+    説明: 構造そのものが要点の箇所だけ。使いすぎない（1記事に2〜3枚）。
+    サイズ: 1600x900
+    構成: 見出し＋サブコピー、角丸カードとイラストで関係を示し、下部に結論を1行。
+    参考: public/images/blog/ai-development-bottleneck-shift/quality-by-design.webp
+
+common:
+  形式: webp（品質85 / 50〜150KB 目安）
+  トーン: 白背景・青系のフラットイラスト。人物は青とグレーの2色。
+  配置: 該当セクションの見出し直後（本文より前）に1枚
+
+# 事実面だけの注意（表現の自由度には関わらない）
+cautions:
+  - 画像に入れる数値は本文にある値だけにする
+  - 「95%削減」「数日→1分」は使わない（本文から削除済みの旧数値）
+  - PoC記事に費用の相場金額と標準期間を入れない（本文で出さない方針のため）
+  - 顧客名・実在企業のロゴを入れない
+  - AIが最終金額や契約を単独で決めているように描かない（人の承認を経る）
+
+# ==========================================================================
+articles:
+
+  - id: ai-estimate-automation
+    url: /usecases/ai-estimate-automation
+    source: content/usecases/ai-estimate-automation.ts
+    dir: public/images/blog/ai-estimate-automation/
+    images:
+
+      - filename: 01-three-levels.webp
+        type: message
+        priority: 1
+        section: AIで見積もり作成はどこまで自動化できるか｜3つのレベル
+        insert_after: '<h2 id="levels">AIで見積もり作成はどこまで自動化できるか｜3つのレベル</h2>'
+        text: 全部いっぺんに、じゃなくていい
+        illustration: 階段を一段ずつ上っている人。上の段ほど大きな仕組みが見えている
+        alt: 「全部いっぺんに、じゃなくていい」という言葉と、階段を一段ずつ上る人のイラスト
+        caption: 同じ「AIで見積もり」でも、レベルによって必要な準備が違います
+
+      - filename: 02-system-flow.webp
+        type: diagram
+        priority: 1
+        section: AI見積もりシステムの仕組み｜基本構成と役割分担
+        insert_after: '<h2 id="architecture">AI見積もりシステムの仕組み｜基本構成と役割分担</h2>'
+        intent: 金額は決まったルールで計算し、AIは分類と提案を担う。人の承認も残る
+        direction: >-
+          顧客入力から要件整理、データ・価格マスタ参照、ルール計算、AIによる分類・提案、
+          人間確認、見積書生成、メール連携までの流れ。
+          「AIが担当」「ルールで計算」「人が担当」の3者が区別して見えることが要点。
+        alt: AI見積もりシステムの処理の流れを示した図。顧客入力から要件整理、データ・価格マスタ参照、ルール計算、AIによる分類・提案、人間確認、見積書生成、メール連携までが並び、AIが担当する工程、ルールで計算する工程、人が担当する工程が区別されている
+        caption: 金額を決めるのは計算ルール。AIは要件の整理と分類を担当します
+
+      - filename: 03-who-does-what.webp
+        type: message
+        priority: 2
+        section: AIに任せてよい範囲・人が確認すべき範囲
+        insert_after: '<h3>AIに任せてよい範囲・人が確認すべき範囲</h3>'
+        text: 最後は、人が決める
+        illustration: 画面に出た見積もりの内容を確認し、承認しようとしている人
+        alt: 「最後は、人が決める」という言葉と、画面の見積もり内容を確認して承認する人のイラスト
+        caption: 承認の手前までは自動化できます。線を引く基準は取り返しのつきやすさです
+
+      - filename: 04-our-system-design.webp
+        type: diagram
+        priority: 1
+        section: 自社開発したAI見積もりシステムではどう設計したか
+        insert_after: '<h2 id="our-system">自社開発したAI見積もりシステムではどう設計したか</h2>'
+        intent: 自社システムは「13ステップの入力」「17カテゴリ×7係数の計算」「PDFとメールの出力」でできている
+        direction: >-
+          入力・計算・出力の3ブロック。入力はチャット形式の13ステップ、
+          計算は17カテゴリの価格モデル×7つの補正係数（掛け合わせに上限あり）、
+          出力はPDF見積書の自動生成とメール送付。数値は本文・実装と一致させる。
+        alt: 自社開発したAI見積もりシステムの構成図。入力はチャット形式の13ステップ、計算は17カテゴリの価格モデルと7つの補正係数、出力はPDF見積書の自動生成とメール送付という3ブロックで構成されている
+        caption: チャットの13ステップで受け取った条件を、価格モデルと補正係数の計算にかけています
+
+      - filename: 05-required-data.webp
+        type: message
+        priority: 2
+        section: 導入前に整えること｜必要なデータと手段の選び方
+        insert_after: '<h2 id="prepare">導入前に整えること｜必要なデータと手段の選び方</h2>'
+        text: まずは単価表から
+        illustration: 散らばった書類を棚に整理している人。棚の一段が「単価表」
+        alt: 「まずは単価表から」という言葉と、散らばった書類を棚に整理する人のイラスト
+        caption: 何が揃っているかで、始め方が変わります
+
+      - filename: 06-not-suitable.webp
+        type: message
+        priority: 1
+        section: AI見積もりが向かないケース
+        insert_after: '<h2 id="not-suitable">AI見積もりが向かないケース</h2>'
+        text: 向かない仕事も、ある
+        illustration: 一点物の製品を前に、手を止めて考えている人。無理に自動化しない空気
+        alt: 「向かない仕事も、ある」という言葉と、一点物の製品を前に手を止めて考える人のイラスト
+        caption: 向かない条件でも、部分的に自動化できる余地は残ります
+
+      - filename: 07-six-steps.webp
+        type: message
+        priority: 2
+        section: 導入の進め方｜6つのステップ
+        insert_after: '<h2 id="steps">導入の進め方｜6つのステップ</h2>'
+        text: まずは、1つの業務から
+        illustration: たくさんの業務のうち1つだけを選び出して手元に置いている人
+        alt: 「まずは、1つの業務から」という言葉と、多くの業務のうち1つを選び出す人のイラスト
+        caption: 全社展開の前に、1カテゴリで人とAIの差を見ます
+
+  # ------------------------------------------------------------------------
+  - id: how-to-build-ai-agent
+    url: /usecases/how-to-build-ai-agent
+    source: content/usecases/how-to-build-ai-agent.ts
+    dir: public/images/blog/how-to-build-ai-agent/
+    images:
+
+      - filename: 01-agent-vs-others.webp
+        type: message
+        priority: 1
+        section: AIエージェントとは｜LLMアプリ・チャットボット・RPAとの違い
+        insert_after: '<h2 id="what-is-agent">AIエージェントとは｜LLMアプリ・チャットボット・RPAとの違い</h2>'
+        text: 違いは、手順を誰が決めるか
+        illustration: 同じ目的地へ向かう2人。片方は決まった線路の上、もう片方は自分で道を選んでいる
+        alt: 「違いは、手順を誰が決めるか」という言葉と、決まった線路を進む人と自分で道を選ぶ人を並べたイラスト
+        caption: 並び順は優劣ではありません。ワークフロー型やRPAが適切な業務もあります
+
+      - filename: 02-task-selection.webp
+        type: message
+        priority: 2
+        section: 作り方の出発点は「業務選び」｜最初に確認する6つの条件
+        insert_after: '<h2 id="choose-task">作り方の出発点は「業務選び」｜最初に確認する6つの条件</h2>'
+        text: つまずくのは、技術より業務選び
+        illustration: たくさんの業務が書かれた付箋の前で、どれを選ぶか吟味している人
+        alt: 「つまずくのは、技術より業務選び」という言葉と、多くの業務の付箋から対象を選ぼうとする人のイラスト
+        caption: 6つ全部そろわなくても着手はできますが、2つだけは外せません
+
+      - filename: 03-nine-components.webp
+        type: diagram
+        priority: 1
+        section: まず基本構成を9つの要素に分解する
+        insert_after: '<h3>まず基本構成を9つの要素に分解する</h3>'
+        intent: 設計会議で抜けやすいのは後半の4つ（状態管理・人間承認・実行結果・ログ）
+        direction: >-
+          ユーザー／トリガー、モデル、指示・ルール、データ参照、ツール、状態管理、人間承認、
+          実行結果、ログ・評価の9要素。人間承認が実行の手前のゲートになっていること、
+          ログから改善に戻る流れがあることが見えるとよい。
+        alt: AIエージェントの基本構成を9つの要素に分解した図。ユーザーとトリガー、モデル、指示とルール、データ参照、ツール、状態管理、人間承認、実行結果、ログと評価が配置され、人間承認が実行の手前に置かれている
+        caption: 抜けやすいのは後半の4つ。人間承認は実行の手前に置くゲートです
+
+      - filename: 04-seven-steps.webp
+        type: message
+        priority: 1
+        section: そのうえで、7つのステップで作る
+        insert_after: '<h3>そのうえで、7つのステップで作る</h3>'
+        text: 順番を変えると、作り直しになる
+        illustration: 積み上げた土台を飛ばして上から積もうとして、崩れかけているブロック
+        alt: 「順番を変えると、作り直しになる」という言葉と、土台を飛ばして積んだために崩れかけたブロックのイラスト
+        caption: 実装方式を選ぶのは5番目。先に決めるのは業務・入出力・権限です
+
+      - filename: 05-implementation-map.webp
+        type: message
+        priority: 2
+        section: 実装方式の比較｜4つの分類と開発ツールの位置づけ
+        insert_after: '<h2 id="implementation">実装方式の比較｜4つの分類と開発ツールの位置づけ</h2>'
+        text: 「どれが一番」は、ない
+        illustration: 用途の違う道具が並んだ棚から、目的に合う1つを選んでいる人
+        alt: 「『どれが一番』は、ない」という言葉と、用途の違う道具の中から目的に合う1つを選ぶ人のイラスト
+        caption: ランキングではありません。権限・複雑さ・保守の要件で選びます
+
+      - filename: 06-four-quadrants.webp
+        type: diagram
+        priority: 1
+        section: AIエージェントに向かない業務｜4象限で見極める
+        insert_after: '<h2 id="not-suitable">AIエージェントに向かない業務｜4象限で見極める</h2>'
+        intent: 「めんどくさい単純作業をAIに」は、実はいちばん向いていない
+        direction: >-
+          縦軸に定型／非定型、横軸に単純／創造的をとった4象限。
+          定型×単純は生成AIが不向き（プログラム・Excel・RPAの領域）、
+          非定型×創造的が生成AIの主戦場。相談で狙われがちな定型×単純が
+          実は向いていない、という逆説が一目で伝わることが最重要。
+        alt: 業務を定型・非定型と単純・創造的の2軸で分けた4象限の図。定型かつ単純な作業は生成AIが不向きでプログラムやRPAの領域、非定型かつ創造的な作業が生成AIの主戦場であることを示している
+        caption: 相談で最も多い「定型×単純」は、実は生成AIが向いていない領域です
+
+      - filename: 07-pdca.webp
+        type: message
+        priority: 2
+        section: PDCAで言えば、生成AIが得意なのはD以外
+        insert_after: '<h3>PDCAで言えば、生成AIが得意なのはD以外</h3>'
+        text: 実行だけは、別のやり方で
+        illustration: 考える・見直す場面には人とAIが並び、実行の場面には黙々と動く歯車だけがある
+        alt: 「実行だけは、別のやり方で」という言葉と、計画や評価では人とAIが並び、実行は歯車が担っている様子のイラスト
+        caption: 毎回同じ結果が必要な処理は、出力が変わりうるAIより決まった仕組みが向きます
+
+      - filename: 08-security-and-eval.webp
+        type: message
+        priority: 2
+        section: 運用に載せる設計｜セキュリティとPoCの評価
+        insert_after: '<h2 id="operation">運用に載せる設計｜セキュリティとPoCの評価</h2>'
+        text: 「動いた」で、終わらせない
+        illustration: 動いている画面の横で、記録を見ながら結果を確かめている人
+        alt: 「『動いた』で、終わらせない」という言葉と、動作画面の横で記録を見ながら結果を確認する人のイラスト
+        caption: 守る設計と測る指標はセットです。合格ラインは業務ごとに決めます
+
+      - filename: 09-build-or-outsource.webp
+        type: message
+        priority: 2
+        section: 自社で作るか、外注するか｜判断軸の整理
+        insert_after: '<h2 id="build-or-outsource">自社で作るか、外注するか｜判断軸の整理</h2>'
+        text: 自分で作るか、任せるか
+        illustration: 分かれ道の前に立つ人。片方の先には自社のチーム、もう片方には並走する外部の人
+        alt: 「自分で作るか、任せるか」という言葉と、分かれ道の前に立つ人のイラスト
+        caption: 5つの観点のうち、どちらに多く当てはまるかで判断します
+
+  # ------------------------------------------------------------------------
+  - id: ai-poc-method-cost-kpi
+    url: /usecases/ai-poc-method-cost-kpi
+    source: content/usecases/ai-poc-method-cost-kpi.ts
+    dir: public/images/blog/aI_poc_playbook/
+    note: >-
+      この記事だけディレクトリ名が aI_poc_playbook（既存の命名を踏襲）。
+      本文には既に Niigata_AI_PoC_Playbook-04.webp（3つの問い）が入っているため連番は05から。
+    images:
+
+      - filename: 05-poc-vs-prototype.webp
+        type: message
+        priority: 1
+        section: PoC・プロトタイプ・実証実験・本開発の違い
+        insert_after: '<h3>PoC・プロトタイプ・実証実験・本開発の違い</h3>'
+        text: 残すのは、動くものより判断
+        illustration: 試作品の横で、進むか止めるかを書き留めている人
+        alt: 「残すのは、動くものより判断」という言葉と、試作品の横で進むか止めるかを書き留める人のイラスト
+        caption: 見た目が似ていても、終わり方がまったく違います
+
+      - filename: 06-six-steps.webp
+        type: message
+        priority: 1
+        section: AI PoCの進め方｜6ステップ
+        insert_after: '<h2 id="how-to-proceed">AI PoCの進め方｜6ステップ</h2>'
+        text: 止める基準を、先に決める
+        illustration: 走り出す前に、紙に基準を書き出している人
+        alt: 「止める基準を、先に決める」という言葉と、着手前に紙へ基準を書き出す人のイラスト
+        caption: 撤退の基準は、結果が出る前に文章にしておきます
+
+      - filename: 07-kpi-three-layers.webp
+        type: diagram
+        priority: 1
+        section: AI PoCのKPI設計と評価軸｜業務・技術・投資の3層
+        insert_after: '<h2 id="kpi-design">AI PoCのKPI設計と評価軸｜業務・技術・投資の3層</h2>'
+        intent: 技術KPIだけでは本番化の判断ができない
+        direction: >-
+          業務KPI（現場が見る）・技術KPI（開発チームが見る）・投資KPI（経営層が見る）の3層。
+          合格ラインに一般的な正解値は存在しない、という但し書きを添える。
+        alt: AI PoCのKPIを業務・技術・投資の3層で示した図。業務KPIは現場、技術KPIは開発チーム、投資KPIは経営層がそれぞれ見る指標であり、合格ラインに一般的な正解値は存在しないことを示している
+        caption: 3層のうち1つでも欠けると、本番化の判断ができません
+
+      - filename: 08-cost-variables.webp
+        type: message
+        priority: 2
+        section: AI PoCの費用を左右する変数
+        insert_after: '<h2 id="cost-factors">AI PoCの費用を左右する変数</h2>'
+        text: 相場より、中身
+        illustration: 値札を探すのをやめて、作業の内訳を一つずつ確かめている人
+        alt: 「相場より、中身」という言葉と、値段を探すのではなく作業の内訳を確かめる人のイラスト
+        caption: 一律の相場はありません。何が含まれるかで大きく変わります
+
+      - filename: 09-go-no-go.webp
+        type: message
+        priority: 1
+        section: PoCから本開発へ進む判断基準
+        insert_after: '<h2 id="go-no-go">PoCから本開発へ進む判断基準</h2>'
+        text: 進まない、も答え
+        illustration: 3方向の分かれ道の前に立つ人。どの道も行き止まりに描かない
+        alt: 「進まない、も答え」という言葉と、3方向の分かれ道の前に立つ人のイラスト
+        caption: 本開発に進まないと決めることも、PoCが出した答えのひとつです
+
+      - filename: 10-failure-patterns.webp
+        type: message
+        priority: 2
+        section: AI PoCが失敗するパターンと回避策
+        insert_after: '<h2 id="failure-patterns">AI PoCが失敗するパターンと回避策</h2>'
+        text: 先に決めておけば、避けられる
+        illustration: 同じ落とし穴の手前で立ち止まり、印をつけている人
+        alt: 「先に決めておけば、避けられる」という言葉と、落とし穴の手前で立ち止まって印をつける人のイラスト
+        caption: どれも「先に決めておけば避けられる」種類の行き詰まりです
+
+# ==========================================================================
+summary:
+  total: 22
+  message: 17
+  diagram: 5
+  priority_1: 12
+  note: >-
+    基本は message（言葉＋イラスト）。diagram は構造そのものが要点の5枚だけ。
+    priority 1 の12枚で各記事の主要セクションはカバーできる。

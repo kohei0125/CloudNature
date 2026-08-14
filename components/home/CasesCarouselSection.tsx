@@ -6,8 +6,11 @@ import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
-import { USECASES_SECTION, USECASES_ARTICLES, getArticleDate } from "@/content/usecases";
+// 記事本文を持つ @/content/usecases ではなく _common から直接読む。
+// index.ts を import すると全記事の body がこのクライアントバンドルに載る。
+import { USECASES_SECTION } from "@/content/usecases/_common";
 import { formatDateJP } from "@/lib/utils";
+import type { UseCaseCard } from "@/types";
 
 type EmblaApi = ReturnType<typeof useEmblaCarousel>[1];
 
@@ -44,7 +47,12 @@ function useEmblaState(api: EmblaApi) {
   return { index, count };
 }
 
-const CasesCarouselSection = () => {
+interface CasesCarouselSectionProps {
+  /** server component 側で射影して渡す。本文を含むオブジェクトは渡さない */
+  cards: UseCaseCard[];
+}
+
+const CasesCarouselSection = ({ cards }: CasesCarouselSectionProps) => {
   /* --- PC carousel（自動スクロールなし。矢印とスワイプで操作する） --- */
   const [pcRef, pcApi] = useEmblaCarousel({ loop: true, align: "start", slidesToScroll: 1 });
   const { index: pcIndex, count: pcCount } = useEmblaState(pcApi);
@@ -74,7 +82,7 @@ const CasesCarouselSection = () => {
         <div className="relative">
           <div ref={pcRef} className="overflow-hidden">
             <div className="flex -ml-3 pr-6">
-              {USECASES_ARTICLES.map((article) => (
+              {cards.map((article) => (
                 <div
                   key={article.id}
                   className="flex-[0_0_38%] lg:flex-[0_0_24%] pl-3"
@@ -106,7 +114,7 @@ const CasesCarouselSection = () => {
                             {article.category}
                           </span>
                           <time className="text-[10px] text-gray-400">
-                            {formatDateJP(getArticleDate(article))}
+                            {formatDateJP(article.date)}
                           </time>
                         </div>
                         <h3 className="text-gray-900 font-bold leading-snug line-clamp-2 text-sm group-hover:text-teal-700 transition-colors mb-1">
@@ -152,7 +160,7 @@ const CasesCarouselSection = () => {
       <div className="block md:hidden">
         <div ref={spRef} className="overflow-hidden px-6">
           <div className="flex -ml-3">
-            {USECASES_ARTICLES.map((article) => (
+            {cards.map((article) => (
               <div
                 key={article.id}
                 className="flex-[0_0_85%] pl-3"
@@ -184,7 +192,7 @@ const CasesCarouselSection = () => {
                           {article.category}
                         </span>
                         <time className="text-[10px] text-gray-400">
-                          {formatDateJP(getArticleDate(article))}
+                          {formatDateJP(article.date)}
                         </time>
                       </div>
                       <h3 className="text-gray-900 font-bold text-sm leading-snug line-clamp-2">

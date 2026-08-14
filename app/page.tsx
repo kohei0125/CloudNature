@@ -10,6 +10,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import WaveSeparator from "@/components/shared/WaveSeparator";
 import CasesSection from "@/components/home/CasesSection";
 import CasesCarouselSection from "@/components/home/CasesCarouselSection";
+import { USECASES_CARDS } from "@/content/usecases";
 import CtaSection from "@/components/home/CtaSection";
 
 export const metadata: Metadata = {
@@ -55,7 +56,7 @@ const Home = async () => {
       <WaveSeparator position="bottom" color="#F6FAFA" bgColor="#0e483e" withTexture={false} />
       <CasesSection />
       <WaveSeparator position="top" color="#ffffff" bgColor="#0e483e" withTexture={false} />
-      <CasesCarouselSection />
+      <CasesCarouselSection cards={USECASES_CARDS} />
       <CtaSection />
     </div>
   );
