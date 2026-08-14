@@ -247,5 +247,5 @@ export const article: UseCaseArticle = {
 <li><small>NICO「DX先端技術活用サービス等開発支援事業」<a href="https://www.nico.or.jp/sien/hojokin/85795/" target="_blank" rel="noopener noreferrer">令和8年度</a>／<a href="https://www.nico.or.jp/sien/hojokin/78989/" target="_blank" rel="noopener noreferrer">令和7年度</a></small></li>
 <li><small><a href="https://www.city.niigata.lg.jp/business/growing/digitaltransformatio/jissyo/index.html" target="_blank" rel="noopener noreferrer">新潟市「実証事業に対する支援」</a>／<a href="https://www.city.shibata.lg.jp/jigyosha/shien/shien/1031425.html" target="_blank" rel="noopener noreferrer">新発田市「市内産業DX推進補助金」</a></small></li>
 </ul>`,
-  image: "/images/blog/niigata-ai-subsidy-guide-2026/thumbnail-v2.webp",
+  image: "/images/blog/niigata-ai-subsidy-guide-2026/thumbnail-v3.webp",
 };

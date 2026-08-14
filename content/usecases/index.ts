@@ -1,4 +1,5 @@
 import type { UseCaseArticle } from "@/types";
+import { article as aiEstimateAutomation } from "./ai-estimate-automation";
 import { article as aiDevelopmentBottleneckShift } from "./ai-development-bottleneck-shift";
 import { article as niigataAiDevelopmentCompanyGuide } from "./niigata-ai-development-company-guide";
 import { article as niigataFdeSharedAiDevelopment } from "./niigata-fde-shared-ai-development";
@@ -22,8 +23,12 @@ export function getArticleDate(
   return article.updatedAt ?? article.publishedAt;
 }
 
-/** 更新日の新しい順。TOP のカルーセルと /usecases 一覧が共通で参照する */
+/**
+ * 更新日の新しい順。TOP のカルーセルと /usecases 一覧が共通で参照する。
+ * 同じ日付のときは 0 を返し、この配列に書いた順をそのまま表示順にする。
+ */
 export const USECASES_ARTICLES: UseCaseArticle[] = [
+  aiEstimateAutomation,
   aiDevelopmentBottleneckShift,
   niigataAiDevelopmentCompanyGuide,
   niigataFdeSharedAiDevelopment,
@@ -34,4 +39,9 @@ export const USECASES_ARTICLES: UseCaseArticle[] = [
   niigataAiSubsidyGuide2026,
   aiAutoSalesDelivery,
   aiAnalyticsAutoReport,
-].sort((a, b) => (getArticleDate(a) < getArticleDate(b) ? 1 : -1));
+].sort((a, b) => {
+  // ISO形式（YYYY-MM-DD）の機械可読な日付なので、ロケール依存の比較は不要。
+  // 単純な辞書順で降順にし、等しいときは 0 を返して配列順を維持する（sort は安定）。
+  const [x, y] = [getArticleDate(a), getArticleDate(b)];
+  return x < y ? 1 : x > y ? -1 : 0;
+});
