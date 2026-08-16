@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { cn, isPathActive } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
+import { heroHeaderMotion } from "@/lib/hero-motion";
 
 interface HeaderProps {
   isScrolled: boolean;
@@ -28,10 +29,13 @@ const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpen
       data-site-header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform",
+        // TOP はヒーローのテキストが出そろってから遅れて現れる
+        isHeroOverlay && "animate-hero-appear",
         isTransparent ? "bg-transparent md:bg-white" : "bg-white",
         isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",
         isScrolled && "shadow-sm"
       )}
+      style={isHeroOverlay ? heroHeaderMotion : undefined}
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex justify-between items-center h-14 md:h-[56px]">
         <Link href="/" className="flex items-center">

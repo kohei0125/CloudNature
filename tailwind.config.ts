@@ -42,6 +42,12 @@ const config: Config = {
       animation: {
         "infinite-scroll": "infinite-scroll 25s linear infinite",
         "hero-fade-in": "hero-fade-in 700ms ease-out both",
+        // TOP ヒーローの登場演出。開始タイミングは lib/hero-motion.ts の
+        // HERO_MOTION_DELAY を animationDelay として各要素に渡す。
+        "hero-wipe": "hero-wipe 800ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "hero-rise": "hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "hero-zoom-in": "hero-zoom-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "hero-appear": "hero-appear 800ms ease-out both",
       },
       keyframes: {
         "infinite-scroll": {
@@ -51,6 +57,27 @@ const config: Config = {
         "hero-fade-in": {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
+        },
+        // 左から右へ拭き出すように文字を出す
+        "hero-wipe": {
+          from: { clipPath: "inset(0 100% 0 0)" },
+          to: { clipPath: "inset(0 0 0 0)" },
+        },
+        // わずかに下から浮かせながらフェードイン
+        "hero-rise": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "none" },
+        },
+        // 背景写真。わずかに引きながらフェードイン
+        "hero-zoom-in": {
+          from: { opacity: "0", transform: "scale(1.03)" },
+          to: { opacity: "1", transform: "none" },
+        },
+        // opacity のみ。transform を動かすとスクロール時の表示制御
+        //（translate-y ユーティリティ）を fill-mode: both が上書きしてしまう
+        "hero-appear": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
       }
     }

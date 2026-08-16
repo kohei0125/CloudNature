@@ -1,5 +1,6 @@
 import { getImageProps } from "next/image";
 import { cn } from "@/lib/utils";
+import { HERO_MOTION_DELAY, heroDelay } from "@/lib/hero-motion";
 import { HERO_COPY } from "@/content/home";
 
 // モバイル/PC で異なるヒーロー画像をアートディレクション（<picture>）で出し分ける。
@@ -65,11 +66,17 @@ const indentOf = (headingSize: string) => `calc(${INDENT_RATIO} * (${headingSize
 const headingLine2Parts = HERO_COPY.headingLine2.split(HERO_COPY.headingHighlight);
 
 const HeroHeading = ({ className, size }: { className: string; size: string }) => (
+  // 行ごとにワイプさせるため、各行を inline-block で包む
   <p className={cn(HEADING_CLASS, className)} style={{ fontSize: size }}>
-    {HERO_COPY.headingLine1}
+    <span className="animate-hero-wipe inline-block" style={heroDelay(HERO_MOTION_DELAY.headingLine1)}>
+      {HERO_COPY.headingLine1}
+    </span>
     <br />
     {/* 2行目は半角よりやや広い程度に字下げする */}
-    <span className="inline-block" style={{ paddingLeft: indentOf(size) }}>
+    <span
+      className="animate-hero-wipe inline-block"
+      style={{ paddingLeft: indentOf(size), ...heroDelay(HERO_MOTION_DELAY.headingLine2) }}
+    >
       {headingLine2Parts.map((part, i) => (
         <span key={i}>
           {part}
@@ -94,10 +101,11 @@ const HeroParagraphs = ({
   // 見出し2行目と左端を揃えるための字下げ。字下げ分を max-width に足して、
   // 行長（＝改行位置）が字下げの有無で変わらないようにする。
   <div
-    className={cn(PARAGRAPH_CLASS, className)}
+    className={cn(PARAGRAPH_CLASS, "animate-hero-rise", className)}
     style={{
       paddingLeft: indentOf(size),
       maxWidth: `calc(${measure} + ${indentOf(size)})`,
+      ...heroDelay(HERO_MOTION_DELAY.paragraphs),
     }}
   >
     {HERO_COPY.paragraphs.map((segments, paragraphIndex) => (
@@ -129,7 +137,8 @@ const HeroSection = () => {
       >
         {/* 写真の下端（川）を切り落として橋を下寄りに見せるため、
             ヒーローより高いボックスに敷いて下側をはみ出させる */}
-        <div className="absolute inset-x-0 top-0 h-[125%]">
+        <div className="animate-hero-zoom-in absolute inset-x-0 top-0 h-[125%]"
+          style={heroDelay(HERO_MOTION_DELAY.image)}>
           <HeroBackground />
         </div>
 
@@ -158,7 +167,10 @@ const HeroSection = () => {
 
         <div className="relative w-full px-5">
           {/* SEO: ターゲットコピーを含む見出し帯を h1 とし、ディスプレイコピーは p で表示する */}
-          <h1 className={cn(EYEBROW_CLASS, "text-sm leading-relaxed")}>
+          <h1
+            className={cn(EYEBROW_CLASS, "animate-hero-wipe text-sm leading-relaxed")}
+            style={heroDelay(HERO_MOTION_DELAY.eyebrow)}
+          >
             {HERO_COPY.badge}
           </h1>
 
@@ -175,7 +187,8 @@ const HeroSection = () => {
 
       {/* ===== PC: 背景写真 + 左側に白グラデーション ===== */}
       <div className="relative min-h-[600px] lg:min-h-[660px] hidden md:flex items-center">
-        <div className="absolute inset-0 z-0">
+        <div className="animate-hero-zoom-in absolute inset-0 z-0"
+          style={heroDelay(HERO_MOTION_DELAY.image)}>
           <HeroBackground />
         </div>
 
@@ -223,11 +236,14 @@ const HeroSection = () => {
         </div>
 
         <div
-          className="relative z-10 w-full px-10 lg:px-14 py-24 animate-hero-fade-in"
+          className="relative z-10 w-full px-10 lg:px-14 py-24"
         >
           <div className="max-w-2xl lg:max-w-3xl">
             {/* SEO: H1 はモバイル側（mobile-first）に一本化。PC側の見出し帯は p で表示 */}
-            <p className={cn(EYEBROW_CLASS, "mb-7 text-base leading-relaxed")}>
+            <p
+              className={cn(EYEBROW_CLASS, "animate-hero-wipe mb-7 text-base leading-relaxed")}
+              style={heroDelay(HERO_MOTION_DELAY.eyebrow)}
+            >
               {HERO_COPY.badge}
             </p>
 
