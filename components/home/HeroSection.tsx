@@ -235,9 +235,7 @@ const HeroSection = () => {
           <div className="absolute inset-0 bg-teal-400/10 rounded-full" />
         </div>
 
-        <div
-          className="relative z-10 w-full px-10 lg:px-14 py-24"
-        >
+        <div className="relative z-10 w-full px-10 lg:px-14 py-24">
           <div className="max-w-2xl lg:max-w-3xl">
             {/* SEO: H1 はモバイル側（mobile-first）に一本化。PC側の見出し帯は p で表示 */}
             <p
