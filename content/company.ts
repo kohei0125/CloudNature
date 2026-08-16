@@ -86,7 +86,8 @@ export const COMPANY_OVERVIEW: CompanyInfo[] = [
     label: "所在地",
     value: "〒951-8068 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F",
   },
-  { label: "事業内容", value: "システム開発 / AIエージェント開発 / AI導入伴走支援" },
+  // 名称は content/services.ts の SERVICE_DETAILS[].title、並びは SERVICE_ORDER が正（CONTEXT.md 参照）
+  { label: "事業内容", value: "システム開発 / AIエージェント開発 / 法人向けAI導入支援" },
 ];
 
 /** 会社概要の右側に表示するドットマップ（スクリプト生成SVG、新潟にアクセント。PCのみ表示） */
