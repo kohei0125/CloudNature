@@ -72,6 +72,18 @@ const ServicesSection = () => {
           headingId="services-heading"
         />
 
+        {/* ── Lead ── トップ唯一の散文。/services/system-dev への文脈内リンクを含む */}
+        <p className="max-w-3xl mb-8 md:mb-12 text-sm md:text-base leading-[1.9] text-gray-700">
+          {SERVICES_SECTION.lead.before}
+          <Link
+            href={SERVICES_SECTION.lead.linkHref}
+            className="font-bold text-teal-800 underline underline-offset-4 decoration-teal-800/30 transition-colors hover:decoration-teal-800"
+          >
+            {SERVICES_SECTION.lead.linkLabel}
+          </Link>
+          {SERVICES_SECTION.lead.after}
+        </p>
+
         {/* ── Grid ── */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5 items-stretch">
           {SERVICES.map((service, i) => {
