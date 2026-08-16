@@ -10,14 +10,18 @@
  * image を 0 にしているのは、opacity:0 の要素が LCP の計測対象外になるため。
  * 開始を遅らせるとそのぶん LCP が悪化する。
  */
+/** 本文フェードの開始と長さ。長さは tailwind.config.ts の animate-hero-rise に合わせる */
+const PARAGRAPHS_DELAY = 1.55;
+const PARAGRAPHS_DURATION = 0.9;
+
 export const HERO_MOTION_DELAY = {
   image: 0,
-  eyebrow: 1,
-  headingLine1: 1.15,
-  headingLine2: 1.3,
-  paragraphs: 2.05,
-  // 本文（2.05s + 0.9s）が出そろった直後
-  header: 3,
+  eyebrow: 0.5,
+  headingLine1: 0.65,
+  headingLine2: 0.8,
+  paragraphs: PARAGRAPHS_DELAY,
+  // 本文が出そろった直後。本文の値から導出して、retiming しても順序が崩れないようにする
+  header: PARAGRAPHS_DELAY + PARAGRAPHS_DURATION,
 } as const;
 
 /** 上記の遅延を style 属性に渡す形へ変換する */
