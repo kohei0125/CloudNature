@@ -176,6 +176,46 @@ Google はトップを選ぶ可能性が高い。両立しない。
    致命的ではないが、可視 h1 が PC に無い状態は既存の構造的論点。
    今回の依頼範囲外のため未着手。
 
+## 5-5. 追加対応（ユーザー指摘、2026-08-16）
+
+「中小企業というワードはあった方が良いのか。大きい企業の案件が取れることに越したことはない」
+という指摘を受け、メタデータから顧客規模の限定語を外した。判断根拠は
+`docs/adr/0002-lead-with-system-development-on-top-page.md` の該当節を参照。
+
+| 箇所 | 変更前 | 変更後 |
+| --- | --- | --- |
+| `PAGE_META.home.description` | 新潟市を拠点に、**中小企業の**業務システム開発と… | 新潟市を拠点に、業務システム開発と… |
+| `PAGE_META.services.description` | 新潟の**中小企業**の業務効率化… | 新潟の企業の業務効率化… |
+| `PAGE_META.cases.title` | …90%以上削減など**中小企業の成果** | …90%以上削減など**実際の成果** |
+| `PAGE_META.cases.description` | 新潟の**中小企業**で実際に成果が出た… | 新潟の企業で実際に成果が出た… |
+| `PAGE_META.company.description` | 新潟の**中小企業**に寄り添う伴走型… | 新潟の企業に寄り添う伴走型… |
+| `PAGE_META.servicesAiSupport.description` | 新潟の**中小企業**のAI業務効率化… | 新潟の企業のAI業務効率化… |
+| `PAGE_META.servicesAiAgent.description` | 新潟の**中小企業**の人手不足… | 新潟の企業の人手不足… |
+| `HERO_COPY.paragraphs[0]` | **新潟の中小企業に、** | **新潟の企業に、** |
+| `HERO_COPY.heroImageAlt` | 新潟の**中小企業向け**システム開発… | 新潟のシステム開発… |
+
+### あわせて修正した ADR 0002 の反映漏れ
+
+当初の実装で `PAGE_META.home` しか更新しておらず、以下が旧ブランド軸
+「新潟のAI開発・AIエージェント開発」のまま残っていた。今回まとめて修正した。
+
+- `app/layout.tsx` のルート `metadata.title` / `description`、`openGraph`、`twitter`
+- `app/layout.tsx` の JSON-LD 2箇所（`Organization.description` / `ProfessionalService.description`）
+- `app/llms.txt/route.ts` の概要文
+
+### 変更しなかったもの
+
+- お知らせ（`content/home.ts` の `NEWS_ITEMS`）の過去記事タイトル・本文。
+  実際に開催したセミナー名・設立時の告知文であり、履歴を書き換えることになるため。
+- `content/usecases/` の記事本文。補助金制度の要件など、「中小企業」が事実として
+  必要な箇所を含むため。
+
+### 再検証
+
+- ヒーローの折り返し: 320 / 360 / 375 / 390 / 414 / 430px の全幅で変更前と同数（回帰なし）
+- `npm run build`: 成功 / lint（変更4ファイル）: 0 errors
+- 配信HTMLで トップ description・`/cases` title と description・JSON-LD 2件・`llms.txt` を実地確認
+
 ## 6. Codex レビュー
 
 実施日: 2026-08-16 / モデル: gpt-5.4 / 対象: working tree + untracked docs
