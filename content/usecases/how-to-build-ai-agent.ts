@@ -2,7 +2,7 @@ import type { UseCaseArticle } from "@/types";
 
 export const article: UseCaseArticle = {
   id: "how-to-build-ai-agent",
-  publishedAt: "2026-08-13",
+  publishedAt: "2026-08-16",
   category: "実践ガイド",
   relatedServiceIds: ["ai", "dev", "ai-support"],
   title:
@@ -214,7 +214,7 @@ agentic systems を2つに分けています。ワークフローは、LLMとツ
 </table>
 
 <h3>各ツールがどの分類に入るか</h3>
-<p>執筆時点（2026年8月13日）の公式ドキュメントの記述に沿って整理します。</p>
+<p>執筆時点（2026年8月16日）の公式ドキュメントの記述に沿って整理します。</p>
 <ul>
 <li><strong><a href="https://docs.dify.ai/" target="_blank" rel="noopener noreferrer">Dify</a>（分類2に近い）</strong><br />
 AIアプリケーションを構築するためのオープンソースのプラットフォーム。エージェント、エージェント的なワークフロー、チャットボットを自社データを使って作り、Webアプリとして公開したりAPIで組み込んだりできます。クラウド版とセルフホストの両方に対応。</li>
@@ -439,7 +439,7 @@ AIエージェントとアプリケーションを構築するためのTypeScrip
 
 <hr />
 <p><small><strong>監修</strong>：株式会社クラウドネイチャー（新潟市中央区上大川前通）／ AIエージェント開発・AI活用支援チーム<br />
-<strong>最終更新</strong>：2026年8月13日<br />
-本記事の技術情報は、2026年8月13日時点で確認した各公式ドキュメントを一次情報としています。参照先：<a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol 公式サイト</a>、<a href="https://a2a-protocol.org/latest/specification/" target="_blank" rel="noopener noreferrer">Agent2Agent（A2A）公式仕様</a>、<a href="https://adk.dev/" target="_blank" rel="noopener noreferrer">Google ADK 公式サイト</a>、<a href="https://mastra.ai/" target="_blank" rel="noopener noreferrer">Mastra 公式サイト</a>、<a href="https://docs.dify.ai/" target="_blank" rel="noopener noreferrer">Dify 公式ドキュメント</a>、<a href="https://docs.n8n.io/" target="_blank" rel="noopener noreferrer">n8n 公式ドキュメント</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic「Building effective agents」</a>、<a href="https://developers.openai.com/api/docs/guides/agents" target="_blank" rel="noopener noreferrer">OpenAI 公式のエージェント向けガイド</a>。自社の取り組みとして記載した内容は、株式会社クラウドネイチャーが実際に実施した開発・実証および社内運用の範囲に限定しています。特定の顧客名・成果数値は含みません。</small></p>`,
+<strong>最終更新</strong>：2026年8月16日<br />
+本記事の技術情報は、2026年8月16日時点で確認した各公式ドキュメントを一次情報としています。参照先：<a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol 公式サイト</a>、<a href="https://a2a-protocol.org/latest/specification/" target="_blank" rel="noopener noreferrer">Agent2Agent（A2A）公式仕様</a>、<a href="https://adk.dev/" target="_blank" rel="noopener noreferrer">Google ADK 公式サイト</a>、<a href="https://mastra.ai/" target="_blank" rel="noopener noreferrer">Mastra 公式サイト</a>、<a href="https://docs.dify.ai/" target="_blank" rel="noopener noreferrer">Dify 公式ドキュメント</a>、<a href="https://docs.n8n.io/" target="_blank" rel="noopener noreferrer">n8n 公式ドキュメント</a>、<a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic「Building effective agents」</a>、<a href="https://developers.openai.com/api/docs/guides/agents" target="_blank" rel="noopener noreferrer">OpenAI 公式のエージェント向けガイド</a>。自社の取り組みとして記載した内容は、株式会社クラウドネイチャーが実際に実施した開発・実証および社内運用の範囲に限定しています。特定の顧客名・成果数値は含みません。</small></p>`,
   image: "/images/blog/how-to-build-ai-agent/thumbnail.webp",
 };
