@@ -2,15 +2,21 @@ import { ServiceItem, CaseStudy, ValueProp, NewsItem, NewsCategory } from "@/typ
 import { AI_DEV_URL, byServiceOrder } from "@/content/common";
 
 export const HERO_COPY = {
-  imageSrc: "/images/niigata_view.jpeg",
+  // モバイルは縦構図の写真を使う（横長写真だと縦フレームで空ばかりになるため）
+  imageSrc: "/images/niigata_view_mobile.webp",
   pcImageSrc: "/images/niigata_img.webp",
   badge: "新潟のAI開発・AIエージェント開発パートナー",
   headingLine1: "AIトランスフォーメーションで",
-  headingLine2: "人手に代わる仕組みを",
-  description:
-  "営業・提案・開発・情報整理・意思決定まで、あらゆる仕事をAIとともに再設計。\nその実践から得た知見で、お客様のビジネスに、確かな変化を生み出します。",
-  primaryCta: "AI見積もりを体験（最短1分）",
-  secondaryCta: "お問い合わせ",
+  headingLine2: "人手に代わる仕組みを実現する",
+  // 見出し2行目のうち、この語だけブランドカラーで強調する
+  headingHighlight: "仕組み",
+  // 各段落は意味の切れ目で分割する。描画側で分割単位ごとに inline-block にすることで、
+  // 「成果を生む／ための」のような語中改行が起きない（モバイル・PC とも2行に折り返る）。
+  paragraphs: [
+    ["AIがあらゆる業務に", "浸透する時代。", "重要なのは、", "導入そのものではなく、", "成果を生むための", "設計です。"],
+    ["営業・提案・開発・", "情報整理・", "意思決定といった", "あらゆる仕事を、", "AIを前提として", "再構築。"],
+    ["システム開発・", "AIエージェント開発を", "通じて、", "お客様のビジネスに", "確かな変化を", "生み出します。"],
+  ],
   heroImageAlt: "新潟の中小企業向けAI開発・AIエージェント開発会社 クラウドネイチャー"
 };
 

@@ -8,14 +8,18 @@ import MobileMenu from "./MobileMenu";
 const HeaderWrapper = () => {
   const pathname = usePathname();
 
-  return <HeaderWrapperInner key={pathname} />;
+  // TOP のモバイルはメインビジュアルの上にヘッダーを重ねる（白い帯との境目をなくすため）
+  return <HeaderWrapperInner key={pathname} isHeroOverlay={pathname === "/"} />;
 };
 
-const HeaderWrapperInner = () => {
+const HeaderWrapperInner = ({ isHeroOverlay }: { isHeroOverlay: boolean }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollY = useRef(0);
+  // メニュー展開中は body が position:fixed でロックされ window.scrollY が 0 になる。
+  // その 0 で判定するとヘッダーが誤って透明化・非表示になるため、スクロール判定を止める。
+  const isMenuOpenRef = useRef(false);
 
   useEffect(() => {
     const initScroll = () => {
@@ -25,6 +29,8 @@ const HeaderWrapperInner = () => {
     initScroll();
 
     const handleScroll = () => {
+      if (isMenuOpenRef.current) return;
+
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
@@ -47,10 +53,14 @@ const HeaderWrapperInner = () => {
   }, []);
 
   const handleOpenMobileMenu = useCallback(() => {
+    isMenuOpenRef.current = true;
     setMobileMenuOpen(true);
   }, []);
 
   const handleCloseMobileMenu = useCallback(() => {
+    // スクロール位置は useScrollLock の後始末で元に戻る。ロック中の値を取り込んでいないため、
+    // 復帰時のスクロールイベントは「変化なし」と判定され、ヘッダーの状態が維持される。
+    isMenuOpenRef.current = false;
     setMobileMenuOpen(false);
   }, []);
 
@@ -58,7 +68,7 @@ const HeaderWrapperInner = () => {
     <>
       <Header
         isScrolled={isScrolled}
-        isHeroOverlay={false}
+        isHeroOverlay={isHeroOverlay}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
         onOpenMobileMenu={handleOpenMobileMenu}

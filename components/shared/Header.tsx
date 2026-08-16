@@ -17,14 +17,18 @@ interface HeaderProps {
   onCloseMobileMenu: () => void;
 }
 
-const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
+const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
+
+  // メインビジュアルに重ねるのはモバイルの最上部のみ。スクロール後とメニュー展開中は白地に戻す
+  const isTransparent = isHeroOverlay && !isScrolled && !isMobileMenuOpen;
 
   return (
     <header
       data-site-header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform bg-white",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform",
+        isTransparent ? "bg-transparent md:bg-white" : "bg-white",
         isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",
         isScrolled && "shadow-sm"
       )}

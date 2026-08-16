@@ -1,8 +1,6 @@
 import { getImageProps } from "next/image";
-import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { HERO_COPY } from "@/content/home";
-import EstimateCtaLink from "@/components/shared/EstimateCtaLink";
 
 // モバイル/PC で異なるヒーロー画像をアートディレクション（<picture>）で出し分ける。
 // CSS 出し分け（2つの <Image priority>）では非表示側もダウンロード+プリロードされるため、
@@ -35,67 +33,177 @@ const HeroBackground = () => (
   </picture>
 );
 
+// 見出し帯（アイブロウ）。字下げは PC のみ（モバイルは見出し1行目と左端を揃える）
+const EYEBROW_CLASS = "md:pl-2 font-bold tracking-wide text-teal-800";
+
+// 日本語の大見出し。Noto Sans JP は 400/700 しか読み込んでいないため、font-extrabold(800) を
+// 指定しても実際は 700 で描画される。誤解を避けるため実ウェイトの 700 を明示する。
+const HEADING_CLASS = "font-bold tracking-[-0.01em] text-gray-900";
+
+// 本文。各段落2行 + 段落間は行送りの約半分（0.9em）。行送りは 1.8。
+// モバイル/PC で変えるのは文字サイズと text-shadow のみ。
+const PARAGRAPH_CLASS = "space-y-[0.9em] leading-[1.8] text-gray-800";
+
+// モバイルのヒーロー高。ビューポート「高さ」基準（svh/dvh）にすると、スクロールに伴う
+// アドレスバーの伸縮で高さが変わり、背景画像が拡大縮小して見える。幅基準にすると
+// スクロール中に値が変わらないため、画像がずれない。
+const MOBILE_HERO_HEIGHT = "clamp(560px, 182vw, 820px)";
+// テキストを中央よりやや上に置くための下パディング（ヒーロー高に対する比率）
+const MOBILE_TEXT_RAISE = 0.16;
+
+// 見出しのフォントサイズ（モバイル / PC）
+const HEADING_SIZE = {
+  mobile: "clamp(1.05rem, 5.35vw, 1.5rem)",
+  pc: "clamp(2rem, 3.5vw, 2.8rem)",
+};
+// 見出し2行目と説明文の字下げ量（見出しフォントサイズに対する比率）。半角よりやや広い程度。
+// 両方を同じ値から導出することで、画面幅が変わっても左端が揃う。
+const INDENT_RATIO = 0.6;
+const indentOf = (headingSize: string) => `calc(${INDENT_RATIO} * (${headingSize}))`;
+
+// 見出し2行目のうち、強調語だけブランドカラーにする
+const headingLine2Parts = HERO_COPY.headingLine2.split(HERO_COPY.headingHighlight);
+
+const HeroHeading = ({ className, size }: { className: string; size: string }) => (
+  <p className={cn(HEADING_CLASS, className)} style={{ fontSize: size }}>
+    {HERO_COPY.headingLine1}
+    <br />
+    {/* 2行目は半角よりやや広い程度に字下げする */}
+    <span className="inline-block" style={{ paddingLeft: indentOf(size) }}>
+      {headingLine2Parts.map((part, i) => (
+        <span key={i}>
+          {part}
+          {i < headingLine2Parts.length - 1 && (
+            <span className="text-teal-800">{HERO_COPY.headingHighlight}</span>
+          )}
+        </span>
+      ))}
+    </span>
+  </p>
+);
+
+const HeroParagraphs = ({
+  className,
+  size,
+  measure,
+}: {
+  className: string;
+  size: string;
+  measure: string;
+}) => (
+  // 見出し2行目と左端を揃えるための字下げ。字下げ分を max-width に足して、
+  // 行長（＝改行位置）が字下げの有無で変わらないようにする。
+  <div
+    className={cn(PARAGRAPH_CLASS, className)}
+    style={{
+      paddingLeft: indentOf(size),
+      maxWidth: `calc(${measure} + ${indentOf(size)})`,
+    }}
+  >
+    {HERO_COPY.paragraphs.map((segments, paragraphIndex) => (
+      <p key={paragraphIndex}>
+        {segments.map((segment, segmentIndex) => (
+          // 文節ごとに inline-block にして、改行位置を文節の切れ目だけに限定する
+          <span key={segmentIndex} className="inline-block">
+            {segment}
+          </span>
+        ))}
+      </p>
+    ))}
+  </div>
+);
+
 const HeroSection = () => {
   return (
     <section id="hero" className="relative overflow-hidden bg-white">
-      {/* ヘッダー分のスペーサー */}
-      <div className="pt-[52px] md:pt-[56px]" />
+      {/* ヘッダー分のスペーサー。モバイルはヘッダーをメインビジュアルに重ねるため確保しない */}
+      <div className="md:pt-[56px]" />
 
-      {/* ===== モバイル: 旧デザイン（フルスクリーン画像 + テキストオーバーレイ） ===== */}
-      <div className="md:hidden">
-        <div className="relative overflow-hidden min-h-[calc(85svh-52px)]">
+      {/* ===== モバイル: 写真を背景に敷き、中央のテキスト帯だけ白を強めにかける構成 ===== */}
+      <div
+        className="md:hidden relative flex items-center overflow-hidden"
+        style={{
+          minHeight: MOBILE_HERO_HEIGHT,
+          paddingBottom: `calc(${MOBILE_TEXT_RAISE} * ${MOBILE_HERO_HEIGHT})`,
+        }}
+      >
+        {/* 写真の下端（川）を切り落として橋を下寄りに見せるため、
+            ヒーローより高いボックスに敷いて下側をはみ出させる */}
+        <div className="absolute inset-x-0 top-0 h-[125%]">
           <HeroBackground />
-          <div
-            className="absolute inset-0 flex flex-col justify-center px-5"
-            style={{ textShadow: "0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.2)" }}
-          >
-            <div className="max-w-2xl">
-              {/* SEO: 地域×AI開発のターゲットキーワードを含むバッジを h1 とし、
-                  ディスプレイコピーは p で表示する（見た目は従来どおり） */}
-              <h1 className="text-xs font-bold tracking-widest text-white/70 mb-3">
-                {HERO_COPY.badge}
-              </h1>
+        </div>
 
-              <p className="text-[clamp(1.6rem,5vw,3rem)] font-bold leading-[1.1] text-white tracking-tight text-balance mb-3">
-                {HERO_COPY.headingLine1}
-                <br />
-                {HERO_COPY.headingLine2}
-              </p>
+        {/* テキスト帯を最も白くし、上は空が薄く透ける程度、下は写真をそのまま見せる。
+            線形2点だと境目が帯として見えるため、イージングをかけた多段ストップにしている */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background: [
+              "linear-gradient(to bottom",
+              "rgba(255,255,255,0.78) 0%",
+              "rgba(255,255,255,0.86) 12%",
+              "rgba(255,255,255,0.90) 20%",
+              "rgba(255,255,255,0.90) 62%",
+              "rgba(255,255,255,0.82) 68%",
+              "rgba(255,255,255,0.66) 75%",
+              "rgba(255,255,255,0.48) 81%",
+              "rgba(255,255,255,0.30) 87%",
+              "rgba(255,255,255,0.14) 93%",
+              "rgba(255,255,255,0.04) 97%",
+              "rgba(255,255,255,0) 100%)",
+            ].join(", "),
+          }}
+        />
 
-              <p className="text-sm text-white leading-relaxed max-w-[600px] mb-6 font-medium rounded-md bg-black/10 backdrop-blur-[1px] px-3 py-2">
-                {HERO_COPY.description.replace(/\n/g, '')}
-              </p>
+        <div className="relative w-full px-5">
+          {/* SEO: ターゲットコピーを含む見出し帯を h1 とし、ディスプレイコピーは p で表示する */}
+          <h1 className={cn(EYEBROW_CLASS, "text-sm leading-relaxed")}>
+            {HERO_COPY.badge}
+          </h1>
 
-              <div className="flex flex-col gap-3" style={{ textShadow: "none" }}>
-                <EstimateCtaLink
-                  ctaLocation="hero"
-                  className="w-full px-8 py-3 rounded-full font-bold center gap-3 text-white group bg-teal-700 shadow-lg shadow-teal-800/30 hover:shadow-teal-800/50 transition-all"
-                >
-                  {HERO_COPY.primaryCta}
-                  <div className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-                </EstimateCtaLink>
-                <Link
-                  href="/contact"
-                  className="w-full px-8 py-3 bg-white/90 text-gray-800 rounded-full font-bold hover:bg-white transition-colors center gap-2 group"
-                >
-                  <Mail className="w-5 h-5 text-gray-600 group-hover:scale-110 transition-transform" />
-                  <span>{HERO_COPY.secondaryCta}</span>
-                </Link>
-              </div>
-            </div>
-          </div>
+          {/* 2行目は字下げのぶん長くなるため、320px 幅でも折り返さないサイズに抑えている */}
+          <HeroHeading className="mt-7 leading-[1.45]" size={HEADING_SIZE.mobile} />
+
+          <HeroParagraphs
+            className="mt-7 text-[clamp(13.5px,3.75vw,15px)] [text-shadow:0_1px_3px_rgba(255,255,255,0.9)]"
+            size={HEADING_SIZE.mobile}
+            measure="23em"
+          />
         </div>
       </div>
 
-      {/* ===== PC: 新デザイン ===== */}
+      {/* ===== PC: 背景写真 + 左側に白グラデーション ===== */}
       <div className="relative min-h-[600px] lg:min-h-[660px] hidden md:flex items-center">
         <div className="absolute inset-0 z-0">
           <HeroBackground />
         </div>
 
-        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-white from-25% via-white/50 via-42% to-transparent to-60%" />
+        {/* テキスト列の幅はウィンドウ幅に比例しないため、グラデーションも px 基準にして
+            どのウィンドウ幅でも文字が写真に重ならないようにする。
+            線形2点だと変化の境目が帯として見えるため、イージングをかけた多段ストップで
+            長い距離をかけて減衰させている */}
+        <div
+          className="absolute inset-0 z-[1]"
+          style={{
+            background: [
+              "linear-gradient(to right",
+              "#ffffff 0",
+              "#ffffff 380px",
+              "rgba(255,255,255,0.98) 450px",
+              "rgba(255,255,255,0.94) 520px",
+              "rgba(255,255,255,0.88) 590px",
+              "rgba(255,255,255,0.79) 660px",
+              "rgba(255,255,255,0.67) 730px",
+              "rgba(255,255,255,0.53) 800px",
+              "rgba(255,255,255,0.38) 870px",
+              "rgba(255,255,255,0.24) 940px",
+              "rgba(255,255,255,0.13) 1010px",
+              "rgba(255,255,255,0.05) 1080px",
+              "rgba(255,255,255,0) 1150px)",
+            ].join(", "),
+          }}
+        />
 
         <div
           className="absolute inset-0 z-[2] opacity-[0.06] pointer-events-none"
@@ -117,43 +225,20 @@ const HeroSection = () => {
         <div
           className="relative z-10 w-full px-10 lg:px-14 py-24 animate-hero-fade-in"
         >
-          <div className="max-w-xl lg:max-w-3xl">
-            {/* SEO: H1 はモバイル側（mobile-first）に一本化。PC側のバッジは見た目維持のため p で表示 */}
-            <p className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-widest text-teal-800 bg-white/90 border border-teal-200/60 rounded-full shadow-sm uppercase">
+          <div className="max-w-2xl lg:max-w-3xl">
+            {/* SEO: H1 はモバイル側（mobile-first）に一本化。PC側の見出し帯は p で表示 */}
+            <p className={cn(EYEBROW_CLASS, "mb-7 text-base leading-relaxed")}>
               {HERO_COPY.badge}
             </p>
 
-            <p className="text-5xl lg:text-[3.2rem] font-extrabold leading-[1.25] text-gray-900 tracking-tight mb-6">
-              {HERO_COPY.headingLine1}
-              <br />
-              {HERO_COPY.headingLine2.split("仕組み").map((part, i, arr) =>
-                i < arr.length - 1 ? (
-                  <span key={i}>{part}<span className="text-teal-800">仕組み</span></span>
-                ) : (
-                  <span key={i}>{part}</span>
-                )
-              )}
-            </p>
+            {/* 最大 2.8rem。ウィンドウが狭まるほど滑らかに縮小する */}
+            <HeroHeading className="mb-9 leading-[1.4]" size={HEADING_SIZE.pc} />
 
-            <p className="text-base text-gray-800 leading-relaxed mb-10 max-w-xl font-medium [text-shadow:0_1px_3px_rgba(0,0,0,0.15),0_0_12px_rgba(255,255,255,0.7)]">
-              {HERO_COPY.description.split('\n').map((line, i, arr) => (
-                <span key={i}>
-                  {line}
-                  {i < arr.length - 1 && <br />}
-                </span>
-              ))}
-            </p>
-
-            <div className="flex flex-row gap-4">
-              <Link href="/services" className="btn-primary text-base py-3.5">
-                サービスを見る
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link href="/contact" className="btn-outline text-base py-3.5">
-                {HERO_COPY.secondaryCta}
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </div>
+            <HeroParagraphs
+              className="text-[15px] [text-shadow:0_1px_3px_rgba(255,255,255,0.9),0_0_14px_rgba(255,255,255,0.85)]"
+              size={HEADING_SIZE.pc}
+              measure="24em"
+            />
           </div>
         </div>
       </div>
