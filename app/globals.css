@@ -201,8 +201,12 @@ h1, h2, h3, h4, h5, h6 {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* duration だけ潰しても delay が残ると、動きはないのに待たされる状態になる。
+       登場演出（animate-hero-* など）は delay 付きなので delay も無効化する。 */
+    animation-delay: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }
