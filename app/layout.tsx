@@ -1,8 +1,10 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import HeaderWrapper from "@/components/shared/HeaderWrapper";
+import { HERO_MOTION_DELAY, HERO_HEADER_DELAY_VAR } from "@/lib/hero-motion";
 import Footer from "@/components/shared/Footer";
 import GoogleAnalytics from "@/components/shared/GoogleAnalytics";
 import GtmNoscript from "@/components/shared/GtmNoscript";
@@ -151,7 +153,12 @@ export default function RootLayout({
 
   return (
     <html lang="ja">
-      <body className={cn(sans.variable, inter.variable)}>
+      {/* ヘッダー登場の遅延は lib/hero-motion.ts を正とし、CSS 変数として渡す。
+          サーバーコンポーネントで出力するのでハイドレーションに依存しない。 */}
+      <body
+        className={cn(sans.variable, inter.variable)}
+        style={{ [HERO_HEADER_DELAY_VAR]: `${HERO_MOTION_DELAY.header}s` } as CSSProperties}
+      >
         <GoogleAnalytics />
         <GtmNoscript />
         <ClarityAnalytics />

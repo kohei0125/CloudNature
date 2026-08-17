@@ -123,7 +123,11 @@ const HeroParagraphs = ({
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="relative overflow-hidden bg-white">
+    // data-hero-section: ヘッダーの登場演出と透過背景の起点。TOP にしか存在しないことを
+    // 利用して app/globals.css が body:has([data-hero-section]) で拾う。
+    // 「TOP かどうか」をレイアウト側の usePathname() で判定するとハイドレーション不一致で
+    // 本番だけ壊れるため、DOM の実体を起点にしている（詳細は globals.css のコメント）。
+    <section id="hero" data-hero-section className="relative overflow-hidden bg-white">
       {/* ヘッダー分のスペーサー。モバイルはヘッダーをメインビジュアルに重ねるため確保しない */}
       <div className="md:pt-[56px]" />
 

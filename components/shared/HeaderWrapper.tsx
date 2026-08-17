@@ -8,11 +8,15 @@ import MobileMenu from "./MobileMenu";
 const HeaderWrapper = () => {
   const pathname = usePathname();
 
-  // TOP のモバイルはメインビジュアルの上にヘッダーを重ねる（白い帯との境目をなくすため）
-  return <HeaderWrapperInner key={pathname} isHeroOverlay={pathname === "/"} />;
+  // pathname は key（ルート遷移時にスクロール状態をリセットする）にのみ使う。
+  // マークアップの分岐には使わないこと。サーバーとクライアントで値が食い違うと、
+  // React は className / style の不一致を DOM へ反映し直さないため、本番だけ無言で
+  // 壊れる（TOP のヘッダー演出が実際にこれで効かなくなっていた）。
+  // TOP 限定の見た目は app/globals.css がヒーローの有無で判定する。
+  return <HeaderWrapperInner key={pathname} />;
 };
 
-const HeaderWrapperInner = ({ isHeroOverlay }: { isHeroOverlay: boolean }) => {
+const HeaderWrapperInner = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -68,7 +72,6 @@ const HeaderWrapperInner = ({ isHeroOverlay }: { isHeroOverlay: boolean }) => {
     <>
       <Header
         isScrolled={isScrolled}
-        isHeroOverlay={isHeroOverlay}
         isVisible={isVisible}
         isMobileMenuOpen={mobileMenuOpen}
         onOpenMobileMenu={handleOpenMobileMenu}

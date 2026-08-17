@@ -47,7 +47,9 @@ const config: Config = {
         "hero-wipe": "hero-wipe 800ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "hero-rise": "hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "hero-zoom-in": "hero-zoom-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) both",
-        "hero-appear": "hero-appear 800ms ease-out both",
+        // ヘッダーの登場演出（hero-appear）はユーティリティクラスではなく
+        // app/globals.css に直接定義している。TOP かどうかの判定を JS で持てないため
+        // （理由は globals.css のコメント参照）。ここに再定義しないこと。
       },
       keyframes: {
         "infinite-scroll": {
@@ -72,12 +74,6 @@ const config: Config = {
         "hero-zoom-in": {
           from: { opacity: "0", transform: "scale(1.03)" },
           to: { opacity: "1", transform: "none" },
-        },
-        // opacity のみ。transform を動かすとスクロール時の表示制御
-        //（translate-y ユーティリティ）を fill-mode: both が上書きしてしまう
-        "hero-appear": {
-          from: { opacity: "0" },
-          to: { opacity: "1" },
         },
       }
     }
