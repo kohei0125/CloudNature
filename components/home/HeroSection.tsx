@@ -101,7 +101,7 @@ const HeroParagraphs = ({
   // 見出し2行目と左端を揃えるための字下げ。字下げ分を max-width に足して、
   // 行長（＝改行位置）が字下げの有無で変わらないようにする。
   <div
-    className={cn(PARAGRAPH_CLASS, "animate-hero-rise", className)}
+    className={cn(PARAGRAPH_CLASS, "animate-hero-text-in", className)}
     style={{
       paddingLeft: indentOf(size),
       maxWidth: `calc(${measure} + ${indentOf(size)})`,
@@ -141,7 +141,7 @@ const HeroSection = () => {
       >
         {/* 写真の下端（川）を切り落として橋を下寄りに見せるため、
             ヒーローより高いボックスに敷いて下側をはみ出させる */}
-        <div className="animate-hero-image-in absolute inset-x-0 top-0 h-[125%]"
+        <div className="animate-hero-zoom-in absolute inset-x-0 top-0 h-[125%]"
           style={heroDelay(HERO_MOTION_DELAY.image)}>
           <HeroBackground />
         </div>
@@ -191,7 +191,7 @@ const HeroSection = () => {
 
       {/* ===== PC: 背景写真 + 左側に白グラデーション ===== */}
       <div className="relative min-h-[600px] lg:min-h-[660px] hidden md:flex items-center">
-        <div className="animate-hero-image-in absolute inset-0 z-0"
+        <div className="animate-hero-zoom-in absolute inset-0 z-0"
           style={heroDelay(HERO_MOTION_DELAY.image)}>
           <HeroBackground />
         </div>

@@ -10,7 +10,7 @@
  * image を 0 にしているのは、opacity:0 の要素が LCP の計測対象外になるため。
  * 開始を遅らせるとそのぶん LCP が悪化する。
  */
-/** 本文フェードの開始と長さ。長さは tailwind.config.ts の animate-hero-rise に合わせる */
+/** 本文フェードの開始と長さ。長さは tailwind.config.ts の animate-hero-text-in に合わせる */
 const PARAGRAPHS_DELAY = 1.55;
 const PARAGRAPHS_DURATION = 0.9;
 
