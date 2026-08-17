@@ -46,7 +46,7 @@ const config: Config = {
         // HERO_MOTION_DELAY を animationDelay として各要素に渡す。
         "hero-wipe": "hero-wipe 800ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "hero-rise": "hero-rise 900ms cubic-bezier(0.22, 1, 0.36, 1) both",
-        "hero-zoom-in": "hero-zoom-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "hero-image-in": "hero-image-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) both",
         // ヘッダーの登場演出（hero-appear）はユーティリティクラスではなく
         // app/globals.css に直接定義している。TOP かどうかの判定を JS で持てないため
         // （理由は globals.css のコメント参照）。ここに再定義しないこと。
@@ -70,10 +70,13 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "none" },
         },
-        // 背景写真。わずかに引きながらフェードイン
-        "hero-zoom-in": {
-          from: { opacity: "0", transform: "scale(1.03)" },
-          to: { opacity: "1", transform: "none" },
+        // 背景写真。opacity のみで、transform は動かさないこと。
+        // 以前は scale(1.03) → none で「わずかに引きながら」出していたが、
+        // メインビジュアルが 1.2 秒かけて動くため「表示直後に画面がずれている」と
+        // 受け取られた（2026-08-17）。レイアウトは動かないが、視覚上のズレになる。
+        "hero-image-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
       }
     }
