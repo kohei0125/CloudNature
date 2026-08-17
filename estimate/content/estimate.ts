@@ -331,14 +331,17 @@ export const LP_COPY = {
     companyMeta: [
       "運営会社: 株式会社クラウドネイチャー",
       "所在地: 新潟県新潟市中央区上大川前通七番町1230番地7 ストークビル鏡橋 7F",
-      "提供領域: AI導入支援 / AIエージェント開発 / システム開発",
+      // 並びは本体 content/common.ts の SERVICE_ORDER（dev → ai → ai-support）に合わせる
+      "提供領域: システム開発 / AIエージェント開発 / 法人向けAI導入支援",
     ],
     serviceHeading: "Service",
     companyHeading: "Company",
+    // 従来は3本ともハブ(/services)宛てで、サービス詳細ページへの被リンクが1本も無かった。
+    // ラベルは本体 content/services.ts の SERVICE_DETAILS[].title を正とする。
     serviceLinks: [
-      { label: "システム開発", path: "https://cloudnature.jp/services" },
-      { label: "AIエージェント開発", path: "https://cloudnature.jp/services" },
-      { label: "AI活用支援", path: "https://cloudnature.jp/services" },
+      { label: "システム開発", path: "https://cloudnature.jp/services/system-dev" },
+      { label: "AIエージェント開発", path: "https://cloudnature.jp/services/ai-agent" },
+      { label: "法人向けAI導入支援", path: "https://cloudnature.jp/services/ai-support" },
     ],
     companyLinks: [
       { label: "企業情報", path: "https://cloudnature.jp/company" },

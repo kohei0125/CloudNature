@@ -6,6 +6,7 @@ import { useRef, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { SERVICES_SECTION, SERVICES } from "@/content/home";
 import SectionHeader from "@/components/shared/SectionHeader";
+import SmartLink from "@/components/shared/SmartLink";
 
 /* ── Icon map ── */
 const SERVICE_ICONS: Record<string, string> = {
@@ -71,6 +72,20 @@ const ServicesSection = () => {
           cta={{ label: SERVICES_SECTION.cta, href: "/services" }}
           headingId="services-heading"
         />
+
+        {/* ── Lead ── トップ唯一の散文。/services/system-dev への文脈内リンクを含む。
+            リンク先は content 側の定義なので、遷移先が将来 ESTIMATE_URL に変わっても
+            計測が漏れないよう SmartLink 経由で描画する。 */}
+        <p className="max-w-3xl mb-8 md:mb-12 text-sm md:text-base leading-[1.9] text-gray-700">
+          {SERVICES_SECTION.lead.before}
+          <SmartLink
+            href={SERVICES_SECTION.lead.linkHref}
+            className="font-bold text-teal-800 underline underline-offset-4 decoration-teal-800/30 transition-colors hover:decoration-teal-800"
+          >
+            {SERVICES_SECTION.lead.linkLabel}
+          </SmartLink>
+          {SERVICES_SECTION.lead.after}
+        </p>
 
         {/* ── Grid ── */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5 items-stretch">

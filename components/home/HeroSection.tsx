@@ -178,7 +178,7 @@ const HeroSection = () => {
           <HeroHeading className="mt-7 leading-[1.45]" size={HEADING_SIZE.mobile} />
 
           <HeroParagraphs
-            className="mt-7 text-[clamp(13.5px,3.75vw,15px)] [text-shadow:0_1px_3px_rgba(255,255,255,0.9)]"
+            className="mt-7 text-[clamp(12.5px,3.4vw,14px)] [text-shadow:0_1px_3px_rgba(255,255,255,0.9)]"
             size={HEADING_SIZE.mobile}
             measure="23em"
           />
