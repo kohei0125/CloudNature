@@ -10,7 +10,7 @@
  * image を 0 にしているのは、opacity:0 の要素が LCP の計測対象外になるため。
  * 開始を遅らせるとそのぶん LCP が悪化する。
  */
-/** 本文フェードの開始と長さ。長さは tailwind.config.ts の animate-hero-rise に合わせる */
+/** 本文フェードの開始と長さ。長さは tailwind.config.ts の animate-hero-text-in に合わせる */
 const PARAGRAPHS_DELAY = 1.55;
 const PARAGRAPHS_DURATION = 0.9;
 
@@ -30,12 +30,9 @@ export const heroDelay = (delaySeconds: number) => ({
 });
 
 /**
- * ヘッダー用。ヘッダーは transition 用の `duration-300` を持っており、
- * tailwindcss-animate はこの `duration-*` を animation-duration にも当てるため、
- * animate-hero-appear の 800ms が 300ms に上書きされてしまう。
- * そのため duration も style 属性で明示する。
+ * ヘッダーの遅延だけは CSS 側（app/globals.css の `body:has([data-hero-section])`）で
+ * 適用する。ヘッダーはレイアウトにあり「TOP かどうか」をクライアントで判定すると
+ * ハイドレーション不一致で本番だけ壊れるため。
+ * ここを正としたまま CSS に渡せるよう、app/layout.tsx が `<body>` にこの変数を出力する。
  */
-export const heroHeaderMotion = {
-  ...heroDelay(HERO_MOTION_DELAY.header),
-  animationDuration: "800ms",
-};
+export const HERO_HEADER_DELAY_VAR = "--hero-header-delay";

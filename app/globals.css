@@ -195,6 +195,44 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* --- TOP のヘッダー（ヒーローがあるページだけの振る舞い） ---
+
+   ヒーロー（data-hero-section）は TOP にしか存在しないため、その有無を起点に
+   「ヘッダーを遅れて出す」「モバイル最上部でヘッダーを透過する」を CSS で表現する。
+
+   以前は HeaderWrapper の usePathname() === "/" で分岐していたが、サーバーが描画した
+   HTML とクライアントの計算結果が食い違うと、React は className / style の不一致を
+   DOM へ反映し直さない（サーバー側の DOM を採用し、以降の再レンダリングも
+   「変化なし」と判定して永久に直らない）。この結果、本番だけ無言でヘッダーの
+   登場演出と透過背景が効かない状態になっていた（2026-08-17 に検出・修正）。
+   ページ固有の状態をレイアウト側のクライアントフックで推測しないこと。
+
+   遅延値は lib/hero-motion.ts の HERO_MOTION_DELAY.header が単一の正で、
+   app/layout.tsx が --hero-header-delay として <body> に出力している。
+   :has() 非対応ブラウザではこの規則群ごと無視され、ヘッダーは即時表示・白背景になる
+   （＝演出が付かないだけで、レイアウトは破綻しない）。 */
+/* opacity のみを動かすこと。transform を動かすと、スクロール時の表示制御
+   （Header.tsx の translate-y ユーティリティ）を animation-fill-mode: both が
+   上書きしてしまい、下スクロールでヘッダーが隠れなくなる。 */
+@keyframes hero-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+body:has([data-hero-section]) [data-site-header] {
+  animation: hero-appear 800ms ease-out var(--hero-header-delay, 2.45s) both;
+}
+
+/* メインビジュアルに重ねるのはモバイルの最上部のみ。
+   スクロール後（data-scrolled）とメニュー展開中（data-menu-open）は白地に戻す。
+   これらの属性は components/shared/Header.tsx が付与する。 */
+@media (max-width: 767px) {
+  body:has([data-hero-section])
+    [data-site-header]:not([data-scrolled]):not([data-menu-open]) {
+    background-color: transparent;
+  }
+}
+
 /* --- Reduced motion preference --- */
 @media (prefers-reduced-motion: reduce) {
   *,

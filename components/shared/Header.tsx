@@ -7,35 +7,32 @@ import { Menu, X } from "lucide-react";
 import { cn, isPathActive } from "@/lib/utils";
 import { NAV_ITEMS } from "@/content/common";
 import { HEADER_COPY } from "@/content/layout";
-import { heroHeaderMotion } from "@/lib/hero-motion";
 
 interface HeaderProps {
   isScrolled: boolean;
-  isHeroOverlay: boolean;
   isVisible: boolean;
   isMobileMenuOpen: boolean;
   onOpenMobileMenu: () => void;
   onCloseMobileMenu: () => void;
 }
 
-const Header = ({ isScrolled, isHeroOverlay, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
+const Header = ({ isScrolled, isVisible, isMobileMenuOpen, onOpenMobileMenu, onCloseMobileMenu }: HeaderProps) => {
   const pathname = usePathname();
-
-  // メインビジュアルに重ねるのはモバイルの最上部のみ。スクロール後とメニュー展開中は白地に戻す
-  const isTransparent = isHeroOverlay && !isScrolled && !isMobileMenuOpen;
 
   return (
     <header
       data-site-header
+      // TOP 限定の振る舞い（遅れて現れる・モバイル最上部で透過する）は app/globals.css が
+      // ヒーローの有無で判定する。ここでは「TOP かどうか」を持たず、CSS が必要とする
+      // クライアント状態だけを属性として公開する。どちらもサーバー・クライアントとも
+      // 初期値 false のため、ハイドレーション不一致は起きない。
+      data-scrolled={isScrolled ? "" : undefined}
+      data-menu-open={isMobileMenuOpen ? "" : undefined}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform",
-        // TOP はヒーローのテキストが出そろってから遅れて現れる
-        isHeroOverlay && "animate-hero-appear",
-        isTransparent ? "bg-transparent md:bg-white" : "bg-white",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform bg-white",
         isVisible || isMobileMenuOpen ? "translate-y-0" : "-translate-y-full",
         isScrolled && "shadow-sm"
       )}
-      style={isHeroOverlay ? heroHeaderMotion : undefined}
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8 flex justify-between items-center h-14 md:h-[56px]">
         <Link href="/" className="flex items-center">
