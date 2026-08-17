@@ -98,6 +98,10 @@ export const COMPANY_MAP = {
   height: 711,
 };
 
+/**
+ * 会社紹介資料（PDF）のダウンロード導線。
+ * 現在は非表示（CompanyOverview から導線を外している）。再掲する場合はこの定義をそのまま使う。
+ */
 export const COMPANY_PROFILE_DOC = {
   label: "会社紹介資料（PDF）",
   description: "事業内容・サービス・実績をまとめた資料です。社内でのご検討にご活用ください。",

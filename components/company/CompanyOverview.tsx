@@ -1,11 +1,5 @@
 import Image from "next/image";
-import { Download } from "lucide-react";
-import {
-  COMPANY_MAP,
-  COMPANY_OVERVIEW,
-  COMPANY_OVERVIEW_HEADING,
-  COMPANY_PROFILE_DOC,
-} from "@/content/company";
+import { COMPANY_MAP, COMPANY_OVERVIEW, COMPANY_OVERVIEW_HEADING } from "@/content/company";
 
 // 会社概要。左に見出し＋2カラムのテーブル、右に新潟をマークした日本のドットマップを配置する。
 const CompanyOverview = () => {
@@ -17,7 +11,7 @@ const CompanyOverview = () => {
     >
       <div className="container mx-auto max-w-6xl px-6">
         <div className="grid items-center gap-12 md:grid-cols-[1fr_0.75fr] lg:gap-16">
-          {/* 左：見出し＋テーブル＋会社紹介資料 */}
+          {/* 左：見出し＋テーブル */}
           <div>
             {/* 共有 SectionHeader はモバイルで中央寄せになるため、
                 他の企業情報セクションと揃えて常に左揃えの手組みにする */}
@@ -47,20 +41,6 @@ const CompanyOverview = () => {
                 </div>
               ))}
             </dl>
-
-            {/* 会社紹介資料ダウンロード */}
-            <div className="mt-8 text-center">
-              <a
-                href={COMPANY_PROFILE_DOC.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-outline-forest"
-              >
-                <Download className="h-4 w-4" />
-                {COMPANY_PROFILE_DOC.label}
-              </a>
-              <p className="mt-3 text-[13px] text-forest/60">{COMPANY_PROFILE_DOC.description}</p>
-            </div>
           </div>
 
           {/* 右：新潟をマークした日本のドットマップ（PCのみ表示） */}
