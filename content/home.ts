@@ -5,7 +5,9 @@ export const HERO_COPY = {
   // モバイルは縦構図の写真を使う（横長写真だと縦フレームで空ばかりになるため）
   imageSrc: "/images/niigata_view_mobile.webp",
   pcImageSrc: "/images/niigata_img.webp",
-  badge: "新潟のシステム開発・AIエージェント開発会社",
+  // ADR 0003（docs/adr/0003-restore-ai-axis-on-top-page.md）: H1 はAI開発・AI導入支援パートナー軸に統一。
+  // 「システム開発」を先頭に置くとAIエージェント開発と同列になり、本文のAI訴求とブランドが割れるため。
+  badge: "新潟のAI開発・AI導入支援パートナー",
   headingLine1: "AIトランスフォーメーションで",
   headingLine2: "人手に代わる仕組みを実現する",
   // 見出し2行目のうち、この語だけブランドカラーで強調する
@@ -19,7 +21,7 @@ export const HERO_COPY = {
     ["営業・バックオフィス・", "戦略・", "クリエイティブといった", "あらゆる仕事を、", "AIを前提として", "再構築。"],
     ["システム開発・", "AIエージェント開発を", "通じて、", "お客様のビジネスに", "確かな変化を", "生み出します。"],
   ],
-  heroImageAlt: "新潟のシステム開発・AIエージェント開発会社 クラウドネイチャー"
+  heroImageAlt: "新潟のAI開発・AI導入支援パートナー クラウドネイチャー"
 };
 
 

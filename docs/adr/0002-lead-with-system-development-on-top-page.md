@@ -4,7 +4,7 @@ cloudnature.jp トップの h1・title・meta description・ヒーローのリ�
 
 ## Status
 
-accepted（2026-08-16）
+accepted（2026-08-16）→ **トップページの見出し軸のみ、2026-08-22 付で ADR 0003（`docs/adr/0003-restore-ai-axis-on-top-page.md`）により supersede 済み**。h1構造の不整合（「システム開発」と「AIエージェント開発」の並列化がブランドの本文訴求と割れる）が理由。GSC実測データ自体はこの後も参照価値があるため、本文は削除せず残す。`/services/system-dev` の title・description は本ADRのまま変更していない。
 
 ADR 0001（AI導入支援 → AI開発への転換）を supersede しない。0001 が退けた「導入支援を主軸に戻す」判断は今も有効であり、本 ADR はその軸の**入口となるカテゴリ語**だけを差し替えるもの。
 
