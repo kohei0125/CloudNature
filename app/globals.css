@@ -604,12 +604,30 @@ body:has([data-hero-section]) [data-site-header] {
   border-color: #055448;
 }
 
+/* スマホでは見出しが2行に折り返して目次だけで1画面が埋まりやすい。
+ * 文字を大きく削るより、左の字下げ・行間・行の上下余白を詰めて
+ * 1行に収まる幅を稼ぐほうが、読みやすさを損なわずに短くできる。 */
 @media (max-width: 640px) {
   .prose nav.toc {
     margin: 2rem 0 2.5rem;
+    padding-top: 0.75rem;
+  }
+  .prose nav.toc > p {
+    margin-bottom: 0.375rem;
+    font-size: 0.8125rem;
   }
   .prose nav.toc > ol > li {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .prose nav.toc a {
+    padding: 0.5625rem 0 0.5625rem 1rem;
+  }
+  .prose nav.toc a::before {
+    left: 0.05rem;
+    top: 1rem;
+    width: 0.3125rem;
+    height: 0.3125rem;
   }
 }
 
