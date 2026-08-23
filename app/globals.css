@@ -446,6 +446,16 @@ body:has([data-hero-section]) [data-site-header] {
   }
 }
 
+/* === Article Images (.prose figure img) ===
+ * 記事画像は本文幅いっぱいに広がるものが多いが、スクリーンショットのように
+ * 本文幅より小さい実寸で置きたい画像もある。その場合に左寄せのままだと
+ * 収まりが悪いので中央に置く。本文幅より大きい画像は max-width で
+ * 頭打ちになるため、この指定の影響を受けない。
+ */
+.prose figure img {
+  margin-inline: auto;
+}
+
 /* === Article Tables (.prose .table-scroll) ===
  * NewsBody が <table> をこのラッパーで囲む。
  * スマホ幅では列が潰れて「最大1／億円」のように金額が途中で折り返されるため、
