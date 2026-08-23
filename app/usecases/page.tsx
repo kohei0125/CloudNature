@@ -153,14 +153,13 @@ export default function UseCasesPage() {
                       className="object-contain transition-transform duration-500 group-hover:scale-105 relative z-10"
                       sizes="(max-width: 768px) 128px, 288px"
                     />
-                    <span className="hidden md:block absolute top-3 left-3 z-20 text-[11px] font-bold px-3 py-1 rounded bg-sage text-white shadow-sm">
-                      {article.category}
-                    </span>
                   </div>
 
                   {/* テキスト */}
                   <div className="flex flex-col flex-1 min-w-0">
-                    <span className="md:hidden text-[11px] font-bold text-sage mb-1">
+                    {/* サムネイルは文字を焼き込んだ画像なので、カテゴリは画像に重ねずテキスト側に置く
+                        （TOPのカルーセル・ガイド一覧と同じ扱い） */}
+                    <span className="self-start inline-flex px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 text-[10px] font-bold tracking-wide mb-1.5">
                       {article.category}
                     </span>
                     <h3 className="text-forest font-bold text-[15px] md:text-lg leading-snug mb-1 md:mb-2 line-clamp-2 h-[2.75em] group-hover:text-sage transition-colors">
