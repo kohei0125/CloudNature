@@ -11,6 +11,7 @@ CloudNature — コーポレートサイト & AI見積もりシステムのモ�
 ├── estimate/        AI見積もりフロントエンド (Next.js) → ai.cloudnature.jp
 ├── backend/         見積もりAPI (FastAPI / Python)   → Cloud Run
 ├── docs/            設計書・TODO
+│   └── blog/        ブログ記事の制作資料 (ガイドライン・プロンプト・原稿・調査・レビュー)
 ├── types/           TypeScript 型定義
 └── docker-compose.yml  ローカル開発用
 ```
@@ -43,6 +44,7 @@ CloudNature — コーポレートサイト & AI見積もりシステムのモ�
 1. **検証内容のドキュメント作成（必須・着手前）**
    - 検証・レビューに着手する **前に**、`docs/` 配下に検証内容をまとめたファイルを作成する
    - ファイル名: `docs/YYYYMMDD_<対象>_review.md`（例: `docs/20260222_estimate_api_review.md`）
+   - ただし**記事本文のレビュー・ファクトチェック**（ブログ記事そのものの検証）は `docs/blog/reviews/` に置く（命名は `docs/blog/README.md` に従う）。サイト構成・システム改修の検証記録は従来どおり `docs/` 直下
    - 記載内容: 極力端的に以下をまとめる
      - 検証目的
      - 対象範囲
@@ -58,6 +60,13 @@ CloudNature — コーポレートサイト & AI見積もりシステムのモ�
 - 見積もりバックエンド（`backend/`）や見積もりフロントエンド（`estimate/`）を改修・変更する際は、**最初に** `backend/docs/estimate_logic.md` を読んで全体のロジック・フローを把握すること
 - 改修後は `backend/docs/estimate_logic.md` の該当箇所を必ず更新し、実装とドキュメントの乖離を防ぐこと
 
+## ブログ記事・コンテンツ制作ファイルの配置ルール
+
+- 本番で配信されるのは**記事データ `content/usecases/*.ts` と配信画像 `public/images/blog/<slug>/` のみ**。この2箇所に制作途中の資料（.md / .yaml 等）を混ぜない
+- `public/images/blog/` 配下の既存ディレクトリ名・ファイル名は公開URLのため**変更しない**（記事から参照され、検索エンジンにもインデックスされている）
+- それ以外の制作資料（執筆ガイドライン・プロンプト・企画/画像仕様・原稿/下書き・SEO調査・記事レビュー）は**すべて `docs/blog/` 配下**に置く。サブディレクトリの内訳と命名は `docs/blog/README.md` に従う
+- リポジトリ直下に `draft/` のような一時ディレクトリを新設しない。下書きは `docs/blog/drafts/` へ
+
 ## 認証
 
 Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護。
@@ -65,6 +74,7 @@ Vercel (estimate) → Cloud Run (backend) 間は `X-API-Key` ヘッダで保護�
 
 ## 注意事項
 
+- `.claude/skills/` と `.agents/skills/` の同名スキル（usecase-article-creation 等）は Claude 用 / Codex 用の対で管理されている。**片方を編集したら必ずもう一方にも同じ変更を反映する**（過去2回、`.agents` 側の更新漏れがレビューで検出されている）
 - コーポレートサイトと見積もりフロントエンドは同一リポジトリだが、それぞれ独立した `node_modules`・`tsconfig.json`・`next.config.mjs` を持つ
 - 見積もりサイトはサブドメイン（https://ai.cloudnature.jp/）で運用する
 - `tsconfig.json`（ルート）の `exclude` に `estimate` が含まれる — 型チェックは各サブプロジェクト単位

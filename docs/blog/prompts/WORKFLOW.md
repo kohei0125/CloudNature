@@ -28,7 +28,7 @@
 ## 1. ファイル構成
 
 ```
-seo-prompts/
+docs/blog/prompts/
 ├── 00_primary_information_for_eeat.md   ← 一次情報の唯一の正。毎回渡す
 ├── 01_ai_training_subsidy_prompt.md     → niigata-ai-academy.com
 ├── 02_ai_estimate_automation_prompt.md  → cloudnature.jp（新規）

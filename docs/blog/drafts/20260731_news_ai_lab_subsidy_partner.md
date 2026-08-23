@@ -28,7 +28,7 @@ microCMS の MCP サーバーは接続されていないため、REST API での
 | **contentId** | `niigata-ai-lab-subsidy-partner` ← **この値で作成してください**（ブログ記事からこのURLでリンクしています） |
 | category | **更新情報**（`og1c18n6c009`）※ 下記「カテゴリの注意」参照 |
 | publishedAt | 2026-07-31 |
-| image | `docs/assets/20260731_news_partner_thumbnail.webp` をアップロード（1600×900・32KB・16:9に調整済み） |
+| image | `docs/blog/assets/20260731_news_partner_thumbnail.webp` をアップロード（1600×900・32KB・16:9に調整済み） |
 | title | 下記 |
 | excerpt | 下記 |
 | content | 下記 HTML をそのまま貼り付け |

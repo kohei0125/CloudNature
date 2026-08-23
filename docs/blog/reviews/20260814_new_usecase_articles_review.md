@@ -31,7 +31,7 @@
 |---|---|
 | 記事データの必須項目・登録順・関連サービスID | OK。`relatedServiceIds` は `SERVICE_PAGE_MAP` に実在するIDのみ。表示順は配列順と一致 |
 | タイトル・検索意図・カニバリ | OK。`/cases`（実績）と記事02（方法・仕組み）で担当意図を分離。記事02は `/cases` の文言を転記していない |
-| 冒頭フック・文章の自然さ・段落構成 | OK。3本とも題材・オチ・書き出し構文が相互に重複せず、`docs/blog_opening_hooks.md` の既存2件とも非重複 |
+| 冒頭フック・文章の自然さ・段落構成 | OK。3本とも題材・オチ・書き出し構文が相互に重複せず、`docs/blog/guidelines/blog_opening_hooks.md` の既存2件とも非重複 |
 | 事実主張・数値・出典・更新日・監修表記 | OK（後述の是正あり） |
 | 内部リンク・CTA・FAQ・外部リンク属性 | OK。内部リンク 9 / 12 / 11 本。外部リンクは全件 `target="_blank" rel="noopener noreferrer"` |
 | 画像パス・alt・寸法・遅延読み込み・最適化 | OK。全12記事の `image` 実在を確認。新規4枚は 1600×900 / 73〜105KB |
@@ -59,7 +59,7 @@
 
 ### 一次情報の確認結果
 
-`content/usecases/files/00_primary_information_for_eeat.md` および `WORKFLOW.md` が
+`docs/blog/prompts/00_primary_information_for_eeat.md` および `WORKFLOW.md` が
 「未確認」としていた自社システム仕様を、実コードで確認して一致を確認した。
 
 | 主張 | 確認先 | 結果 |

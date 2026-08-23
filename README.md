@@ -10,6 +10,7 @@ CloudNature コーポレートサイト・AI見積もりシステム・AI開発�
 ├── ai-dev/          AI開発研修LP (Next.js)          → ai-dev.cloudnature.jp
 ├── backend/         見積もりAPI (FastAPI)           → Cloud Run
 ├── docs/            設計書・TODO
+│   └── blog/        ブログ記事の制作資料 (ガイドライン・プロンプト・原稿・調査・レビュー)
 └── docker-compose.yml  ローカル開発用
 ```
 
@@ -312,6 +313,7 @@ OpenAI Realtime API（`gpt-realtime`）+ WebRTC による日英双方向の音�
 | ファイル | 内容 |
 |---|---|
 | [`docs/TODO.md`](docs/TODO.md) | デプロイチェックリスト & 技術的負債 |
+| [`docs/blog/README.md`](docs/blog/README.md) | ブログ記事の制作資料の構成・配置ルール |
 | [`docs/20260217_estimate_deploy_design.md`](docs/20260217_estimate_deploy_design.md) | デプロイ設計（Cloud Run + Neon + Vercel） |
 | [`docs/20260216_estimate_strategy.md`](docs/20260216_estimate_strategy.md) | 見積もりシステム戦略 |
 | [`docs/20260216_estimate_top_design.md`](docs/20260216_estimate_top_design.md) | 見積もり UI/UX 設計 |

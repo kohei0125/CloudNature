@@ -22,7 +22,7 @@
 | `types/usecases.ts` | `updatedAt?: string` を追加 |
 | `app/usecases/[slug]/page.tsx` | JSON-LD の `dateModified` を `updatedAt ?? publishedAt` に変更／記事上部に「（最終更新：…）」を表示 |
 | `app/sitemap.ts` | 記事の `lastModified` を `updatedAt ?? publishedAt` に変更、`/usecases` の日付を更新 |
-| `docs/blog_opening_hooks.md` | 冒頭フック管理表に本記事の行を追記 |
+| `docs/blog/guidelines/blog_opening_hooks.md` | 冒頭フック管理表に本記事の行を追記 |
 
 ## 確認項目リスト
 
@@ -82,7 +82,7 @@
 
 - 制度の詳細とクラウドネイチャーの実証パートナー募集は **`/news` のお知らせ**に集約する
 - ブログ記事には要点2〜4行とお知らせへのリンクのみ残す
-- お知らせ原稿は `docs/20260731_news_ai_lab_subsidy_partner.md`（microCMS 管理のためコードからは作成不可）
+- お知らせ原稿は `docs/blog/drafts/20260731_news_ai_lab_subsidy_partner.md`（microCMS 管理のためコードからは作成不可）
 - お知らせの contentId は `niigata-ai-lab-subsidy-partner`
 - **公開順序**：お知らせを microCMS で公開 → その後ブログをデプロイ（逆順だとリンクが404）
 
@@ -140,7 +140,7 @@ Codex 指摘 #1・#2 に伴い、内容が古くなった図版3点を本文か�
 
 `/news` に手動で追加する際に、このセクションから順にコピーして貼り付ける。
 API キーが読み取り専用のため自動作成はできない（権限の詳細は
-`docs/20260731_news_ai_lab_subsidy_partner.md` を参照）。
+`docs/blog/drafts/20260731_news_ai_lab_subsidy_partner.md` を参照）。
 
 ## 1. 設定項目
 
@@ -149,7 +149,7 @@ API キーが読み取り専用のため自動作成はできない（権限の�
 | **contentId** | `niigata-ai-lab-subsidy-partner` |
 | category | 更新情報 |
 | publishedAt | 2026-07-31 |
-| image | `docs/assets/20260731_news_partner_thumbnail.webp`（1600×900 / 32.5KB） |
+| image | `docs/blog/assets/20260731_news_partner_thumbnail.webp`（1600×900 / 32.5KB） |
 
 > **contentId は必ず `niigata-ai-lab-subsidy-partner` にすること。**
 > ブログ記事（`/usecases/niigata-ai-subsidy-guide-2026`）から4箇所リンクしている。

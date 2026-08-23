@@ -1,0 +1,630 @@
+version: 2
+updated: "2026-08-23"
+owner: "CloudNature"
+project: "usecases"
+
+purpose: >
+  iPhoneのショートカットとClaudeを使い、
+  会議の録音から文字起こし、AI議事録作成、
+  NotionまたはGoogle Driveへの保存までを自動化した実例記事を制作する。
+
+  記事の中心価値は「議事録専用AIサービスを追加契約しなくても、
+  iPhoneとClaudeを使って実用的な議事録作成環境を構築できること」。
+
+  Claude Codeが本文執筆時に迷わないよう、
+  SEO方針、記事の主張、構成、画像、注意事項まで定義する。
+
+
+# ============================================================
+# 記事全体の方針
+# ============================================================
+
+global_rules:
+
+  core_message: >
+    議事録AIのためだけに新しいサービスを追加契約しなくても、
+    普段使っているiPhoneとClaudeを組み合わせれば、
+    ホーム画面のアイコンを押して録音を開始するだけで、
+    文字起こし、議事録作成、保存までつなげられる。
+
+  primary_value:
+    - "追加の議事録専用サービスを契約せずに始められる"
+    - "iPhoneからワンタップで録音開始できる"
+    - "Claudeで自由な形式の議事録を生成できる"
+    - "NotionやGoogle Driveへ保存できる"
+    - "一度ショートカットを作れば、普段の操作は非常に少ない"
+
+  positioning: >
+    「完全無料の議事録サービス」とは表現しない。
+    Claudeをすでに利用している人であれば、
+    新たな議事録専用サービスへの追加課金をせずに構築できる、
+    または無料プランから試せる、という表現を基本とする。
+
+  tone:
+    - "実際に自社で使っている実践例として書く"
+    - "技術記事だが非エンジニアにも理解できる"
+    - "専用サービスとの対立構造にはしない"
+    - "便利さを率直に伝える"
+    - "過度な誇張をしない"
+
+  prohibited_claims:
+    - "完全無料で無制限に使える"
+    - "他の議事録AIより必ず優れている"
+    - "専用議事録サービスは不要"
+    - "100%正確"
+    - "すべての企業にこの方法が最適"
+
+  terminology:
+    preferred:
+      - "議事録自動化"
+      - "AI議事録"
+      - "iPhoneショートカット"
+      - "Claude"
+      - "文字起こし"
+      - "自動保存"
+    avoid:
+      - "半自動"
+      - "完全自動ではない"
+      - "価値の中心"
+      - "二次的な選択肢"
+
+
+# ============================================================
+# 実際に構築した構成
+# ============================================================
+
+implementation_facts:
+
+  trigger:
+    method: "iPhoneホーム画面に追加したショートカットアイコン"
+    user_action:
+      - "アイコンをタップ"
+      - "会議を録音"
+      - "録音を終了"
+
+  after_recording:
+    automated_flow:
+      - "録音データを取得"
+      - "iPhoneで文字起こし"
+      - "Googleカレンダーから今日の予定を取得"
+      - "Claudeへ文字起こしと予定候補を送信"
+      - "Claudeが議事録を生成"
+      - "指定した保存先へ保存"
+
+  calendar:
+    service: "Google Calendar"
+    method: "iPhone標準カレンダーとの同期経由"
+    logic: >
+      複雑な開始時刻判定は採用せず、
+      「今日の予定」を取得するシンプルな設計とした。
+    purpose: >
+      Googleカレンダーの予定は、
+      議事録本文そのものではなく、
+      Claudeが会議タイトルを判断するための補助情報として利用する。
+
+  ai:
+    service: "Claude"
+    method: "iOSショートカットのClaudeアクション"
+    responsibilities:
+      - "文字起こし内容の整理"
+      - "会議タイトルの判断"
+      - "概要の生成"
+      - "決定事項の抽出"
+      - "TODOの抽出"
+      - "次回確認事項の整理"
+      - "議事録フォーマットへの整形"
+      - "保存処理"
+
+  destinations:
+    primary_examples:
+      - "Notion"
+      - "Google Drive"
+    note: >
+      記事では保存先連携を主役にしない。
+      「議事録完成後、用途に応じてNotionやGoogle Driveにも保存できる」
+      程度の説明でよい。
+
+  notion:
+    example: "プライベートページ配下へ議事録を自動作成"
+
+  google_drive:
+    example: >
+      議事録をGoogle Drive側へ保存する構成にも変更可能であることを紹介する。
+      詳細なGoogle Drive API実装記事にはしない。
+
+
+# ============================================================
+# 記事冒頭
+# ============================================================
+
+intro:
+
+  hook: >
+    NottaやProudNote、tl;dvなど、
+    AI議事録サービスを仕事で使っている方も増えています。
+
+    こうした専用サービスは非常に便利ですが、
+    「議事録を作る」という目的だけで考えると、
+    すでに使っているiPhoneとClaudeだけでも
+    かなりのところまで自動化できます。
+
+  personal_story: >
+    私自身も以前はGensparkの議事録AIを使用していました。
+
+    今回、普段の打ち合わせをiPhoneで録音し、
+    文字起こしをClaudeに渡して、
+    議事録を作成した後にNotionへ保存するところまで
+    iPhoneショートカットでつないでみました。
+
+  result: >
+    一度ショートカットを作ってしまえば、
+    普段やることはiPhoneのホーム画面に置いた
+    「打合せ録音」アイコンをタップするだけです。
+
+    録音終了後はClaudeが内容を整理し、
+    議事録を作成して保存まで進めます。
+
+  competitor_policy:
+    allowed:
+      - "Notta"
+      - "ProudNote"
+      - "tl;dv"
+      - "Genspark"
+    rule: >
+      他サービスは「有名なAI議事録サービスの例」としてのみ扱う。
+      料金、精度、機能不足などの批判は行わない。
+      各サービスには専用サービスならではのメリットがあることも明記する。
+    fact_check: >
+      公開前に各サービスの正式名称・公式表記・現行サービス提供状況を確認する。
+
+
+# ============================================================
+# SEO
+# ============================================================
+
+seo:
+
+  primary_keyword: "AI 議事録"
+
+  priority_keywords:
+    - "AI 議事録"
+    - "議事録 AI"
+    - "議事録 自動化"
+    - "iPhone 議事録"
+    - "議事録 自動作成"
+    - "Claude 議事録"
+
+  secondary_keywords:
+    - "iPhone ショートカット 議事録"
+    - "iPhone 文字起こし"
+    - "ボイスメモ 文字起こし"
+    - "Claude 文字起こし"
+    - "Claude Notion 連携"
+    - "Notion 議事録"
+    - "Google Drive 議事録"
+    - "AI 議事録 無料"
+    - "議事録 AI 無料"
+    - "議事録 自動作成 無料"
+    - "会議 文字起こし AI"
+
+  comparison_keywords:
+    - "Notta"
+    - "tl;dv"
+    - "AI議事録 アプリ"
+    - "AI議事録 ツール"
+
+  search_intent:
+    primary: "AIで議事録を自動作成する方法を知りたい"
+    secondary:
+      - "AI議事録サービスの費用を抑えたい"
+      - "iPhoneだけで議事録を作りたい"
+      - "Claudeを業務で活用したい"
+      - "Notionに議事録を自動保存したい"
+
+  recommended_title: >
+    iPhoneだけでAI議事録を自動化｜
+    Claude×ショートカットで無料から始める方法
+
+  alternative_titles:
+    - "AI議事録に毎月払う必要ある？iPhone×Claudeで議事録を自動化してみた"
+    - "iPhone×Claudeで議事録を自動作成｜Notion保存までショートカットで自動化"
+    - "議事録AIを自作する方法｜iPhoneショートカット×Claude実践例"
+
+  h1: >
+    iPhoneだけでAI議事録を自動化｜
+    Claude×ショートカットで無料から始める方法
+
+  slug: "/usecases/iphone-claude-ai-meeting-notes"
+
+  meta_description: >
+    iPhoneのショートカットとClaudeを使い、
+    会議の録音から文字起こし、AI議事録作成、
+    Notion・Google Driveへの保存まで自動化する方法を実例で解説。
+    追加の議事録専用サービスなしで始められる構成を紹介します。
+
+  ahrefs_validation:
+    required: true
+    tasks:
+      - "AI 議事録"
+      - "議事録 自動化"
+      - "AI 議事録 無料"
+      - "iPhone 議事録"
+      - "Claude 議事録"
+      - "iPhone ショートカット 議事録"
+    output:
+      - "Volume"
+      - "KD"
+      - "Traffic Potential"
+      - "Parent Topic"
+      - "SERP上位ページ"
+      - "関連Questions"
+    rule: >
+      Ahrefs実数値を確認後、
+      title / H1 / descriptionは必要に応じて微調整する。
+
+
+# ============================================================
+# 記事構成
+# ============================================================
+
+outline:
+
+  - level: 2
+    id: "intro"
+    title: "AI議事録、毎月料金を払っていませんか？"
+    purpose: "強い導入フック"
+    content:
+      - "Notta、ProudNote、tl;dvなどのAI議事録サービスに触れる"
+      - "専用サービスを否定しない"
+      - "iPhoneとClaudeでも実現できるという選択肢を提示"
+      - "筆者も以前Gensparkの議事録AIを使用していた"
+      - "今回実際に自分用の仕組みに切り替えた"
+
+  - level: 2
+    id: "result"
+    title: "今回作ったもの"
+    purpose: "完成形を先に見せる"
+    content:
+      - "iPhoneホーム画面から起動"
+      - "録音"
+      - "文字起こし"
+      - "Googleカレンダー参照"
+      - "Claudeで議事録作成"
+      - "Notion / Google Drive保存"
+    note: >
+      保存先説明は簡潔にする。
+      メインはあくまで議事録作成。
+
+  - level: 2
+    id: "architecture"
+    title: "全体構成｜iPhoneショートカット×Claude"
+    content:
+      - "ホーム画面から起動"
+      - "録音"
+      - "文字起こし"
+      - "今日の予定を取得"
+      - "Claudeへ送信"
+      - "議事録生成"
+      - "保存"
+
+  - level: 2
+    id: "why"
+    title: "なぜ専用アプリを使わずに作ったのか"
+    content:
+      - "既存のiPhoneとClaudeを活用できる"
+      - "追加の議事録専用サービス契約を増やさなくて済む"
+      - "出力形式をClaudeのプロンプトで自由に変えられる"
+      - "保存先も自分の業務に合わせられる"
+
+  - level: 2
+    id: "requirements"
+    title: "準備するもの"
+    content:
+      - "iPhone"
+      - "Appleショートカット"
+      - "Claude"
+      - "Googleカレンダー"
+      - "必要に応じてNotion / Google Drive"
+
+  - level: 2
+    id: "implementation"
+    title: "実際の作り方"
+
+    children:
+
+      - level: 3
+        title: "1. iPhoneで録音する"
+
+      - level: 3
+        title: "2. 録音データを文字起こしする"
+
+      - level: 3
+        title: "3. Googleカレンダーから今日の予定を取得する"
+
+      - level: 3
+        title: "4. Claudeへ文字起こしを送る"
+
+      - level: 3
+        title: "5. Claudeで議事録を作成する"
+
+      - level: 3
+        title: "6. NotionやGoogle Driveへ保存する"
+
+  - level: 2
+    id: "calendar"
+    title: "カレンダー連携もショートカットで"
+    key_message: >
+      カレンダーは議事録生成そのものには使わず、
+      会議タイトル選定の補助情報として利用する。
+    content:
+      - "開始時間の厳密な判定はやめた"
+      - "今日の予定をすべて取得する"
+      - "Claudeに候補として渡す"
+      - "シンプルな方が運用しやすかった"
+
+  - level: 2
+    id: "prompt"
+    title: "Claudeに渡している議事録プロンプト"
+    content:
+      - "会議タイトル"
+      - "概要"
+      - "決定事項"
+      - "主な議論"
+      - "TODO"
+      - "次回までの確認事項"
+      - "事実を推測しないルール"
+    format: "コードブロック"
+
+  - level: 2
+    id: "notion-drive"
+    title: "議事録はNotionやGoogle Driveへ保存できる"
+    purpose: "保存先の拡張性を簡潔に紹介"
+    content:
+      - "現在はNotionのプライベートページへ保存"
+      - "Google Driveを保存先にする構成も可能"
+      - "会社の運用に合わせて変更できる"
+    max_length: "短め"
+
+  - level: 2
+    id: "troubleshooting"
+    title: "一番詰まったのはショートカットの使い方"
+    content:
+      - "オーディオ変数の渡し方が分かりにくい"
+      - "カレンダー予定検索のUIが分かりにくい"
+      - "If文の設定が直感的ではない"
+      - "作成後の普段の利用自体は簡単"
+
+    key_message: >
+      難しいのはAIやシステム設計ではなく、
+      AppleショートカットのUIに慣れる部分だった。
+
+  - level: 2
+    id: "daily-operation"
+    title: "一度作れば、普段はアイコンを押すだけ"
+    content:
+      - "ホーム画面にショートカットを追加"
+      - "会議開始時にタップ"
+      - "録音終了"
+      - "Claude処理"
+      - "議事録保存"
+    key_message: >
+      初回構築には設定が必要だが、
+      日々の操作は一般的な議事録アプリと同程度まで簡略化できる。
+
+  - level: 2
+    id: "pros-cons"
+    title: "この構成のメリットと注意点"
+
+    merits:
+      - "追加の議事録専用サービス不要"
+      - "iPhoneからすぐ使える"
+      - "Claudeで議事録形式を自由に変更できる"
+      - "Notion / Google Driveへ保存できる"
+
+    cautions:
+      - "Claudeの利用上限"
+      - "最初のショートカット作成に少し時間がかかる"
+      - "iOSアップデートでUIが変わる可能性がある"
+
+    explicitly_exclude:
+      - "録音品質によって精度が左右される"
+      - "完全自動ではない"
+
+  - level: 2
+    id: "comparison"
+    title: "専用のAI議事録サービスとの使い分け"
+    content:
+      - "Nottaなどの専用サービスには専用サービスのメリットがある"
+      - "導入設定をせずすぐ利用したい場合は専用サービスが便利"
+      - "既にClaudeを使っていて、自社向けにカスタマイズしたい場合は今回の構成が向く"
+    prohibited:
+      - "価格批判"
+      - "精度批判"
+      - "機能不足の指摘"
+      - "優劣ランキング"
+
+  - level: 2
+    id: "conclusion"
+    title: "まとめ"
+    key_message: >
+      AI活用では新しいサービスを増やすことだけが解決策ではない。
+      すでに使っているツール同士をつなぐだけでも、
+      業務はかなり自動化できる。
+
+
+# ============================================================
+# 画像
+# ============================================================
+
+images:
+
+  common:
+    format: "webp"
+    quality: 85
+    style:
+      - "白背景"
+      - "CloudNatureの青・緑"
+      - "モダン"
+      - "フラットイラスト"
+      - "AI感を出しすぎない"
+    logo:
+      rule: >
+        メインビジュアルにはCloudNatureロゴを右上に配置する。
+        記事内の小見出し画像には必須ではない。
+
+  assets:
+
+    - id: "hero"
+      filename: "01-main-visual.webp"
+      type: "thumbnail"
+      headline: "議事録AI、毎月払う必要ある？"
+      subheadline: "iPhoneとClaudeで自動化"
+      lower_flow:
+        - "録音"
+        - "議事録作成"
+        - "Notion / Google Drive 保存"
+      requirements:
+        - "右上にCloudNatureロゴ"
+        - "人物＋iPhone＋PC"
+        - "録音→Claude→議事録の流れを強調"
+        - "Notion / Google Driveは保存先として小さく表示"
+      do_not_include:
+        - "価値の中心は議事録作成"
+        - "保存先は二次的な選択肢"
+
+    - id: "workflow"
+      filename: "02-workflow.webp"
+      type: "diagram"
+      headline: "全体構成｜iPhoneショートカット×Claude"
+      steps:
+        - "ホーム画面から起動"
+        - "録音"
+        - "文字起こし"
+        - "今日の予定を参照"
+        - "Claudeで議事録作成"
+        - "自動保存"
+
+    - id: "paid-service-hook"
+      filename: "03-no-extra-service.webp"
+      type: "message"
+      headline: "議事録AI、専用アプリじゃなくていい"
+      purpose: "導入直後"
+
+    - id: "calendar"
+      filename: "04-calendar-shortcut.webp"
+      type: "message"
+      headline: "カレンダー連携も、ショートカットで"
+
+    - id: "shortcut"
+      filename: "05-shortcut-ui.webp"
+      type: "message"
+      headline: "詰まるのは、ショートカットの使い方"
+
+    - id: "pros-cons"
+      filename: "06-pros-cons.webp"
+      type: "diagram"
+      headline: "この構成のメリットと注意点"
+      merits:
+        - "追加の議事録サービス不要"
+        - "iPhoneからすぐ使える"
+        - "Claudeで自由に整形できる"
+        - "Notion / Google Driveへ保存できる"
+      cautions:
+        - "Claudeの利用上限に注意"
+        - "初回設定に少し時間がかかる"
+        - "iOS更新で画面が変わることがある"
+
+
+# ============================================================
+# 実装スクリーンショット
+# ============================================================
+
+screenshots:
+
+  - id: "shortcut-recording"
+    description: "オーディオを録音→文字起こし"
+
+  - id: "shortcut-calendar"
+    description: "今日のカレンダー予定検索"
+
+  - id: "shortcut-if"
+    description: "カレンダー予定あり/なしのIf文"
+
+  - id: "shortcut-claude"
+    description: "Claudeへ送信するアクション"
+
+  - id: "notion-result"
+    description: "Notionへ保存された実際の議事録"
+
+  - id: "home-icon"
+    description: "ホーム画面に追加した打合せ録音アイコン"
+
+  - rules:
+    - "ユーザー名・会社名・顧客情報は必要に応じてぼかす"
+    - "個人情報を公開しない"
+    - "スクショは実際の操作説明の直後に配置"
+
+
+# ============================================================
+# Claude Code執筆指示
+# ============================================================
+
+writer_instructions:
+
+  first_person:
+    enabled: true
+    examples:
+      - "私も以前はGensparkの議事録AIを使っていました"
+      - "実際に今回、自分の業務用に作ってみました"
+      - "最も詰まったのはiPhoneのショートカットの構築でした"
+
+  must_do:
+    - "記事冒頭に強い問題提起を入れる"
+    - "専用議事録サービスを否定しない"
+    - "完成形を早い段階で見せる"
+    - "実際に構築したスクリーンショットを多く使う"
+    - "初回設定と日常利用を明確に分ける"
+    - "無料という言葉には条件を付ける"
+
+  free_wording:
+    recommended:
+      - "無料から始められる"
+      - "追加の議事録専用サービスなし"
+      - "すでにClaudeを利用しているなら追加契約なしで構築できる"
+    avoid:
+      - "完全無料"
+      - "永久無料"
+      - "無料で無制限"
+
+  competitor_wording:
+    example: >
+      NottaやProudNote、tl;dvなど、
+      AI議事録に特化した便利なサービスもあります。
+      一方で、すでにClaudeを日常的に使っているなら、
+      既存環境を組み合わせて自分用の議事録ワークフローを
+      作るという選択肢もあります。
+
+  final_cta: >
+    今回のように、既存のAIツールや業務ツールをつなぐだけでも
+    多くの業務は自動化できます。
+    自社の業務に合わせたAI活用・業務自動化をご検討の場合は、
+    クラウドネイチャーまでご相談ください。
+
+
+# ============================================================
+# 公開前チェック
+# ============================================================
+
+publish_checklist:
+
+  - "Nottaのサービス名・公式URL確認"
+  - "ProudNoteの正式表記確認"
+  - "tl;dvの正式表記確認"
+  - "Gensparkの議事録機能の現行状況確認"
+  - "Claude iOSショートカット仕様確認"
+  - "Notion連携仕様確認"
+  - "Google Drive保存の説明が実装と一致しているか確認"
+  - "『無料』の表現が誤解を生まないか確認"
+  - "競合サービスを否定する表現がないか確認"
+  - "顧客情報がスクリーンショットに残っていないか確認"
+  - "H1とtitleがAhrefs調査結果と整合しているか確認"
