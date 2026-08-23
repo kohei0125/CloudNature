@@ -65,16 +65,7 @@ export const VALUES: ValueProp[] = [
 export const SERVICES_SECTION = {
   eyebrow: "SERVICE",
   title: "サービス内容",
-  cta: "すべてのサービスを見る",
-  // 見出し直下のリード文。トップ唯一の散文であり、ここに /services/system-dev への
-  // 文脈内リンクを置く（アンカーテキストに「新潟のシステム開発」を含める）。
-  // カードのリンクはカード全体が <a> のため、アンカーテキストを制御できない。
-  lead: {
-    before: "受発注・在庫・勤怠などの業務システムから、判断を伴う仕事を任せるAIエージェントまで、現場に合わせて開発します。",
-    linkLabel: "新潟のシステム開発",
-    linkHref: "/services/system-dev",
-    after: "の対応領域と進め方は、サービス詳細ページでご案内しています。"
-  }
+  cta: "すべてのサービスを見る"
 };
 
 // 表示順は content/common.ts の SERVICE_ORDER が正（サービス詳細ページと機械的に一致させる）

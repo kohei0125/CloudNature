@@ -115,12 +115,12 @@ export const SERVICE_DETAILS: ServiceDetail[] = [
  * ここでは「システム開発会社」「対応領域」「保守」寄りの語で構成し、
  * 費用そのものの訴求は CTA からの送客に寄せる。
  *
- * SERVICE_DETAILS[dev].title（=「システム開発」）はナビ・JSON-LD の name・関連リンクで
- * 共有されているため変更せず、このページの H1 だけを別に持つ。
+ * H1 は他のサービス詳細ページ（/services/ai-agent・/services/ai-support）と同じく
+ * サービス名そのもの（=「システム開発」）を出す。地域名を含む語は title / description が担当する。
  */
 export const SYSTEM_DEV_HERO = {
   eyebrow: "System Development",
-  title: "新潟のシステム開発会社",
+  title: "システム開発",
   description: "新潟市中央区を拠点に、受発注管理・在庫管理・勤怠管理といった業務システムを、要件整理から設計・実装・運用まで一貫して開発します。既存の環境を活かし、業務への影響を抑えながら、必要な部分から段階的に仕組み化していきます。",
   cta: { label: "無料でAI見積もり", href: ESTIMATE_URL },
 };
