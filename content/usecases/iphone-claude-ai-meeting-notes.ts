@@ -43,11 +43,14 @@ export const article: UseCaseArticle = {
      width="520" height="481" loading="lazy" />
 <figcaption>ホーム画面に置いた「打合せ録音」アイコン。日々の入口はこれだけです</figcaption>
 </figure>
+<section class="flow">
+<p>使うときの流れ</p>
 <ol>
-<li><strong>ホーム画面の「打合せ録音」アイコンをタップする</strong><br />ショートカットが起動して、その場で録音が始まる</li>
-<li><strong>会議が終わったら録音を止める</strong><br />停止した時点で、あとの処理は自動で進む</li>
-<li><strong>できあがった議事録を確認する</strong><br />会議タイトル、決定事項、TODOまで整形された状態で届く</li>
+<li><strong>アイコンをタップ</strong><span>ショートカットが起動して、その場で録音が始まる</span></li>
+<li><strong>録音を止める</strong><span>停止した時点で、あとの処理は自動で進む</span></li>
+<li><strong>議事録を受け取る</strong><span>会議タイトル、決定事項、TODOまで整形された状態で届く</span></li>
 </ol>
+</section>
 
 <h3>なぜ専用アプリではなく、自分で作ったのか</h3>
 <p>いちばん大きかった理由は、正直なところ費用です。すでにClaudeを使っていて、そこに文字起こしを貼れば議事録はできていました。それなのに議事録のためだけにもう1つ契約を増やして払い続けるのが、どうにももったいなく感じたんです。</p>
@@ -92,6 +95,33 @@ export const article: UseCaseArticle = {
 <li><strong>カレンダー※なくても良い</strong><br />Googleカレンダーを使っている場合は、iPhone標準のカレンダーと同期しておく</li>
 <li><strong>保存先</strong><br />NotionやGoogle Driveなど。まずはiPhoneの「メモ」から始めても構わない</li>
 </ul>
+
+<h3>作り方に入る前に｜完成形はこの並び</h3>
+<p>ここから3つのパートに分けて作っていきます。先に完成形を見ておくと、いま何を作っているのかを見失いません。</p>
+<section class="stack">
+<p>ショートカットの中身（上から順に実行される）</p>
+<ol>
+<li><strong><a href="#record">作り方1｜録音して、その場で文字起こしする</a></strong>
+<ul>
+<li>オーディオを録音<span>会議の音声をその場で録る</span></li>
+<li>テキストに文字起こし<span>入力＝「録音されたオーディオ」</span></li>
+</ul>
+</li>
+<li><strong><a href="#calendar">作り方2｜カレンダーから会議タイトルを決める</a></strong>
+<ul>
+<li>カレンダーの予定を検索<span>開始日が今日／新しい順に3件</span></li>
+<li>If（予定が任意の値の場合）<span>予定があればタイトルを取得、なければ手入力</span></li>
+<li>変数「打ち合わせ名」に設定<span>どちらの経路でも同じ変数に入れる</span></li>
+</ul>
+</li>
+<li><strong><a href="#prompt">作り方3｜Claudeへ渡すプロンプトと、議事録の保存先</a></strong>
+<ul>
+<li>Ask Claude<span>入力＝文字起こし＋打ち合わせ名</span></li>
+<li>メモに追加／Notion／Google Drive<span>入力＝「Claudeの返答」</span></li>
+</ul>
+</li>
+</ol>
+</section>
 
 <h2 id="record">作り方1｜録音して、その場で文字起こしする</h2>
 <p>ここが土台になります。アクションは2つだけです。</p>
@@ -159,10 +189,14 @@ export const article: UseCaseArticle = {
 <figcaption>どちらの経路を通っても、最後は同じ変数「打ち合わせ名」に入ります</figcaption>
 </figure>
 <p>分岐の中身はどちらもシンプルです。</p>
+<section class="branch">
+<p>If｜カレンダーの予定が任意の値の場合</p>
 <ul>
-<li><strong>予定がある場合</strong><br />カレンダーの予定から「タイトル」を取得し、変数「打ち合わせ名」に設定する</li>
-<li><strong>予定がない場合</strong><br />「打ち合わせ名を入力してください」でテキストを要求し、同じ変数「打ち合わせ名」に設定する</li>
+<li><strong>予定がある場合</strong><span>カレンダーの予定から「タイトル」を取得する</span></li>
+<li><strong>予定がない場合</strong><span>「打ち合わせ名を入力してください」でテキストを要求する</span></li>
 </ul>
+<p>変数「打ち合わせ名」に設定する</p>
+</section>
 <p>大事なのは、どちらの経路を通っても<strong>最後は同じ変数名に入れる</strong>ことです。こうしておくと、この先のClaudeへ渡す部分は分岐を意識せずに書けます。</p>
 <p>なお、予定がある場合の「タイトルを取得」は、3件の予定に対してタイトルを3つ返します。変数「打ち合わせ名」には候補が並んだ状態で入る、という前提でこのあとのプロンプトを書きます。</p>
 

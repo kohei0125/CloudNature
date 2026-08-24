@@ -1,5 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
+import TableScrollHints from "./TableScrollHints";
+
 const PROSE_BASE = "prose prose-sm md:prose-lg max-w-none";
 // 見出しの前後は大きく空ける。セクションの切れ目が一目で分かるほうが、
 // 読み手が「どこまで読んだか」を見失いにくく、認知的負荷が下がる。
@@ -37,15 +39,24 @@ interface NewsBodyProps {
 }
 
 /**
- * 表を横スクロール可能なラッパーで囲む。
+ * 表を横スクロール可能なラッパーで囲み、その下にスライドできることを伝える一文を置く。
  * スマホ幅では列が潰れて「最大1／億円」のように金額が途中で折り返されるため、
  * 最小幅（globals.css の .table-scroll）を確保したうえでスクロールさせる。
  * sanitize は div の class を許可していないので、サニタイズ後に付与する。
+ *
+ * ヒントは常に出力しておき、実際にはみ出しているかの判定は TableScrollHints が
+ * data-scrollable として付ける（表示の既定値は globals.css 側）。
  */
+const TABLE_SCROLL_HINT =
+  '<p class="table-scroll-hint" aria-hidden="true">横にスライドできます</p>';
+
 const wrapTables = (html: string) =>
   html
-    .replace(/<table(\s[^>]*)?>/g, (tag) => `<div class="table-scroll">${tag}`)
-    .replace(/<\/table>/g, "</table></div>");
+    .replace(
+      /<table(\s[^>]*)?>/g,
+      (tag) => `<div class="table-scroll-wrap"><div class="table-scroll">${tag}`,
+    )
+    .replace(/<\/table>/g, `</table></div>${TABLE_SCROLL_HINT}</div>`);
 
 const NewsBody = ({ html }: NewsBodyProps) => {
   if (!html) return null;
@@ -53,10 +64,12 @@ const NewsBody = ({ html }: NewsBodyProps) => {
   const clean = wrapTables(sanitizeHtml(html, SANITIZE_OPTIONS));
 
   return (
-    <div
-      className={PROSE_CLASSES}
-      dangerouslySetInnerHTML={{ __html: clean }}
-    />
+    <TableScrollHints>
+      <div
+        className={PROSE_CLASSES}
+        dangerouslySetInnerHTML={{ __html: clean }}
+      />
+    </TableScrollHints>
   );
 };
 

@@ -164,17 +164,17 @@ export const article: UseCaseArticle = {
 <figcaption>補助金を選ぶ前に「何を自動化するか」を決めることが成功の鍵</figcaption>
 </figure>
 <p>まず、国の導入型補助金を使う場合の一般的な流れです（必要な手続きは制度ごとに異なります）。</p>
-<table>
-<thead><tr><th>STEP</th><th>やること</th><th>目安期間</th></tr></thead>
-<tbody>
-<tr><td>1</td><td>GビズIDプライムを取得する（電子申請の制度で必須）</td><td>オンライン申請は最短即日／郵送は最大1か月</td></tr>
-<tr><td>2</td><td>自社の課題と「最初に自動化する1業務」を決める</td><td>1〜2週間</td></tr>
-<tr><td>3</td><td>どの補助金が合うか、公募要領で対象要件を確認する</td><td>—</td></tr>
-<tr><td>4</td><td>制度に応じてIT導入支援事業者や認定支援機関を選ぶ</td><td>1〜2週間</td></tr>
-<tr><td>5</td><td>申請書類を作成・提出する</td><td>2〜4週間</td></tr>
-<tr><td>6</td><td>交付決定後、導入を開始する</td><td>—</td></tr>
-</tbody>
-</table>
+<section class="stack">
+<p>国の導入型補助金を使う場合の流れ</p>
+<ol>
+<li><strong>STEP 1｜GビズIDプライムを取得する</strong><span>電子申請の制度で必須。オンライン申請は最短即日、郵送は最大1か月</span></li>
+<li><strong>STEP 2｜自社の課題と「最初に自動化する1業務」を決める</strong><span>目安1〜2週間</span></li>
+<li><strong>STEP 3｜どの補助金が合うか、公募要領で対象要件を確認する</strong><span>対象経費も申請要件も制度ごとに違う</span></li>
+<li><strong>STEP 4｜制度に応じてIT導入支援事業者や認定支援機関を選ぶ</strong><span>目安1〜2週間</span></li>
+<li><strong>STEP 5｜申請書類を作成・提出する</strong><span>目安2〜4週間</span></li>
+<li><strong>STEP 6｜交付決定後、導入を開始する</strong><span>多くの制度で、交付決定前に契約・発注した経費は補助対象外になる</span></li>
+</ol>
+</section>
 <p><strong>最も大事なのはSTEP 2です。</strong>補助金を調べる前に「何を自動化するか」を決めること。ここが曖昧なまま申請しても、採択されにくく、導入後も成果が出ません。</p>
 <ul>
 <li>具体的な進め方 → <a href="/usecases/business-automation-small-start">業務自動化の始め方ガイド</a></li>
