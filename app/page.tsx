@@ -8,7 +8,6 @@ import HeroSection from "@/components/home/HeroSection";
 import NewsSection from "@/components/home/NewsSection";
 import ServicesSection from "@/components/home/ServicesSection";
 import WaveSeparator from "@/components/shared/WaveSeparator";
-import CasesSection from "@/components/home/CasesSection";
 import CasesCarouselSection from "@/components/home/CasesCarouselSection";
 import { USECASES_CARDS } from "@/content/usecases";
 import CtaSection from "@/components/home/CtaSection";
@@ -53,9 +52,11 @@ const Home = async () => {
       <HeroSection />
       <NewsSection items={newsItems} />
       <ServicesSection />
-      <WaveSeparator position="bottom" color="#F6FAFA" bgColor="#0e483e" withTexture={false} />
-      <CasesSection />
-      <WaveSeparator position="top" color="#ffffff" bgColor="#0e483e" withTexture={false} />
+      {/*
+        CasesSection は 2026-08-27 より非表示（実名顧客事例が揃った時点で復活）。
+        コンポーネントとデータは意図的に残置。docs/20260827_cases_page_restructure_review.md
+      */}
+      <WaveSeparator position="bottom" color="#F6FAFA" bgColor="#ffffff" withTexture={false} />
       <CasesCarouselSection cards={USECASES_CARDS} />
       <CtaSection />
     </div>

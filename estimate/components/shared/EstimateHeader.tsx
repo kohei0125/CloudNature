@@ -74,7 +74,7 @@ export default function EstimateHeader() {
             rel="noopener noreferrer"
             className="transition-colors hover:text-sunset"
           >
-            導入事例
+            開発実績
           </a>
           <a
             href="https://cloudnature.jp/contact"

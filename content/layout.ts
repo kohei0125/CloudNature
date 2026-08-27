@@ -20,7 +20,7 @@ export const FOOTER_COPY = {
   ],
   companyLinks: [
     { label: "企業情報", path: "/company" },
-    { label: "導入事例", path: "/cases" },
+    { label: "開発実績", path: "/cases" },
     { label: "AIガイド", path: "/usecases" },
     { label: "お知らせ", path: "/news" },
   ],

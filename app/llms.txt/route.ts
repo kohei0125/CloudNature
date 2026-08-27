@@ -1,8 +1,10 @@
+import { CASES_HERO, CASE_STUDY_DETAILS } from "@/content/cases";
+import { ESTIMATE_URL } from "@/content/common";
 import { USECASES_ARTICLES } from "@/content/usecases";
 import { CANONICAL_SITE_URL } from "@/lib/site";
 
 // llms.txt: AI クローラ・AI 検索向けのサイト概要（AIEO）
-// 記事一覧は sitemap.ts と同じく USECASES_ARTICLES から生成し、記事追加に自動追従させる
+// 記事一覧・実績一覧は sitemap.ts と同じく content/ の定義から生成し、追加・改稿に自動追従させる
 
 export const dynamic = "force-static";
 
@@ -10,6 +12,10 @@ export function GET() {
   const articleLines = USECASES_ARTICLES.map(
     (article) =>
       `- [${article.title}](${CANONICAL_SITE_URL}/usecases/${article.id}): ${article.excerpt}`
+  ).join("\n");
+
+  const caseLines = CASE_STUDY_DETAILS.map(
+    (study) => `- ${study.title}: ${study.results[0]}`
   ).join("\n");
 
   const body = `# 株式会社クラウドネイチャー
@@ -28,12 +34,12 @@ export function GET() {
 - [AIエージェント開発](${CANONICAL_SITE_URL}/services/ai-agent): 社内ナレッジAI、問い合わせ自動応答、SaaS連携自動化
 - [システム開発](${CANONICAL_SITE_URL}/services/system-dev): 既存システム連携、業務Webアプリ開発、業務効率化システム開発
 
-## 導入事例
+## ${CASES_HERO.title}
 
-- [導入事例一覧](${CANONICAL_SITE_URL}/cases): 実績と成果の一覧ページ
-- AI見積もりシステムの自社開発: 見積もり作成にかかる自社の工数を1件あたり約1時間から90%以上削減
-- AI学習管理システム: 研修管理工数を削減し、学習定着を支援
-- コンテンツマーケティングの自律的運営: 執筆・投稿工数を80%削減し、公開頻度を向上
+以下はすべて自社の業務課題のために当社が自社開発したシステムです（顧客導入事例ではありません）。AI見積もりシステムは稼働中のものを ${ESTIMATE_URL} で公開しています。
+
+- [${CASES_HERO.title}](${CANONICAL_SITE_URL}/cases): 当社が自社開発したAI・システムの実績一覧
+${caseLines}
 
 ## AIガイド
 
@@ -51,9 +57,9 @@ ${articleLines}
 
 ## ページ一覧
 
-- [トップページ](${CANONICAL_SITE_URL}/): AI導入支援の概要、導入事例、FAQ、CTA
+- [トップページ](${CANONICAL_SITE_URL}/): AI導入支援の概要、サービス、AIガイド、FAQ、CTA
 - [サービス一覧](${CANONICAL_SITE_URL}/services): サービス全体の整理、導入フロー、FAQ
-- [導入事例](${CANONICAL_SITE_URL}/cases): 実績と成果の一覧
+- [${CASES_HERO.title}](${CANONICAL_SITE_URL}/cases): 当社が自社開発したAI・システムの実績一覧
 - [AIガイド](${CANONICAL_SITE_URL}/usecases): AI導入・業務自動化のガイド記事一覧
 - [お知らせ](${CANONICAL_SITE_URL}/news): 最新情報、事例紹介、技術ブログ
 - [企業情報](${CANONICAL_SITE_URL}/company): 会社概要、代表メッセージ、アクセス

@@ -101,18 +101,20 @@ export const SERVICES: ServiceItem[] = [
   }
 ].sort(byServiceOrder);
 
+// CASES_SECTION / CASE_STUDIES は TOP では未描画（休眠中）。復活させる前に、
+// 記載内容が当時の実態と一致するか必ず再確認すること。app/page.tsx のコメント参照。
 export const CASES_SECTION = {
-  eyebrow: "CASE STUDY",
-  titleLine1: "導入事例",
-  description: "さまざまな業種・業務での導入実績と、\n具体的な成果をご紹介します。",
-  cta: "事例を見る",
+  eyebrow: "OUR WORK",
+  titleLine1: "開発・AI活用実績",
+  description: "自社の業務課題のために\n自分たちで開発したAIをご紹介します。",
+  cta: "実績を見る",
 };
 
 export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "ai-estimate",
-    title: "AI見積もりシステムの自動連携",
-    category: "製造業",
+    title: "AI見積もりシステム",
+    category: "自社開発",
     before: "",
     after: "AIが見積もり作業を代替することで、要件確認から概算提示までのリードタイムを大幅に短縮します。",
     link: { label: "AI見積もりを試す", href: "https://ai.cloudnature.jp/" },
@@ -121,20 +123,11 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "ai-lms",
     title: "AI学習管理システム",
-    category: "サービス業",
+    category: "自社開発",
     before: "",
-    after: "研修の属人化を解消し、学習成果の可視化と管理工数も大幅に削減。",
-    link: { label: "事例を見る", href: "/cases" },
+    after: "動画視聴と演習をワンストップ化し、AIが弱点を判定して復習コースを自動提案。",
+    link: { label: "実績を見る", href: "/cases" },
     image: "/images/top_lms_banner.jpg"
-  },
-  {
-    id: "marketing-automation",
-    title: "AIによるコンテンツ・デザイン提案の自動化",
-    category: "小売業",
-    before: "",
-    after: "コンテンツ制作を自動化し、CTRを改善。投稿内容やデザインのパターンも分析",
-    link: { label: "事例を見る", href: "/cases" },
-    image: "/images/marketing.jpg"
   }
 ];
 
@@ -169,15 +162,6 @@ export const NEWS_ITEMS: NewsItem[] = [
     title: "AI見積もりシステムをリリースしました",
     excerpt: "チャット形式で要件を伝えるだけで、AIが最適なシステム構成と概算費用を自動算出するサービスを公開しました。",
     url: "/news/ai-estimate-release",
-    image: "/images/og-img.jpg"
-  },
-  {
-    id: "case-marketing-automation",
-    publishedAt: "2026-02-01",
-    category: "事例紹介",
-    title: "コンテンツマーケティング自動化の導入事例を公開",
-    excerpt: "AIと自動化ツールを活用し、記事執筆工数を80%削減した事例をご紹介します。",
-    url: "/news/case-marketing-automation",
     image: "/images/og-img.jpg"
   },
   {

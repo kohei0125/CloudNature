@@ -9,6 +9,14 @@ interface CaseStudyDetailCardProps {
   index: number;
 }
 
+// ラベル + 本文の組はカード内で3回使うため、体裁の変更が1箇所で済むようまとめる
+const LabeledText = ({ label, text, className }: { label: string; text: string; className?: string }) => (
+  <div className={className}>
+    <p className="text-xs font-bold text-forest uppercase tracking-wider mb-1">{label}</p>
+    <p className="text-sm text-gray-600 leading-relaxed">{text}</p>
+  </div>
+);
+
 const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
   const isEven = index % 2 === 0;
 
@@ -47,14 +55,8 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
         <p className="text-sm text-gray-500 mb-6">{study.client}</p>
 
         <div className="space-y-4 mb-6">
-          <div>
-            <p className="text-xs font-bold text-forest uppercase tracking-wider mb-1">CHALLENGE</p>
-            <p className="text-sm text-gray-600 leading-relaxed">{study.challenge}</p>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-forest uppercase tracking-wider mb-1">SOLUTION</p>
-            <p className="text-sm text-gray-600 leading-relaxed">{study.solution}</p>
-          </div>
+          <LabeledText label="CHALLENGE" text={study.challenge} />
+          <LabeledText label="SOLUTION" text={study.solution} />
         </div>
 
         <ul className="space-y-2 mb-6">
@@ -65,6 +67,10 @@ const CaseStudyDetailCard = ({ study, index }: CaseStudyDetailCardProps) => {
             </li>
           ))}
         </ul>
+
+        {study.status ? (
+          <LabeledText label="NOW" text={study.status} className="mb-6 rounded-r-xl border-l-4 border-teal-800 bg-white px-4 py-3" />
+        ) : null}
 
         {study.link ? (
           <Link

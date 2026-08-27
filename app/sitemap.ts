@@ -8,12 +8,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const latestUsecaseDate = getArticleDate(USECASES_ARTICLES[0]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: "2026-02-27", changeFrequency: "weekly", priority: 1.0 },
+    { url: BASE_URL, lastModified: "2026-08-27", changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/services`, lastModified: "2026-08-12", changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/services/ai-support`, lastModified: "2026-03-29", changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE_URL}/services/ai-agent`, lastModified: "2026-03-29", changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE_URL}/services/system-dev`, lastModified: "2026-08-12", changeFrequency: "monthly", priority: 0.85 },
-    { url: `${BASE_URL}/cases`, lastModified: "2026-02-27", changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE_URL}/cases`, lastModified: "2026-08-27", changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE_URL}/company`, lastModified: "2026-02-06", changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/contact`, lastModified: "2026-02-06", changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE_URL}/news`, lastModified: "2026-02-27", changeFrequency: "weekly", priority: 0.8 },

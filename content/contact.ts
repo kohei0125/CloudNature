@@ -18,7 +18,7 @@ export const CONTACT_FORM_LABELS: ContactFormLabels = {
   required: "必須",
   successTitle: "お問い合わせを受け付けました",
   successMessage: "担当者より2営業日以内にメールでご連絡いたします。",
-  successCta: "導入事例を見る",
+  successCta: "開発実績を見る",
   estimateCta: "今すぐAI見積もりを試す"
 };
 

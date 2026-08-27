@@ -11,9 +11,9 @@ export function getRelatedLinksForService(serviceId: string): RelatedLinkItem[] 
   );
   if (relatedCases.length > 0) {
     links.push({
-      label: "関連する導入事例を見る",
+      label: "関連する開発実績を見る",
       href: "/cases",
-      description: `${relatedCases.length}件の関連事例`
+      description: `${relatedCases.length}件の関連実績`
     });
   }
 

@@ -345,7 +345,7 @@ export const LP_COPY = {
     ],
     companyLinks: [
       { label: "企業情報", path: "https://cloudnature.jp/company" },
-      { label: "導入事例", path: "https://cloudnature.jp/cases" },
+      { label: "開発実績", path: "https://cloudnature.jp/cases" },
       { label: "利用規約", path: "https://cloudnature.jp/terms" },
       { label: "プライバシーポリシー", path: "https://cloudnature.jp/privacy" },
       {
