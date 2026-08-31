@@ -696,27 +696,86 @@ body:has([data-hero-section]) [data-site-header] {
 }
 
 /* === Article Section Heading (.prose h2) ===
- * セクションの切れ目を、目次（nav.toc）と同じ罫線の語彙で示す。
- * カード・角丸・背景色・左のアクセントバーは使わない。
+ * セクションの切れ目を「四角 + 下線」で示す。カード・角丸・背景色は使わない。
+ * 四角と見出し文字はテーマ色の teal-800、下線は本文幅いっぱいに引く。
  *
- *   ━━━━━━━━━━━━━━━━━━━━━━━━━━━  (forest 2px)
- *   見出しテキスト
- *   ───────────────────────────  (hairline)
+ *   ■  見出しテキスト
+ *   ───────────────────────────
  *
  * 上の余白は NewsBody.tsx の prose-h2:mt-14 / md:mt-20 が持つ。
- * ここでは罫線と、罫線に対する内側の間隔だけを足す。
+ * ここでは四角・下線と、下線に対する内側の間隔だけを足す。
+ *
+ * padding-left と同じ幅の負の text-indent でぶら下げインデントにしている。
+ * 見出しが2行に折り返しても、2行目が四角の真下ではなく1行目の文字に揃う。
+ * flex / grid では見出し内の <strong> や <a> がそれぞれ別のアイテムになり、
+ * 折り返さずに横並びになってしまうため使わないこと。
  */
 .prose h2 {
-  padding-top: 0.875rem;
-  padding-bottom: 0.625rem;
-  border-top: 2px solid #19231B;
-  border-bottom: 1px solid rgba(25, 35, 27, 0.14);
+  padding-top: 0;
+  padding-bottom: 0.5rem;
+  padding-left: 1.15em;
+  text-indent: -1.15em;
+  border-top: 0;
+  border-bottom: 2px solid rgba(5, 84, 72, 0.9);
+  color: #055448;
+}
+
+/* 四角は空の inline-block。ベースラインが下辺になるので、文字のベースラインに乗る */
+.prose h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  margin-right: 0.53em;
+  text-indent: 0;
+  background: currentColor;
 }
 
 @media (max-width: 640px) {
   .prose h2 {
-    padding-top: 0.75rem;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.4375rem;
+  }
+}
+
+/* === Article Sub Heading (.prose > h3) ===
+ * h3 にも下線を引く。ただし h2 との上下関係が潰れないよう、四角は付けず、
+ * 罫線は 1px・薄い teal にとどめる（h2 は ■ ＋ 2px の濃い罫）。
+ *
+ * 直下の h3 だけが対象。section.faq の h3 は「Q.01」の行として別の罫線を
+ * 持っているので巻き込まないこと。
+ */
+.prose > h3 {
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid rgba(5, 84, 72, 0.3);
+}
+
+/* === Article Body Rhythm (.prose > p) ===
+ * スマホでは段落が詰まって「文字の壁」になり、どこまで読んだかを見失いやすい。
+ * 段落の間隔を1行分以上まで広げて、意味のかたまりを目で拾えるようにする。
+ * （NewsBody.tsx の prose-p:my-3 / md:my-4 をここで上書きする）
+ *
+ * 対象は本文直下の段落だけ。目次・FAQ・図解の中の段落は、それぞれの規則が
+ * 自前の余白を持っているのでここでは触らない。
+ */
+.prose > p {
+  margin-top: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+
+/* 見出しと直後の段落は近づけたままにする。ここまで広げると、見出しが
+   どの段落に掛かっているのかが読み取れなくなるため。
+   実際の間隔は見出し側の margin-bottom（prose-h2:mb-5 / prose-h3:mb-3）と
+   相殺されて決まる。 */
+.prose > h2 + p,
+.prose > h3 + p,
+.prose > h4 + p {
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .prose > p {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }
 

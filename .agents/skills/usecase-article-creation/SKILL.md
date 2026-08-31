@@ -325,6 +325,22 @@ Google の品質評価基準に沿って次の要素を組み込む。
 テーブルは `NewsBody.tsx` が `.table-scroll-wrap > .table-scroll` で囲み、横に溢れる場合だけ
 「横にスライドできます」を出す（`components/news/TableScrollHints.tsx` が実測）。記事側の対応は不要。
 
+### 見出しの装飾（`app/globals.css` の `.prose h2`）
+
+`h2` は**四角（■）＋ 下線**でセクションの切れ目を示す。四角・見出し文字・下線とも
+テーマ色の teal-800（`#055448`）。カード・角丸・背景色は使わない。記事側の対応は不要。
+
+```
+■  セクション見出し｜副題
+────────────────────────────
+```
+
+四角は `.prose h2::before` の空の `inline-block`。折り返した 2 行目を四角の真下ではなく
+1 行目の文字に揃えるため、`padding-left` と同じ幅の負の `text-indent` でぶら下げている。
+
+**`h2` に `display: flex` / `grid` を使わないこと。** 見出しの中の `<strong>` や `<a>` が
+それぞれ別のアイテムになり、折り返さずに横並びになってしまう。
+
 ### `NewsBody.tsx` の prose 拡張（必要な場合）
 
 `components/news/NewsBody.tsx` の className に以下が含まれていることを確認。なければ追加：
@@ -341,6 +357,12 @@ prose-table:text-[13px] md:prose-table:text-sm prose-table:my-4
 prose-img:my-4 md:prose-img:my-6
 prose-li:my-1
 ```
+
+**段落の間隔は `prose-p:my-3` ではなく `app/globals.css` の `.prose > p` が決める**（スマホ
+1.75rem ＝ ちょうど 1 行分、md 以上 2rem）。段落が詰まって「文字の壁」になるのを避けるための
+上書きなので、間隔を変えたいときは `NewsBody.tsx` ではなく globals.css 側を触ること。
+見出しの直後の段落だけは `.prose > h2 + p` 等で近づけたままにしてある（見出しがどの段落に
+掛かっているかを読み取れなくなるため）。
 
 ## Phase 8: 画像準備
 
@@ -539,8 +561,8 @@ node .Codex/skills/usecase-article-creation/scripts/screenshot.cjs \
 4. **段落を 1 文ずつ分割しすぎて「ぶつ切り」に**
    → 1 段落 2〜4 文を基本とし、関連文をまとめる
 
-5. **NewsBody の prose スタイルがデフォルトで段落間隔が広すぎた**
-   → 本スキル Phase 7 の拡張クラスを適用
+5. **段落間隔を `NewsBody.tsx` の `prose-p:my-*` で調整しようとして効かなかった**
+   → 段落間隔は `app/globals.css` の `.prose > p` が上書きしている（Phase 7 を参照）
 
 6. **外部リンクが `rel="noopener"` だけだった**
    → `noopener noreferrer` に統一
