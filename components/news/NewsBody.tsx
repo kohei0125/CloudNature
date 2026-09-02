@@ -58,10 +58,29 @@ const wrapTables = (html: string) =>
     )
     .replace(/<\/table>/g, `</table></div>${TABLE_SCROLL_HINT}</div>`);
 
+/**
+ * 見出しの先頭に手で置かれた四角マーク（■ など）を落とす。
+ *
+ * 見出しの四角は app/globals.css の `.prose h2::before` が描くので、本文側にも
+ * 書かれていると「■ ■ 見出し」と二重になる。microCMS の既存記事には手打ちの ■ が
+ * 残っており、CMS 側を直しても書き手が再び付ける余地があるため、描画時に正規化する。
+ * （検出時点で該当は news/jci-2026aspac-realtime-translation の h2 5 件）
+ */
+const HEADING_SQUARE_MARKER = /^(?:\s|&nbsp;|　)*[■□◼◻◾◽▪▫⬛⬜]+(?:\s|&nbsp;|　)*/;
+
+const stripHeadingSquareMarkers = (html: string) =>
+  html.replace(
+    /(<h([1-6])\b[^>]*>)([\s\S]*?)(<\/h\2\s*>)/gi,
+    (whole, open: string, _level: string, inner: string, close: string) => {
+      const stripped = inner.replace(HEADING_SQUARE_MARKER, "");
+      return stripped === inner ? whole : `${open}${stripped}${close}`;
+    },
+  );
+
 const NewsBody = ({ html }: NewsBodyProps) => {
   if (!html) return null;
 
-  const clean = wrapTables(sanitizeHtml(html, SANITIZE_OPTIONS));
+  const clean = wrapTables(stripHeadingSquareMarkers(sanitizeHtml(html, SANITIZE_OPTIONS)));
 
   return (
     <TableScrollHints>

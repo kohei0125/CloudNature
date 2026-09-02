@@ -341,6 +341,11 @@ Google の品質評価基準に沿って次の要素を組み込む。
 **`h2` に `display: flex` / `grid` を使わないこと。** 見出しの中の `<strong>` や `<a>` が
 それぞれ別のアイテムになり、折り返さずに横並びになってしまう。
 
+**記事本文の見出しに ■ を手で書かないこと。** 四角は CSS が付けるので二重になる。
+過去に microCMS 側で手打ちされていたため、`components/news/NewsBody.tsx` の
+`stripHeadingSquareMarkers` が描画時に見出し先頭の四角マークを落とす保険を持っている
+（本文中の `<pre>` や段落の ■ は対象外）。
+
 ### `NewsBody.tsx` の prose 拡張（必要な場合）
 
 `components/news/NewsBody.tsx` の className に以下が含まれていることを確認。なければ追加：
