@@ -10,7 +10,7 @@ export const article: UseCaseArticle = {
   excerpt:
     "会議の録音から文字起こし、AI議事録の作成、Notionへの保存までをiPhoneのショートカットとClaudeでつないだ実例です。実際に組んだ画面のスクリーンショットとともに、録音・文字起こし・カレンダー連携・プロンプトの中身まで手順を公開します。追加の議事録専用サービスを契約せず、無料から試せる構成です。",
   body: `<p>以前はGensparkのAI議事録を使っていました。よくできていて、不満もありませんでした。</p>
-<p>ただGensparkを解約してClaudeをメインで使うようになってからはiPhoneのボイスメモ使用し、毎回録音のメモを開いて、文字起こしをコピーしてClaudeに貼り付けて議事録を作成していました。iPhoneのボイスメモでも精度に関しては十分でしたが、地味に手間がかかる。週に1,2回ならまだしも、1日何件も打ち合わせが続くと管理し切れなくなりました。 </p>
+<p>ただGensparkを解約してClaudeをメインで使うようになってからは、iPhoneのボイスメモで録音し、毎回そのメモを開いて文字起こしをコピーし、Claudeに貼り付けて議事録を作成していました。iPhoneのボイスメモでも精度に関しては十分でしたが、地味に手間がかかる。週に1,2回ならまだしも、1日何件も打ち合わせが続くと管理し切れなくなりました。</p>
 <p>この記事では、実際に組んだ画面のスクリーンショットとともに、録音から議事録の保存までをiPhoneのショートカットとClaudeでつなぐ手順を公開します。</p>
 
 <nav class="toc" aria-label="この記事の目次">
@@ -145,7 +145,7 @@ export const article: UseCaseArticle = {
 </figure>
 <p>並べただけでは動きません。文字起こしアクションの入力欄は、初期状態では「オーディオファイル」という汎用の枠になっています。</p>
 <p>ここを、直前の録音アクションの結果である<strong>「録音されたオーディオ」</strong>に差し替えます。入力欄を長押しして、変数として選び直すだけです。</p>
-<p>私が最初に挫折したのは、まさにここでした。原因が分からないまましばらく放置して、数日後に思い出したように開き直して、ようやく気づいた次第です。</p>
+<p>私が最初に挫折したのは、まさにここでした。原因が分からないまま、しばらく放置しました。数日後、思い出したように開き直して、ようやく気づいた次第です。</p>
 <p>画面上は一見それらしく並んでいるので、見た目では分かりません。2つのアクションの間に縦線が出れば、正しく渡せているサインです。</p>
 <p><small>※ ここがどうしても通らないときは、<a href="/contact">お問い合わせページ</a>からお気軽にご質問ください。</small></p>
 
@@ -252,7 +252,7 @@ export const article: UseCaseArticle = {
 <img src="/images/blog/iphone-claude-ai-meeting-notes/11-shortcut-ui.webp"
      alt="「詰まるのは、ショートカットの使い方」という見出しと、アクション検索・変数設定・If文の分岐といったショートカットアプリの編集画面の要素、そしてスマートフォンを手に考え込む人のイラスト"
      width="1600" height="600" loading="lazy" />
-<figcaption>難しいのはAIの設計ではなく、ショートカットアプリの操作に慣れる部分でした</figcaption>
+<figcaption>時間がかかったのは、ショートカットアプリの操作に慣れる部分でした</figcaption>
 </figure>
 <p>正直に書くと、時間がかかったのはプロンプトの調整でも構成の検討でもありません。ショートカットアプリの画面に慣れるまででした。</p>
 
@@ -398,6 +398,6 @@ export const article: UseCaseArticle = {
 <hr />
 <p><small><strong>監修</strong>：株式会社クラウドネイチャー（新潟市中央区上大川前通）／ AI開発・AI活用支援チーム<br />
 <strong>最終更新</strong>：2026年8月23日<br />
-本記事に掲載しているショートカットの画面は、2026年8月に筆者のiPhoneで実際に作成・運用しているものです。iOSおよび各アプリの更新により、アクション名や設定画面の表示は変わる場合があります。ClaudeのiOSアプリからショートカットを利用する方法と、利用上限に含まれる旨は<a href="https://support.claude.com/en/articles/10263469-use-claude-app-intents-shortcuts-and-widgets-on-ios" target="_blank" rel="noopener noreferrer">Anthropicヘルプセンター「Use Claude app intents, shortcuts, and widgets on iOS」</a>を参照しました。ショートカットアプリの基本操作は<a href="https://support.apple.com/ja-jp/guide/shortcuts/welcome/ios" target="_blank" rel="noopener noreferrer">Apple「ショートカットユーザガイド」</a>に記載があります。本文で挙げたNotta、PLAUD NOTE、tl;dv、Gensparkは、いずれもAI議事録・文字起こし領域で提供されている既存サービスの例として挙げたものであり、比較評価や優劣の判定を行うものではありません。各サービスの機能・料金は提供元の公式情報をご確認ください。</small></p>`,
+本記事に掲載しているショートカットの画面は、2026年8月に筆者のiPhoneで実際に作成・運用しているものです。iOSおよび各アプリの更新により、アクション名や設定画面の表示は変わる場合があります。ClaudeのiOSアプリからショートカットを利用する方法は<a href="https://support.claude.com/en/articles/10263469-use-claude-app-intents-shortcuts-and-widgets-on-ios" target="_blank" rel="noopener noreferrer">Anthropicヘルプセンター「Use Claude app intents, shortcuts, and widgets on iOS」</a>を参照しました。利用上限に含まれる旨も同ページの記載によります。ショートカットアプリの基本操作は<a href="https://support.apple.com/ja-jp/guide/shortcuts/welcome/ios" target="_blank" rel="noopener noreferrer">Apple「ショートカットユーザガイド」</a>に記載があります。本文で挙げたNotta、PLAUD NOTE、tl;dv、Gensparkは、いずれもAI議事録・文字起こし領域で提供されている既存サービスの例として挙げたものであり、比較評価や優劣の判定を行うものではありません。各サービスの機能・料金は提供元の公式情報をご確認ください。</small></p>`,
   image: "/images/blog/iphone-claude-ai-meeting-notes/thumbnail.webp",
 };
