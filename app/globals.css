@@ -502,6 +502,11 @@ body:has([data-hero-section]) [data-site-header] {
   line-height: 1.6;
   vertical-align: top;
   border-bottom: 1px solid rgba(25, 35, 27, 0.1);
+  /* 既定（line-break: auto）は長音符号「ー」等の行頭禁則が効かず、
+     狭い列で「アカデミー」が「アカデミ」＋「ー」のように「ー」だけ
+     次行に孤立する。strict にすると禁則が有効になり、これを防げる
+     （word-break/overflow-wrap では防げないことを実機検証済み）。 */
+  line-break: strict;
 }
 
 /* 列の区切り。行が長い表でも横方向に目線を追いやすくする */
@@ -514,6 +519,39 @@ body:has([data-hero-section]) [data-site-header] {
   background: #f5f7f4;
   border-bottom-color: rgba(25, 35, 27, 0.18);
   font-size: 0.95em;
+}
+
+/* 1列目（行の見出しにあたる列）は横スクロール中も固定し、
+   「どの行を見ているか」を見失わないようにする。
+   thead/tbody で背景色が異なるため、固定列側にも同じ背景を個別に持たせる。
+   nowrap は使わない：既存記事には1列目に長文ラベルを使う表もあり
+   （例: niigata-ai-subsidy-guide-2026.ts）、全列共通で nowrap にすると
+   そちらが1列でビューポートの大半を占めて逆に読みにくくなる。 */
+.prose .table-scroll th:first-child,
+.prose .table-scroll td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fff;
+}
+
+.prose .table-scroll thead th:first-child {
+  background: #f5f7f4;
+  z-index: 2;
+}
+
+/* 固定列の右端に影を出し、内容がその下を横スクロールしていることを伝える */
+.prose .table-scroll th:first-child::after,
+.prose .table-scroll td:first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0.5rem;
+  transform: translateX(100%);
+  background: linear-gradient(to right, rgba(25, 35, 27, 0.08), transparent);
+  pointer-events: none;
 }
 
 /* prose の tr 罫線と二重にならないようにする */

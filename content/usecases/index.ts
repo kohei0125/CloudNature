@@ -1,5 +1,6 @@
 import type { UseCaseArticle, UseCaseCard } from "@/types";
 // import の順序は下の USECASES_ARTICLES の並び（＝表示順）に合わせている
+import { article as niigataAiSeminarTraining } from "./niigata-ai-seminar-training";
 import { article as iphoneClaudeAiMeetingNotes } from "./iphone-claude-ai-meeting-notes";
 import { article as aiEstimateAutomation } from "./ai-estimate-automation";
 import { article as howToBuildAiAgent } from "./how-to-build-ai-agent";
@@ -31,6 +32,7 @@ export function getArticleDate(
  * 同じ日付のときは 0 を返し、この配列に書いた順をそのまま表示順にする。
  */
 export const USECASES_ARTICLES: UseCaseArticle[] = [
+  niigataAiSeminarTraining,
   iphoneClaudeAiMeetingNotes,
   aiEstimateAutomation,
   howToBuildAiAgent,
