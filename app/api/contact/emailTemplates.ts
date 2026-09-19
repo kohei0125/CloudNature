@@ -1,3 +1,5 @@
+import { describeTriage, type TriageResult } from "@/lib/contact/triage";
+
 export interface ContactRequestBody {
   name: string;
   email: string;
@@ -17,7 +19,40 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-export function buildEmailHtml(body: ContactRequestBody): string {
+const NOTIFY_SUBJECT_BASE = "【CloudNature】新しいお問い合わせがありました";
+
+/**
+ * 通知メールの件名。Gmail側で仕分けられるよう判定を後ろに足す。
+ * 従来の件名をそのまま前方に残すことで、既存のフィルタの一致条件を壊さない。
+ */
+export function buildNotifySubject(triage?: TriageResult): string {
+  if (triage?.status === "営業") {
+    return `${NOTIFY_SUBJECT_BASE}（営業の可能性）`;
+  }
+  if (triage?.status === "その他") {
+    return `${NOTIFY_SUBJECT_BASE}（要確認）`;
+  }
+  return NOTIFY_SUBJECT_BASE;
+}
+
+function buildTriageRow(triage?: TriageResult): string {
+  if (!triage) return "";
+
+  const { verdictLabel, confidencePercent, reasonBullets } = describeTriage(triage);
+  const detail =
+    triage.source === "fallback"
+      ? "自動仕分けを実行できませんでした"
+      : `確信度 ${confidencePercent}%・Notionのステータスは「${triage.status}」`;
+  const reasons = reasonBullets.length > 0 ? `\n${reasonBullets.join("\n")}` : "";
+
+  return `
+        <tr>
+          <td style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">自動仕分け</td>
+          <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; white-space: pre-wrap; vertical-align: top;">${escapeHtml(`${verdictLabel}（${detail}）${reasons}`)}</td>
+        </tr>`;
+}
+
+export function buildEmailHtml(body: ContactRequestBody, triage?: TriageResult): string {
   return `
 <!DOCTYPE html>
 <html lang="ja">
@@ -55,7 +90,7 @@ export function buildEmailHtml(body: ContactRequestBody): string {
         <tr>
           <td style="padding: 12px; background: #F4F2F0; font-weight: bold; border-bottom: 1px solid #EDE8E5; vertical-align: top;">お問い合わせ内容</td>
           <td style="padding: 12px; border-bottom: 1px solid #EDE8E5; white-space: pre-wrap; vertical-align: top;">${escapeHtml(body.message)}</td>
-        </tr>
+        </tr>${buildTriageRow(triage)}
       </table>
     </div>
     <div style="background-color: #F8F9FA; padding: 20px; text-align: center; border-top: 1px solid #EDE8E5;">

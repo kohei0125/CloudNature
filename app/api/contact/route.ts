@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
-import { ContactRequestBody, buildEmailHtml, buildConfirmationEmailHtml } from "./emailTemplates";
+import {
+  ContactRequestBody,
+  buildEmailHtml,
+  buildConfirmationEmailHtml,
+  buildNotifySubject,
+} from "./emailTemplates";
 import { CONTACT_SUBJECTS } from "@/content/contact";
 import { PHONE_REGEX } from "@/lib/utils";
 import { createRateLimiter, getClientIp } from "@/lib/rate-limit";
 import { IS_PRODUCTION } from "@/lib/site";
-import { saveContactToNotion } from "./notionService";
+import { fetchSalesFingerprints, saveContactToNotion } from "./notionService";
+import { triageContact } from "@/lib/contact/triage";
 
 // ローカルはクラウドフレアのチェックをスキップ
 const CLOUDFLARE_TURNSTILE_SECRET_KEY = IS_PRODUCTION
@@ -122,19 +128,41 @@ export async function POST(request: NextRequest) {
     }
 
     const resend = getResend();
-    const [notifyResult, confirmResult] = await Promise.allSettled([
+
+    // 営業の仕分け。通知メールの件名とNotionのステータスで使うので通知メールの前に
+    // 確定させる必要があるが、送信者への自動返信は判定に依存しないため待たせない。
+    // 判定できない場合は「未対応」に倒れる（triageContact は例外を投げない）
+    const triagePromise = triageContact(
+      {
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+        company: body.company,
+        subject: body.subject,
+        message: body.message,
+      },
+      { fetchSalesFingerprints }
+    );
+
+    const confirmPromise = resend.emails.send({
+      from: emailFrom,
+      to: body.email,
+      subject: `【CloudNature】お問い合わせありがとうございます`,
+      html: buildConfirmationEmailHtml(body),
+    });
+
+    const notifyPromise = triagePromise.then((triage) =>
       resend.emails.send({
         from: emailFrom,
         to: notifyEmail,
-        subject: `【CloudNature】新しいお問い合わせがありました`,
-        html: buildEmailHtml(body),
-      }),
-      resend.emails.send({
-        from: emailFrom,
-        to: body.email,
-        subject: `【CloudNature】お問い合わせありがとうございます`,
-        html: buildConfirmationEmailHtml(body),
-      }),
+        subject: buildNotifySubject(triage),
+        html: buildEmailHtml(body, triage),
+      })
+    );
+
+    const [notifyResult, confirmResult] = await Promise.allSettled([
+      notifyPromise,
+      confirmPromise,
     ]);
 
     if (notifyResult.status === "rejected") {
@@ -144,6 +172,8 @@ export async function POST(request: NextRequest) {
     if (confirmResult.status === "rejected") {
       console.error("[contact] confirmation email failed:", confirmResult.reason);
     }
+
+    const triage = await triagePromise;
 
     // Notion保存（レスポンス送信後に実行・失敗してもレスポンスに影響しない）
     // after() でレスポンス返却後も関数の寿命を延長し、保存処理を完走させる。
@@ -158,6 +188,7 @@ export async function POST(request: NextRequest) {
           company: body.company,
           subject: body.subject,
           message: body.message,
+          triage,
         });
       } catch (err) {
         console.error("[notion] Failed to save contact:", err);
