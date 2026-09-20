@@ -7,6 +7,7 @@ import {
   matchSalesFingerprints,
   normalizePhone,
   parseEvaluation,
+  resolveGatewayToken,
   toNotionStatus,
   triageContact,
   type TriageInput,
@@ -144,6 +145,23 @@ describe("toNotionStatus", () => {
   });
 });
 
+describe("resolveGatewayToken", () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  it("APIキーを最優先し、次にヘッダ、最後に環境変数を使う", () => {
+    vi.stubEnv("AI_GATEWAY_API_KEY", "key");
+    vi.stubEnv("VERCEL_OIDC_TOKEN", "env");
+    expect(resolveGatewayToken("header")).toBe("key");
+
+    vi.stubEnv("AI_GATEWAY_API_KEY", "");
+    expect(resolveGatewayToken("header")).toBe("header");
+    expect(resolveGatewayToken(null)).toBe("env");
+
+    vi.stubEnv("VERCEL_OIDC_TOKEN", "");
+    expect(resolveGatewayToken(null)).toBeNull();
+  });
+});
+
 describe("describeTriage", () => {
   it("判定なしは「判定不能」と表示し、確信度を%へ丸める", () => {
     expect(
@@ -196,7 +214,7 @@ describe("parseEvaluation", () => {
 
 /** /v1/evaluate のレスポンス形をそのまま返す fetch のモック */
 function evaluationResponding(answer: Record<string, unknown>) {
-  return vi.fn(async () => ({
+  return vi.fn(async (_url: string, _init: { headers: Record<string, string> }) => ({
     ok: true,
     json: async () => ({ model: "typesafe-ai/jev", answers: { category: { type: "choice", ...answer } } }),
   }));
@@ -247,7 +265,7 @@ describe("triageContact", () => {
     expect(result.source).toBe("evaluation");
   });
 
-  it("認証情報が未設定なら未対応で返す", async () => {
+  it("認証情報が未設定なら未対応で返し、理由をそれと分かる形で残す", async () => {
     // どちらかが環境に残っていると実際にAI Gatewayへリクエストが飛ぶため両方潰す
     vi.stubEnv("AI_GATEWAY_API_KEY", "");
     vi.stubEnv("VERCEL_OIDC_TOKEN", "");
@@ -257,10 +275,44 @@ describe("triageContact", () => {
     const result = await triageContact(baseInput, { fetchSalesFingerprints: async () => null });
 
     expect(fetchSpy).not.toHaveBeenCalled();
-
     expect(result.status).toBe("未対応");
     expect(result.source).toBe("fallback");
     expect(result.verdict).toBeNull();
+    expect(result.reasons[0]).toContain("認証情報");
+  });
+
+  it("環境変数が無くてもリクエストヘッダのOIDCトークンで判定できる", async () => {
+    // 本番のVercel Functionでは環境変数にトークンが入らず、ヘッダ経由で渡る
+    vi.stubEnv("AI_GATEWAY_API_KEY", "");
+    vi.stubEnv("VERCEL_OIDC_TOKEN", "");
+    const fetchSpy = evaluationResponding({
+      choice: "営業",
+      confidence: 0.96,
+      probabilities: { 営業: 0.97 },
+    });
+    vi.stubGlobal("fetch", fetchSpy);
+
+    const result = await triageContact(baseInput, {
+      fetchSalesFingerprints: async () => null,
+      oidcToken: "header-token",
+    });
+
+    expect(result.status).toBe("営業");
+    expect(result.source).toBe("evaluation");
+    expect(fetchSpy.mock.calls[0][1].headers.Authorization).toBe("Bearer header-token");
+  });
+
+  it("呼び出しに失敗した場合は認証情報の欠如と区別できる理由を残す", async () => {
+    vi.stubEnv("AI_GATEWAY_API_KEY", "test-key");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: false, status: 401, text: async () => "unauthorized" }))
+    );
+
+    const result = await triageContact(baseInput, { fetchSalesFingerprints: async () => null });
+
+    expect(result.status).toBe("未対応");
+    expect(result.reasons[0]).toContain("呼び出しに失敗");
   });
 
   it("過去判定の取得に失敗してもLLM判定へ進む", async () => {

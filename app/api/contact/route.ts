@@ -141,7 +141,11 @@ export async function POST(request: NextRequest) {
         subject: body.subject,
         message: body.message,
       },
-      { fetchSalesFingerprints }
+      {
+        fetchSalesFingerprints,
+        // デプロイされた Vercel Function では OIDC トークンがこのヘッダで渡る
+        oidcToken: request.headers.get("x-vercel-oidc-token"),
+      }
     );
 
     const confirmPromise = resend.emails.send({

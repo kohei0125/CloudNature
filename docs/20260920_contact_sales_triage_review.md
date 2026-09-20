@@ -79,8 +79,7 @@ Notion データソース `310f32ff-de8d-80a3-8dce-000be18944fe` を SQL で集�
   - <https://vercel.com/docs/ai-gateway/modalities/evaluation>
 - モデル: `typesafe-ai/jev`。分類・ルーティング専用の評価モデルで、自由文ではなく
   選択肢・スコア・真偽確率を返す。`AI_GATEWAY_TRIAGE_MODEL` で上書き可
-- 認証: `AI_GATEWAY_API_KEY || VERCEL_OIDC_TOKEN`。Vercel のデプロイ環境では OIDC トークンが
-  自動で入るため**本番に追加の環境変数は不要**
+- 認証: `AI_GATEWAY_API_KEY` → リクエストヘッダ `x-vercel-oidc-token` → 環境変数 `VERCEL_OIDC_TOKEN` の順に解決する（§10 参照）
 - `choice` 型の質問を1つ投げ、`choice` と `confidence` を受け取る。
   評価モデルは理由の文章を返さないため、根拠としては `probabilities` の内訳を保存する
 - 個人情報を送るため `providerOptions.gateway.zeroDataRetention: true` を指定する。
@@ -218,7 +217,7 @@ Turnstile検証
   現状のままでよいか確認する
 - 本番投入後、最初の数件は Notion のステータスを目視で確認し、誤判定がないか見る
 - `lib/notion/blocks.ts` への共通化（§6.2 の見送り分）
-- 環境変数の追加設定は不要（Vercel のデプロイ環境では `VERCEL_OIDC_TOKEN` が自動で入る）
+- §10 の修正をデプロイしたあと、実際の問い合わせで判定が動くことを確認する
 
 ## 8. LLM を Vercel AI Gateway の評価モデルへ移行（2026-09-20）
 
@@ -280,3 +279,46 @@ Codex が使えないため `/code-review` を high で実施。8件の指摘す
   `none were human-reviewed` が出ていないか確認すること
 - ローカルの `.env` の `NOTION_API_KEY` は失効している。Vercel の development 環境にも設定が無いため、
   ローカルで Notion 保存を試す場合は別途設定が要る（本件とは別の既存の問題）
+
+
+## 10. 本番で判定が動かなかった件（2026-09-20）
+
+デプロイ後に届いた問い合わせの Notion ページが「判定不能（判定できず）」となり、
+ステータスが「未対応」のままだった。
+
+### 10.1 原因
+
+OIDC トークンの受け取り方を取り違えていた。Vercel の仕様は次のとおり。
+
+| 実行環境 | OIDC トークンの渡り方 |
+|---|---|
+| ビルド時 | 環境変数 `VERCEL_OIDC_TOKEN` |
+| **デプロイされた Vercel Function** | **リクエストヘッダ `x-vercel-oidc-token`** |
+| ローカル開発 | `vercel env pull` が `.env.local` に書く `VERCEL_OIDC_TOKEN` |
+
+<https://vercel.com/docs/oidc#in-vercel-functions>
+
+実装は `process.env.VERCEL_OIDC_TOKEN` だけを見ていたため、本番では認証情報が取れず
+`classifyWithEvaluation` が即 `null` を返していた。ローカルの実 API 検証（§8.2）が通ったのは
+`.env.local` に環境変数として入っていたためで、本番の経路を確かめたことにはなっていなかった。
+
+### 10.2 対応
+
+- `resolveGatewayToken()` を追加し、
+  `AI_GATEWAY_API_KEY` → リクエストヘッダ `x-vercel-oidc-token` → `VERCEL_OIDC_TOKEN` の順で解決する
+- `route.ts` で `request.headers.get("x-vercel-oidc-token")` を渡す
+- 「認証情報が無い」と「呼び出しに失敗した」で Notion に残す理由を分けた。
+  対処が違うため、ログを見なくてもページだけで切り分けられるようにする
+
+### 10.3 本番の認証方式
+
+ヘッダ方式はドキュメントどおりだが本番で未検証のため、確実な経路として
+**Vercel の本番環境に `AI_GATEWAY_API_KEY` を設定する**方針にした（ダッシュボードで作成）。
+コードはAPIキーを最優先で見るので、キーが入っていればヘッダの可否に関係なく動く。
+ヘッダ経由の解決は、キーが未設定の環境（プレビュー等）での予備として残す。
+
+### 10.4 この取りこぼしから得た教訓
+
+ローカルで実 API を叩けたことを「本番でも動く」根拠にしてしまった。
+認証情報の入手経路は実行環境ごとに違うため、ローカルでの疎通確認は
+**その経路が本番と同じ場合にのみ**本番の裏付けになる。

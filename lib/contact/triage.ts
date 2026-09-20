@@ -260,12 +260,10 @@ export function parseEvaluation(data: unknown): EvaluationVerdict | null {
   };
 }
 
-async function classifyWithEvaluation(input: TriageInput): Promise<EvaluationVerdict | null> {
-  // Vercelのデプロイ環境では VERCEL_OIDC_TOKEN が自動で入るため、通常は
-  // AI_GATEWAY_API_KEY の設定は不要。明示的なキーがあればそちらを優先する
-  const apiKey = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN;
-  if (!apiKey) return null;
-
+async function classifyWithEvaluation(
+  input: TriageInput,
+  apiKey: string
+): Promise<EvaluationVerdict | null> {
   const model = process.env.AI_GATEWAY_TRIAGE_MODEL || DEFAULT_MODEL;
 
   try {
@@ -308,6 +306,25 @@ async function classifyWithEvaluation(input: TriageInput): Promise<EvaluationVer
 export interface TriageDeps {
   /** 過去に「営業」と判定されたリードの指紋。取得できないときは null */
   fetchSalesFingerprints: () => Promise<SalesFingerprints | null>;
+  /**
+   * リクエストヘッダ `x-vercel-oidc-token` の値。
+   * デプロイされた Vercel Function では OIDC トークンが環境変数ではなくこのヘッダで渡る
+   * （環境変数に入るのはビルド時とローカル開発のみ）。
+   * https://vercel.com/docs/oidc#in-vercel-functions
+   */
+  oidcToken?: string | null;
+}
+
+/**
+ * AI Gateway の認証情報を解決する。優先順は
+ * 明示的なAPIキー → リクエストヘッダのOIDCトークン（本番） → 環境変数（ローカル開発・ビルド）。
+ */
+export function resolveGatewayToken(oidcToken?: string | null): string | null {
+  return process.env.AI_GATEWAY_API_KEY || oidcToken || process.env.VERCEL_OIDC_TOKEN || null;
+}
+
+function unclassified(reason: string): TriageResult {
+  return { status: "未対応", verdict: null, confidence: 0, reasons: [reason], source: "fallback" };
 }
 
 /**
@@ -350,16 +367,19 @@ export async function triageContact(
     }
   }
 
-  // 層2: 本文を評価モデルで分類する
-  const evaluation = await classifyWithEvaluation(input);
+  // 層2: 本文を評価モデルで分類する。
+  // 失敗の理由は Notion のページに残す。「認証情報が無い」と「呼び出しに失敗した」は
+  // 対処が違うため、ログを見なくても切り分けられるよう区別する
+  const token = resolveGatewayToken(deps.oidcToken);
+  if (!token) {
+    return unclassified(
+      "AI Gatewayの認証情報を取得できませんでした（AI_GATEWAY_API_KEY の設定、または x-vercel-oidc-token ヘッダを確認してください）"
+    );
+  }
+
+  const evaluation = await classifyWithEvaluation(input, token);
   if (!evaluation) {
-    return {
-      status: "未対応",
-      verdict: null,
-      confidence: 0,
-      reasons: ["自動仕分けを実行できませんでした（手動で確認してください）"],
-      source: "fallback",
-    };
+    return unclassified("自動仕分けの呼び出しに失敗しました（Vercelのログを確認してください）");
   }
 
   return {
