@@ -21,6 +21,5 @@ export interface ContactFormLabels {
   required: string;
   successTitle: string;
   successMessage: string;
-  successCta: string;
   estimateCta: string;
 }

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import { CONTACT_FORM_LABELS } from "@/content/contact";
 import EstimateCtaLink from "@/components/shared/EstimateCtaLink";
@@ -33,13 +32,6 @@ export default function ContactThanksPage() {
               {CONTACT_FORM_LABELS.successMessage}
             </p>
             <div className="v-stack sm:h-stack justify-center gap-3">
-              <Link
-                href="/cases"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-mist px-6 py-3 text-sm font-bold text-forest transition-colors hover:bg-gray-200"
-              >
-                {CONTACT_FORM_LABELS.successCta}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
               <EstimateCtaLink
                 ctaLocation="contact_thanks"
                 className="btn-puffy btn-puffy-accent inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white"
